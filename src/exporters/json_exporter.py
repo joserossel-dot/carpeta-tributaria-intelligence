@@ -27,16 +27,11 @@ class JsonExporter:
 
     def _prepare(self, tax_folder: TaxFolder) -> dict:
         if not self.normalize:
-            return tax_folder.model_dump()
+            return tax_folder.model_dump(mode="json")
 
-        contributor = normalize_contributor(tax_folder.contributor)
-        f29 = normalize_f29(tax_folder.f29)
-        sections = tax_folder.sections.model_dump()
-        metadata = tax_folder.metadata.model_dump()
-
-        return {
-            "contributor": contributor.model_dump(),
-            "f29": [f.model_dump() for f in f29],
-            "sections": sections,
-            "metadata": metadata,
-        }
+        data = tax_folder.model_dump(mode="json")
+        if tax_folder.contributor is not None:
+            data["contributor"] = normalize_contributor(tax_folder.contributor).model_dump(mode="json")
+        if tax_folder.f29:
+            data["f29"] = [f.model_dump(mode="json") for f in normalize_f29(tax_folder.f29)]
+        return data

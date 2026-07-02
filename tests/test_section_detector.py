@@ -39,6 +39,7 @@ class TestSectionDetector:
             "DECLARACIONES JURADAS",
             "BIENES RAICES",
             "VEHICULOS",
+            "CONFORMACION DE LA SOCIEDAD",
         ]
         result = _make_result(*texts)
         detector = SectionDetector()
@@ -69,6 +70,7 @@ class TestSectionDetector:
             "BIENES RAICES",
             "VEHICULO",
             "f29",
+            "CONFORMACION DE LA SOCIEDAD",
         )
         detector = SectionDetector()
         section_result = detector.detect(result)
@@ -81,6 +83,7 @@ class TestSectionDetector:
         assert section_result.secciones["DECLARACIONES JURADAS"] == [6]
         assert section_result.secciones["BIENES RAICES"] == [7]
         assert section_result.secciones["VEHICULOS"] == [8]
+        assert section_result.secciones["CONFORMACION DE LA SOCIEDAD"] == [10]
 
     def test_empty_text(self) -> None:
         result = _make_result("")

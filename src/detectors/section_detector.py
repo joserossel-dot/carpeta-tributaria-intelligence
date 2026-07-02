@@ -26,7 +26,7 @@ class SectionDetector:
             r"FORMULARIO\s+29|F29", re.IGNORECASE
         ),
         "FORMULARIO 22": re.compile(
-            r"FORMULARIO\s+22|F22", re.IGNORECASE
+            r"FORMULARIO\s+22|FORM\.\s*22|F22", re.IGNORECASE
         ),
         "DECLARACIONES JURADAS": re.compile(
             r"DECLARACION(?:ES)?\s+JURADA(?:S)?", re.IGNORECASE
@@ -36,6 +36,9 @@ class SectionDetector:
         ),
         "VEHICULOS": re.compile(
             r"VEH(?:Í|I)CULO(?:S)?", re.IGNORECASE
+        ),
+        "CONFORMACION DE LA SOCIEDAD": re.compile(
+            r"CONFORMACION\s+DE\s+LA\s+SOCIEDAD", re.IGNORECASE
         ),
     }
 

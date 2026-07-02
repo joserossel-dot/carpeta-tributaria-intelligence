@@ -9,10 +9,9 @@ class TestTaxFolderEngine:
         assert result.contributor.rut == "79606270-3"
         assert result.contributor.razon_social == "AGRICOLA GONZAGRI LIMITADA"
         assert result.contributor.tipo_contribuyente == "Primera categoría"
-        assert result.sections.secciones is not None
         assert result.metadata.pages == 41
-        assert result.metadata.version == "0.1.0"
-        assert "T" in result.metadata.processed_at
+        assert result.metadata.source_file.endswith("CPTAgrGonzagriLtda.pdf")
+        assert result.metadata.processing_time > 0
         assert len(result.f29) > 0
         assert result.f29[0].periodo == "2019-12"
 
@@ -24,7 +23,7 @@ class TestTaxFolderEngine:
         assert result.contributor.razon_social == "CLINICA HYPERBARIC SPA"
         assert result.contributor.regimen_tributario is not None
         assert result.metadata.pages == 43
-        assert result.metadata.version == "0.1.0"
+        assert result.metadata.processing_time > 0
         assert len(result.f29) > 0
         assert result.f29[0].periodo == "2026-04"
 
@@ -35,6 +34,6 @@ class TestTaxFolderEngine:
 
         assert dumped["contributor"]["rut"] == "99556090-9"
         assert dumped["metadata"]["pages"] == 41
-        assert "sections" in dumped
+        assert "source_file" in dumped["metadata"]
         assert "f29" in dumped
         assert len(dumped["f29"]) > 0
