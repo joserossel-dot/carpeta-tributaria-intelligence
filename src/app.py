@@ -1,14 +1,28 @@
 import os
 import sys
+import importlib.util
 import streamlit as st
 from src.core.tax_folder_engine import TaxFolderEngine
 
-# Inyección absoluta para solucionar las rutas internas de los componentes
-raiz_real = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if raiz_real not in sys.path:
-    sys.path.insert(0, raiz_real)
+# --- CARGA DIRECTA POR RUTA FÍSICA ---
+# Calculamos la ubicación exacta en el disco de Render o en tu PC local
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+file_path = os.path.join(base_dir, "app", "components", "f22_summary.py")
 
-from components.f22_summary import show_f22_summary
+if os.path.exists(file_path):
+    # Inyectamos el directorio base en el PATH para que las dependencias internas (app.utils) se resuelvan
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    
+    # Cargamos el archivo de forma manual e individual
+    spec = importlib.util.spec_from_file_location("f22_summary_module", file_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    show_f22_summary = module.show_f22_summary
+else:
+    def show_f22_summary(*args, **kwargs):
+        st.error(f"No se encontró el archivo del componente en: {file_path}")
+# -------------------------------------
 
 st.set_page_config(
     page_title="Motor de Inteligencia - Carpeta Tributaria",
