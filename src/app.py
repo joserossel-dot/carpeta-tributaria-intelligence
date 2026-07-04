@@ -1,12 +1,21 @@
-import sys
 import os
+import importlib.util
 
-# Agregamos tanto la raíz del proyecto como el directorio padre al PATH de búsqueda
-raiz_proyecto = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if raiz_proyecto not in sys.path:
-    sys.path.insert(0, raiz_proyecto)
+# Buscamos la ruta física del archivo subiendo un nivel desde src/
+_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+_file_path = os.path.join(_base_dir, "app", "components", "f22_summary.py")
 
-from app.components.f22_summary import show_f22_summary
+if os.path.exists(_file_path):
+    _spec = importlib.util.spec_from_file_location("f22_summary_module", _file_path)
+    _module = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_module)
+    show_f22_summary = _module.show_f22_summary
+else:
+    # Fallback por si la estructura cambia localmente
+    def show_f22_summary(*args, **kwargs):
+        import streamlit as st
+        st.error("No se pudo cargar el archivo f22_summary.py físicamente.")
+
 import streamlit as st
 
 import tempfile
