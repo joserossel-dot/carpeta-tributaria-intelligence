@@ -1,16 +1,14 @@
 import os
 import sys
+import streamlit as st
 
-# INYECCIÓN ABSOLUTA: Forzamos la raíz real en el PATH de Python
-# Funciona tanto en tu máquina local como en la ruta exacta de Render (/opt/render/project/src)
+# Forzamos la raíz real en el PATH de Python para solucionar app.components y app.utils en Render
 raiz_real = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if raiz_real not in sys.path:
     sys.path.insert(0, raiz_real)
 
-import streamlit as st
 from app.components.f22_summary import show_f22_summary
 
-# Configuración de Streamlit
 st.set_page_config(
     page_title="Motor de Inteligencia - Carpeta Tributaria",
     page_icon="📊",
