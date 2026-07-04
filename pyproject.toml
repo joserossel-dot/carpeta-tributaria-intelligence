@@ -5,7 +5,7 @@ description = "Extracción y análisis de carpetas tributarias"
 authors = ["Jose Alfonso Rossel <josealfonsorossel@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "src" }]
+packages = [{ include = "src" }, { include = "app" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
