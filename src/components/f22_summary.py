@@ -1,5 +1,5 @@
 import streamlit as st
-from src.utils.formatting import fmt_currency
+from ..utils.formatting import fmt_currency
 
 def show_f22_summary(result):
     st.subheader("🏢 Resumen de Renta Anual (Formulario 22)")
