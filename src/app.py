@@ -70,7 +70,7 @@ if uploaded_file is not None:
                 st.info("No se encontraron registros de IVA detallados.")
         
         with tab2:
-        show_f22_summary(result)
+            show_f22_summary(result)
         with tab3: st.info("Módulo de Conformación de la Sociedad en desarrollo.")
 
     # CASO 2: CONTROL DE CONTINGENCIA (SI PYDANTIC DIJO MODEL_TYPE / INPUT_TYPE=LIST)
