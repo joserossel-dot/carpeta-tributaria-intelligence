@@ -1,8 +1,14 @@
 import os
 import sys
-import importlib.util
+
+# Forzamos la raíz absoluta del disco en Python
+root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
+
 import streamlit as st
 from src.core.tax_folder_engine import TaxFolderEngine
+from app.components.f22_summary import show_f22_summary
 
 # --- CARGA DIRECTA POR RUTA FÍSICA ---
 # Calculamos la ubicación exacta en el disco de Render o en tu PC local
