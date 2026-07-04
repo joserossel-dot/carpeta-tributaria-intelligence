@@ -1,26 +1,20 @@
 import os
-import importlib.util
+import sys
+
+# INYECCIÓN ABSOLUTA: Forzamos la raíz real en el PATH de Python
+# Funciona en tu máquina local y en la ruta exacta de Render (/opt/render/project/src)
+raiz_real = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if raiz_real not in sys.path:
+    sys.path.insert(0, raiz_real)
+
 import streamlit as st
-
-# Carga física directa del componente para saltarnos las restricciones de Render
-_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-_file_path = os.path.join(_base_dir, "app", "components", "f22_summary.py")
-
-if os.path.exists(_file_path):
-    _spec = importlib.util.spec_from_file_location("f22_summary_module", _file_path)
-    _module = importlib.util.module_from_spec(_spec)
-    _spec.loader.exec_module(_module)
-    show_f22_summary = _module.show_f22_summary
-else:
-    def show_f22_summary(*args, **kwargs):
-        st.error(f"No se pudo encontrar el archivo físico en: {_file_path}")
+from app.components.f22_summary import show_f22_summary
 
 import tempfile
-import os
 import pandas as pd
 from core.tax_folder_engine import TaxFolderEngine
 
-# Configuración de Streamlit (esto debe venir inmediatamente después de los imports)
+# Configuración de Streamlit
 st.set_page_config(
     page_title="Motor de Inteligencia - Carpeta Tributaria",
     page_icon="📊",
