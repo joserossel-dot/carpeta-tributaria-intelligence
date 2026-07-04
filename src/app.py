@@ -1,8 +1,14 @@
-import streamlit as st
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# Agregamos tanto la raíz del proyecto como el directorio padre al PATH de búsqueda
+raiz_proyecto = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if raiz_proyecto not in sys.path:
+    sys.path.insert(0, raiz_proyecto)
+
 from app.components.f22_summary import show_f22_summary
+import streamlit as st
+
 import tempfile
 import os
 import pandas as pd
