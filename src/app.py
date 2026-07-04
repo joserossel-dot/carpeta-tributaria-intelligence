@@ -8,7 +8,7 @@ raiz_real = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if raiz_real not in sys.path:
     sys.path.insert(0, raiz_real)
 
-from app.components.f22_summary import show_f22_summary
+from components.f22_summary import show_f22_summary
 
 st.set_page_config(
     page_title="Motor de Inteligencia - Carpeta Tributaria",
