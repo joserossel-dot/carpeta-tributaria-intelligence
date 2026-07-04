@@ -2,7 +2,7 @@ import os
 import sys
 
 # INYECCIÓN ABSOLUTA: Forzamos la raíz real en el PATH de Python
-# Funciona en tu máquina local y en la ruta exacta de Render (/opt/render/project/src)
+# Funciona tanto en tu máquina local como en la ruta exacta de Render (/opt/render/project/src)
 raiz_real = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if raiz_real not in sys.path:
     sys.path.insert(0, raiz_real)
@@ -10,16 +10,16 @@ if raiz_real not in sys.path:
 import streamlit as st
 from app.components.f22_summary import show_f22_summary
 
-import tempfile
-import pandas as pd
-from core.tax_folder_engine import TaxFolderEngine
-
 # Configuración de Streamlit
 st.set_page_config(
     page_title="Motor de Inteligencia - Carpeta Tributaria",
     page_icon="📊",
     layout="wide"
 )
+
+import tempfile
+import pandas as pd
+from core.tax_folder_engine import TaxFolderEngine
 
 st.title("📊 Motor de Inteligencia - Carpeta Tributaria SII")
 st.markdown("Estado de extracción unificada de Compras, Ventas, Renta y Estructura Societaria.")
