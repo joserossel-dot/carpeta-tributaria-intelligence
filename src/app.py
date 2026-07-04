@@ -1,15 +1,7 @@
 import os
-import sys
 import streamlit as st
 from src.core.tax_folder_engine import TaxFolderEngine
-
-# Ajuste nativo de rutas para entornos de producción
-root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if root_dir not in sys.path:
-    sys.path.insert(0, root_dir)
-
-# Ahora que Poetry y PYTHONPATH conocen 'app', la importación es limpia y directa
-from app.components.f22_summary import show_f22_summary
+from src.components.f22_summary import show_f22_summary
 
 st.set_page_config(
     page_title="Motor de Inteligencia - Carpeta Tributaria",
