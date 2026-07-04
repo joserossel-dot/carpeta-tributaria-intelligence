@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from src.core.tax_folder_engine import TaxFolderEngine
-from src.components.f22_summary import show_f22_summary
+from components.f22_summary import show_f22_summary
 
 st.set_page_config(
     page_title="Motor de Inteligencia - Carpeta Tributaria",
@@ -24,7 +24,7 @@ if uploaded_file is not None:
             engine = TaxFolderEngine(temp_path)
             result = engine.parse()
         
-        st.success("✅ Documento procesado con éxito")
+        st.success("✅ Documento processed con éxito")
         
         tab1, tab2 = st.tabs(["📋 Resumen General", "🏢 Renta Anual (F22)"])
         
