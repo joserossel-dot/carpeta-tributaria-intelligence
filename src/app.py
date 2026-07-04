@@ -31,11 +31,10 @@ if uploaded_file is not None:
         
         st.success("¡Análisis estructurado con éxito!")
         
-        # Estructura de pestañas con lo que necesitas ver
         tab1, tab2, tab3, tab4 = st.tabs([
             "📈 Ventas y Compras (Mes a Mes)", 
             "🏢 Declaración Anual de Impuestos", 
-            "👥 Participación Accionaria / Socios",
+            "👥 Conformación de la Sociedad",
             "💾 JSON Completo"
         ])
         
@@ -47,21 +46,16 @@ if uploaded_file is not None:
             
             if hasattr(result, 'f29') and result.f29:
                 f29_data = []
-                # Recorremos tus registros de F29 extraídos
                 for f in result.f29:
                     periodo = getattr(f, 'periodo', 'Desconocido')
-                    
-                    # Intentamos buscar los códigos típicos de montos de ventas/compras de tus detalles
                     monto_ventas = 0
                     monto_compras = 0
                     
                     if hasattr(f, 'detalles') and f.detalles:
                         for d in f.detalles:
-                            # Código 538/502/714 suelen ser totales de ventas en el F29 chileno
                             if d.codigo in ["538", "502", "714"]:
                                 try: monto_ventas = int(d.valor.replace('.','').replace(',',''))
                                 except: pass
-                            # Código 537/519/520 suelen ser totales de compras
                             elif d.codigo in ["537", "519", "520"]:
                                 try: monto_compras = int(d.valor.replace('.','').replace(',',''))
                                 except: pass
@@ -72,62 +66,72 @@ if uploaded_file is not None:
                         "Compras ($)": monto_compras
                     })
                 
-                # Crear DataFrame de Pandas para mostrar la tabla y el gráfico
                 df_f29 = pd.DataFrame(f29_data)
-                
-                # Gráfico Evolutivo
                 st.markdown("### Evolución de Flujos")
                 st.line_chart(df_f29.set_index("Período"))
-                
-                # Tabla de Datos
                 st.markdown("### Detalle Mensual")
                 st.dataframe(df_f29, use_container_width=True)
             else:
                 st.warning("No se encontraron registros mensuales de F29 en esta carpeta.")
 
         # ---------------------------------------------------------
-        # PESTAÑA 2: DECLARACIÓN ANUAL de IMPUESTOS
+        # PESTAÑA 2: DECLARACIÓN ANUAL (Formateada sin JSON crudo)
         # ---------------------------------------------------------
         with tab2:
-            st.subheader("Análisis de Declaración Anual de Impuestos (F22 / Balances)")
+            st.subheader("Declaración Anual de Impuestos")
             
-            # Revisamos si tu engine ya guarda el análisis o la información del régimen
             if hasattr(result, 'contributor') and result.contributor:
                 c = result.contributor
-                col1, col2 = st.columns(2)
+                st.markdown("### Resumen de Clasificación")
+                col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric("Régimen Tributario", getattr(c, 'regimen_tributario', 'No especificado'))
                 with col2:
                     st.metric("Tipo de Contribuyente", getattr(c, 'tipo_contribuyente', 'No especificado'))
+                with col3:
+                    st.metric("Inicio de Actividades", getattr(c, 'fecha_inicio_actividades', 'No especificado'))
             
-            if hasattr(result, 'analysis') and result.analysis:
-                st.markdown("### Diagnóstico Tributario Inteligente")
-                st.json(result.analysis)
+            st.markdown("### Datos de la Declaración Anual")
+            # Si el análisis anual viene dentro de 'analysis' o 'f22', lo desplegamos de forma amigable
+            analysis_data = getattr(result, 'analysis', None) or getattr(result, 'f22', None)
+            
+            if analysis_data:
+                # Si es un diccionario, lo iteramos para mostrarlo lindo como tarjetas en lugar de un JSON crudo
+                if isinstance(analysis_data, dict):
+                    for clave, valor in analysis_data.items():
+                        # Reemplazamos guiones bajos por espacios y ponemos mayúsculas
+                        titulo_bonito = clave.replace("_", " ").title()
+                        st.markdown(f"**{titulo_bonito}**")
+                        st.info(str(valor))
+                else:
+                    st.info(str(analysis_data))
             else:
-                st.info("Información de renta anual o balance procesada. Si está vacía, verifica si el PDF contiene las páginas del F22.")
+                st.warning("No se detectaron datos adicionales de la declaración anual en el procesamiento base.")
 
         # ---------------------------------------------------------
-        # PESTAÑA 3: PARTICIPACIÓN ACCIONARIA
+        # PESTAÑA 3: CONFORMACIÓN DE LA SOCIEDAD
         # ---------------------------------------------------------
         with tab3:
-            st.subheader("Estructura de Socios y Participación Accionaria")
+            st.subheader("Conformación de la Sociedad")
             
-            # Buscamos en representantes o si tienes un modelo de socios separado
-            if hasattr(result, 'representatives') and result.representatives:
+            # Buscamos de manera flexible: ya sea en 'representatives', 'society', o 'shares'
+            socios = getattr(result, 'representatives', None) or getattr(result, 'society', None) or getattr(result, 'conformacion_sociedad', None)
+            
+            if socios and len(socios) > 0:
                 rep_data = []
-                for r in result.representatives:
+                for r in socios:
                     rep_data.append({
-                        "Nombre / Razón Social": getattr(r, 'nombre', 'N/A'),
+                        "Nombre / Razón Social": getattr(r, 'nombre', getattr(r, 'razon_social', 'N/A')),
                         "RUT": getattr(r, 'rut', 'N/A'),
-                        "Rol / Participación": getattr(r, 'cargo', 'Representante Legal')
+                        "Participación / Cargo": getattr(r, 'cargo', getattr(r, 'participacion', 'Socio/Representante'))
                     })
                 df_rep = pd.DataFrame(rep_data)
-                st.table(df_rep)
+                st.dataframe(df_rep, use_container_width=True)
             else:
-                st.warning("No se detectó la tabla de representantes legales o accionistas directos en el parse principal.")
+                st.warning("El motor parseó el documento pero la estructura de 'Conformación de la sociedad' no devolvió registros. Revisa el contrato en la pestaña 'JSON Completo' para ver bajo qué nombre exacto de variable está guardando estos datos tu pipeline.")
 
         # ---------------------------------------------------------
-        # PESTAÑA 4: JSON COMPLETO
+        # PESTAÑA 4: JSON COMPLETO (Para auditoría técnica)
         # ---------------------------------------------------------
         with tab4:
             st.subheader("Contrato Único de Salida (Pydantic)")
