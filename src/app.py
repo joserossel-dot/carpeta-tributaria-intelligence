@@ -1,4 +1,5 @@
 import streamlit as st
+from app.components.f22_summary import show_f22_summary
 import tempfile
 import os
 import pandas as pd
@@ -68,7 +69,7 @@ if uploaded_file is not None:
             else:
                 st.info("No se encontraron registros de IVA detallados.")
         
-        with tab2: from app.components.f22_summary import show_f22_summary
+        with tab2:
         show_f22_summary(result)
         with tab3: st.info("Módulo de Conformación de la Sociedad en desarrollo.")
 
