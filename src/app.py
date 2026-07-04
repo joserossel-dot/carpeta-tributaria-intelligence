@@ -1,7 +1,8 @@
 import os
 import importlib.util
+import streamlit as st
 
-# Buscamos la ruta física del archivo subiendo un nivel desde src/
+# Carga física directa del componente para saltarnos las restricciones de Render
 _base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 _file_path = os.path.join(_base_dir, "app", "components", "f22_summary.py")
 
@@ -11,20 +12,17 @@ if os.path.exists(_file_path):
     _spec.loader.exec_module(_module)
     show_f22_summary = _module.show_f22_summary
 else:
-    # Fallback por si la estructura cambia localmente
     def show_f22_summary(*args, **kwargs):
-        import streamlit as st
-        st.error("No se pudo cargar el archivo f22_summary.py físicamente.")
-
-import streamlit as st
+        st.error(f"No se pudo encontrar el archivo físico en: {_file_path}")
 
 import tempfile
 import os
 import pandas as pd
 from core.tax_folder_engine import TaxFolderEngine
 
+# Configuración de Streamlit (esto debe venir inmediatamente después de los imports)
 st.set_page_config(
-    page_title="Carpeta Tributaria Intelligence",
+    page_title="Motor de Inteligencia - Carpeta Tributaria",
     page_icon="📊",
     layout="wide"
 )
