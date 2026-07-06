@@ -17,37 +17,41 @@ class CorporateParser:
         r"Fecha\s+de\s+[Cc]onstituci[oó]n:\s*(\d{2}[/\-]\d{2}[/\-]\d{4})",
         re.IGNORECASE,
     )
-    _RE_SOCIO_LINE = re.compile(
-        r"(\d{1,2}\.\d{3}\.\d{3}[-−]\d)\s+(.+?)"  # RUT + nombre
-    )
-    _RE_SOCIO_PCT = re.compile(
-        r"(\d{1,3}(?:\.\d{3})*(?:,\d+)?)\s*%"
-    )
-    _RE_REPR_LINE = re.compile(
-        r"(\d{1,2}\.\d{3}\.\d{3}[-−]\d)\s+(.+?)(?:\s+(?:Representante\s+Legal|Administrador|Gerente|Director|Presidente))?$",
+    # RUT con o sin puntos de miles: "5603821-3" o "5.603.821-3".
+    _RE_RUT = re.compile(r"(\d{1,2}(?:\.?\d{3}){2}[-−][\dkK])")
+    _RE_FECHA = re.compile(r"(\d{2}[-−]\d{2}[-−]\d{4})")
+    _RE_PCT = re.compile(r"(\d{1,3}(?:[.,]\d{1,2})?)\s*%")
+
+    # Encabezados que marcan donde termina un bloque de nombres (para no
+    # arrastrar la seccion siguiente al extraer una tabla).
+    _STOP_HEADINGS = re.compile(
+        r"CONFORMACI[OÓ]N\s+DE\s+LA\s+SOCIEDAD"
+        r"|REPRESENTANTE(?:\(?S\)?)?\s+LEGAL(?:\(?ES\)?)?"
+        r"|ACTIVIDAD(?:ES)?\s+ECON[OÓ]MICA(?:S)?"
+        r"|FORMULARIO\s+2[29]"
+        r"|DECLARACI[OÓ]N(?:ES)?\s+JURADA(?:S)?",
         re.IGNORECASE,
     )
 
     def parse(
         self, extract_result: ExtractResult, section_result: SectionResult
     ) -> CorporateInfo:
-        conformacion_pages = section_result.secciones.get(
-            "CONFORMACION DE LA SOCIEDAD", []
-        )
-        representantes_pages = section_result.secciones.get(
-            "REPRESENTANTES LEGALES", []
-        )
+        full_text = "\n".join(p.text for p in extract_result.pages)
 
-        conformacion_text = self._get_text(extract_result, conformacion_pages)
-        representantes_text = self._get_text(extract_result, representantes_pages)
+        conformacion_text = self._slice_after(full_text, [
+            r"CONFORMACI[OÓ]N\s+DE\s+LA\s+SOCIEDAD",
+        ])
+        representantes_text = self._slice_after(full_text, [
+            r"REPRESENTANTE(?:\(?S\)?)?\s+LEGAL(?:\(?ES\)?)?",
+        ])
 
         tipo_sociedad = self._extract_tipo_sociedad(conformacion_text)
         capital = self._extract_capital(conformacion_text)
         fecha_constitucion = self._extract_fecha_constitucion(
             conformacion_text or representantes_text
         )
-        socios = self._extract_socios(conformacion_text)
-        representantes = self._extract_representantes(representantes_text)
+        socios = self._extract_personas(conformacion_text, Socio, participacion=True)
+        representantes = self._extract_personas(representantes_text, Representante, participacion=False)
 
         return CorporateInfo(
             tipo_sociedad=tipo_sociedad,
@@ -57,14 +61,18 @@ class CorporateParser:
             representantes=representantes,
         )
 
-    def _get_text(
-        self, extract_result: ExtractResult, pages: list[int]
-    ) -> str:
-        texts: list[str] = []
-        for p in pages:
-            if p - 1 < len(extract_result.pages):
-                texts.append(extract_result.pages[p - 1].text)
-        return "\n".join(texts)
+    def _slice_after(self, text: str, heading_patterns: list[str]) -> str:
+        """Devuelve el texto desde el encabezado buscado hasta el proximo
+        encabezado conocido (o 2000 caracteres si no encuentra ninguno)."""
+        for hp in heading_patterns:
+            m = re.search(hp, text, re.IGNORECASE)
+            if not m:
+                continue
+            start = m.end()
+            resto = text[start:start + 3000]
+            stop = self._STOP_HEADINGS.search(resto)
+            return resto[: stop.start()] if stop else resto
+        return ""
 
     def _extract_tipo_sociedad(self, text: str) -> str | None:
         if not text:
@@ -84,61 +92,49 @@ class CorporateParser:
         m = self._RE_FECHA_CONSTITUCION.search(text)
         return m.group(1).strip() if m else None
 
-    def _extract_socios(self, text: str) -> list[Socio]:
+    def _extract_personas(self, text: str, model_cls, participacion: bool):
+        """Extrae filas 'NOMBRE RUT [FECHA|%]' -- el formato real del SII
+        pone el nombre primero y el RUT despues, al reves de lo que
+        asumia la version anterior de este parser."""
         if not text:
             return []
-        socios: list[Socio] = []
+
+        personas = []
+        seen = set()
         for line in text.split("\n"):
             line = line.strip()
-            if not line:
+            if not line or len(line) < 8:
                 continue
-            rut_match = self._RE_SOCIO_LINE.search(line)
+
+            rut_match = self._RE_RUT.search(line)
             if not rut_match:
                 continue
-            rut = rut_match.group(1).strip()
-            rest = line[rut_match.end() :].strip()
-            pct_match = self._RE_SOCIO_PCT.search(rest)
-            participacion = pct_match.group(1) if pct_match else None
-            nombre = rest[: pct_match.start()].strip() if pct_match else rest
-            nombre = re.sub(r"\s+", " ", nombre).strip()
-            socios.append(Socio(rut=rut, nombre=nombre, participacion=participacion))
-        return socios
 
-    def _extract_representantes(self, text: str) -> list[Representante]:
-        if not text:
-            return []
-        representantes: list[Representante] = []
-        cargo_map = {
-            "representante legal": "Representante Legal",
-            "administrador": "Administrador",
-            "gerente": "Gerente",
-            "director": "Director",
-            "presidente": "Presidente",
-        }
-        for line in text.split("\n"):
-            line = line.strip()
-            if not line:
+            rut = rut_match.group(1)
+            nombre = line[: rut_match.start()].strip(" .-")
+            nombre = re.sub(r"\s+", " ", nombre)
+
+            # Filtra encabezados de tabla ("Nombre o Razon Social RUT...")
+            # que no son una fila de datos real.
+            if not nombre or len(nombre) < 4 or "RAZ" in nombre.upper():
                 continue
-            parts = re.split(r"\s{2,}", line)
-            if len(parts) < 2:
+
+            resto = line[rut_match.end():].strip()
+
+            if rut in seen:
                 continue
-            rut_part = parts[0].strip()
-            if not re.match(r"\d{1,2}\.\d{3}\.\d{3}[-−]\d", rut_part):
-                continue
-            nombre_raw = parts[1].strip()
-            cargo = None
-            for key, val in cargo_map.items():
-                if key in nombre_raw.lower():
-                    cargo = val
-                    nombre_raw = re.sub(
-                        r"\s+" + re.escape(key) + r"\s*$",
-                        "",
-                        nombre_raw,
-                        flags=re.IGNORECASE,
-                    ).strip()
-                    break
-            nombre = re.sub(r"\s+", " ", nombre_raw).strip()
-            representantes.append(
-                Representante(rut=rut_part, nombre=nombre, cargo=cargo)
-            )
-        return representantes
+            seen.add(rut)
+
+            if participacion:
+                pct_match = self._RE_PCT.search(resto)
+                personas.append(
+                    model_cls(
+                        rut=rut,
+                        nombre=nombre,
+                        participacion=f"{pct_match.group(1)}%" if pct_match else None,
+                    )
+                )
+            else:
+                personas.append(model_cls(rut=rut, nombre=nombre, cargo=None))
+
+        return personas

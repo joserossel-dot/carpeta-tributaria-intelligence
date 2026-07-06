@@ -10,7 +10,23 @@
     "tipo_contribuyente": "Primera categoría",
     "regimen_tributario": null
   },
-  "representatives": [],
+  "representatives": [
+    {
+      "rut": "5603821−3",
+      "nombre": "BENJAMIN DE LAS MERCEDES GONZALEZ CANALES",
+      "cargo": null
+    },
+    {
+      "rut": "8417660−5",
+      "nombre": "CARLOS DAMIAN BOADA CAMPOS",
+      "cargo": null
+    },
+    {
+      "rut": "10664274−5",
+      "nombre": "LORENA CAROLINA FOLATRE BRIONES",
+      "cargo": null
+    }
+  ],
   "activities": [
     {
       "codigo": "681012",
@@ -2210,7 +2226,62 @@
       ]
     }
   ],
-  "f22": [],
+  "f22": [
+    {
+      "anio_tributario": "2019",
+      "ingresos": null,
+      "renta_liquida_imponible": null,
+      "capital_propio_tributario": null,
+      "impuesto_determinado": null,
+      "ppm": null,
+      "creditos": null,
+      "perdidas": null,
+      "base_imponible": null,
+      "resultado_tributario": null,
+      "observaciones": [
+        "No se encontraron Ingresos del Giro",
+        "No se encontró Renta Líquida Imponible",
+        "No se encontró Capital Propio Tributario",
+        "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+      ]
+    },
+    {
+      "anio_tributario": "2018",
+      "ingresos": null,
+      "renta_liquida_imponible": null,
+      "capital_propio_tributario": null,
+      "impuesto_determinado": null,
+      "ppm": null,
+      "creditos": null,
+      "perdidas": null,
+      "base_imponible": null,
+      "resultado_tributario": null,
+      "observaciones": [
+        "No se encontraron Ingresos del Giro",
+        "No se encontró Renta Líquida Imponible",
+        "No se encontró Capital Propio Tributario",
+        "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+      ]
+    },
+    {
+      "anio_tributario": "2017",
+      "ingresos": null,
+      "renta_liquida_imponible": null,
+      "capital_propio_tributario": null,
+      "impuesto_determinado": null,
+      "ppm": null,
+      "creditos": null,
+      "perdidas": null,
+      "base_imponible": null,
+      "resultado_tributario": null,
+      "observaciones": [
+        "No se encontraron Ingresos del Giro",
+        "No se encontró Renta Líquida Imponible",
+        "No se encontró Capital Propio Tributario",
+        "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+      ]
+    }
+  ],
   "properties": [],
   "vehicles": [],
   "validation": [],
@@ -2218,7 +2289,7 @@
     "company_age_years": null,
     "activity_count": 1,
     "principal_activity": "COMPRA, VENTA Y ALQUILER (EXCEPTO AMOBLADOS) DE INMUEBLES",
-    "representative_count": 0,
+    "representative_count": 3,
     "property_count": 0,
     "vehicle_count": 0,
     "f29_count": 34,
@@ -2231,13 +2302,11 @@
     "alerts": [
       "La empresa no tiene régimen tributario registrado."
     ],
-    "warnings": [
-      "La empresa no tiene representantes legales registrados."
-    ],
+    "warnings": [],
     "statistics": {
       "total_actividades": 1,
       "total_f29": 34,
-      "total_representantes": 0,
+      "total_representantes": 3,
       "total_propiedades": 0,
       "total_vehiculos": 0
     },
@@ -3146,11 +3215,48 @@
     "tipo_sociedad": null,
     "fecha_constitucion": null,
     "capital": null,
-    "socios": [],
-    "representantes": []
+    "socios": [
+      {
+        "rut": "5603821−3",
+        "nombre": "BENJAMIN DE LAS MERCEDES GONZALEZ CANALES",
+        "participacion": null
+      },
+      {
+        "rut": "79606270−3",
+        "nombre": "AGRICOLA GONZAGRI LIMITADA",
+        "participacion": null
+      },
+      {
+        "rut": "89810600−4",
+        "nombre": "INVERSIONES SEPTIMA REGION LIMITADA",
+        "participacion": null
+      },
+      {
+        "rut": "96589040−8",
+        "nombre": "DISTRIBUIDORA MULTIHOGAR SA",
+        "participacion": null
+      }
+    ],
+    "representantes": [
+      {
+        "rut": "5603821−3",
+        "nombre": "BENJAMIN DE LAS MERCEDES GONZALEZ CANALES",
+        "cargo": null
+      },
+      {
+        "rut": "8417660−5",
+        "nombre": "CARLOS DAMIAN BOADA CAMPOS",
+        "cargo": null
+      },
+      {
+        "rut": "10664274−5",
+        "nombre": "LORENA CAROLINA FOLATRE BRIONES",
+        "cargo": null
+      }
+    ]
   },
   "metadata": {
-    "source_file": "/Users/josealfonsorossel/AI-Workspace/Projects/CarpetaTributaria/examples/CPTGonzagriS.A..pdf",
+    "source_file": "/home/claude/carpeta-tributaria-intelligence/examples/CPTGonzagriS.A..pdf",
     "pages": 41,
     "processing_time": 0.0
   }

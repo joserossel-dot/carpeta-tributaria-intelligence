@@ -1,67 +1,127 @@
 import re
 
+from src.models.contributor import Contributor
+
+
 class ContributorParser:
-    def __init__(self):
-        self.rut_pattern = re.compile(r"(\d{1,2}\.?\d{3}\.?\d{3}-[\dkK])")
+    """Extrae los datos de identificacion del contribuyente.
 
-    def parse(self, extract_result, section_result) -> dict:
-        """
-        Analiza la sección 'Conformación de la sociedad' y devuelve un DICCIONARIO
-        compatible con el modelo Contributor para no romper la validación de Pydantic.
-        """
-        representatives = []
-        
-        text = ""
-        if hasattr(section_result, 'text') and section_result.text:
-            text = section_result.text
-        elif hasattr(extract_result, 'text') and extract_result.text:
-            text = extract_result.text
-        elif isinstance(extract_result, str):
-            text = extract_result
-            
+    El SII imprime estos datos como lineas "Etiqueta: valor" al inicio
+    de la carpeta (normalmente pagina 1), NO dentro de una seccion con
+    encabezado propio -- por eso este parser no depende de SectionDetector
+    y trabaja directo sobre el texto completo de la primera pagina.
+    """
+
+    # re.IGNORECASE en todo: el SII no es consistente entre formatos de
+    # carpeta -- a veces "Nombre del emisor", a veces "Nombre del Emisor".
+    _RE_RAZON_SOCIAL = re.compile(r"Nombre del emisor:\s*(.+)", re.IGNORECASE)
+    _RE_RUT = re.compile(r"RUT del emisor:\s*([\d.]+\s*[-−]\s*[\dkK])", re.IGNORECASE)
+    _RE_FECHA_GENERACION = re.compile(
+        r"Fecha de generaci[oó]n de la carpeta:\s*([\d/]+(?:\s+[\d:]+)?)", re.IGNORECASE
+    )
+    _RE_FECHA_INICIO = re.compile(
+        r"Fecha de Inicio de Actividades:\s*(.+)", re.IGNORECASE
+    )
+    # "Categoria tributaria" (Primera/Segunda categoria) y "Regimen
+    # Tributario" (ProPyme, 14A, etc.) son conceptos DISTINTOS en el SII.
+    # El formato viejo de carpeta solo trae categoria; el nuevo trae ambos.
+    _RE_CATEGORIA = re.compile(r"Categor[ií]a tributaria:\s*(.+)", re.IGNORECASE)
+    _RE_REGIMEN = re.compile(r"R[eé]gimen [Tt]ributario:\s*(.+)", re.IGNORECASE)
+    _RE_DOMICILIO = re.compile(r"Domicilio:\s*(.+)", re.IGNORECASE)
+    # El domicilio del emisor puede seguir en las lineas siguientes hasta
+    # que empieza el bloque de sucursales u otra seccion -- a diferencia de
+    # las demas etiquetas (una sola linea), este campo puede ser multilinea.
+    _RE_DOMICILIO_STOP = re.compile(
+        r"^\s*(Sucursales:|Informaci[oó]n proporcionada|Representante|"
+        r"Conformaci[oó]n de la sociedad|Actividad(?:es)? [Ee]con[oó]mica)",
+        re.IGNORECASE,
+    )
+
+    def parse(self, extract_result, section_result) -> Contributor:
+        text = self._get_text(extract_result, section_result)
         if not text:
-            return {}
+            return Contributor()
 
-        clean_text = " ".join(text.split())
-        
-        start_keywords = ["CONFORMACIÓN DE LA SOCIEDAD", "CONFORMACION DE LA SOCIEDAD", "REPRESENTANTES LEGALES"]
-        start_idx = -1
-        for kw in start_keywords:
-            if kw in clean_text.upper():
-                start_idx = clean_text.upper().find(kw)
+        primera_linea_domicilio, domicilio = self._extract_domicilio(text)
+
+        return Contributor(
+            razon_social=self._clean(self._match(self._RE_RAZON_SOCIAL, text)),
+            rut=self._clean_rut(self._match(self._RE_RUT, text)),
+            fecha_generacion=self._clean(self._match(self._RE_FECHA_GENERACION, text)),
+            fecha_inicio_actividades=self._clean(self._match(self._RE_FECHA_INICIO, text)),
+            tipo_contribuyente=self._clean(self._match(self._RE_CATEGORIA, text)),
+            regimen_tributario=self._clean(self._match(self._RE_REGIMEN, text)),
+            domicilio=domicilio,
+            comuna=self._extract_comuna(primera_linea_domicilio),
+        )
+
+    def _extract_domicilio(self, text: str) -> tuple[str | None, str | None]:
+        """Devuelve (primera_linea, domicilio_completo).
+
+        El domicilio del SII puede extenderse por varias lineas (direccion
+        principal + informacion adicional) antes del bloque "Sucursales:"
+        u otra seccion. La comuna se calcula solo sobre la primera linea
+        (la direccion principal), no sobre las lineas de sucursales.
+        """
+        m = self._RE_DOMICILIO.search(text)
+        if not m:
+            return None, None
+
+        start = m.end() - len(m.group(1))
+        resto = text[start:]
+        lineas = resto.split("\n")
+
+        primera_linea = lineas[0].strip()
+        bloque = [primera_linea] if primera_linea else []
+        for linea in lineas[1:]:
+            if self._RE_DOMICILIO_STOP.match(linea):
                 break
-                
-        fragmento = clean_text[start_idx:start_idx + 4000] if start_idx != -1 else clean_text
+            linea = linea.strip()
+            if linea:
+                bloque.append(linea)
 
-        ruts_encontrados = self.rut_pattern.findall(fragmento)
-        
-        if ruts_encontrados:
-            for i, rut in enumerate(ruts_encontrados):
-                pos_rut = fragmento.find(rut)
-                bloque_nombre = fragmento[pos_rut + len(rut):pos_rut + 150]
-                
-                bloque_nombre = re.sub(r"(REPRESENTANTE|LEGAL|SOCIO|ACCIONISTA|VIGENTE|FECHA|\bAL\b|\bDEL\b)", "", bloque_nombre, flags=re.IGNORECASE)
-                
-                if i + 1 < len(ruts_encontrados):
-                    siguiente_rut = ruts_encontrados[i+1]
-                    if siguiente_rut in bloque_nombre:
-                        bloque_nombre = bloque_nombre.split(siguiente_rut)[0]
-                
-                match_nombre = re.search(r"([A-ZÁÉÍÓÚÑa-záéíóúñ\s]{5,40})", bloque_nombre)
-                nombre_socio = match_nombre.group(1).strip() if match_nombre else "Socio no identificado"
+        domicilio = " ".join(bloque).strip() or None
+        return (primera_linea or None), domicilio
 
-                match_part = re.search(r"(\d{1,3}(?:[.,]\d{1,2})?\s*%)", bloque_nombre)
-                cargo_o_part = match_part.group(1).strip() if match_part else "Socio / Representante"
+    def _get_text(self, extract_result, section_result) -> str:
+        if hasattr(extract_result, "pages") and extract_result.pages:
+            # Los datos del emisor siempre estan en la primera pagina.
+            return extract_result.pages[0].text
+        if hasattr(section_result, "text") and section_result.text:
+            return section_result.text
+        if isinstance(extract_result, str):
+            return extract_result
+        return ""
 
-                representatives.append({
-                    "rut": rut,
-                    "nombre": nombre_socio,
-                    "cargo": cargo_o_part,
-                    "participacion": cargo_o_part
-                })
+    @staticmethod
+    def _match(pattern: re.Pattern, text: str) -> str | None:
+        m = pattern.search(text)
+        return m.group(1) if m else None
 
-        return {
-            "representatives": representatives,
-            "partners": representatives,
-            "socios": representatives
-        }
+    @staticmethod
+    def _clean(value: str | None) -> str | None:
+        if value is None:
+            return None
+        # Corta en el primer salto de linea: estas etiquetas son de una sola
+        # linea salvo Domicilio, que puede seguir en lineas siguientes -- se
+        # deja solo la primera linea para evitar arrastrar la seccion siguiente.
+        return value.split("\n")[0].strip() or None
+
+    @staticmethod
+    def _clean_rut(value: str | None) -> str | None:
+        if value is None:
+            return None
+        rut = re.sub(r"\s+", "", value.split("\n")[0])
+        return rut.replace("−", "-").strip() or None
+
+    @staticmethod
+    def _extract_comuna(domicilio: str | None) -> str | None:
+        """Heuristica: el ultimo tramo separado por coma de la direccion
+        suele incluir la comuna en el formato de domicilio del SII.
+        No es exacto (el SII no separa comuna en un campo propio en el
+        texto), pero es mejor que dejarlo vacio.
+        """
+        if not domicilio:
+            return None
+        partes = [p.strip() for p in domicilio.split(",") if p.strip()]
+        return partes[-1] if partes else None
