@@ -53,6 +53,7 @@ class TaxFolderEngine:
 
         tax_folder = TaxFolder(
             contributor=contributor,
+            representatives=corporate.representantes if corporate else [],
             activities=activities,
             f29=f29_forms,
             f22=f22_forms,
