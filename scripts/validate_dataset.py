@@ -42,8 +42,8 @@ def _gather_field_groups(result):
     }
 
 
-def main() -> None:
-    examples = sorted(Path("examples").glob("*.pdf"))
+def main(directory: str = "examples") -> None:
+    examples = sorted(Path(directory).glob("*.pdf"))
     rows: list[dict] = []
     all_missing: Counter = Counter()
     total = len(examples)
@@ -148,4 +148,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+
+    main(sys.argv[1] if len(sys.argv) > 1 else "examples")
