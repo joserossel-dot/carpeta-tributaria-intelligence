@@ -33,6 +33,10 @@ class TestSnapshot:
         actual = result.model_dump(mode="json")
 
         actual["metadata"]["processing_time"] = 0.0
+        # source_file es una ruta absoluta -- varia segun la maquina/usuario
+        # que corre el test, no es parte del contrato de datos a validar.
+        actual["metadata"]["source_file"] = ""
+        expected["metadata"]["source_file"] = ""
         if actual.get("kpis"):
             actual["kpis"]["processing_timestamp"] = ""
 
