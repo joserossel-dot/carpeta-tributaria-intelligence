@@ -6,14 +6,14 @@ from src.core.tax_folder_engine import TaxFolderEngine
 from src.reports.executive_report import ExecutiveReport
 
 
-def process_pdf(uploaded_file) -> tuple:
+def process_pdf(uploaded_file, cupo_solicitado: int | None = None) -> tuple:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
         tmp.write(uploaded_file.getbuffer())
         tmp_path = tmp.name
 
     try:
         engine = TaxFolderEngine(tmp_path)
-        result = engine.parse()
+        result = engine.parse(cupo_solicitado=cupo_solicitado)
 
         json_bytes = result.model_dump_json(
             indent=2, ensure_ascii=False

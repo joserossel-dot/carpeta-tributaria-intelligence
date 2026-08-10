@@ -5359,6 +5359,128 @@
       }
     ]
   },
+  "credit_risk": {
+    "calidad_datos": {
+      "completitud_pct": 100.0,
+      "campos_no_confiables": [
+        {
+          "campo": "f22.2019.Ingresos del Giro",
+          "motivo": "No se encontraron Ingresos del Giro"
+        },
+        {
+          "campo": "f22.2019.Renta Líquida Imponible",
+          "motivo": "No se encontró Renta Líquida Imponible"
+        },
+        {
+          "campo": "f22.2019.Capital Propio Tributario",
+          "motivo": "No se encontró Capital Propio Tributario"
+        },
+        {
+          "campo": "f22.2019.Impuesto determinado",
+          "motivo": "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+        },
+        {
+          "campo": "f22.2018.Ingresos del Giro",
+          "motivo": "No se encontraron Ingresos del Giro"
+        },
+        {
+          "campo": "f22.2018.Renta Líquida Imponible",
+          "motivo": "No se encontró Renta Líquida Imponible"
+        },
+        {
+          "campo": "f22.2018.Impuesto determinado",
+          "motivo": "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+        },
+        {
+          "campo": "f22.2017.Ingresos del Giro",
+          "motivo": "No se encontraron Ingresos del Giro"
+        },
+        {
+          "campo": "f22.2017.Renta Líquida Imponible",
+          "motivo": "No se encontró Renta Líquida Imponible"
+        },
+        {
+          "campo": "f22.2017.Capital Propio Tributario",
+          "motivo": "No se encontró Capital Propio Tributario"
+        },
+        {
+          "campo": "f22.2017.Impuesto determinado",
+          "motivo": "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+        }
+      ],
+      "meses_f29_faltantes": [],
+      "veredicto": "APTO_PARA_SCORING"
+    },
+    "hechos": {
+      "composicion_ventas": {
+        "pct_facturado": 1.0,
+        "pct_boletas": 0.0,
+        "monto_facturado_estimado": 1007081514,
+        "meses_evaluados": 34,
+        "nota": "sin código 111 (boletas) detectado -- puede ser un giro 100% facturado, o el rubro simplemente no emite boletas; no confirmar sin cruzar con el giro real de la empresa"
+      },
+      "postergaciones_iva": {
+        "meses_con_postergacion": 0,
+        "total_meses_evaluados": 34,
+        "periodos": []
+      }
+    },
+    "indicadores": {
+      "mora_efectiva": {
+        "score": 100,
+        "meses_con_recargo": 0,
+        "meses_con_remanente_credito": 28,
+        "meses_evaluados": 34,
+        "confianza": "alta",
+        "criterio": "distingue remanente de crédito fiscal (posición normal) de mora real (código 94 con recargo/interés)"
+      },
+      "margen_vs_giro": {
+        "score": null,
+        "ratio_debito_credito_12m": 0.164,
+        "codigo_actividad": "461001",
+        "descripcion_actividad": "CORRETAJE AL POR MAYOR DE PRODUCTOS AGRICOLAS",
+        "ratio_promedio_sector": null,
+        "n_empresas_referencia": 0,
+        "confianza": "insuficiente_muestra",
+        "criterio": "proxy de margen bruto (débito/crédito fiscal), no incluye remuneraciones; requiere benchmark propio por giro con muestra mínima antes de calificar con confianza alta"
+      },
+      "respaldo_estructural": {
+        "score": null,
+        "capital_propio_tributario": 1603576969849,
+        "cupo_solicitado": null,
+        "veces_cobertura": null,
+        "confianza": "media",
+        "criterio": "CPT es proxy tributario, no liquidez real"
+      }
+    },
+    "score_compuesto": null,
+    "decision": {
+      "resultado_base": "NO_EVALUABLE",
+      "producto_evaluado": "credito_30_dias",
+      "caminos_mitigacion": [
+        {
+          "condicion": "cesion_facturas_factoring",
+          "aplica": true,
+          "resultado": "APROBADO",
+          "cupo_sugerido": null,
+          "justificacion": "alta proporción facturada permite ceder cuentas por cobrar como garantía, reduciendo el riesgo de cobranza independiente del score de margen"
+        },
+        {
+          "condicion": "pago_contado_con_descuento",
+          "aplica": true,
+          "resultado": "APROBADO",
+          "cupo_sugerido": null,
+          "justificacion": "sin señales de mora efectiva en el historial evaluado"
+        }
+      ]
+    },
+    "alertas": [
+      "Margen vs. giro sin benchmark confiable todavía (muestra actual: 0 empresas del rubro)"
+    ],
+    "fortalezas": [
+      "Cero meses con mora efectiva en 34 meses de historia evaluados"
+    ]
+  },
   "metadata": {
     "source_file": "",
     "pages": 41,

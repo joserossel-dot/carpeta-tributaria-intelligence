@@ -5,6 +5,7 @@ from src.kpis.kpi_result import KPIResult
 from src.models.annual_tax_return import AnnualTaxReturn
 from src.models.contributor import Contributor
 from src.models.corporate import CorporateInfo
+from src.models.credit_risk import CreditRiskResult
 from src.models.f29 import F29
 from src.models.monthly_tax import MonthlyTax
 from src.rules.validation_result import ValidationResult
@@ -31,4 +32,5 @@ class TaxFolder(BaseModel):
     monthly_taxes: list[MonthlyTax] = []
     monthly_analysis: MonthlyTaxResult | None = None
     corporate: CorporateInfo | None = None
+    credit_risk: CreditRiskResult | None = None
     metadata: Metadata

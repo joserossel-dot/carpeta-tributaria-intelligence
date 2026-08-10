@@ -4,6 +4,7 @@ from app.components.activities import show_activities
 from app.components.alerts import show_alerts
 from app.components.company_info import show_company_info
 from app.components.corporate_info import show_corporate_info
+from app.components.credit_score import show_credit_score
 from app.components.downloads import show_downloads
 from app.components.export_data import show_export
 from app.components.f22_summary import show_f22_summary
@@ -13,13 +14,16 @@ from app.components.representatives import show_representatives
 from app.utils.pdf_processor import process_pdf
 
 st.set_page_config(
-    page_title="Carpeta Tributaria",
-    page_icon="📁",
+    page_title="Carpeta Tributaria Score",
+    page_icon="📊",
     layout="wide",
 )
 
-st.title("Carpeta Tributaria")
-st.markdown("Sube el PDF de la Carpeta Tributaria para obtener el análisis.")
+st.title("Carpeta Tributaria Score")
+st.markdown(
+    "Sube el PDF de la Carpeta Tributaria para obtener el análisis y el "
+    "score de riesgo crediticio."
+)
 
 uploaded_file = st.file_uploader(
     "Arrastra un PDF aquí",
@@ -27,10 +31,22 @@ uploaded_file = st.file_uploader(
     accept_multiple_files=False,
 )
 
+cupo_solicitado = st.number_input(
+    "Cupo de crédito solicitado (CLP, opcional)",
+    min_value=0,
+    value=0,
+    step=1_000_000,
+    help="Se usa para calcular el indicador de Respaldo Estructural (Capital "
+    "Propio Tributario vs. cupo). Si lo dejas en 0, ese indicador queda sin "
+    "calificar.",
+)
+
 if uploaded_file is not None and st.button("Analizar", type="primary"):
     with st.spinner("Procesando Carpeta Tributaria..."):
         try:
-            result, json_bytes, markdown_bytes = process_pdf(uploaded_file)
+            result, json_bytes, markdown_bytes = process_pdf(
+                uploaded_file, cupo_solicitado=cupo_solicitado or None
+            )
         except Exception as e:
             st.error(f"Error al procesar el PDF: {e}")
             st.stop()
@@ -43,8 +59,16 @@ if uploaded_file is not None and st.button("Analizar", type="primary"):
     show_kpi_cards(result)
     st.divider()
 
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
-        ["Empresa", "Socios y Administración", "IVA Mensual", "F22", "Alertas", "Exportación"]
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
+        [
+            "Empresa",
+            "Socios y Administración",
+            "IVA Mensual",
+            "F22",
+            "Score Crediticio",
+            "Alertas",
+            "Exportación",
+        ]
     )
 
     with tab1:
@@ -64,9 +88,12 @@ if uploaded_file is not None and st.button("Analizar", type="primary"):
         show_f22_summary(result)
 
     with tab5:
-        show_alerts(result)
+        show_credit_score(result)
 
     with tab6:
+        show_alerts(result)
+
+    with tab7:
         show_export(result)
 
     st.divider()
