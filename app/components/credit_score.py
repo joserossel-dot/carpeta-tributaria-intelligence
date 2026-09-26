@@ -13,7 +13,7 @@ _CONFIANZA_LABEL = {
 
 
 def show_credit_score(tax_folder: TaxFolder) -> None:
-    st.subheader("Score Crediticio")
+    st.subheader("Comité de Crédito B2B v2.0 — Asignación de Cupo Comercial")
 
     cr = tax_folder.credit_risk
     if cr is None:
@@ -30,24 +30,85 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
         return
 
     st.divider()
-    col1, col2 = st.columns([1, 2])
-    with col1:
-        if cr.score_compuesto is not None:
-            st.metric("Score compuesto", f"{cr.score_compuesto}/100")
+
+    # --- PANEL EJECUTIVO DE COMITÉ ---
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        st.metric("Score Crediticio", f"{cr.score_crediticio:.1f}/100", cr.categoria_riesgo)
+    with c2:
+        _show_veredicto_badge(cr.veredicto)
+    with c3:
+        cupo_str = fmt_currency(cr.cupo_aprobado) if cr.cupo_aprobado is not None else "—"
+        st.metric("Cupo Aprobado", cupo_str)
+    with c4:
+        plazo_str = f"{cr.plazo_sugerido_dias} días" if cr.plazo_sugerido_dias else "Contado"
+        st.metric("Plazo Sugerido", plazo_str, cr.garantia_exigida or "Sin garantía")
+
+    if cr.dictamen_ejecutivo:
+        if "RECHAZADO" in cr.veredicto:
+            st.error(f"**Dictamen de Comité:** {cr.dictamen_ejecutivo}")
+        elif "APROBADO" in cr.veredicto and "CONDICIONES" not in cr.veredicto:
+            st.success(f"**Dictamen de Comité:** {cr.dictamen_ejecutivo}")
         else:
-            st.metric("Score compuesto", "No evaluable")
-            st.caption("Menos de 2 de 3 indicadores tienen datos suficientes.")
-    with col2:
-        if cr.decision.resultado_base:
-            _show_resultado_badge(cr.decision.resultado_base)
+            st.warning(f"**Dictamen de Comité:** {cr.dictamen_ejecutivo}")
+
+    # --- MEMORIA DE CÁLCULO CUANTITATIVA ---
+    if cr.memoria_calculo:
+        with st.expander("📊 Memoria de Cálculo Cuantitativa de Cupo", expanded=True):
+            mc = cr.memoria_calculo
+            mc_c1, mc_c2, mc_c3, mc_c4 = st.columns(4)
+            with mc_c1:
+                st.caption("Paso A: Base Compras (30d)")
+                st.markdown(f"**${mc.get('base_compras_mensual_operacional', 0):,.0f}**".replace(",", "."))
+            with mc_c2:
+                st.caption("Paso B: Techo Ventas (20%)")
+                st.markdown(f"**${mc.get('techo_20pct_ventas_promedio', 0):,.0f}**".replace(",", "."))
+            with mc_c3:
+                st.caption("Paso C: Calidad Crediticia (Φ)")
+                st.markdown(f"**{mc.get('factor_phi_calidad_crediticia', 0.0):.2f}**")
+            with mc_c4:
+                st.caption("Paso D: Freno CPT")
+                freno = mc.get("cpt_freno_aplicado")
+                cpt_max = mc.get("cpt_maximo_cupo")
+                cpt_str = f"${cpt_max:,.0f}".replace(",", ".") if cpt_max else "N/A"
+                st.markdown(f"**{'SÍ (' + cpt_str + ')' if freno else 'NO'}**")
+
+    # --- COMPARATIVA OPERACIONAL 12M vs 3M ---
+    ma = tax_folder.monthly_analysis
+    if ma and (ma.tasa_crecimiento_ventas_trimestral is not None or ma.margen_operacional_implicito_promedio is not None):
+        with st.expander("📈 Dinámica Operacional Reciente (12M vs 3M)", expanded=False):
+            op_c1, op_c2, op_c3 = st.columns(3)
+            with op_c1:
+                tc = ma.tasa_crecimiento_ventas_trimestral
+                tc_str = f"{tc:+.1%}" if tc is not None else "N/A"
+                st.metric("Tendencia Ventas (3M vs 12M)", tc_str)
+            with op_c2:
+                tcc = ma.tasa_crecimiento_compras_trimestral
+                tcc_str = f"{tcc:+.1%}" if tcc is not None else "N/A"
+                st.metric("Tendencia Compras (3M vs 12M)", tcc_str)
+            with op_c3:
+                m12 = ma.margen_operacional_implicito_promedio
+                m12_str = f"{m12:.1%}" if m12 is not None else "N/A"
+                st.metric("Margen Implícito Operacional (12M)", m12_str)
+
+    # --- BANDERAS ROJAS Y HOJA DE RUTA ---
+    if cr.banderas_rojas:
+        st.markdown("#### Banderas Rojas")
+        for b in cr.banderas_rojas:
+            st.markdown(f"- 🔴 {b}")
+
+    if cr.hoja_ruta_comercial:
+        st.markdown("#### Hoja de Ruta Comercial")
+        for r in cr.hoja_ruta_comercial:
+            st.markdown(f"- 🧭 {r}")
 
     st.divider()
-    st.markdown("#### Hechos (sin calificar)")
-    st.caption("Se reportan tal cual, sin convertirlos en un juicio de riesgo.")
+    st.markdown("#### Hechos Factuales")
+    st.caption("Extracciones no calificadas de la carpeta tributaria.")
     _show_hechos(cr.hechos)
 
     st.divider()
-    st.markdown("#### Indicadores")
+    st.markdown("#### Pilares Cuantitativos de Riesgo")
     _show_indicador("Mora efectiva", cr.indicadores.mora_efectiva)
     _show_indicador("Margen vs. giro", cr.indicadores.margen_vs_giro)
     _show_indicador("Respaldo estructural", cr.indicadores.respaldo_estructural)
@@ -83,6 +144,18 @@ def _show_calidad_datos(calidad) -> None:
         with st.expander(f"{len(calidad.campos_no_confiables)} campo(s) no confiable(s)"):
             for c in calidad.campos_no_confiables:
                 st.markdown(f"- **{c.campo}**: {c.motivo}")
+
+
+def _show_veredicto_badge(resultado: str) -> None:
+    colores = {
+        "APROBADO": "green",
+        "APROBADO_CON_CONDICIONES": "orange",
+        "RECHAZADO": "red",
+        "OBSERVADO": "orange",
+        "NO_EVALUABLE": "gray",
+    }
+    color = colores.get(resultado, "gray")
+    st.markdown(f"### :{color}[**{resultado.replace('_', ' ')}**]")
 
 
 def _show_resultado_badge(resultado: str) -> None:

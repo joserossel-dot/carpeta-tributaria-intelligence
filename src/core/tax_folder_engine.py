@@ -15,6 +15,13 @@ from src.parsers.f22_parser import F22Parser
 from src.parsers.f29_financial_parser import F29FinancialParser
 from src.parsers.f29_parser import F29Parser
 from src.rules.rule_engine import RuleEngine
+from src.rules.tax_rules import (
+    MultiplesActividadesPrincipalesRule,
+    SinActividadesRule,
+    SinF29Rule,
+    SinRegimenTributarioRule,
+    SinRepresentantesRule,
+)
 from src.services.monthly_tax_service import MonthlyTaxService
 
 
@@ -36,6 +43,11 @@ class TaxFolderEngine:
         activities_parser = EconomicActivitiesParser()
         corporate_parser = CorporateParser()
         rule_engine = RuleEngine()
+        rule_engine.register(SinActividadesRule())
+        rule_engine.register(SinF29Rule())
+        rule_engine.register(SinRepresentantesRule())
+        rule_engine.register(MultiplesActividadesPrincipalesRule())
+        rule_engine.register(SinRegimenTributarioRule())
         kpi_engine = KPIEngine()
         tax_analyzer = TaxAnalyzer()
         tax_folder_mapper = TaxFolderMapper()

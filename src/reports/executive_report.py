@@ -19,6 +19,7 @@ class ExecutiveReport:
         self._add_company_age(lines, kpis, tax_folder)
         self._add_f29_summary(lines, kpis, tax_folder)
         self._add_statistics(lines, analysis)
+        self._add_credit_committee(lines, tax_folder)
         self._add_alerts(lines, analysis)
         self._add_warnings(lines, analysis)
 
@@ -91,6 +92,44 @@ class ExecutiveReport:
             label = key.replace("_", " ").capitalize()
             lines.append(f"- **{label}:** {value}")
         lines.append("")
+
+    @staticmethod
+    def _add_credit_committee(lines: list[str], tf: TaxFolder) -> None:
+        if not tf.credit_risk:
+            return
+        cr = tf.credit_risk
+        lines.append("## Dictamen de Comité de Crédito B2B v2.0\n")
+        lines.append(f"- **Veredicto:** {cr.veredicto}")
+        lines.append(f"- **Score Crediticio:** {cr.score_crediticio:.1f}/100 ({cr.categoria_riesgo})")
+        if cr.cupo_aprobado is not None:
+            lines.append(f"- **Cupo Aprobado:** ${cr.cupo_aprobado:,.0f}".replace(",", "."))
+        if cr.cupo_maximo_sugerido is not None:
+            lines.append(f"- **Cupo Máximo Sugerido:** ${cr.cupo_maximo_sugerido:,.0f}".replace(",", "."))
+        if cr.plazo_sugerido_dias is not None:
+            lines.append(f"- **Plazo Sugerido:** {cr.plazo_sugerido_dias} días")
+        if cr.garantia_exigida:
+            lines.append(f"- **Garantía Exigida:** {cr.garantia_exigida}")
+        if cr.dictamen_ejecutivo:
+            lines.append(f"\n> **Dictamen:** {cr.dictamen_ejecutivo}\n")
+
+        if cr.memoria_calculo:
+            lines.append("### Memoria de Cálculo Cuantitativa")
+            for k, v in cr.memoria_calculo.items():
+                label = k.replace("_", " ").capitalize()
+                lines.append(f"- **{label}:** {v}")
+            lines.append("")
+
+        if cr.banderas_rojas:
+            lines.append("### Banderas Rojas")
+            for b in cr.banderas_rojas:
+                lines.append(f"- 🔴 {b}")
+            lines.append("")
+
+        if cr.hoja_ruta_comercial:
+            lines.append("### Hoja de Ruta Comercial")
+            for r in cr.hoja_ruta_comercial:
+                lines.append(f"- 🧭 {r}")
+            lines.append("")
 
     @staticmethod
     def _add_alerts(lines: list[str], analysis: AnalysisResult) -> None:

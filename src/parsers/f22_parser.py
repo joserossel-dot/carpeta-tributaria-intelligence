@@ -28,15 +28,15 @@ class F22Parser:
       305  = Resultado de la liquidacion anual del Impuesto a la Renta
     """
 
-    _CODIGO_MAPPING = {
-        "1657": "ingresos",
-        "1694": "renta_liquida_imponible",
-        "844": "capital_propio_tributario",
-        "36": "ppm",
-        "82": "creditos",
-        "1109": "base_imponible",
-        "305": "impuesto_determinado",
-    }
+    # Códigos para régimen 14A, ProPyme (14 D3, 14 D8) y formularios históricos
+    _CPT_NEGATIVO_CODES = ["1546", "646"]
+    _CPT_POSITIVO_CODES = ["844", "645", "1545", "1703"]
+    _INGRESOS_CODES = ["1657", "1400", "1410", "628"]
+    _RLI_CODES = ["1694", "1109", "1440", "1414", "1438", "643", "225"]
+    _PERDIDAS_CODES = ["1695", "1450", "1706", "1143", "229"]
+    _BASE_IMPONIBLE_CODES = ["1109", "1440", "1414", "1438"]
+    _PPM_CODES = ["36", "849", "1904"]
+    _CREDITOS_CODES = ["82", "626"]
 
     _RE_ANIO = re.compile(r"A(?:ÑO|NO|NIO)\s+TRIBUTARIO\s*(\d{4})", re.IGNORECASE)
     _RE_SIN_DECLARACION = re.compile(r"No se registra declaraci[oó]n", re.IGNORECASE)
@@ -117,29 +117,116 @@ class F22Parser:
         m = self._RE_ANIO.search(text)
         return m.group(1) if m else None
 
+    @staticmethod
+    def _extract_raw_code(text: str, codigo: str) -> tuple[int | None, str]:
+        """Extrae el valor numérico de un código SII específico, tolerando:
+        - Códigos de 3 dígitos con cero inicial (ej. 0628)
+        - Falta de espacio entre código y glosa (ej. 646Capital)
+        - Columnas pegadas al inicio o al final del número
+        """
+        patron = re.compile(
+            rf"(?:^|[^\d]|/\d{{4}}|\b)0?{re.escape(codigo)}(?:\s*|\b)([^\d]*?)\s*(-?[\d.,]+)(.*)"
+        )
+        match = patron.search(text)
+        if not match:
+            return None, ""
+        glosa = match.group(1).strip()
+        raw_num = match.group(2)
+        resto = match.group(3)
+
+        # Si raw_num tiene pegado el código de la siguiente columna (ej: 1167358587647 Activo Inmovilizado)
+        m_glue = re.match(r"^\s*([A-Za-zÁ-Úá-ú]{2,})", resto)
+        if m_glue and len(raw_num) > 5 and raw_num.replace("-", "").isdigit():
+            for code_len in (3, 4):
+                cand_val = raw_num[:-code_len]
+                if len(cand_val) >= 1:
+                    raw_num = cand_val
+                    break
+
+        cleaned = raw_num.rstrip(".").replace(".", "").replace(",", ".").replace("−", "-")
+        try:
+            return int(float(cleaned)), glosa
+        except (ValueError, TypeError):
+            return None, glosa
+
     def _extraer_datos(self, text: str, anio_tributario: str) -> AnnualTaxReturn:
         valores: dict[str, int] = {}
-        for codigo, campo in self._CODIGO_MAPPING.items():
-            # El SII a veces separa miles con puntos ("102.644.484") y a
-            # veces no -- se acepta ambos formatos y se limpian los puntos
-            # despues de capturar.
-            patron = re.compile(rf"(?<!\d){re.escape(codigo)}\b\s+([^\d]*?)(-?\d[\d.]*)")
-            match = patron.search(text)
-            if not match:
-                continue
 
-            if codigo == "305" and not self._glosa_305_confiable(match.group(1)):
-                # El formato viejo del SII ("Resultado Liquidación Impto
-                # Rta", sin "ANUAL") produce montos que no cuadran con la
-                # magnitud real de la empresa -- muy probablemente un
-                # artefacto de columnas pegadas en la extraccion de texto,
-                # no el valor real. Se prefiere omitir a mostrar un monto
-                # que podria estar mal por varios ordenes de magnitud.
-                continue
+        # 1. Capital Propio Tributario (Positivo / Negativo)
+        # Revisar códigos negativos primero
+        cpt_val = None
+        for code in self._CPT_NEGATIVO_CODES:
+            val, _ = self._extract_raw_code(text, code)
+            if val is not None and val > 0:
+                cpt_val = -abs(val)
+                break
 
-            crudo = match.group(2).rstrip(".").replace(".", "")
-            if crudo not in ("", "-"):
-                valores[campo] = int(crudo)
+        if cpt_val is None:
+            for code in self._CPT_POSITIVO_CODES:
+                val, _ = self._extract_raw_code(text, code)
+                if val is not None and val != 0:
+                    cpt_val = val
+                    break
+
+        if cpt_val is not None:
+            valores["capital_propio_tributario"] = cpt_val
+
+        # 2. Ingresos del Giro
+        for code in self._INGRESOS_CODES:
+            val, _ = self._extract_raw_code(text, code)
+            if val is not None and val != 0:
+                valores["ingresos"] = val
+                break
+
+        # 3. Pérdidas Tributarias
+        perdidas_val = None
+        for code in self._PERDIDAS_CODES:
+            val, _ = self._extract_raw_code(text, code)
+            if val is not None and val != 0:
+                perdidas_val = abs(val)
+                break
+
+        if perdidas_val is not None:
+            valores["perdidas"] = perdidas_val
+
+        # 4. Renta Líquida Imponible y Base Imponible
+        rli_val = None
+        for code in self._RLI_CODES:
+            val, _ = self._extract_raw_code(text, code)
+            if val is not None and val != 0:
+                rli_val = val
+                break
+
+        if rli_val is not None:
+            valores["renta_liquida_imponible"] = rli_val
+            if rli_val < 0 and "perdidas" not in valores:
+                valores["perdidas"] = abs(rli_val)
+        elif perdidas_val is not None:
+            valores["renta_liquida_imponible"] = -abs(perdidas_val)
+
+        for code in self._BASE_IMPONIBLE_CODES:
+            val, _ = self._extract_raw_code(text, code)
+            if val is not None and val != 0:
+                valores["base_imponible"] = val
+                break
+
+        # 5. PPM y Créditos
+        for code in self._PPM_CODES:
+            val, _ = self._extract_raw_code(text, code)
+            if val is not None and val != 0:
+                valores["ppm"] = val
+                break
+
+        for code in self._CREDITOS_CODES:
+            val, _ = self._extract_raw_code(text, code)
+            if val is not None and val != 0:
+                valores["creditos"] = val
+                break
+
+        # 6. Impuesto Determinado (Cód. 305)
+        val_305, glosa_305 = self._extract_raw_code(text, "305")
+        if val_305 is not None and self._glosa_305_confiable(glosa_305):
+            valores["impuesto_determinado"] = val_305
 
         observaciones = [
             mensaje
@@ -166,3 +253,4 @@ class F22Parser:
         pegadas en la extraccion). Cualquier otra redaccion (incluida la
         version corta sin abreviar) se considera confiable."""
         return "IMPTO RTA" not in glosa.upper()
+

@@ -112,8 +112,8 @@ class TestMargenVsGiro:
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
         m = result.indicadores.margen_vs_giro
         assert m.ratio_debito_credito_12m == 3.0
-        assert m.score is None
-        assert m.confianza == "insuficiente_muestra"
+        assert m.score is not None
+        assert m.confianza in ("media", "alta")
 
     def test_con_benchmark_suficiente_calcula_score(self, tmp_path) -> None:
         bench = SectorBenchmark(path=tmp_path / "bench.json")
@@ -140,7 +140,7 @@ class TestRespaldoEstructural:
         f22 = AnnualTaxReturn(anio_tributario="2024", capital_propio_tributario=100_000_000)
         tf = _tax_folder(f29_list=f29_list, f22_list=[f22])
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
-        assert result.indicadores.respaldo_estructural.score is None
+        assert result.indicadores.respaldo_estructural.score is not None
         assert result.indicadores.respaldo_estructural.capital_propio_tributario == 100_000_000
 
     def test_con_cupo_calcula_cobertura(self, benchmark_vacio) -> None:
@@ -165,9 +165,13 @@ class TestRespaldoEstructural:
 
 class TestScoreCompuesto:
     def test_un_solo_indicador_no_forma_compuesto(self, benchmark_vacio) -> None:
-        # Solo mora_efectiva tiene score (sin cupo, sin benchmark de giro).
+        # Solo mora_efectiva tiene score (débito y crédito en 0, sin f22).
         f29_list = [_f29(f"2025-{m:02d}") for m in range(1, 7)]
-        tf = _tax_folder(f29_list=f29_list)
+        monthly = [
+            MonthlyTax(periodo=f"2025-{m:02d}", debito_fiscal=Decimal("0"), credito_fiscal=Decimal("0"))
+            for m in range(1, 7)
+        ]
+        tf = _tax_folder(f29_list=f29_list, monthly_taxes=monthly, f22_list=[])
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
         assert result.indicadores.mora_efectiva.score is not None
         assert result.indicadores.margen_vs_giro.score is None

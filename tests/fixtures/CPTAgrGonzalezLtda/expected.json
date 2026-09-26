@@ -4133,7 +4133,7 @@
       "anio_tributario": "2019",
       "ingresos": null,
       "renta_liquida_imponible": null,
-      "capital_propio_tributario": null,
+      "capital_propio_tributario": 6559199969,
       "impuesto_determinado": null,
       "ppm": null,
       "creditos": null,
@@ -4143,7 +4143,6 @@
       "observaciones": [
         "No se encontraron Ingresos del Giro",
         "No se encontró Renta Líquida Imponible",
-        "No se encontró Capital Propio Tributario",
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
       ]
     },
@@ -4154,7 +4153,7 @@
       "capital_propio_tributario": null,
       "impuesto_determinado": null,
       "ppm": null,
-      "creditos": 312110101,
+      "creditos": null,
       "perdidas": null,
       "base_imponible": null,
       "resultado_tributario": null,
@@ -4166,8 +4165,8 @@
     },
     {
       "anio_tributario": "2017",
-      "ingresos": null,
-      "renta_liquida_imponible": null,
+      "ingresos": 2957744173,
+      "renta_liquida_imponible": 173179282,
       "capital_propio_tributario": null,
       "impuesto_determinado": null,
       "ppm": null,
@@ -4176,8 +4175,6 @@
       "base_imponible": null,
       "resultado_tributario": null,
       "observaciones": [
-        "No se encontraron Ingresos del Giro",
-        "No se encontró Renta Líquida Imponible",
         "No se encontró Capital Propio Tributario",
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
       ]
@@ -4185,7 +4182,15 @@
   ],
   "properties": [],
   "vehicles": [],
-  "validation": [],
+  "validation": [
+    {
+      "severity": "error",
+      "code": "CONT-001",
+      "title": "Sin régimen tributario",
+      "description": "La empresa no tiene régimen tributario registrado.",
+      "recommendation": "Verificar el régimen tributario asignado por el SII."
+    }
+  ],
   "kpis": {
     "company_age_years": null,
     "activity_count": 1,
@@ -4225,6 +4230,14 @@
       "iva_determinado": "0",
       "ppm": "5793857",
       "total_ventas": "362116071",
+      "compras_operacionales": "17428151",
+      "credito_operacional": "3311348",
+      "activo_fijo": "5880000",
+      "remanente_anterior": "6765555",
+      "notas_credito_compras": "602457",
+      "retencion_sueldos": "190986",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "214986",
       "observaciones": []
     },
     {
@@ -4238,6 +4251,14 @@
       "iva_determinado": "0",
       "ppm": "9738578",
       "total_ventas": "608661101",
+      "compras_operacionales": "113944594",
+      "credito_operacional": "21649471",
+      "activo_fijo": "41561995",
+      "remanente_anterior": null,
+      "notas_credito_compras": "189304",
+      "retencion_sueldos": "605225",
+      "retencion_honorarios": "74000",
+      "retenciones_totales": "679225",
       "observaciones": []
     },
     {
@@ -4251,6 +4272,14 @@
       "iva_determinado": "0",
       "ppm": "7379431",
       "total_ventas": null,
+      "compras_operacionales": "44391795",
+      "credito_operacional": "8281825",
+      "activo_fijo": "298305",
+      "remanente_anterior": null,
+      "notas_credito_compras": "292425",
+      "retencion_sueldos": "201027",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "225027",
       "observaciones": []
     },
     {
@@ -4264,6 +4293,14 @@
       "iva_determinado": "5582100",
       "ppm": "4353151",
       "total_ventas": "272071963",
+      "compras_operacionales": "160296586",
+      "credito_operacional": "30456348",
+      "activo_fijo": "82395921",
+      "remanente_anterior": null,
+      "notas_credito_compras": "21874",
+      "retencion_sueldos": "151757",
+      "retencion_honorarios": "165222",
+      "retenciones_totales": "316979",
       "observaciones": []
     },
     {
@@ -4277,6 +4314,14 @@
       "iva_determinado": "0",
       "ppm": "4992239",
       "total_ventas": null,
+      "compras_operacionales": "188176303",
+      "credito_operacional": "34848475",
+      "activo_fijo": "78042974",
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": "156494",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "180494",
       "observaciones": []
     },
     {
@@ -4290,6 +4335,14 @@
       "iva_determinado": "0",
       "ppm": "3546546",
       "total_ventas": null,
+      "compras_operacionales": "65090262",
+      "credito_operacional": "11239157",
+      "activo_fijo": "10500000",
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": "169655",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "193655",
       "observaciones": []
     },
     {
@@ -4303,6 +4356,14 @@
       "iva_determinado": "0",
       "ppm": "3560",
       "total_ventas": "222500",
+      "compras_operacionales": "38053035",
+      "credito_operacional": "7230075",
+      "activo_fijo": "4711832",
+      "remanente_anterior": null,
+      "notas_credito_compras": "11600",
+      "retencion_sueldos": "169842",
+      "retencion_honorarios": "56801",
+      "retenciones_totales": "226643",
       "observaciones": []
     },
     {
@@ -4316,6 +4377,14 @@
       "iva_determinado": "0",
       "ppm": "246760",
       "total_ventas": "15422474",
+      "compras_operacionales": "143640958",
+      "credito_operacional": "27291778",
+      "activo_fijo": "5590779",
+      "remanente_anterior": "8099124",
+      "notas_credito_compras": "28652",
+      "retencion_sueldos": "192949",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "216949",
       "observaciones": []
     },
     {
@@ -4329,6 +4398,14 @@
       "iva_determinado": "0",
       "ppm": null,
       "total_ventas": null,
+      "compras_operacionales": "82893061",
+      "credito_operacional": "15162110",
+      "activo_fijo": "18250000",
+      "remanente_anterior": "33455752",
+      "notas_credito_compras": "183144",
+      "retencion_sueldos": "177172",
+      "retencion_honorarios": "68444",
+      "retenciones_totales": "245616",
       "observaciones": []
     },
     {
@@ -4342,6 +4419,14 @@
       "iva_determinado": "0",
       "ppm": "1786159",
       "total_ventas": "111634932",
+      "compras_operacionales": "160205660",
+      "credito_operacional": "30439073",
+      "activo_fijo": "120277168",
+      "remanente_anterior": "52397736",
+      "notas_credito_compras": "6864384",
+      "retencion_sueldos": "204755",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "228755",
       "observaciones": []
     },
     {
@@ -4355,6 +4440,14 @@
       "iva_determinado": "0",
       "ppm": "12688702",
       "total_ventas": "793043887",
+      "compras_operacionales": "131458273",
+      "credito_operacional": "24977068",
+      "activo_fijo": "37532374",
+      "remanente_anterior": "84563201",
+      "notas_credito_compras": null,
+      "retencion_sueldos": "597749",
+      "retencion_honorarios": "57333",
+      "retenciones_totales": "655082",
       "observaciones": []
     },
     {
@@ -4368,6 +4461,14 @@
       "iva_determinado": "0",
       "ppm": "8815287",
       "total_ventas": "518546266",
+      "compras_operacionales": "130891950",
+      "credito_operacional": "19754841",
+      "activo_fijo": "675489",
+      "remanente_anterior": null,
+      "notas_credito_compras": "1147600",
+      "retencion_sueldos": "682711",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "706711",
       "observaciones": []
     },
     {
@@ -4381,6 +4482,14 @@
       "iva_determinado": "0",
       "ppm": "2096279",
       "total_ventas": "123310548",
+      "compras_operacionales": "81973068",
+      "credito_operacional": "15574881",
+      "activo_fijo": "3500000",
+      "remanente_anterior": null,
+      "notas_credito_compras": "19300",
+      "retencion_sueldos": "208802",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "232802",
       "observaciones": []
     },
     {
@@ -4394,6 +4503,14 @@
       "iva_determinado": "0",
       "ppm": "2228930",
       "total_ventas": "131113545",
+      "compras_operacionales": "115241525",
+      "credito_operacional": "20355459",
+      "activo_fijo": "25195968",
+      "remanente_anterior": null,
+      "notas_credito_compras": "37487",
+      "retencion_sueldos": "578212",
+      "retencion_honorarios": "30667",
+      "retenciones_totales": "608879",
       "observaciones": []
     },
     {
@@ -4407,6 +4524,14 @@
       "iva_determinado": "25634444",
       "ppm": "3963014",
       "total_ventas": "233118465",
+      "compras_operacionales": "72411179",
+      "credito_operacional": "13758120",
+      "activo_fijo": "24569358",
+      "remanente_anterior": "231766",
+      "notas_credito_compras": "293309",
+      "retencion_sueldos": "191232",
+      "retencion_honorarios": "111924",
+      "retenciones_totales": "303156",
       "observaciones": []
     },
     {
@@ -4420,6 +4545,14 @@
       "iva_determinado": "4033325",
       "ppm": "4138901",
       "total_ventas": "243464789",
+      "compras_operacionales": "196313753",
+      "credito_operacional": "37299610",
+      "activo_fijo": "25923026",
+      "remanente_anterior": null,
+      "notas_credito_compras": "106186",
+      "retencion_sueldos": "159524",
+      "retencion_honorarios": "149556",
+      "retenciones_totales": "309080",
       "observaciones": []
     },
     {
@@ -4433,6 +4566,14 @@
       "iva_determinado": "12772171",
       "ppm": "2710220",
       "total_ventas": "159424723",
+      "compras_operacionales": "113652348",
+      "credito_operacional": "17453065",
+      "activo_fijo": "344532",
+      "remanente_anterior": null,
+      "notas_credito_compras": "59350",
+      "retencion_sueldos": "128444",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "152444",
       "observaciones": []
     },
     {
@@ -4446,6 +4587,14 @@
       "iva_determinado": "973537",
       "ppm": "721206",
       "total_ventas": "42423884",
+      "compras_operacionales": "35941206",
+      "credito_operacional": "6828826",
+      "activo_fijo": "1358816",
+      "remanente_anterior": null,
+      "notas_credito_compras": "3431403",
+      "retencion_sueldos": "124124",
+      "retencion_honorarios": "44667",
+      "retenciones_totales": "168791",
       "observaciones": []
     },
     {
@@ -4459,6 +4608,14 @@
       "iva_determinado": "0",
       "ppm": "1006437",
       "total_ventas": "59202187",
+      "compras_operacionales": "65639791",
+      "credito_operacional": "12471558",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "670331",
+      "retencion_sueldos": "100782",
+      "retencion_honorarios": "30000",
+      "retenciones_totales": "130782",
       "observaciones": []
     },
     {
@@ -4472,6 +4629,14 @@
       "iva_determinado": "0",
       "ppm": "785510",
       "total_ventas": "46206467",
+      "compras_operacionales": "46695996",
+      "credito_operacional": "8872237",
+      "activo_fijo": null,
+      "remanente_anterior": "1391504",
+      "notas_credito_compras": "279881",
+      "retencion_sueldos": "115619",
+      "retencion_honorarios": "164333",
+      "retenciones_totales": "279952",
       "observaciones": []
     },
     {
@@ -4485,6 +4650,14 @@
       "iva_determinado": "0",
       "ppm": "2811093",
       "total_ventas": "165358435",
+      "compras_operacionales": "178430313",
+      "credito_operacional": "32985032",
+      "activo_fijo": null,
+      "remanente_anterior": "1489107",
+      "notas_credito_compras": "631846",
+      "retencion_sueldos": "150710",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "174710",
       "observaciones": []
     },
     {
@@ -4498,6 +4671,14 @@
       "iva_determinado": "0",
       "ppm": "1725635",
       "total_ventas": "101507967",
+      "compras_operacionales": "110383879",
+      "credito_operacional": "20162296",
+      "activo_fijo": null,
+      "remanente_anterior": "3068481",
+      "notas_credito_compras": "196717",
+      "retencion_sueldos": "144102",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "168102",
       "observaciones": []
     },
     {
@@ -4511,6 +4692,14 @@
       "iva_determinado": "84533891",
       "ppm": "13569920",
       "total_ventas": "798230569",
+      "compras_operacionales": "292954382",
+      "credito_operacional": "53386306",
+      "activo_fijo": "51576089",
+      "remanente_anterior": "3944154",
+      "notas_credito_compras": "2829243",
+      "retencion_sueldos": "436967",
+      "retencion_honorarios": "206556",
+      "retenciones_totales": "643523",
       "observaciones": []
     },
     {
@@ -4524,6 +4713,14 @@
       "iva_determinado": "0",
       "ppm": "741532",
       "total_ventas": "43619544",
+      "compras_operacionales": "957619",
+      "credito_operacional": "181944",
+      "activo_fijo": "89128447",
+      "remanente_anterior": null,
+      "notas_credito_compras": "10371078",
+      "retencion_sueldos": "435111",
+      "retencion_honorarios": "479226",
+      "retenciones_totales": "914337",
       "observaciones": []
     },
     {
@@ -4537,6 +4734,14 @@
       "iva_determinado": "0",
       "ppm": "22400",
       "total_ventas": "1317669",
+      "compras_operacionales": "71573848",
+      "credito_operacional": "13599028",
+      "activo_fijo": "1161116",
+      "remanente_anterior": "8837478",
+      "notas_credito_compras": "1239791",
+      "retencion_sueldos": "169437",
+      "retencion_honorarios": "407444",
+      "retenciones_totales": "576881",
       "observaciones": []
     },
     {
@@ -4550,6 +4755,14 @@
       "iva_determinado": "2006557",
       "ppm": "3350195",
       "total_ventas": "197070289",
+      "compras_operacionales": "82440339",
+      "credito_operacional": "12701655",
+      "activo_fijo": "1728226",
+      "remanente_anterior": "22406780",
+      "notas_credito_compras": "1237528",
+      "retencion_sueldos": "523565",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "547565",
       "observaciones": []
     },
     {
@@ -4563,6 +4776,14 @@
       "iva_determinado": "0",
       "ppm": "1861291",
       "total_ventas": "109487711",
+      "compras_operacionales": "208129867",
+      "credito_operacional": "39544669",
+      "activo_fijo": "318837",
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": "222550",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "246550",
       "observaciones": []
     },
     {
@@ -4576,6 +4797,14 @@
       "iva_determinado": "16284870",
       "ppm": "4468166",
       "total_ventas": "262833304",
+      "compras_operacionales": "77866285",
+      "credito_operacional": "14794590",
+      "activo_fijo": null,
+      "remanente_anterior": "18858868",
+      "notas_credito_compras": null,
+      "retencion_sueldos": "189539",
+      "retencion_honorarios": "258667",
+      "retenciones_totales": "448206",
       "observaciones": []
     },
     {
@@ -4589,6 +4818,14 @@
       "iva_determinado": "56296586",
       "ppm": "7421733",
       "total_ventas": "436572508",
+      "compras_operacionales": "92273865",
+      "credito_operacional": "17532031",
+      "activo_fijo": "48000837",
+      "remanente_anterior": null,
+      "notas_credito_compras": "217830",
+      "retencion_sueldos": "191949",
+      "retencion_honorarios": "37889",
+      "retenciones_totales": "229838",
       "observaciones": []
     },
     {
@@ -4602,6 +4839,14 @@
       "iva_determinado": "19366063",
       "ppm": "2910676",
       "total_ventas": "171216221",
+      "compras_operacionales": "84367618",
+      "credito_operacional": "13160434",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "2214516",
+      "retencion_sueldos": "182794",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "206794",
       "observaciones": []
     },
     {
@@ -4615,6 +4860,14 @@
       "iva_determinado": "0",
       "ppm": "918",
       "total_ventas": "54000",
+      "compras_operacionales": "47409055",
+      "credito_operacional": "9007717",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "290765",
+      "retencion_sueldos": "213161",
+      "retencion_honorarios": "28444",
+      "retenciones_totales": "241605",
       "observaciones": []
     },
     {
@@ -4628,6 +4881,14 @@
       "iva_determinado": "0",
       "ppm": "14457807",
       "total_ventas": "850459237",
+      "compras_operacionales": "32027851",
+      "credito_operacional": "5006125",
+      "activo_fijo": "5021011",
+      "remanente_anterior": "9015307",
+      "notas_credito_compras": "162341",
+      "retencion_sueldos": "236077",
+      "retencion_honorarios": "51555",
+      "retenciones_totales": "287632",
       "observaciones": []
     },
     {
@@ -4641,6 +4902,14 @@
       "iva_determinado": "0",
       "ppm": null,
       "total_ventas": null,
+      "compras_operacionales": "119548691",
+      "credito_operacional": "22401619",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "1408735",
+      "retencion_sueldos": "93921",
+      "retencion_honorarios": "135111",
+      "retenciones_totales": "229032",
       "observaciones": []
     },
     {
@@ -4654,6 +4923,14 @@
       "iva_determinado": "0",
       "ppm": null,
       "total_ventas": null,
+      "compras_operacionales": "55810501",
+      "credito_operacional": "9129310",
+      "activo_fijo": "2345321",
+      "remanente_anterior": "22580946",
+      "notas_credito_compras": null,
+      "retencion_sueldos": "151006",
+      "retencion_honorarios": "24000",
+      "retenciones_totales": "175006",
       "observaciones": []
     },
     {
@@ -4667,6 +4944,14 @@
       "iva_determinado": "0",
       "ppm": "5158588",
       "total_ventas": "303446368",
+      "compras_operacionales": "157174776",
+      "credito_operacional": "27295148",
+      "activo_fijo": "12211726",
+      "remanente_anterior": "32188104",
+      "notas_credito_compras": "58813255",
+      "retencion_sueldos": "163926",
+      "retencion_honorarios": "135111",
+      "retenciones_totales": "299037",
       "observaciones": []
     }
   ],
@@ -4683,6 +4968,14 @@
         "iva_determinado": "0",
         "ppm": "5793857",
         "total_ventas": "362116071",
+        "compras_operacionales": "17428151",
+        "credito_operacional": "3311348",
+        "activo_fijo": "5880000",
+        "remanente_anterior": "6765555",
+        "notas_credito_compras": "602457",
+        "retencion_sueldos": "190986",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "214986",
         "observaciones": []
       },
       {
@@ -4696,6 +4989,14 @@
         "iva_determinado": "0",
         "ppm": "9738578",
         "total_ventas": "608661101",
+        "compras_operacionales": "113944594",
+        "credito_operacional": "21649471",
+        "activo_fijo": "41561995",
+        "remanente_anterior": null,
+        "notas_credito_compras": "189304",
+        "retencion_sueldos": "605225",
+        "retencion_honorarios": "74000",
+        "retenciones_totales": "679225",
         "observaciones": []
       },
       {
@@ -4709,6 +5010,14 @@
         "iva_determinado": "0",
         "ppm": "7379431",
         "total_ventas": null,
+        "compras_operacionales": "44391795",
+        "credito_operacional": "8281825",
+        "activo_fijo": "298305",
+        "remanente_anterior": null,
+        "notas_credito_compras": "292425",
+        "retencion_sueldos": "201027",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "225027",
         "observaciones": []
       },
       {
@@ -4722,6 +5031,14 @@
         "iva_determinado": "5582100",
         "ppm": "4353151",
         "total_ventas": "272071963",
+        "compras_operacionales": "160296586",
+        "credito_operacional": "30456348",
+        "activo_fijo": "82395921",
+        "remanente_anterior": null,
+        "notas_credito_compras": "21874",
+        "retencion_sueldos": "151757",
+        "retencion_honorarios": "165222",
+        "retenciones_totales": "316979",
         "observaciones": []
       },
       {
@@ -4735,6 +5052,14 @@
         "iva_determinado": "0",
         "ppm": "4992239",
         "total_ventas": null,
+        "compras_operacionales": "188176303",
+        "credito_operacional": "34848475",
+        "activo_fijo": "78042974",
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": "156494",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "180494",
         "observaciones": []
       },
       {
@@ -4748,6 +5073,14 @@
         "iva_determinado": "0",
         "ppm": "3546546",
         "total_ventas": null,
+        "compras_operacionales": "65090262",
+        "credito_operacional": "11239157",
+        "activo_fijo": "10500000",
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": "169655",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "193655",
         "observaciones": []
       },
       {
@@ -4761,6 +5094,14 @@
         "iva_determinado": "0",
         "ppm": "3560",
         "total_ventas": "222500",
+        "compras_operacionales": "38053035",
+        "credito_operacional": "7230075",
+        "activo_fijo": "4711832",
+        "remanente_anterior": null,
+        "notas_credito_compras": "11600",
+        "retencion_sueldos": "169842",
+        "retencion_honorarios": "56801",
+        "retenciones_totales": "226643",
         "observaciones": []
       },
       {
@@ -4774,6 +5115,14 @@
         "iva_determinado": "0",
         "ppm": "246760",
         "total_ventas": "15422474",
+        "compras_operacionales": "143640958",
+        "credito_operacional": "27291778",
+        "activo_fijo": "5590779",
+        "remanente_anterior": "8099124",
+        "notas_credito_compras": "28652",
+        "retencion_sueldos": "192949",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "216949",
         "observaciones": []
       },
       {
@@ -4787,6 +5136,14 @@
         "iva_determinado": "0",
         "ppm": null,
         "total_ventas": null,
+        "compras_operacionales": "82893061",
+        "credito_operacional": "15162110",
+        "activo_fijo": "18250000",
+        "remanente_anterior": "33455752",
+        "notas_credito_compras": "183144",
+        "retencion_sueldos": "177172",
+        "retencion_honorarios": "68444",
+        "retenciones_totales": "245616",
         "observaciones": []
       },
       {
@@ -4800,6 +5157,14 @@
         "iva_determinado": "0",
         "ppm": "1786159",
         "total_ventas": "111634932",
+        "compras_operacionales": "160205660",
+        "credito_operacional": "30439073",
+        "activo_fijo": "120277168",
+        "remanente_anterior": "52397736",
+        "notas_credito_compras": "6864384",
+        "retencion_sueldos": "204755",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "228755",
         "observaciones": []
       },
       {
@@ -4813,6 +5178,14 @@
         "iva_determinado": "0",
         "ppm": "12688702",
         "total_ventas": "793043887",
+        "compras_operacionales": "131458273",
+        "credito_operacional": "24977068",
+        "activo_fijo": "37532374",
+        "remanente_anterior": "84563201",
+        "notas_credito_compras": null,
+        "retencion_sueldos": "597749",
+        "retencion_honorarios": "57333",
+        "retenciones_totales": "655082",
         "observaciones": []
       },
       {
@@ -4826,6 +5199,14 @@
         "iva_determinado": "0",
         "ppm": "8815287",
         "total_ventas": "518546266",
+        "compras_operacionales": "130891950",
+        "credito_operacional": "19754841",
+        "activo_fijo": "675489",
+        "remanente_anterior": null,
+        "notas_credito_compras": "1147600",
+        "retencion_sueldos": "682711",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "706711",
         "observaciones": []
       },
       {
@@ -4839,6 +5220,14 @@
         "iva_determinado": "0",
         "ppm": "2096279",
         "total_ventas": "123310548",
+        "compras_operacionales": "81973068",
+        "credito_operacional": "15574881",
+        "activo_fijo": "3500000",
+        "remanente_anterior": null,
+        "notas_credito_compras": "19300",
+        "retencion_sueldos": "208802",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "232802",
         "observaciones": []
       },
       {
@@ -4852,6 +5241,14 @@
         "iva_determinado": "0",
         "ppm": "2228930",
         "total_ventas": "131113545",
+        "compras_operacionales": "115241525",
+        "credito_operacional": "20355459",
+        "activo_fijo": "25195968",
+        "remanente_anterior": null,
+        "notas_credito_compras": "37487",
+        "retencion_sueldos": "578212",
+        "retencion_honorarios": "30667",
+        "retenciones_totales": "608879",
         "observaciones": []
       },
       {
@@ -4865,6 +5262,14 @@
         "iva_determinado": "25634444",
         "ppm": "3963014",
         "total_ventas": "233118465",
+        "compras_operacionales": "72411179",
+        "credito_operacional": "13758120",
+        "activo_fijo": "24569358",
+        "remanente_anterior": "231766",
+        "notas_credito_compras": "293309",
+        "retencion_sueldos": "191232",
+        "retencion_honorarios": "111924",
+        "retenciones_totales": "303156",
         "observaciones": []
       },
       {
@@ -4878,6 +5283,14 @@
         "iva_determinado": "4033325",
         "ppm": "4138901",
         "total_ventas": "243464789",
+        "compras_operacionales": "196313753",
+        "credito_operacional": "37299610",
+        "activo_fijo": "25923026",
+        "remanente_anterior": null,
+        "notas_credito_compras": "106186",
+        "retencion_sueldos": "159524",
+        "retencion_honorarios": "149556",
+        "retenciones_totales": "309080",
         "observaciones": []
       },
       {
@@ -4891,6 +5304,14 @@
         "iva_determinado": "12772171",
         "ppm": "2710220",
         "total_ventas": "159424723",
+        "compras_operacionales": "113652348",
+        "credito_operacional": "17453065",
+        "activo_fijo": "344532",
+        "remanente_anterior": null,
+        "notas_credito_compras": "59350",
+        "retencion_sueldos": "128444",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "152444",
         "observaciones": []
       },
       {
@@ -4904,6 +5325,14 @@
         "iva_determinado": "973537",
         "ppm": "721206",
         "total_ventas": "42423884",
+        "compras_operacionales": "35941206",
+        "credito_operacional": "6828826",
+        "activo_fijo": "1358816",
+        "remanente_anterior": null,
+        "notas_credito_compras": "3431403",
+        "retencion_sueldos": "124124",
+        "retencion_honorarios": "44667",
+        "retenciones_totales": "168791",
         "observaciones": []
       },
       {
@@ -4917,6 +5346,14 @@
         "iva_determinado": "0",
         "ppm": "1006437",
         "total_ventas": "59202187",
+        "compras_operacionales": "65639791",
+        "credito_operacional": "12471558",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "670331",
+        "retencion_sueldos": "100782",
+        "retencion_honorarios": "30000",
+        "retenciones_totales": "130782",
         "observaciones": []
       },
       {
@@ -4930,6 +5367,14 @@
         "iva_determinado": "0",
         "ppm": "785510",
         "total_ventas": "46206467",
+        "compras_operacionales": "46695996",
+        "credito_operacional": "8872237",
+        "activo_fijo": null,
+        "remanente_anterior": "1391504",
+        "notas_credito_compras": "279881",
+        "retencion_sueldos": "115619",
+        "retencion_honorarios": "164333",
+        "retenciones_totales": "279952",
         "observaciones": []
       },
       {
@@ -4943,6 +5388,14 @@
         "iva_determinado": "0",
         "ppm": "2811093",
         "total_ventas": "165358435",
+        "compras_operacionales": "178430313",
+        "credito_operacional": "32985032",
+        "activo_fijo": null,
+        "remanente_anterior": "1489107",
+        "notas_credito_compras": "631846",
+        "retencion_sueldos": "150710",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "174710",
         "observaciones": []
       },
       {
@@ -4956,6 +5409,14 @@
         "iva_determinado": "0",
         "ppm": "1725635",
         "total_ventas": "101507967",
+        "compras_operacionales": "110383879",
+        "credito_operacional": "20162296",
+        "activo_fijo": null,
+        "remanente_anterior": "3068481",
+        "notas_credito_compras": "196717",
+        "retencion_sueldos": "144102",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "168102",
         "observaciones": []
       },
       {
@@ -4969,6 +5430,14 @@
         "iva_determinado": "84533891",
         "ppm": "13569920",
         "total_ventas": "798230569",
+        "compras_operacionales": "292954382",
+        "credito_operacional": "53386306",
+        "activo_fijo": "51576089",
+        "remanente_anterior": "3944154",
+        "notas_credito_compras": "2829243",
+        "retencion_sueldos": "436967",
+        "retencion_honorarios": "206556",
+        "retenciones_totales": "643523",
         "observaciones": []
       },
       {
@@ -4982,6 +5451,14 @@
         "iva_determinado": "0",
         "ppm": "741532",
         "total_ventas": "43619544",
+        "compras_operacionales": "957619",
+        "credito_operacional": "181944",
+        "activo_fijo": "89128447",
+        "remanente_anterior": null,
+        "notas_credito_compras": "10371078",
+        "retencion_sueldos": "435111",
+        "retencion_honorarios": "479226",
+        "retenciones_totales": "914337",
         "observaciones": []
       },
       {
@@ -4995,6 +5472,14 @@
         "iva_determinado": "0",
         "ppm": "22400",
         "total_ventas": "1317669",
+        "compras_operacionales": "71573848",
+        "credito_operacional": "13599028",
+        "activo_fijo": "1161116",
+        "remanente_anterior": "8837478",
+        "notas_credito_compras": "1239791",
+        "retencion_sueldos": "169437",
+        "retencion_honorarios": "407444",
+        "retenciones_totales": "576881",
         "observaciones": []
       },
       {
@@ -5008,6 +5493,14 @@
         "iva_determinado": "2006557",
         "ppm": "3350195",
         "total_ventas": "197070289",
+        "compras_operacionales": "82440339",
+        "credito_operacional": "12701655",
+        "activo_fijo": "1728226",
+        "remanente_anterior": "22406780",
+        "notas_credito_compras": "1237528",
+        "retencion_sueldos": "523565",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "547565",
         "observaciones": []
       },
       {
@@ -5021,6 +5514,14 @@
         "iva_determinado": "0",
         "ppm": "1861291",
         "total_ventas": "109487711",
+        "compras_operacionales": "208129867",
+        "credito_operacional": "39544669",
+        "activo_fijo": "318837",
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": "222550",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "246550",
         "observaciones": []
       },
       {
@@ -5034,6 +5535,14 @@
         "iva_determinado": "16284870",
         "ppm": "4468166",
         "total_ventas": "262833304",
+        "compras_operacionales": "77866285",
+        "credito_operacional": "14794590",
+        "activo_fijo": null,
+        "remanente_anterior": "18858868",
+        "notas_credito_compras": null,
+        "retencion_sueldos": "189539",
+        "retencion_honorarios": "258667",
+        "retenciones_totales": "448206",
         "observaciones": []
       },
       {
@@ -5047,6 +5556,14 @@
         "iva_determinado": "56296586",
         "ppm": "7421733",
         "total_ventas": "436572508",
+        "compras_operacionales": "92273865",
+        "credito_operacional": "17532031",
+        "activo_fijo": "48000837",
+        "remanente_anterior": null,
+        "notas_credito_compras": "217830",
+        "retencion_sueldos": "191949",
+        "retencion_honorarios": "37889",
+        "retenciones_totales": "229838",
         "observaciones": []
       },
       {
@@ -5060,6 +5577,14 @@
         "iva_determinado": "19366063",
         "ppm": "2910676",
         "total_ventas": "171216221",
+        "compras_operacionales": "84367618",
+        "credito_operacional": "13160434",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "2214516",
+        "retencion_sueldos": "182794",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "206794",
         "observaciones": []
       },
       {
@@ -5073,6 +5598,14 @@
         "iva_determinado": "0",
         "ppm": "918",
         "total_ventas": "54000",
+        "compras_operacionales": "47409055",
+        "credito_operacional": "9007717",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "290765",
+        "retencion_sueldos": "213161",
+        "retencion_honorarios": "28444",
+        "retenciones_totales": "241605",
         "observaciones": []
       },
       {
@@ -5086,6 +5619,14 @@
         "iva_determinado": "0",
         "ppm": "14457807",
         "total_ventas": "850459237",
+        "compras_operacionales": "32027851",
+        "credito_operacional": "5006125",
+        "activo_fijo": "5021011",
+        "remanente_anterior": "9015307",
+        "notas_credito_compras": "162341",
+        "retencion_sueldos": "236077",
+        "retencion_honorarios": "51555",
+        "retenciones_totales": "287632",
         "observaciones": []
       },
       {
@@ -5099,6 +5640,14 @@
         "iva_determinado": "0",
         "ppm": null,
         "total_ventas": null,
+        "compras_operacionales": "119548691",
+        "credito_operacional": "22401619",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "1408735",
+        "retencion_sueldos": "93921",
+        "retencion_honorarios": "135111",
+        "retenciones_totales": "229032",
         "observaciones": []
       },
       {
@@ -5112,6 +5661,14 @@
         "iva_determinado": "0",
         "ppm": null,
         "total_ventas": null,
+        "compras_operacionales": "55810501",
+        "credito_operacional": "9129310",
+        "activo_fijo": "2345321",
+        "remanente_anterior": "22580946",
+        "notas_credito_compras": null,
+        "retencion_sueldos": "151006",
+        "retencion_honorarios": "24000",
+        "retenciones_totales": "175006",
         "observaciones": []
       },
       {
@@ -5125,6 +5682,14 @@
         "iva_determinado": "0",
         "ppm": "5158588",
         "total_ventas": "303446368",
+        "compras_operacionales": "157174776",
+        "credito_operacional": "27295148",
+        "activo_fijo": "12211726",
+        "remanente_anterior": "32188104",
+        "notas_credito_compras": "58813255",
+        "retencion_sueldos": "163926",
+        "retencion_honorarios": "135111",
+        "retenciones_totales": "299037",
         "observaciones": []
       }
     ],
@@ -5136,7 +5701,19 @@
     "crecimiento_anual": "-0.72",
     "meses_sin_movimiento": 6,
     "mejor_mes": "2019-09",
-    "peor_mes": "2019-08"
+    "peor_mes": "2019-08",
+    "promedio_ventas_ultimos_3m": "101148789.3333333333333333333",
+    "promedio_compras_ultimos_3m": "108055993",
+    "promedio_compras_operacionales_12m": "85798359.58333333333333333333",
+    "promedio_compras_operacionales_3m": "110844656",
+    "variacion_ventas_3m_pct": "-48.92",
+    "margen_implicito_12m": "2.449",
+    "margen_implicito_3m": "0.980",
+    "retenciones_totales_12m": "4402483",
+    "retenciones_totales_3m": "703075",
+    "variacion_ventas_yoy_3m_pct": "-71.51",
+    "promedio_costo_operativo_proxy_12m": "90252198.219696969696969697",
+    "costo_operativo_proxy_aplica": false
   },
   "corporate": {
     "tipo_sociedad": null,
@@ -5169,7 +5746,7 @@
   },
   "credit_risk": {
     "calidad_datos": {
-      "completitud_pct": 66.7,
+      "completitud_pct": 100.0,
       "campos_no_confiables": [
         {
           "campo": "f22.2019.Ingresos del Giro",
@@ -5178,10 +5755,6 @@
         {
           "campo": "f22.2019.Renta Líquida Imponible",
           "motivo": "No se encontró Renta Líquida Imponible"
-        },
-        {
-          "campo": "f22.2019.Capital Propio Tributario",
-          "motivo": "No se encontró Capital Propio Tributario"
         },
         {
           "campo": "f22.2019.Impuesto determinado",
@@ -5198,14 +5771,6 @@
         {
           "campo": "f22.2018.Capital Propio Tributario",
           "motivo": "No se encontró Capital Propio Tributario"
-        },
-        {
-          "campo": "f22.2017.Ingresos del Giro",
-          "motivo": "No se encontraron Ingresos del Giro"
-        },
-        {
-          "campo": "f22.2017.Renta Líquida Imponible",
-          "motivo": "No se encontró Renta Líquida Imponible"
         },
         {
           "campo": "f22.2017.Capital Propio Tributario",
@@ -5225,12 +5790,22 @@
         "pct_boletas": 0.0,
         "monto_facturado_estimado": 1555047882,
         "meses_evaluados": 35,
-        "nota": "sin código 111 (boletas) detectado -- puede ser un giro 100% facturado, o el rubro simplemente no emite boletas; no confirmar sin cruzar con el giro real de la empresa"
+        "nota": "sin código 111 (boletas) detectado -- giro predominantemente B2B facturado"
       },
       "postergaciones_iva": {
-        "meses_con_postergacion": 0,
+        "meses_con_postergacion": 9,
         "total_meses_evaluados": 35,
-        "periodos": []
+        "periodos": [
+          "2019-09",
+          "2018-02",
+          "2018-01",
+          "2017-12",
+          "2017-07",
+          "2017-06",
+          "2017-04",
+          "2017-03",
+          "2017-02"
+        ]
       }
     },
     "indicadores": {
@@ -5243,50 +5818,103 @@
         "criterio": "distingue remanente de crédito fiscal (posición normal) de mora real (código 94 con recargo/interés)"
       },
       "margen_vs_giro": {
-        "score": null,
-        "ratio_debito_credito_12m": 1.374,
+        "score": 70,
+        "ratio_debito_credito_12m": 2.449,
         "codigo_actividad": "016100",
         "descripcion_actividad": "ACTIVIDADES DE APOYO A LA AGRICULTURA",
         "ratio_promedio_sector": null,
         "n_empresas_referencia": 0,
-        "confianza": "insuficiente_muestra",
+        "confianza": "media",
         "criterio": "proxy de margen bruto (débito/crédito fiscal), no incluye remuneraciones; requiere benchmark propio por giro con muestra mínima antes de calificar con confianza alta"
       },
       "respaldo_estructural": {
-        "score": null,
-        "capital_propio_tributario": null,
+        "score": 100,
+        "capital_propio_tributario": 6559199969,
         "cupo_solicitado": null,
-        "veces_cobertura": null,
-        "confianza": "sin_datos",
+        "cupo_referencia": 8500000,
+        "veces_cobertura": 771.67,
+        "confianza": "alta",
         "criterio": "CPT es proxy tributario, no liquidez real"
       }
     },
-    "score_compuesto": null,
+    "score_compuesto": 90,
     "decision": {
-      "resultado_base": "NO_EVALUABLE",
+      "resultado_base": "APROBADO_CON_CONDICIONES",
       "producto_evaluado": "credito_30_dias",
+      "cupo_maximo_sugerido": 8500000,
+      "cupo_aprobado": 8500000,
+      "plazo_sugerido_dias": 30,
+      "garantia_exigida": "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring",
+      "memoria_calculo": {
+        "base_compras_c_base": 85798360,
+        "techo_operativo_20pct": 17159672,
+        "factor_riesgo_phi": 0.5,
+        "cupo_preliminar": 8579836,
+        "capital_propio_tributario": 6559199969,
+        "tope_patrimonial_35pct_cpt": 2295719989,
+        "cupo_maximo_sugerido": 8500000,
+        "castigos_aplicados": [
+          "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
+        ]
+      },
+      "hoja_ruta_comercial": [
+        "Veredicto del Comité: APROBADO CON CONDICIONES.",
+        "Línea de crédito comercial autorizada: $8,500,000 CLP (Tope máximo sugerido: $8,500,000 CLP).",
+        "Plazo máximo sugerido: 30 días.",
+        "Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring.",
+        "Habilitada alternativa de factoring o cesión de créditos para compras sobre el cupo."
+      ],
       "caminos_mitigacion": [
         {
           "condicion": "cesion_facturas_factoring",
           "aplica": true,
           "resultado": "APROBADO",
-          "cupo_sugerido": null,
-          "justificacion": "alta proporción facturada permite ceder cuentas por cobrar como garantía, reduciendo el riesgo de cobranza independiente del score de margen"
+          "cupo_sugerido": 8500000,
+          "justificacion": "alta proporción de ventas facturadas B2B permite ceder facturas como garantía de cobro"
         },
         {
           "condicion": "pago_contado_con_descuento",
           "aplica": true,
           "resultado": "APROBADO",
           "cupo_sugerido": null,
-          "justificacion": "sin señales de mora efectiva en el historial evaluado"
+          "justificacion": "historial sin recargos por mora en declaraciones tributarias"
         }
       ]
     },
     "alertas": [
-      "Margen vs. giro sin benchmark confiable todavía (muestra actual: 0 empresas del rubro)"
+      "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
     ],
     "fortalezas": [
-      "Cero meses con mora efectiva en 35 meses de historia evaluados"
+      "Cero meses con mora efectiva en 35 meses evaluados",
+      "Respaldo patrimonial sólido: CPT positivo de $6,559,199,969 CLP"
+    ],
+    "banderas_rojas": [],
+    "dictamen_ejecutivo": "# DICTAMEN DE COMITÉ DE CRÉDITO B2B — AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\n**VEREDICTO:** APROBADO CON CONDICIONES | **SCORE:** 90/100\n**CUPO MÁXIMO SUGERIDO:** $8,500,000 CLP | **PLAZO:** 30 días\n**GARANTÍA EXIGIDA:** Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring\n\n## 1. Memoria Cuantitativa de Asignación de Cupo\n- **Base Mensual de Absorción (C_base):** $85,798,360 CLP\n- **Techo Operativo Proveedor (20%):** $17,159,672 CLP\n- **Factor de Descuento por Riesgo (Phi):** 0.50\n- **Capital Propio Tributario (CPT):** $6,559,199,969 CLP\n- **Ajustes de Riesgo Aplicados:**\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n## 3. Hoja de Ruta Comercial\n- ✅ Veredicto del Comité: APROBADO CON CONDICIONES.\n- ✅ Línea de crédito comercial autorizada: $8,500,000 CLP (Tope máximo sugerido: $8,500,000 CLP).\n- ✅ Plazo máximo sugerido: 30 días.\n- ✅ Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring.\n- ✅ Habilitada alternativa de factoring o cesión de créditos para compras sobre el cupo.",
+    "veredicto": "APROBADO_CON_CONDICIONES",
+    "score_crediticio": 90.0,
+    "categoria_riesgo": "BAJO",
+    "cupo_maximo_sugerido": 8500000,
+    "cupo_aprobado": 8500000,
+    "plazo_sugerido_dias": 30,
+    "garantia_exigida": "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring",
+    "memoria_calculo": {
+      "base_compras_c_base": 85798360,
+      "techo_operativo_20pct": 17159672,
+      "factor_riesgo_phi": 0.5,
+      "cupo_preliminar": 8579836,
+      "capital_propio_tributario": 6559199969,
+      "tope_patrimonial_35pct_cpt": 2295719989,
+      "cupo_maximo_sugerido": 8500000,
+      "castigos_aplicados": [
+        "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
+      ]
+    },
+    "hoja_ruta_comercial": [
+      "Veredicto del Comité: APROBADO CON CONDICIONES.",
+      "Línea de crédito comercial autorizada: $8,500,000 CLP (Tope máximo sugerido: $8,500,000 CLP).",
+      "Plazo máximo sugerido: 30 días.",
+      "Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring.",
+      "Habilitada alternativa de factoring o cesión de créditos para compras sobre el cupo."
     ]
   },
   "metadata": {

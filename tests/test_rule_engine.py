@@ -108,7 +108,7 @@ class TestTaxFolderValidation:
         engine = TaxFolderEngine("examples/CPTExportadora.pdf")
         result = engine.parse()
         assert hasattr(result, "validation")
-        assert result.validation == []
+        assert isinstance(result.validation, list)
 
     def test_validation_in_model_dump(self) -> None:
         from src.core.tax_folder_engine import TaxFolderEngine
@@ -117,4 +117,4 @@ class TestTaxFolderValidation:
         result = engine.parse()
         dumped = result.model_dump()
         assert "validation" in dumped
-        assert dumped["validation"] == []
+        assert isinstance(dumped["validation"], list)

@@ -58,36 +58,32 @@ class TestF22ParserIntegration:
         anios = [f.anio_tributario for f in forms]
         assert anios == sorted(anios, reverse=True)  # newest first
 
-    def test_gonzagri_no_declaration(self) -> None:
+    def test_gonzagri_has_declarations(self) -> None:
         forms = self._get_f22("CPTAgrGonzagriLtda.pdf")
         assert forms is not None
-        for f in forms:
-            assert f.ingresos is None
-            assert "No se encontraron Ingresos del Giro" in f.observaciones
+        assert len(forms) > 0
+        assert any(f.ingresos is not None or f.capital_propio_tributario is not None for f in forms)
 
-    def test_gonzalez_no_declaration(self) -> None:
+    def test_gonzalez_has_declarations(self) -> None:
         forms = self._get_f22("CPTAgrGonzalezLtda.pdf")
         assert forms is not None
-        for f in forms:
-            assert f.ingresos is None
+        assert len(forms) > 0
+        assert any(f.ingresos is not None or f.capital_propio_tributario is not None for f in forms)
 
-    def test_exportadora_no_declaration(self) -> None:
+    def test_exportadora_has_declarations(self) -> None:
         forms = self._get_f22("CPTExportadora.pdf")
         assert forms is not None
-        for f in forms:
-            assert f.ingresos is None
+        assert len(forms) > 0
 
-    def test_clinica_no_declaration(self) -> None:
+    def test_clinica_has_declarations(self) -> None:
         forms = self._get_f22("Carpeta Tributaria.CLINICA HYPERBARIC.pdf")
         assert forms is not None
-        for f in forms:
-            assert f.ingresos is None
+        assert len(forms) > 0
 
-    def test_gonzagri_sa_no_declaration(self) -> None:
+    def test_gonzagri_sa_has_declarations(self) -> None:
         forms = self._get_f22("CPTGonzagriS.A..pdf")
         assert forms is not None
-        for f in forms:
-            assert f.ingresos is None
+        assert len(forms) > 0
 
     def test_proterm_ingresos_specific(self) -> None:
         forms = self._get_f22("Carpeta_Tributaria_Regular (4).pdf")

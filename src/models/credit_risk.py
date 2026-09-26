@@ -64,6 +64,7 @@ class RespaldoEstructural(BaseModel):
     score: int | None = None
     capital_propio_tributario: int | None = None
     cupo_solicitado: int | None = None
+    cupo_referencia: int | None = None
     veces_cobertura: float | None = None
     confianza: str = "sin_datos"
     criterio: str = "CPT es proxy tributario, no liquidez real"
@@ -98,6 +99,12 @@ class CaminoMitigacion(BaseModel):
 class Decision(BaseModel):
     resultado_base: str | None = None
     producto_evaluado: str | None = None
+    cupo_maximo_sugerido: int | None = None
+    cupo_aprobado: int | None = None
+    plazo_sugerido_dias: int | None = None
+    garantia_exigida: str | None = None
+    memoria_calculo: dict | None = None
+    hoja_ruta_comercial: list[str] = []
     caminos_mitigacion: list[CaminoMitigacion] = []
 
 
@@ -109,3 +116,17 @@ class CreditRiskResult(BaseModel):
     decision: Decision = Decision()
     alertas: list[str] = []
     fortalezas: list[str] = []
+    banderas_rojas: list[str] = []
+    dictamen_ejecutivo: str | None = None
+
+    # Campos directos Comité v2.0
+    veredicto: str = "OBSERVADO"
+    score_crediticio: float = 0.0
+    categoria_riesgo: str = "MEDIO"
+    cupo_maximo_sugerido: int | None = None
+    cupo_aprobado: int | None = None
+    plazo_sugerido_dias: int | None = None
+    garantia_exigida: str | None = None
+    memoria_calculo: dict | None = None
+    hoja_ruta_comercial: list[str] = []
+
