@@ -1,5 +1,7 @@
+import io
 from decimal import Decimal
 from pathlib import Path
+from typing import BinaryIO
 
 from src.core.tax_folder_engine import TaxFolderEngine
 from src.db_repository import RepositorioDiccionario
@@ -104,8 +106,8 @@ class PipelineOrquestador:
 
     async def procesar_analisis_completo(
         self,
-        ruta_carpeta: str,
-        ruta_balance: str,
+        ruta_carpeta: str | Path | bytes | BinaryIO,
+        ruta_balance: str | Path | bytes | BinaryIO,
         giro_empresa: str,
     ) -> ResultadoAnalisis:
         resultado = ResultadoAnalisis()
@@ -118,17 +120,25 @@ class PipelineOrquestador:
 
         return resultado
 
-    async def _fase1_carpeta_tributaria(self, ruta: str) -> TaxFolder:
+    async def _fase1_carpeta_tributaria(
+        self, ruta: str | Path | bytes | BinaryIO
+    ) -> TaxFolder:
         engine = TaxFolderEngine(ruta)
         return engine.parse()
 
-    def _fase2_balance(self, ruta: str) -> BalanceHomologado:
-        path = Path(ruta)
-        if not path.exists():
-            return BalanceHomologado()
+    def _fase2_balance(
+        self, ruta: str | Path | bytes | BinaryIO
+    ) -> BalanceHomologado:
+        if isinstance(ruta, (str, Path)):
+            path = Path(ruta)
+            if not path.exists():
+                return BalanceHomologado()
+            source = path
+        else:
+            source = ruta
 
         extractor = PDFExtractor()
-        extract_result = extractor.extract(ruta)
+        extract_result = extractor.extract(source)
         text = "\n".join(p.text for p in extract_result.pages)
 
         ingresos = self._sum_balance_column(text, r"INGRESOS\s", 7)

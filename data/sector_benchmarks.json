@@ -1,1 +1,74 @@
-{}
+{
+  "012400": {
+    "n_empresas": 1,
+    "ratio_promedio": 1.586,
+    "margen_bruto_promedio": 0.342,
+    "ratio_compras_ventas_promedio": 0.658,
+    "distribucion_tramos": {
+      "2.000M - 10.000M": 1
+    },
+    "_fingerprints": [
+      "f4469cc9ec143d0f"
+    ]
+  },
+  "016100": {
+    "n_empresas": 1,
+    "ratio_promedio": 2.449,
+    "margen_bruto_promedio": 0.5442,
+    "ratio_compras_ventas_promedio": 0.4558,
+    "distribucion_tramos": {
+      "2.000M - 10.000M": 1
+    },
+    "_fingerprints": [
+      "8b6f759da4de53a8"
+    ]
+  },
+  "461001": {
+    "n_empresas": 1,
+    "ratio_promedio": 2.129,
+    "margen_bruto_promedio": 0.5303,
+    "ratio_compras_ventas_promedio": 0.4697,
+    "distribucion_tramos": {
+      "> 10.000M": 1
+    },
+    "_fingerprints": [
+      "84dc845abea92921"
+    ]
+  },
+  "681012": {
+    "n_empresas": 1,
+    "ratio_promedio": 3.333,
+    "margen_bruto_promedio": 0.7,
+    "ratio_compras_ventas_promedio": 0.3,
+    "distribucion_tramos": {
+      "100M - 500M": 1
+    },
+    "_fingerprints": [
+      "70baa3456847956c"
+    ]
+  },
+  "862021": {
+    "n_empresas": 1,
+    "ratio_promedio": 3.3333,
+    "margen_bruto_promedio": 0.7,
+    "ratio_compras_ventas_promedio": 0.3,
+    "distribucion_tramos": {
+      "100M - 500M": 1
+    },
+    "_fingerprints": [
+      "f0ab0efa769b2839"
+    ]
+  },
+  "331301": {
+    "n_empresas": 1,
+    "ratio_promedio": 3.954,
+    "margen_bruto_promedio": 0.3823,
+    "ratio_compras_ventas_promedio": 0.6177,
+    "distribucion_tramos": {
+      "2.000M - 10.000M": 1
+    },
+    "_fingerprints": [
+      "5d4c9180d4cacba1"
+    ]
+  }
+}

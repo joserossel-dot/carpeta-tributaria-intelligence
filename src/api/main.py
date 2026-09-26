@@ -1,13 +1,13 @@
-import os
-import tempfile
+import gc
+import io
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.core.orquestador import PipelineOrquestador
 from src.db_repository import RepositorioDiccionario
+
 
 
 repositorio: RepositorioDiccionario | None = None
@@ -70,17 +70,19 @@ async def procesar_analisis(
     if not file_balance.filename or not file_balance.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="file_balance debe ser un archivo PDF")
 
-    tmp_carpeta = None
-    tmp_balance = None
+    buf_carpeta = None
+    buf_balance = None
 
     try:
-        tmp_carpeta = _save_upload(file_carpeta)
-        tmp_balance = _save_upload(file_balance)
+        carpeta_bytes = await file_carpeta.read()
+        balance_bytes = await file_balance.read()
+        buf_carpeta = io.BytesIO(carpeta_bytes)
+        buf_balance = io.BytesIO(balance_bytes)
 
         orquestador = PipelineOrquestador(repositorio)
         resultado = await orquestador.procesar_analisis_completo(
-            ruta_carpeta=tmp_carpeta,
-            ruta_balance=tmp_balance,
+            ruta_carpeta=buf_carpeta,
+            ruta_balance=buf_balance,
             giro_empresa=giro_empresa,
         )
 
@@ -94,19 +96,11 @@ async def procesar_analisis(
             detail=f"Error interno al procesar el análisis: {e}",
         )
     finally:
-        if tmp_carpeta:
-            Path(tmp_carpeta).unlink(missing_ok=True)
-        if tmp_balance:
-            Path(tmp_balance).unlink(missing_ok=True)
+        if buf_carpeta is not None:
+            buf_carpeta.close()
+        if buf_balance is not None:
+            buf_balance.close()
+        del buf_carpeta
+        del buf_balance
+        gc.collect()
 
-
-def _save_upload(file: UploadFile) -> str:
-    suffix = Path(file.filename).suffix if file.filename else ".tmp"
-    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
-    try:
-        content = file.file.read()
-        tmp.write(content)
-        tmp.flush()
-    finally:
-        tmp.close()
-    return tmp.name

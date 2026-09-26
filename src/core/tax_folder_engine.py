@@ -1,5 +1,6 @@
 import time
 from pathlib import Path
+from typing import BinaryIO
 
 from src.analyzers.tax_analyzer import TaxAnalyzer
 from src.credit.credit_risk_engine import CreditRiskEngine
@@ -28,12 +29,18 @@ from src.services.monthly_tax_service import MonthlyTaxService
 class TaxFolderEngine:
     VERSION = "0.1.0"
 
-    def __init__(self, pdf_path: str) -> None:
-        self.pdf_path = pdf_path
+    def __init__(self, pdf_input: str | Path | bytes | BinaryIO) -> None:
+        self.pdf_input = pdf_input
+        self.pdf_path = (
+            str(pdf_input) if isinstance(pdf_input, (str, Path)) else "memory://in-memory.pdf"
+        )
 
     def parse(self, cupo_solicitado: int | None = None) -> TaxFolder:
         t0 = time.perf_counter()
-        source = str(Path(self.pdf_path).resolve())
+        if isinstance(self.pdf_input, (str, Path)):
+            source = str(Path(self.pdf_input).resolve())
+        else:
+            source = "memory://in-memory.pdf"
 
         extractor = PDFExtractor()
         detector = SectionDetector()
@@ -55,7 +62,8 @@ class TaxFolderEngine:
         monthly_tax_service = MonthlyTaxService()
         credit_risk_engine = CreditRiskEngine()
 
-        extract_result = extractor.extract(self.pdf_path)
+        extract_result = extractor.extract(self.pdf_input)
+
         section_result = detector.detect(extract_result)
         contributor = contributor_parser.parse(extract_result, section_result)
         f29_forms = f29_parser.parse(extract_result, section_result)
