@@ -1,4 +1,5 @@
 import gc
+import hashlib
 import os
 import streamlit as st
 
@@ -14,6 +15,7 @@ from app.components.kpi_cards import show_kpi_cards
 from app.components.monthly_chart import show_monthly_chart
 from app.components.representatives import show_representatives
 from app.utils.pdf_processor import process_pdf
+from src.leads.lead_manager import LeadManager, validar_email
 
 # 1. Configuración de Marca Blanca y Paginación
 st.set_page_config(
@@ -59,45 +61,117 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 4. Gate de Acceso Comercial y Roles
+# 4. Gate de Acceso Dual: Freemium Autoatendido (2 Evaluaciones) + Clave Corporativa
 CLIENT_CODE = os.environ.get("CAVILARIA_CLIENT_CODE", "CAVILARIA2026").strip()
 ADMIN_CODE = os.environ.get("CAVILARIA_ADMIN_CODE", "ADMIN-CAVILARIA-99").strip()
 
-if "auth_role" not in st.session_state:
-    st.markdown("### 🔐 Acceso Corporativo")
-    st.markdown(
-        "Ingrese su código de autorización comercial para acceder a la plataforma "
-        "de evaluación crediticia de **Cavilaria SpA**."
+if not st.session_state.get("authenticated", False):
+    tab_free, tab_code = st.tabs(
+        [
+            "🚀 Acceso Inmediato: Prueba Gratuita (2 Evaluaciones)",
+            "🔑 Ya tengo Código de Cliente / Socio",
+        ]
     )
-    with st.form("auth_form"):
-        codigo_input = st.text_input(
-            "🔑 Código de Acceso Corporativo",
-            type="password",
-            placeholder="Ingrese código corporativo...",
-        )
-        submit_btn = st.form_submit_button("Ingresar al Comité", type="primary")
 
-        if submit_btn:
-            codigo_clean = codigo_input.strip()
-            if codigo_clean == ADMIN_CODE:
-                st.session_state["auth_role"] = "admin"
-                st.rerun()
-            elif codigo_clean == CLIENT_CODE:
-                st.session_state["auth_role"] = "client"
-                st.rerun()
-            else:
-                st.error("Código no autorizado. Por favor contacte a su ejecutivo de Cavilaria SpA.")
+    with tab_free:
+        st.markdown("#### Activa tu Prueba Gratuita de Comité de Crédito B2B")
+        st.markdown(
+            "Ingresa tus datos comerciales para evaluar hasta **2 Carpetas Tributarias completas** "
+            "sin costo y obtener el dictamen cuantitativo de cupo al instante."
+        )
+        with st.form("free_trial_form"):
+            col_f1, col_f2 = st.columns(2)
+            with col_f1:
+                nombre = st.text_input("Nombre completo *", placeholder="Ej. Juan Pérez")
+                empresa = st.text_input("Empresa *", placeholder="Ej. Distribuidora del Norte SpA")
+            with col_f2:
+                email = st.text_input(
+                    "Correo electrónico corporativo *",
+                    placeholder="juan.perez@empresa.cl",
+                )
+                telefono = st.text_input(
+                    "Teléfono / WhatsApp (opcional)",
+                    placeholder="+56 9 1234 5678",
+                )
+
+            submit_free = st.form_submit_button(
+                "Activar Acceso Gratuito Ahora", type="primary"
+            )
+
+            if submit_free:
+                if not nombre.strip():
+                    st.error("Por favor ingresa tu nombre completo.")
+                elif not empresa.strip():
+                    st.error("Por favor ingresa el nombre de tu empresa.")
+                elif not validar_email(email):
+                    st.error("Por favor ingresa un correo electrónico válido.")
+                else:
+                    try:
+                        lm = LeadManager()
+                        lm.registrar_lead(
+                            nombre=nombre,
+                            empresa=empresa,
+                            email=email,
+                            telefono=telefono,
+                        )
+                    except Exception:
+                        pass
+
+                    st.session_state["authenticated"] = True
+                    st.session_state["access_tier"] = "FREE_TRIAL"
+                    st.session_state["free_credits_remaining"] = 2
+                    st.session_state["evaluated_fingerprints"] = []
+                    st.session_state["user_info"] = {
+                        "nombre": nombre.strip(),
+                        "empresa": empresa.strip(),
+                        "email": email.strip().lower(),
+                    }
+                    st.rerun()
+
+    with tab_code:
+        st.markdown("#### Acceso Corporativo con Clave")
+        st.markdown(
+            "Si tu empresa ya cuenta con una suscripción comercial o clave de socio, "
+            "ingrésala a continuación para acceder sin límites:"
+        )
+        with st.form("code_form"):
+            codigo_input = st.text_input(
+                "🔑 Código de Cliente / Administrador",
+                type="password",
+                placeholder="Ingrese su clave corporativa...",
+            )
+            submit_code = st.form_submit_button("Ingresar con Código", type="primary")
+
+            if submit_code:
+                clean_code = codigo_input.strip()
+                if clean_code == ADMIN_CODE:
+                    st.session_state["authenticated"] = True
+                    st.session_state["access_tier"] = "ADMIN"
+                    st.session_state["free_credits_remaining"] = 999999
+                    st.rerun()
+                elif clean_code == CLIENT_CODE:
+                    st.session_state["authenticated"] = True
+                    st.session_state["access_tier"] = "CLIENT"
+                    st.session_state["free_credits_remaining"] = 999999
+                    st.rerun()
+                else:
+                    st.error(
+                        "Código no autorizado. Por favor contacte a su ejecutivo de Cavilaria SpA."
+                    )
     st.stop()
 
-auth_role = st.session_state.get("auth_role", "client")
+access_tier = st.session_state.get("access_tier", "FREE_TRIAL")
+free_credits = st.session_state.get("free_credits_remaining", 0)
 
-# Barra de estado de usuario autenticado
+# Barra de estado y nivel de acceso
 col_auth_info, col_auth_action = st.columns([5, 1])
 with col_auth_info:
-    if auth_role == "admin":
-        st.caption("🛡️ **Nivel:** Administrador Cavilaria (Benchmark habilitado)")
+    if access_tier == "ADMIN":
+        st.caption("🛡️ **Nivel:** Administrador Cavilaria (Evaluaciones ilimitadas + Benchmark y Leads)")
+    elif access_tier == "CLIENT":
+        st.caption("👤 **Nivel:** Cliente Corporativo (Evaluaciones ilimitadas)")
     else:
-        st.caption("👤 **Nivel:** Cliente Corporativo Autorizado")
+        st.info(f"🎁 **Modo Prueba Gratuita:** Te quedan **{free_credits}** evaluación(es) disponible(s).")
 with col_auth_action:
     if st.button("Cerrar Sesión", key="btn_logout"):
         st.session_state.clear()
@@ -134,14 +208,38 @@ with col_btn1:
     analizar = st.button("Analizar", type="primary", disabled=uploaded_file is None)
 with col_btn2:
     if st.button("🗑️ Limpiar sesión actual"):
-        role = st.session_state.get("auth_role")
+        tier = st.session_state.get("access_tier")
+        credits = st.session_state.get("free_credits_remaining")
+        fps = st.session_state.get("evaluated_fingerprints")
+        uinfo = st.session_state.get("user_info")
+
         st.session_state.clear()
-        if role:
-            st.session_state["auth_role"] = role
+
+        st.session_state["authenticated"] = True
+        st.session_state["access_tier"] = tier
+        st.session_state["free_credits_remaining"] = credits
+        st.session_state["evaluated_fingerprints"] = fps
+        st.session_state["user_info"] = uinfo
         gc.collect()
         st.rerun()
 
+# 6. Ejecución del Análisis y Control de Créditos
 if uploaded_file is not None and analizar:
+    file_bytes = uploaded_file.getvalue()
+    # Huella criptográfica rápida del archivo para no descontar créditos si solo cambia el cupo solicitado
+    file_fp = hashlib.sha256(file_bytes[:4096] + str(len(file_bytes)).encode()).hexdigest()[:16]
+    evaluated_fps = st.session_state.get("evaluated_fingerprints", [])
+    is_distinct_file = file_fp not in evaluated_fps
+
+    if access_tier == "FREE_TRIAL" and is_distinct_file and free_credits <= 0:
+        st.error(
+            "⚠️ **Límite de Prueba Gratuita Alcanzado (2/2)**\n\n"
+            "Has completado tus 2 evaluaciones gratuitas. Para continuar analizando nuevas carpetas "
+            "tributarias sin límites, activa tu suscripción corporativa contactando a **contacto@cavilaria.com** "
+            "o inicia sesión con tu código corporativo."
+        )
+        st.stop()
+
     with st.spinner("Procesando Carpeta Tributaria en memoria RAM..."):
         try:
             result, json_bytes, markdown_bytes = process_pdf(
@@ -150,6 +248,11 @@ if uploaded_file is not None and analizar:
             st.session_state["result"] = result
             st.session_state["json_bytes"] = json_bytes
             st.session_state["markdown_bytes"] = markdown_bytes
+
+            # Descontar crédito únicamente si es una carpeta distinta
+            if access_tier == "FREE_TRIAL" and is_distinct_file:
+                st.session_state.setdefault("evaluated_fingerprints", []).append(file_fp)
+                st.session_state["free_credits_remaining"] = max(0, free_credits - 1)
         except Exception as e:
             st.error(f"Error al procesar el PDF: {e}")
             st.stop()
@@ -163,6 +266,17 @@ if "result" in st.session_state:
         f"Procesado en {result.metadata.processing_time}s "
         f"({result.metadata.pages} páginas)"
     )
+
+    # Aviso si consumió sus 2 créditos gratis
+    if (
+        access_tier == "FREE_TRIAL"
+        and st.session_state.get("free_credits_remaining", 0) == 0
+    ):
+        st.warning(
+            "🎁 **Has utilizado tus 2 evaluaciones gratuitas.** Puedes seguir consultando, exportando "
+            "y re-evaluando las carpetas de esta sesión. Para evaluar carpetas adicionales, contáctanos en "
+            "**contacto@cavilaria.com** para activar tu cuenta corporativa ilimitada."
+        )
 
     show_kpi_cards(result)
     st.divider()
@@ -202,7 +316,7 @@ if "result" in st.session_state:
         show_alerts(result)
 
     with tab7:
-        show_export(result, auth_role=auth_role)
+        show_export(result, auth_role=access_tier)
 
     st.divider()
     show_downloads(json_bytes, markdown_bytes)

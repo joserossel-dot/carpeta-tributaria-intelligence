@@ -50,23 +50,39 @@ def show_export(tax_folder: TaxFolder, auth_role: str = "client") -> None:
                 mime="text/csv",
             )
 
-    # Protección de Benchmark Sectorial: Exclusivo para administradores
-    if auth_role == "admin":
+    # Funciones exclusivas para Administradores
+    if str(auth_role).upper() == "ADMIN":
         st.divider()
-        st.subheader("Telemetría y Benchmark Sectorial (Acceso Corporativo)")
-        st.markdown(
-            "Descarga el dataset de calibración sectorial anónimo (`sector_benchmarks.json`) "
-            "con los ratios agregados por actividad económica SII."
-        )
-        bench = SectorBenchmark()
-        # include_private=False garantiza que las huellas de deduplicación no se filtren
-        bench_data = json.dumps(
-            bench.get_all(include_private=False), indent=2, ensure_ascii=False
-        ).encode("utf-8")
-        st.download_button(
-            label="📊 Descargar Benchmark Sectorial (JSON)",
-            data=bench_data,
-            file_name="sector_benchmarks.json",
-            mime="application/json",
-            key="btn_download_benchmark",
-        )
+        st.subheader("Administración: Telemetría y Prospectos Registrados")
+
+        col_admin1, col_admin2 = st.columns(2)
+        with col_admin1:
+            st.markdown("**Benchmark Sectorial Anónimo**")
+            st.caption("Ratios agregados por giro SII (sin PII ni huellas privadas).")
+            bench = SectorBenchmark()
+            bench_data = json.dumps(
+                bench.get_all(include_private=False), indent=2, ensure_ascii=False
+            ).encode("utf-8")
+            st.download_button(
+                label="📊 Descargar Benchmark Sectorial (JSON)",
+                data=bench_data,
+                file_name="sector_benchmarks.json",
+                mime="application/json",
+                key="btn_download_benchmark",
+            )
+
+        with col_admin2:
+            st.markdown("**Prospectos Registrados (Leads)**")
+            st.caption("Contactos que activaron evaluaciones gratuitas de prueba.")
+            from src.leads.lead_manager import LeadManager
+
+            lm = LeadManager()
+            leads_csv = lm.exportar_csv()
+            st.download_button(
+                label="👥 Descargar Prospectos Registrados (CSV)",
+                data=leads_csv,
+                file_name="leads_registrados.csv",
+                mime="text/csv",
+                key="btn_download_leads_csv",
+            )
+
