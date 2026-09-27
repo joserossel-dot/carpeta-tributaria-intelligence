@@ -87,7 +87,7 @@ class ExcelReport:
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.3)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.4)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -105,18 +105,34 @@ class ExcelReport:
             or getattr(cr, "veredicto", "OBSERVADO")
         ).replace("_", " ") if cr else "OBSERVADO"
         score_val = getattr(cr, "score_crediticio", 0.0) if cr else 0.0
-        cat_val = getattr(cr, "categoria_riesgo", "MEDIO") if cr else "MEDIO"
-        cupo_ap = getattr(cr, "cupo_aprobado", 0) if cr else 0
+        clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
+        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Desempeño Tributario Alto" if score_val >= 80 else "Desempeño Tributario Medio")
+        linea_ini = getattr(cr, "linea_inicial_sugerida", 0) if cr else 0
+        linea_max = getattr(cr, "linea_maxima_condicionada", 0) or getattr(cr, "cupo_maximo_sugerido", 0) if cr else 0
         plazo_dias = getattr(cr, "plazo_sugerido_dias", 0) if cr else 0
+        plazo_ini = getattr(cr, "plazo_inicial_sugerido", None) or (f"{plazo_dias} días" if plazo_dias > 0 else "Contado")
         resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
+        cond_escalamiento = getattr(cr, "condicion_escalamiento", None) or (
+            "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad "
+            "vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros."
+        )
         protocolo = getattr(cr, "protocolo_operativo", None) or "Procedimiento comercial estándar"
 
+        vars_com = getattr(cr, "variables_comerciales", {}) or {}
+        boletin_com = vars_com.get("boletin_comercial", "Pendiente de consulta (Condiciona línea)")
+        hist_pago = vars_com.get("historial_pago", "Cliente nuevo (Sin historial previo)")
+
         params = [
-            ("Evaluación Referencial", evaluacion, f"Categoría de Riesgo: {cat_val}"),
-            ("Score Crediticio", f"{score_val:.0f} / 100", f"Evaluación cuantitativa sobre declaraciones tributarias SII"),
-            ("Línea Máxima Sugerida (M$)", round(cupo_ap / 1000.0) if cupo_ap else 0, f"Equivalente a {format_mclp(cupo_ap)}"),
-            ("Plazo Sugerido", f"{plazo_dias} días" if plazo_dias else "Contado", "Estándar máximo 30 días para crédito comercial" if plazo_dias else "Pago anticipado o contra entrega"),
+            ("Clasificación y Recomendación", evaluacion, f"Categoría de Riesgo: {clasif_riesgo}"),
+            ("Puntaje Tributario SII", f"{score_val:.0f} / 100 pts", f"{desempeno_texto} (No reemplaza informe comercial)"),
+            ("Línea Inicial Recomendada (M$)", round(linea_ini / 1000.0) if linea_ini else 0, f"Etapa 1 — Apertura controlada ({format_mclp(linea_ini)})"),
+            ("Línea Máxima Condicionada (M$)", round(linea_max / 1000.0) if linea_max else 0, f"Etapa 2 — Techo técnico escalonado ({format_mclp(linea_max)})"),
+            ("Plazo Inicial Sugerido", plazo_ini, "Plazo de apertura para cliente nuevo o con alertas"),
+            ("Plazo Máximo Sugerido", f"{plazo_dias} días" if plazo_dias else "Contado", "Estándar 30 días para crédito comercial tras validación"),
             ("Modalidad y Resguardo Sugerido", resguardo, "Condición legal recomendada para mitigación de riesgo"),
+            ("Condición de Escalamiento", cond_escalamiento, "Requisitos para habilitar paso de Línea Inicial a Línea Máxima"),
+            ("Boletín Comercial (Dicom/Equifax)", boletin_com, "Variable comercial externa ingresada"),
+            ("Historial con Proveedor", hist_pago, "Variable comercial externa ingresada"),
             ("Protocolo Operativo Sugerido", protocolo, "Procedimiento recomendado para despacho y facturación"),
         ]
 
@@ -134,11 +150,29 @@ class ExcelReport:
                 ws.cell(row=row, column=col).border = self.border_thin
             row += 1
 
-        # Desglose del Score Tributario (5 Pilares)
+        # Filtro de Elegibilidad Tributaria (Etapa 1)
+        filtro = getattr(cr, "filtro_elegibilidad", []) or []
+        if filtro:
+            row += 2
+            ws.cell(row=row, column=1, value="Etapa 1: Filtro de Elegibilidad Tributaria").font = self.font_title
+            row += 1
+            self._apply_headers(ws, row, ["Parámetro de Elegibilidad", "Estado", "Detalle y Verificación Factual"])
+            row += 1
+            for item in filtro:
+                ws.cell(row=row, column=1, value=item.get("parametro", "")).font = self.font_bold
+                st_c = ws.cell(row=row, column=2, value=item.get("estado", "OBSERVADO"))
+                st_c.font = self.font_bold
+                st_c.alignment = Alignment(horizontal="center")
+                ws.cell(row=row, column=3, value=item.get("detalle", "")).font = self.font_regular
+                for col in range(1, 4):
+                    ws.cell(row=row, column=col).border = self.border_thin
+                row += 1
+
+        # Desglose del Puntaje Tributario SII (6 Pilares)
         desglose = getattr(cr, "desglose_score", []) or []
         if desglose:
             row += 2
-            ws.cell(row=row, column=1, value="Desglose del Score Tributario (100 Puntos)").font = self.font_title
+            ws.cell(row=row, column=1, value="Desglose del Puntaje Tributario SII (6 Dimensiones — 100 Puntos)").font = self.font_title
             row += 1
             self._apply_headers(ws, row, ["Pilar Cuantitativo", "Puntaje", "Detalle y Fundamento"])
             row += 1
@@ -152,7 +186,7 @@ class ExcelReport:
                     ws.cell(row=row, column=col).border = self.border_thin
                 row += 1
 
-        # Memoria de Cálculo (9 Filas de Trazabilidad)
+        # Memoria de Cálculo (10 Filas de Trazabilidad)
         row += 2
         ws.cell(row=row, column=1, value="Memoria de Cálculo Cuantitativa de Línea Comercial (M$)").font = self.font_title
         row += 1
@@ -171,7 +205,8 @@ class ExcelReport:
         phi_pct = mem.get("factor_ajuste_conductual_pct", int(round(mem.get("factor_riesgo_phi", 1.0) * 100)))
         cpt_val = mem.get("capital_propio_tributario")
         tope_cpt = mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
-        cupo_max = mem.get("cupo_maximo_sugerido", 0)
+        cupo_max = mem.get("linea_maxima_condicionada") or mem.get("cupo_maximo_sugerido", 0)
+        cupo_ini = mem.get("linea_inicial_sugerida") or linea_ini
 
         rango_str = f" ({p_ini} a {p_fin})" if p_ini and p_fin else ""
         cpt_str = f"M$ {int(cpt_val // 1000):,}".replace(",", ".") if cpt_val is not None else "Sin F22"
@@ -180,12 +215,13 @@ class ExcelReport:
             (f"Ventas Netas Mensuales Promedio{rango_str}", round(v_prom / 1000.0) if v_prom else 0, "Promedio mensual de ventas de los 12 meses analizados"),
             ("(-) Paso A: Compras Op. Mensuales Promedio (C_base)", round(base_c / 1000.0) if base_c else 0, "Base mensual de compras operacionales 12M (o costo operativo proxy)"),
             ("(-) IVA Determinado Mensual Promedio", round(iva_prom / 1000.0) if iva_prom else 0, "Promedio mensual Cód. 89 F29 últimos 12 meses"),
-            ("(=) Brecha Operacional Tributaria Mensual Proxy", round(brecha / 1000.0) if brecha else 0, "Margen operacional neto depurado [Ventas - Compras - IVA Det.]"),
+            ("(=) Margen Tributario F29 Proxy [Ventas − Compras Op. − IVA Det.]", round(brecha / 1000.0) if brecha else 0, "Aproximación tributaria antes de sueldos, arriendos, gastos financieros y capital de trabajo (no equivale a flujo de caja libre)"),
             ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (estándar bancario individual conservador)"),
-            ("Paso B2: Freno por Absorción Operacional (25% Brecha)", round(freno_flujo / 1000.0) if freno_flujo else 0, "Máximo 25% del margen operacional neto depurado"),
+            ("Paso B2: Freno por Absorción Operacional (25% Margen Proxy)", round(freno_flujo / 1000.0) if freno_flujo else 0, "Máximo 25% del margen tributario proxy"),
             ("Paso C: Factor de Ajuste Conductual", f"{phi_pct}%", "Ajuste por mora F29, postergación IVA y estabilidad YoY"),
             (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", "12% CPT en línea limpia ($0 si CPT <= 0)"),
-            ("(=) Línea Máxima Sugerida Final", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Flujo 25%) × Factor Conductual con Tope CPT (M$ 100)"),
+            ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Flujo 25%) × Factor Conductual con Tope CPT (M$ 100)"),
+            ("(=) Línea Inicial Recomendada (Etapa 1 - 50% Apertura)", round(cupo_ini / 1000.0) if cupo_ini else 0, "50% de la Línea Máxima Técnica para apertura comercial controlada"),
         ]
 
         for s, v, f in calc_steps:
@@ -204,16 +240,16 @@ class ExcelReport:
 
         # Alertas y Hoja de Ruta
         row += 2
-        ws.cell(row=row, column=1, value="Alertas y Recomendaciones Comerciales").font = self.font_title
+        ws.cell(row=row, column=1, value="Condiciones Suspensivas, Alertas y Monitoreo Sugerido").font = self.font_title
         row += 1
-        self._apply_headers(ws, row, ["Tipo", "Descripción", "Observación / Sugerencia"])
+        self._apply_headers(ws, row, ["Tipo", "Descripción", "Observación / Protocolo"])
         row += 1
 
         banderas = getattr(cr, "banderas_rojas", []) if cr else []
         for b in banderas:
-            ws.cell(row=row, column=1, value="Alerta Forense").font = self.font_bold
+            ws.cell(row=row, column=1, value="Condición Suspensiva / Alerta").font = self.font_bold
             ws.cell(row=row, column=2, value=b).font = self.font_regular
-            ws.cell(row=row, column=3, value="Riesgo de insolvencia o mora tributaria").font = self.font_caption
+            ws.cell(row=row, column=3, value="Exige validación documental previa (ej. Balance de 8 Columnas)").font = self.font_caption
             for col in range(1, 4):
                 ws.cell(row=row, column=col).border = self.border_thin
             row += 1

@@ -33,25 +33,29 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
     st.divider()
 
     # --- PANEL EJECUTIVO DE EVALUACIÓN REFERENCIAL ---
+    score_val = getattr(cr, "score_crediticio", 0.0)
+    clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
+    desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Desempeño Tributario Alto" if score_val >= 80 else "Desempeño Tributario Medio")
+    linea_ini = getattr(cr, "linea_inicial_sugerida", None)
+    linea_max = getattr(cr, "linea_maxima_condicionada", None) or getattr(cr, "cupo_maximo_sugerido", 0)
+    plazo_dias = getattr(cr, "plazo_sugerido_dias", 0)
+    plazo_ini = getattr(cr, "plazo_inicial_sugerido", None) or (f"{plazo_dias} días" if plazo_dias > 0 else "Contado")
+    resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", None) or "Sin garantía"
+    eval_val = getattr(cr, "evaluacion_referencial", None) or getattr(cr, "veredicto", "OBSERVADO")
+
     c1, c2, c3, c4 = st.columns(4)
     with c1:
-        score_val = getattr(cr, "score_crediticio", 0.0)
-        cat_val = getattr(cr, "categoria_riesgo", "MEDIO")
-        st.metric("Score Crediticio", f"{score_val:.1f}/100", f"Riesgo {cat_val}")
+        st.metric("Puntaje Tributario SII", f"{score_val:.0f}/100 pts", desempeno_texto)
     with c2:
-        eval_val = getattr(cr, "evaluacion_referencial", None) or getattr(cr, "veredicto", "OBSERVADO")
         _show_veredicto_badge(eval_val)
     with c3:
-        cupo_ap = getattr(cr, "cupo_aprobado", None)
-        cupo_str = format_mclp(cupo_ap) if cupo_ap is not None else "—"
-        st.metric("Línea Máxima Sugerida", cupo_str)
+        ini_str = format_mclp(linea_ini) if linea_ini is not None else "—"
+        max_str = format_mclp(linea_max) if linea_max is not None else "—"
+        st.metric("Línea Inicial (Apertura)", ini_str, f"Máxima: {max_str}")
     with c4:
-        plazo = getattr(cr, "plazo_sugerido_dias", None)
-        plazo_str = f"{plazo} días" if plazo else "Contado"
-        garantia = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", None) or "Sin garantía"
-        st.metric("Plazo Sugerido", plazo_str, garantia)
+        st.metric("Plazo Inicial", plazo_ini, f"Máximo: {plazo_dias} días" if plazo_dias > 0 else "Contado")
 
-    st.caption("ℹ️ Cifras expresadas en Miles de Pesos Chilenos (M$)")
+    st.caption("ℹ️ Cifras expresadas en Miles de Pesos Chilenos (M$). El Puntaje Tributario evalúa comportamiento ante el SII y no reemplaza el informe comercial externo.")
 
     dictamen = getattr(cr, "dictamen_ejecutivo", None)
     if dictamen:
@@ -61,6 +65,18 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
             st.success(f"**Recomendación Referencial:**\n\n{dictamen}")
         else:
             st.warning(f"**Recomendación Referencial:**\n\n{dictamen}")
+
+    # --- FILTRO DE ELEGIBILIDAD TRIBUTARIA (ETAPA 1) ---
+    filtro = getattr(cr, "filtro_elegibilidad", [])
+    if filtro:
+        with st.expander("📋 Etapa 1: Filtro de Elegibilidad Tributaria", expanded=True):
+            f_cols = st.columns(len(filtro))
+            for i, item in enumerate(filtro):
+                with f_cols[i]:
+                    st_val = item.get("estado", "OBSERVADO")
+                    icon = "✅" if st_val == "CUMPLE" else "⚠️"
+                    st.markdown(f"**{icon} {item.get('parametro')}**")
+                    st.caption(item.get("detalle"))
 
     # --- MEMORIA DE CÁLCULO CUANTITATIVA ---
     memoria = getattr(cr, "memoria_calculo", None)
@@ -72,37 +88,56 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
                 base_c = memoria.get("base_compras_c_base") or memoria.get("base_compras_mensual_operacional", 0)
                 st.markdown(f"**{format_mclp(base_c)}**")
             with mc_c2:
-                st.caption("Paso B: Techo Operativo (8%)")
+                st.caption("Paso B1: Techo Operativo (8%)")
                 techo_op = memoria.get("techo_operativo_8pct") or memoria.get("techo_operativo", 0)
                 st.markdown(f"**{format_mclp(techo_op)}**")
             with mc_c3:
-                st.caption("Freno Flujo Neto (25%)")
+                st.caption("Margen Tributario F29 Proxy")
+                brecha = memoria.get("brecha_operacional_proxy", 0)
+                st.markdown(f"**{format_mclp(brecha)}**")
+            with mc_c4:
+                st.caption("Paso B2: Freno Flujo Neto (25%)")
                 freno_flujo = memoria.get("freno_flujo_operacional_25pct", 0)
                 st.markdown(f"**{format_mclp(freno_flujo)}**")
-            with mc_c4:
-                st.caption("Paso C: Ajuste Conductual")
-                phi_v = memoria.get("factor_riesgo_phi") or memoria.get("factor_phi_calidad_crediticia", 1.0)
-                st.markdown(f"**{int(round(phi_v * 100))}%**")
 
             mc_c5, mc_c6, mc_c7, mc_c8 = st.columns(4)
             with mc_c5:
-                st.caption("Cupo Preliminar")
-                cupo_pre = memoria.get("cupo_preliminar", 0)
-                st.markdown(f"**{format_mclp(cupo_pre)}**")
+                st.caption("Paso C: Ajuste Conductual")
+                phi_v = memoria.get("factor_riesgo_phi") or memoria.get("factor_phi_calidad_crediticia", 1.0)
+                st.markdown(f"**{int(round(phi_v * 100))}%**")
             with mc_c6:
-                st.caption("Capital Propio Tributario")
+                st.caption("Paso D: Capital Propio (CPT)")
                 cpt_v = memoria.get("capital_propio_tributario")
                 st.markdown(f"**{format_mclp(cpt_v)}**" if cpt_v is not None else "**N/A**")
             with mc_c7:
-                st.caption("Paso D: Tope CPT (12%/20%)")
-                tope_c = memoria.get("tope_patrimonial_cpt") or memoria.get("tope_patrimonial_12pct_cpt") or memoria.get("tope_patrimonial_35pct_cpt")
-                st.markdown(f"**{format_mclp(tope_c)}**" if tope_c is not None else "**Sin límite**")
-            with mc_c8:
-                st.caption("Línea Máxima Sugerida")
-                cupo_max = memoria.get("cupo_maximo_sugerido", 0)
+                st.caption("Línea Máxima Condicionada")
+                cupo_max = memoria.get("linea_maxima_condicionada") or memoria.get("cupo_maximo_sugerido", 0)
                 st.markdown(f"**{format_mclp(cupo_max)}**")
+            with mc_c8:
+                st.caption("Línea Inicial (50% Apertura)")
+                cupo_ini = memoria.get("linea_inicial_sugerida") or linea_ini
+                st.markdown(f"**{format_mclp(cupo_ini)}**")
 
-            st.caption("ℹ️ Cifras expresadas en Miles de Pesos Chilenos (M$)")
+            st.caption("ℹ️ Cifras expresadas en Miles de Pesos Chilenos (M$). Margen Tributario F29 Proxy = Ventas - Compras Op. - IVA Determinado.")
+
+    # --- CONDICIONES SUSPENSIVAS Y MONITOREO ---
+    vars_com = getattr(cr, "variables_comerciales", {}) or {}
+    boletin_com = vars_com.get("boletin_comercial", "Pendiente de consulta (Condiciona línea)")
+    hist_pago = vars_com.get("historial_pago", "Cliente nuevo (Sin historial previo)")
+    cond_escalamiento = getattr(cr, "condicion_escalamiento", None)
+
+    with st.expander("🛡️ Condiciones Suspensivas, Alertas y Monitoreo Sugerido", expanded=True):
+        cs_c1, cs_c2 = st.columns(2)
+        with cs_c1:
+            st.markdown("##### Variables Comerciales Externas")
+            st.markdown(f"- 🏦 **Boletín Comercial (Dicom/Equifax):** {boletin_com}")
+            st.markdown(f"- 🤝 **Historial con Proveedor:** {hist_pago}")
+            st.markdown(f"- 📄 **Resguardo Exigido:** {resguardo}")
+        with cs_c2:
+            st.markdown("##### Escalamiento y Monitoreo")
+            if cond_escalamiento:
+                st.markdown(f"- 🚀 **Condición de Escalamiento:** {cond_escalamiento}")
+            st.markdown("- 🔍 **Monitoreo Primeros 90 Días:** Revisión mensual de pagos y vigencia de declaraciones F29.")
 
     # --- COMPARATIVA OPERACIONAL 12M vs 3M ---
     ma = getattr(tax_folder, "monthly_analysis", None)
@@ -111,7 +146,6 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
         tc_compras = getattr(ma, "tasa_crecimiento_compras_trimestral", None)
         m_op = getattr(ma, "margen_operacional_implicito_promedio", None)
 
-        # Fallback defensivo a campos legacy si los campos no estaban precalculados
         if tc_ventas is None and getattr(ma, "variacion_ventas_3m_pct", None) is not None:
             try:
                 tc_ventas = float(ma.variacion_ventas_3m_pct) / 100.0
@@ -140,7 +174,7 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
     # --- BANDERAS ROJAS Y HOJA DE RUTA ---
     banderas = getattr(cr, "banderas_rojas", [])
     if banderas:
-        st.markdown("#### Banderas Rojas")
+        st.markdown("#### Banderas Rojas y Condiciones Suspensivas")
         for b in banderas:
             st.markdown(f"- 🔴 {b}")
 
@@ -164,11 +198,11 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
         if conciliacion:
             st.info(f"📊 **Conciliación Cruzada F29 vs F22:** {conciliacion.get('detalle')}")
 
-    # --- DESGLOSE DEL SCORE TRIBUTARIO (5 PILARES) ---
+    # --- DESGLOSE DEL SCORE TRIBUTARIO (6 PILARES) ---
     desglose = getattr(cr, "desglose_score", [])
     if desglose:
         st.divider()
-        st.markdown("#### Desglose del Score Tributario (100 Puntos)")
+        st.markdown("#### Desglose del Puntaje Tributario SII (6 Dimensiones — 100 Puntos)")
         for p in desglose:
             col1, col2 = st.columns([1, 3])
             with col1:

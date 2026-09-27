@@ -109,7 +109,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.3)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.4)",
                 subtitle_style,
             )
         )
@@ -135,6 +135,10 @@ class PDFReport:
         desfase_m = vigencia.get("meses_desfase", 0)
         confianza_vig = vigencia.get("nivel_confianza", "MEDIA")
 
+        vars_com = getattr(cr, "variables_comerciales", {}) or {}
+        boletin_com = vars_com.get("boletin_comercial", "Pendiente de consulta (Condiciona línea)")
+        hist_pago = vars_com.get("historial_pago", "Cliente nuevo (Sin historial previo)")
+
         contrib_data = [
             [
                 Paragraph("<b>RUT:</b> " + rut, body_style),
@@ -156,6 +160,10 @@ class PDFReport:
                 Paragraph(f"<b>Emisión Carpeta:</b> {fecha_emision} | <b>Último F29:</b> {ult_periodo}", body_style),
                 Paragraph(f"<b>Antigüedad del Dato:</b> {desfase_m} meses (Confianza: <b>{confianza_vig}</b>)", body_style),
             ],
+            [
+                Paragraph(f"<b>Boletín Comercial (Dicom):</b> {boletin_com}", body_style),
+                Paragraph(f"<b>Historial con Proveedor:</b> {hist_pago}", body_style),
+            ],
         ]
         contrib_table = Table(contrib_data, colWidths=[92.5 * mm, 92.5 * mm])
         contrib_table.setStyle(
@@ -163,32 +171,33 @@ class PDFReport:
                 ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#F8FAFC")),
                 ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
-                ("TOPPADDING", (0, 0), (-1, -1), 2),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+                ("TOPPADDING", (0, 0), (-1, -1), 1.8),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 1.8),
                 ("LEFTPADDING", (0, 0), (-1, -1), 4),
                 ("RIGHTPADDING", (0, 0), (-1, -1), 4),
             ])
         )
         story.append(contrib_table)
-        story.append(Spacer(1, 2.5 * mm))
+        story.append(Spacer(1, 2 * mm))
 
-        # 3. RESUMEN RECOMENDACIÓN REFERENCIAL
+        # 3. RESUMEN RECOMENDACIÓN REFERENCIAL (PANEL EJECUTIVO)
         evaluacion = str(
             getattr(cr, "evaluacion_referencial", None)
             or getattr(cr, "veredicto", "OBSERVADO")
         ) if cr else "OBSERVADO"
         score_val = getattr(cr, "score_crediticio", 0.0) if cr else 0.0
-        cat_val = getattr(cr, "categoria_riesgo", "MEDIO") if cr else "MEDIO"
-        cupo_ap = getattr(cr, "cupo_aprobado", 0) if cr else 0
+        clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
+        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Desempeño Tributario Alto" if score_val >= 80 else "Desempeño Tributario Medio")
+        linea_ini = getattr(cr, "linea_inicial_sugerida", 0) if cr else 0
+        linea_max = getattr(cr, "linea_maxima_condicionada", 0) or getattr(cr, "cupo_maximo_sugerido", 0) if cr else 0
         plazo_dias = getattr(cr, "plazo_sugerido_dias", 0) if cr else 0
+        plazo_ini = getattr(cr, "plazo_inicial_sugerido", None) or (f"{plazo_dias} días" if plazo_dias > 0 else "Contado")
         resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
 
         # Color de la evaluación referencial
         if "BAJO" in evaluacion:
             badge_bg = colors.HexColor("#16A34A")
-        elif "MEDIO-ALTO" in evaluacion:
-            badge_bg = colors.HexColor("#EA580C")
-        elif "MEDIO" in evaluacion or "CONDICIONES" in evaluacion:
+        elif "MODERADO" in evaluacion or "MEDIO" in evaluacion or "CONDICIONES" in evaluacion:
             badge_bg = colors.HexColor("#D97706")
         elif "ALTO" in evaluacion or "RECHAZADO" in evaluacion:
             badge_bg = colors.HexColor("#DC2626")
@@ -196,24 +205,24 @@ class PDFReport:
             badge_bg = colors.HexColor("#475569")
 
         evaluacion_cell = Paragraph(f"<b>{evaluacion}</b>", badge_style)
-        cupo_ap_txt = format_mclp(cupo_ap)
-        plazo_txt = f"{plazo_dias} días" if plazo_dias > 0 else "Contado"
+        linea_ini_txt = format_mclp(linea_ini)
+        linea_max_txt = format_mclp(linea_max)
 
         panel_data = [
             [
-                Paragraph("<b>EVALUACIÓN REFERENCIAL</b>", table_cell_header),
-                Paragraph("<b>SCORE CREDITICIO</b>", table_cell_header),
-                Paragraph("<b>LÍNEA MÁXIMA SUGERIDA (M$)</b>", table_cell_header),
-                Paragraph("<b>MODALIDAD Y RESGUARDO SUGERIDO</b>", table_cell_header),
+                Paragraph("<b>CLASIFICACIÓN Y RECOMENDACIÓN</b>", table_cell_header),
+                Paragraph("<b>PUNTAJE TRIBUTARIO SII</b>", table_cell_header),
+                Paragraph("<b>LÍNEA ESCALONADA (M$)</b>", table_cell_header),
+                Paragraph("<b>PLAZO Y CONDICIONES DE RESGUARDO</b>", table_cell_header),
             ],
             [
                 evaluacion_cell,
-                Paragraph(f"<b>{score_val:.0f} / 100</b><br/>Riesgo {cat_val}", table_cell_bold),
-                Paragraph(f"<font size=10><b>{cupo_ap_txt}</b></font>", table_cell_bold),
-                Paragraph(f"<b>{plazo_txt}</b><br/><font size=6>{resguardo}</font>", table_cell),
+                Paragraph(f"<b>{score_val:.0f} / 100 pts</b><br/>{desempeno_texto}<br/><font size=5.5 color='#64748B'>No reemplaza informe comercial</font>", table_cell_bold),
+                Paragraph(f"<b>Inicial: {linea_ini_txt}</b><br/><font size=6.5>Máxima: {linea_max_txt}</font>", table_cell_bold),
+                Paragraph(f"<b>Plazo Inicial: {plazo_ini}</b><br/><font size=5.5>{resguardo}</font>", table_cell),
             ],
         ]
-        panel_table = Table(panel_data, colWidths=[52 * mm, 34 * mm, 44 * mm, 55 * mm])
+        panel_table = Table(panel_data, colWidths=[54 * mm, 38 * mm, 38 * mm, 55 * mm])
         panel_table.setStyle(
             TableStyle([
                 ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
@@ -223,14 +232,47 @@ class PDFReport:
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
                 ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("TOPPADDING", (0, 0), (-1, -1), 3),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("TOPPADDING", (0, 0), (-1, -1), 2.5),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5),
             ])
         )
         story.append(panel_table)
-        story.append(Spacer(1, 2.5 * mm))
+        story.append(Spacer(1, 2 * mm))
 
-        # 4. DESGLOSE DEL SCORE TRIBUTARIO (5 PILARES - 100 PTS)
+        # 3.1 FILTRO DE ELEGIBILIDAD TRIBUTARIA (ETAPA 1)
+        filtro = getattr(cr, "filtro_elegibilidad", []) or []
+        if filtro:
+            filtro_rows = [
+                [
+                    Paragraph("<b>Filtro de Elegibilidad Tributaria (Etapa 1)</b>", table_cell_header),
+                    Paragraph("<b>Estado</b>", table_cell_header),
+                    Paragraph("<b>Detalle y Verificación Factual</b>", table_cell_header),
+                ]
+            ]
+            for item in filtro:
+                st_txt = item.get("estado", "OBSERVADO")
+                st_color = "#16A34A" if st_txt == "CUMPLE" else "#EA580C"
+                filtro_rows.append([
+                    Paragraph(item.get("parametro", ""), table_cell_bold),
+                    Paragraph(f"<font color='{st_color}'><b>{st_txt}</b></font>", table_cell_bold),
+                    Paragraph(item.get("detalle", ""), table_cell),
+                ])
+            filtro_table = Table(filtro_rows, colWidths=[62 * mm, 25 * mm, 98 * mm])
+            filtro_table.setStyle(
+                TableStyle([
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
+                    ("BACKGROUND", (0, 1), (-1, -1), colors.HexColor("#FFFFFF")),
+                    ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
+                    ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
+                    ("TOPPADDING", (0, 0), (-1, -1), 1.5),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 1.5),
+                    ("ALIGN", (1, 0), (1, -1), "CENTER"),
+                ])
+            )
+            story.append(filtro_table)
+            story.append(Spacer(1, 2 * mm))
+
+        # 4. DESGLOSE DEL PUNTAJE TRIBUTARIO SII (6 PILARES - 100 PTS)
         desglose = getattr(cr, "desglose_score", []) or []
         if desglose:
             score_rows = [
@@ -249,12 +291,12 @@ class PDFReport:
                     Paragraph(getattr(p, "detalle", ""), table_cell),
                 ])
             score_rows.append([
-                Paragraph("<b>Total Score Compuesto</b>", table_cell_bold),
+                Paragraph("<b>Total Puntaje Tributario SII</b>", table_cell_bold),
                 Paragraph(f"<b>{score_val:.0f} pts</b>", table_cell_bold),
                 Paragraph("<b>100 pts</b>", table_cell_bold),
-                Paragraph(f"<b>Calificación Global: Riesgo {cat_val}</b>", table_cell_bold),
+                Paragraph(f"<b>Calificación: {desempeno_texto} (Clasificación de Riesgo: {clasif_riesgo})</b>", table_cell_bold),
             ])
-            score_table = Table(score_rows, colWidths=[55 * mm, 20 * mm, 18 * mm, 92 * mm])
+            score_table = Table(score_rows, colWidths=[55 * mm, 18 * mm, 16 * mm, 96 * mm])
             score_table.setStyle(
                 TableStyle([
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
@@ -262,16 +304,16 @@ class PDFReport:
                     ("BACKGROUND", (0, -1), (-1, -1), colors.HexColor("#F1F5F9")),
                     ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                     ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
-                    ("TOPPADDING", (0, 0), (-1, -1), 1.8),
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 1.8),
+                    ("TOPPADDING", (0, 0), (-1, -1), 1.6),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 1.6),
                     ("ALIGN", (1, 0), (2, -1), "CENTER"),
                 ])
             )
-            story.append(Paragraph("Desglose del Score Tributario (100 Puntos)", h2_style))
+            story.append(Paragraph("Desglose del Puntaje Tributario SII (6 Dimensiones — 100 Puntos)", h2_style))
             story.append(score_table)
             story.append(Spacer(1, 2 * mm))
 
-        # 5. MEMORIA DE CÁLCULO CUANTITATIVA (M$) — 9 FILAS DE TRAZABILIDAD
+        # 5. MEMORIA DE CÁLCULO CUANTITATIVA (M$) — 10 FILAS DE TRAZABILIDAD
         mem = getattr(cr, "memoria_calculo", {}) if cr and isinstance(cr.memoria_calculo, dict) else {}
         p_ini = mem.get("periodo_inicio", "")
         p_fin = mem.get("periodo_fin", "")
@@ -284,7 +326,8 @@ class PDFReport:
         phi_pct = mem.get("factor_ajuste_conductual_pct", int(round(mem.get("factor_riesgo_phi", 1.0) * 100)))
         cpt_val = mem.get("capital_propio_tributario")
         tope_cpt = mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
-        cupo_max = mem.get("cupo_maximo_sugerido", 0)
+        cupo_max = mem.get("linea_maxima_condicionada") or mem.get("cupo_maximo_sugerido", 0)
+        cupo_ini = mem.get("linea_inicial_sugerida") or linea_ini
 
         rango_str = f" ({p_ini} a {p_fin})" if p_ini and p_fin else ""
         cpt_str = format_mclp(cpt_val) if cpt_val is not None else "Sin F22"
@@ -311,8 +354,8 @@ class PDFReport:
                 Paragraph(format_mclp(iva_prom), table_cell_bold),
             ],
             [
-                Paragraph("(=) Brecha Operacional Tributaria Mensual Proxy", table_cell_bold),
-                Paragraph("Margen operacional neto depurado [Ventas - Compras - IVA Det.]", table_cell),
+                Paragraph("(=) Margen Tributario F29 Proxy [Ventas − Compras Op. − IVA Det.]", table_cell_bold),
+                Paragraph("Aproximación tributaria antes de sueldos, arriendos, gastos financieros y capital de trabajo (no equivale a flujo de caja libre)", table_cell),
                 Paragraph(format_mclp(brecha), table_cell_bold),
             ],
             [
@@ -321,8 +364,8 @@ class PDFReport:
                 Paragraph(format_mclp(techo_op), table_cell_bold),
             ],
             [
-                Paragraph("Paso B2: Freno por Absorción Operacional (25% Brecha)", table_cell_bold),
-                Paragraph("Máximo 25% del margen operacional neto depurado", table_cell),
+                Paragraph("Paso B2: Freno por Absorción Operacional (25% Margen Proxy)", table_cell_bold),
+                Paragraph("Máximo 25% del margen tributario proxy", table_cell),
                 Paragraph(format_mclp(freno_flujo), table_cell_bold),
             ],
             [
@@ -336,9 +379,14 @@ class PDFReport:
                 Paragraph(format_mclp(tope_cpt) if tope_cpt is not None else "Sin tope", table_cell_bold),
             ],
             [
-                Paragraph("(=) Línea Máxima Sugerida Final", table_cell_bold),
+                Paragraph("(=) Línea Máxima Condicionada (Techo Técnico)", table_cell_bold),
                 Paragraph("min(Techo 8%, Freno Flujo 25%) × Factor Conductual con Tope CPT (M$ 100)", table_cell),
                 Paragraph(format_mclp(cupo_max), table_cell_bold),
+            ],
+            [
+                Paragraph("(=) Línea Inicial Recomendada (Etapa 1 - 50% Apertura)", table_cell_bold),
+                Paragraph("50% de la Línea Máxima Técnica para apertura comercial controlada", table_cell),
+                Paragraph(format_mclp(cupo_ini), table_cell_bold),
             ],
         ]
         mem_table = Table(mem_rows, colWidths=[70 * mm, 85 * mm, 30 * mm])
@@ -354,10 +402,11 @@ class PDFReport:
                 ("BACKGROUND", (0, 7), (-1, 7), colors.HexColor("#FFFFFF")),
                 ("BACKGROUND", (0, 8), (-1, 8), colors.HexColor("#F8FAFC")),
                 ("BACKGROUND", (0, 9), (-1, 9), colors.HexColor("#E2E8F0")),
+                ("BACKGROUND", (0, 10), (-1, 10), colors.HexColor("#FEF3C7")),
                 ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
-                ("TOPPADDING", (0, 0), (-1, -1), 1.8),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 1.8),
+                ("TOPPADDING", (0, 0), (-1, -1), 1.6),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 1.6),
                 ("ALIGN", (2, 0), (2, -1), "RIGHT"),
             ])
         )
@@ -365,25 +414,34 @@ class PDFReport:
         story.append(mem_table)
         story.append(Spacer(1, 2 * mm))
 
-        # 6. BANDERAS ROJAS Y RECOMENDACIONES OPERATIVAS
+        # 6. CONDICIONES SUSPENSIVAS, ALERTAS Y MONITOREO SUGERIDO (RECUADRO LIMPIO)
         banderas = getattr(cr, "banderas_rojas", []) if cr else []
-        hoja_ruta = getattr(cr, "hoja_ruta_comercial", []) if cr else []
+        cond_escalamiento = getattr(cr, "condicion_escalamiento", None) or (
+            "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad "
+            "vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros."
+        )
 
-        flags_p = []
+        alertas_p = [
+            Paragraph("<b>Condiciones Suspensivas y Alertas Críticas:</b>", table_cell_bold),
+        ]
         if banderas:
             for b in banderas:
-                flags_p.append(Paragraph(f"🔴 <b>Alerta:</b> {b}", body_style))
+                alertas_p.append(Paragraph(f"• <b>Alerta:</b> {b}", body_style))
         else:
-            flags_p.append(Paragraph("🟢 <i>Sin alertas críticas detectadas en la carpeta.</i>", body_style))
+            alertas_p.append(Paragraph("• 🟢 <i>Sin alertas críticas detectadas en declaraciones tributarias.</i>", body_style))
 
-        hr_p = []
-        if hoja_ruta:
-            for r in hoja_ruta:
-                hr_p.append(Paragraph(f"🧭 <b>Protocolo:</b> {r}", body_style))
-        else:
-            hr_p.append(Paragraph("<i>Sin recomendaciones adicionales.</i>", body_style))
+        alertas_p.append(Spacer(1, 1 * mm))
+        alertas_p.append(Paragraph(f"• <b>Boletín Comercial Dicom/Equifax:</b> {boletin_com}", body_style))
+        alertas_p.append(Paragraph(f"• <b>Historial con Proveedor:</b> {hist_pago}", body_style))
 
-        flags_table = Table([[flags_p, hr_p]], colWidths=[92.5 * mm, 92.5 * mm])
+        control_p = [
+            Paragraph("<b>Escalamiento Comercial y Monitoreo Sugerido:</b>", table_cell_bold),
+            Paragraph(f"• <b>Condición de Escalamiento (Paso a Línea Máxima):</b> {cond_escalamiento}", body_style),
+            Paragraph("• <b>Monitoreo Durante Primeros 90 Días:</b> Revisión mensual obligatoria de cumplimiento en pagos y vigencia de declaraciones F29 antes de cada despacho.", body_style),
+            Paragraph(f"• <b>Resguardo Previo al Despacho:</b> {resguardo}", body_style),
+        ]
+
+        flags_table = Table([[alertas_p, control_p]], colWidths=[92.5 * mm, 92.5 * mm])
         flags_table.setStyle(
             TableStyle([
                 ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#F8FAFC")),
@@ -395,6 +453,7 @@ class PDFReport:
                 ("RIGHTPADDING", (0, 0), (-1, -1), 4),
             ])
         )
+        story.append(Paragraph("Condiciones Suspensivas, Alertas y Monitoreo Sugerido", h2_style))
         story.append(flags_table)
         story.append(Spacer(1, 2.5 * mm))
 
@@ -503,12 +562,17 @@ class PDFReport:
             ]
             f22_rows = [f22_header]
             for f in sorted_f22:
+                ing = getattr(f, "ingresos", None)
+                rli = getattr(f, "renta_liquida_imponible", None)
+                cpt_f = getattr(f, "capital_propio_tributario", None)
+                imp = getattr(f, "impuesto_determinado", None)
+                anio_clean = str(getattr(f, "anio_tributario", "")).replace(":", "").strip()
                 f22_rows.append([
-                    Paragraph(str(getattr(f, "anio_tributario", "")), table_cell),
-                    Paragraph(format_mclp(getattr(f, "ingresos", None)), table_cell),
-                    Paragraph(format_mclp(getattr(f, "renta_liquida_imponible", None)), table_cell),
-                    Paragraph(format_mclp(getattr(f, "capital_propio_tributario", None)), table_cell),
-                    Paragraph(format_mclp(getattr(f, "impuesto_determinado", None)), table_cell),
+                    Paragraph(anio_clean, table_cell),
+                    Paragraph(format_mclp(ing).replace(":", "").strip(), table_cell),
+                    Paragraph(format_mclp(rli).replace(":", "").strip(), table_cell),
+                    Paragraph(format_mclp(cpt_f).replace(":", "").strip(), table_cell),
+                    Paragraph(format_mclp(imp).replace(":", "").strip(), table_cell),
                 ])
             f22_table = Table(f22_rows, colWidths=[25 * mm, 40 * mm, 40 * mm, 45 * mm, 35 * mm])
             f22_table.setStyle(

@@ -106,11 +106,17 @@ class PilarScore(BaseModel):
 class Decision(BaseModel):
     resultado_base: str | None = None
     evaluacion_referencial: str | None = None
+    clasificacion_riesgo: str | None = None
+    desempeno_tributario_texto: str | None = None
     producto_evaluado: str | None = None
     cupo_maximo_sugerido: int | None = None
     cupo_aprobado: int | None = None
     linea_maxima_sugerida: int | None = None
+    linea_inicial_sugerida: int | None = None
+    linea_maxima_condicionada: int | None = None
     plazo_sugerido_dias: int | None = None
+    plazo_inicial_sugerido: str | None = None
+    condicion_escalamiento: str | None = None
     garantia_exigida: str | None = None
     resguardo_comercial_sugerido: str | None = None
     protocolo_operativo: str | None = None
@@ -121,6 +127,8 @@ class Decision(BaseModel):
     vigencia_datos: dict | None = None
     conciliacion_f29_f22: dict | None = None
     bienes_raices_resumen: str | None = None
+    filtro_elegibilidad: list[dict] = []
+    variables_comerciales: dict | None = None
 
 
 class CreditRiskResult(BaseModel):
@@ -137,12 +145,18 @@ class CreditRiskResult(BaseModel):
     # Campos de Evaluación y Recomendación Referencial
     veredicto: str = "OBSERVADO"
     evaluacion_referencial: str = "OBSERVADO"
+    clasificacion_riesgo: str = "MODERADO"
+    desempeno_tributario_texto: str = "Desempeño Tributario Medio"
     score_crediticio: float = 0.0
     categoria_riesgo: str = "MEDIO"
     cupo_maximo_sugerido: int | None = None
     cupo_aprobado: int | None = None
     linea_maxima_sugerida: int | None = None
+    linea_inicial_sugerida: int | None = None
+    linea_maxima_condicionada: int | None = None
     plazo_sugerido_dias: int | None = None
+    plazo_inicial_sugerido: str | None = None
+    condicion_escalamiento: str | None = None
     garantia_exigida: str | None = None
     resguardo_comercial_sugerido: str | None = None
     protocolo_operativo: str | None = None
@@ -152,5 +166,7 @@ class CreditRiskResult(BaseModel):
     vigencia_datos: dict | None = None
     conciliacion_f29_f22: dict | None = None
     bienes_raices_resumen: str | None = None
+    filtro_elegibilidad: list[dict] = []
+    variables_comerciales: dict | None = None
 
 

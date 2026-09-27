@@ -207,6 +207,30 @@ with col_cupo2:
     st.caption("Equivalencia en M$")
     st.markdown(f"**{format_mclp(cupo_solicitado) if cupo_solicitado else 'M$ 0'}**")
 
+col_com1, col_com2 = st.columns(2)
+with col_com1:
+    boletin_comercial = st.selectbox(
+        "Boletín Comercial (Dicom/Equifax)",
+        [
+            "Pendiente de consulta (Condiciona línea)",
+            "Verificado: Sin morosidad ni protestos",
+            "Verificado: Con morosidad vigente",
+        ],
+        index=0,
+        help="Evaluación del comportamiento crediticio externo. Si registra morosidad vigente, la recomendación se restringe a M$ 0 (Contado).",
+    )
+with col_com2:
+    historial_pago = st.selectbox(
+        "Historial de Pago con Proveedor",
+        [
+            "Cliente nuevo (Sin historial previo)",
+            "Cliente con historial de pago oportuno",
+            "Cliente con atrasos previos",
+        ],
+        index=0,
+        help="Para clientes nuevos o con alertas aplica la Línea Inicial de Apertura (50% del techo técnico).",
+    )
+
 col_btn1, col_btn2 = st.columns([1, 4])
 with col_btn1:
     analizar = st.button("Analizar", type="primary", disabled=uploaded_file is None)
@@ -247,7 +271,10 @@ if uploaded_file is not None and analizar:
     with st.spinner("Procesando Carpeta Tributaria en memoria RAM..."):
         try:
             result, json_bytes, markdown_bytes = process_pdf(
-                uploaded_file, cupo_solicitado=cupo_solicitado or None
+                uploaded_file,
+                cupo_solicitado=cupo_solicitado or None,
+                boletin_comercial=boletin_comercial,
+                historial_pago=historial_pago,
             )
             st.session_state["result"] = result
             st.session_state["json_bytes"] = json_bytes

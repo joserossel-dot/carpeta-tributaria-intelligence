@@ -16,12 +16,20 @@ def fmt_currency(val: int | float | Decimal | None) -> str:
     return f"${fmt_miles(val)}"
 
 
-def format_mclp(valor_clp: float | int | Decimal | None) -> str:
+def format_mclp(valor_clp: float | int | Decimal | str | None) -> str:
     """Divide los montos en pesos por 1.000 y formatea con separador de miles con puntos y prefijo 'M$'.
     Ejemplo: $12.345.678 -> 'M$ 12.346', $0 -> 'M$ 0', None -> '—'.
     """
     if valor_clp is None:
         return "—"
+    if isinstance(valor_clp, str):
+        v_str = str(valor_clp).replace("$", "").replace("M$", "").replace(".", "").replace(",", "").replace(":", "").strip()
+        if not v_str or v_str == "-" or v_str == "—":
+            return "—"
+        try:
+            valor_clp = float(v_str)
+        except ValueError:
+            return str(valor_clp).replace(":", "").strip()
     if isinstance(valor_clp, Decimal):
         valor_clp = float(valor_clp)
     miles = round(valor_clp / 1000.0)

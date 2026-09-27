@@ -35,7 +35,12 @@ class TaxFolderEngine:
             str(pdf_input) if isinstance(pdf_input, (str, Path)) else "memory://in-memory.pdf"
         )
 
-    def parse(self, cupo_solicitado: int | None = None) -> TaxFolder:
+    def parse(
+        self,
+        cupo_solicitado: int | None = None,
+        boletin_comercial: str | None = None,
+        historial_pago: str | None = None,
+    ) -> TaxFolder:
         t0 = time.perf_counter()
         if isinstance(self.pdf_input, (str, Path)):
             source = str(Path(self.pdf_input).resolve())
@@ -95,7 +100,12 @@ class TaxFolderEngine:
         company = tax_folder_mapper.map(tax_folder)
         tax_folder.analysis = tax_analyzer.analyze(company)
         try:
-            tax_folder.credit_risk = credit_risk_engine.calculate(tax_folder, cupo_solicitado)
+            tax_folder.credit_risk = credit_risk_engine.calculate(
+                tax_folder,
+                cupo_solicitado=cupo_solicitado,
+                boletin_comercial=boletin_comercial,
+                historial_pago=historial_pago,
+            )
         except Exception:
             # El motor de riesgo crediticio es una capa adicional sobre
             # datos ya extraídos -- un error ahí NUNCA debe tumbar el

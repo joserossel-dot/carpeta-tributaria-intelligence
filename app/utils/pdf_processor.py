@@ -7,7 +7,12 @@ from src.credit.anonymous_telemetry import registrar_telemetria_anonima
 from src.reports.executive_report import ExecutiveReport
 
 
-def process_pdf(uploaded_file, cupo_solicitado: int | None = None) -> tuple:
+def process_pdf(
+    uploaded_file,
+    cupo_solicitado: int | None = None,
+    boletin_comercial: str | None = None,
+    historial_pago: str | None = None,
+) -> tuple:
     """Procesa un PDF de Carpeta Tributaria 100% en memoria RAM (Zero-PII).
 
     El archivo jamás se escribe a disco. Tras la extracción, los buffers
@@ -19,7 +24,11 @@ def process_pdf(uploaded_file, cupo_solicitado: int | None = None) -> tuple:
         buffer = io.BytesIO(pdf_bytes)
 
         engine = TaxFolderEngine(buffer)
-        result = engine.parse(cupo_solicitado=cupo_solicitado)
+        result = engine.parse(
+            cupo_solicitado=cupo_solicitado,
+            boletin_comercial=boletin_comercial,
+            historial_pago=historial_pago,
+        )
 
         # Captura de telemetría estadística 100% anónima para calibración sectorial
         try:
