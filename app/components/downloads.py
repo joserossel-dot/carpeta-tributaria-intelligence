@@ -24,9 +24,9 @@ def show_downloads(target: TaxFolder | bytes, markdown_bytes: bytes | None = Non
         col1, col2 = st.columns(2)
         with col1:
             st.download_button(
-                label="📄 Descargar Informe de Riesgo (PDF)",
+                label="📄 Descargar Informe de Evaluación Tributaria (PDF)",
                 data=pdf_data,
-                file_name=f"informe_riesgo_{rut_clean}.pdf",
+                file_name=f"evaluacion_tributaria_{rut_clean}.pdf",
                 mime="application/pdf",
                 use_container_width=True,
             )

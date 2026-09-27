@@ -96,6 +96,13 @@ class CaminoMitigacion(BaseModel):
     justificacion: str
 
 
+class PilarScore(BaseModel):
+    nombre: str
+    puntaje_obtenido: int
+    puntaje_maximo: int
+    detalle: str
+
+
 class Decision(BaseModel):
     resultado_base: str | None = None
     evaluacion_referencial: str | None = None
@@ -110,6 +117,10 @@ class Decision(BaseModel):
     memoria_calculo: dict | None = None
     hoja_ruta_comercial: list[str] = []
     caminos_mitigacion: list[CaminoMitigacion] = []
+    desglose_score: list[PilarScore] = []
+    vigencia_datos: dict | None = None
+    conciliacion_f29_f22: dict | None = None
+    bienes_raices_resumen: str | None = None
 
 
 class CreditRiskResult(BaseModel):
@@ -137,5 +148,9 @@ class CreditRiskResult(BaseModel):
     protocolo_operativo: str | None = None
     memoria_calculo: dict | None = None
     hoja_ruta_comercial: list[str] = []
+    desglose_score: list[PilarScore] = []
+    vigencia_datos: dict | None = None
+    conciliacion_f29_f22: dict | None = None
+    bienes_raices_resumen: str | None = None
 
 

@@ -18,14 +18,14 @@ def show_export(tax_folder: TaxFolder, auth_role: str = "client") -> None:
     rut_clean = str(rut_val).replace(".", "").replace("-", "").strip()
 
     with col_rep1:
-        st.markdown("**Informe de Riesgo y Evaluación Comercial (PDF)**")
+        st.markdown("**Informe de Evaluación Tributaria y Recomendación Comercial (PDF)**")
         st.caption("Documento formal con evaluación referencial, línea en M$, memoria de cálculo y resguardos.")
         try:
             pdf_bytes = PDFReport().generate(tax_folder)
             st.download_button(
-                label="📄 Descargar Informe de Riesgo (PDF)",
+                label="📄 Descargar Informe de Evaluación Tributaria (PDF)",
                 data=pdf_bytes,
-                file_name=f"informe_riesgo_{rut_clean}.pdf",
+                file_name=f"evaluacion_tributaria_{rut_clean}.pdf",
                 mime="application/pdf",
                 use_container_width=True,
                 key="btn_export_pdf",

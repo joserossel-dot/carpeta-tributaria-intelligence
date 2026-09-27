@@ -189,7 +189,7 @@ uploaded_file = st.file_uploader(
 )
 
 st.info(
-    "🔒 **Privacidad (Ley N° 21.719):** Los documentos se procesan exclusivamente en memoria temporal para generar este análisis y no son almacenados por Cavilaria SpA."
+    "🔒 **Privacidad (Ley N° 21.719):** Los documentos se procesan en memoria temporal únicamente para generar este reporte y no son almacenados por Cavilaria SpA."
 )
 
 col_cupo1, col_cupo2 = st.columns([3, 1])

@@ -13,7 +13,7 @@ _CONFIANZA_LABEL = {
 
 
 def show_credit_score(tax_folder: TaxFolder) -> None:
-    st.subheader("CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial")
+    st.subheader("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial")
 
     cr = getattr(tax_folder, "credit_risk", None)
     if cr is None:
@@ -149,6 +149,32 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
         st.markdown("#### Hoja de Ruta Comercial")
         for r in hoja_ruta:
             st.markdown(f"- 🧭 {r}")
+
+    # --- CONTROL DE VIGENCIA Y CONCILIACIÓN CRUZADA ---
+    vigencia = getattr(cr, "vigencia_datos", None)
+    conciliacion = getattr(cr, "conciliacion_f29_f22", None)
+    if vigencia or conciliacion:
+        st.divider()
+        if vigencia:
+            v_col1, v_col2 = st.columns(2)
+            with v_col1:
+                st.markdown(f"📅 **Emisión:** {vigencia.get('fecha_emision')} | **Último F29:** {vigencia.get('ultimo_periodo')}")
+            with v_col2:
+                st.markdown(f"⏱️ **Antigüedad del dato:** {vigencia.get('meses_desfase')} meses (Confianza: **{vigencia.get('nivel_confianza')}**)")
+        if conciliacion:
+            st.info(f"📊 **Conciliación Cruzada F29 vs F22:** {conciliacion.get('detalle')}")
+
+    # --- DESGLOSE DEL SCORE TRIBUTARIO (5 PILARES) ---
+    desglose = getattr(cr, "desglose_score", [])
+    if desglose:
+        st.divider()
+        st.markdown("#### Desglose del Score Tributario (100 Puntos)")
+        for p in desglose:
+            col1, col2 = st.columns([1, 3])
+            with col1:
+                st.metric(p.nombre, f"{p.puntaje_obtenido}/{p.puntaje_maximo} pts")
+            with col2:
+                st.markdown(f"**Detalle:** {p.detalle}")
 
     st.divider()
     st.markdown("#### Hechos Factuales")

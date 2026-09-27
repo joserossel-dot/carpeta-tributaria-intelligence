@@ -14,6 +14,7 @@ from src.models.credit_risk import (
     Indicadores,
     MargenVsGiro,
     MoraEfectiva,
+    PilarScore,
     PostergacionesIva,
     RespaldoEstructural,
 )
@@ -23,14 +24,15 @@ MESES_MINIMOS_PARA_SCORING = 6
 
 
 class CreditRiskEngine:
-    """Motor de decisión crediticia B2B v2.0.
+    """Motor de decisión crediticia B2B v2.3.
 
     Evolución cuantitativa:
     1. Autonomía de Indicadores: evalúa margen intrínseco si no existe benchmark.
-    2. Algoritmo Determinista de Asignación de Cupo Comercial (Pasos A-D).
-    3. Detección de Lagunas Tributarias en F29.
-    4. Evaluación estructurada de cupo sugerido vs. solicitado, plazos y garantías.
-    5. Dictamen Ejecutivo de Comité de Crédito.
+    2. Algoritmo Determinista de Asignación de Cupo Comercial (Pasos A-D) con trazabilidad 12M.
+    3. Detección de Lagunas Tributarias en F29 y Control de Vigencia/Desfase.
+    4. Detector de Compresión de RLI en F22 y Conciliación Cruzada F29 vs F22.
+    5. Desglose del Score Tributario en 5 Pilares Objetivos (100 pts).
+    6. Matriz de Garantías y Resguardos Comerciales Referenciales no vinculantes.
     """
 
     def __init__(self, benchmark: SectorBenchmark | None = None):
@@ -41,9 +43,19 @@ class CreditRiskEngine:
     ) -> CreditRiskResult:
         calidad = self._evaluar_calidad_datos(tax_folder)
         hechos = self._extraer_hechos(tax_folder)
+        vigencia = self._evaluar_vigencia_datos(tax_folder)
+        conciliacion = self._calcular_conciliacion_f29_f22(tax_folder)
+        bienes_raices = self._resumen_bienes_raices(tax_folder)
+        rli_comprimida, alerta_rli = self._detectar_compresion_rli(tax_folder)
 
         if calidad.veredicto != "APTO_PARA_SCORING":
-            return CreditRiskResult(calidad_datos=calidad, hechos=hechos)
+            return CreditRiskResult(
+                calidad_datos=calidad,
+                hechos=hechos,
+                vigencia_datos=vigencia,
+                conciliacion_f29_f22=conciliacion,
+                bienes_raices_resumen=bienes_raices,
+            )
 
         # Cálculo de cupo comercial autónomo (Pasos A-D)
         cupo_maximo, memoria, aval_obligatorio = self._calcular_cupo_autonomo(
@@ -53,7 +65,10 @@ class CreditRiskEngine:
         indicadores = self._calcular_indicadores(
             tax_folder, cupo_solicitado, cupo_maximo
         )
-        score_compuesto = self._componer_score(indicadores)
+        desglose_score = self._calcular_desglose_score(
+            tax_folder, calidad, hechos, indicadores, memoria, rli_comprimida
+        )
+        score_compuesto = self._componer_score(indicadores, desglose_score)
         decision = self._decidir(
             hechos,
             indicadores,
@@ -63,10 +78,21 @@ class CreditRiskEngine:
             memoria,
             aval_obligatorio,
             tax_folder=tax_folder,
+            rli_comprimida=rli_comprimida,
         )
+        decision.desglose_score = desglose_score
+        decision.vigencia_datos = vigencia
+        decision.conciliacion_f29_f22 = conciliacion
+        decision.bienes_raices_resumen = bienes_raices
+
         alertas, fortalezas, banderas_rojas = self._alertas_y_fortalezas(
             hechos, indicadores, memoria, calidad
         )
+        if alerta_rli:
+            alertas.insert(0, alerta_rli)
+            banderas_rojas.insert(0, alerta_rli)
+        if vigencia.get("alerta"):
+            alertas.append(vigencia["alerta"])
 
         dictamen = self._generar_dictamen_ejecutivo(
             tax_folder, score_compuesto, decision, memoria, banderas_rojas
@@ -85,6 +111,10 @@ class CreditRiskEngine:
             hechos=hechos,
             indicadores=indicadores,
             score_compuesto=score_compuesto,
+            desglose_score=desglose_score,
+            vigencia_datos=vigencia,
+            conciliacion_f29_f22=conciliacion,
+            bienes_raices_resumen=bienes_raices,
             decision=decision,
             alertas=alertas,
             fortalezas=fortalezas,
@@ -189,6 +219,166 @@ class CreditRiskEngine:
             return "Impuesto determinado"
         return observacion[:40].strip()
 
+    @staticmethod
+    def _detectar_compresion_rli(tax_folder: TaxFolder) -> tuple[bool, str | None]:
+        f22_validos = sorted(
+            [f for f in tax_folder.f22 if f.anio_tributario],
+            key=lambda f: f.anio_tributario or "",
+            reverse=True,
+        )
+        if not f22_validos:
+            return False, None
+
+        ultimo = f22_validos[0]
+        ingresos = ultimo.ingresos or 0
+        rli = ultimo.renta_liquida_imponible
+
+        # Caso 1: Ingresos positivos pero RLI <= 0 (o RLI es 0 con ventas millonarias)
+        if ingresos > 0 and rli is not None and rli <= 0:
+            msg = (
+                f"Alerta de Rentabilidad Tributaria: Compresión severa de RLI en último F22 (AT {ultimo.anio_tributario}). "
+                f"Ingresos: ${ingresos:,.0f} vs RLI: ${rli:,.0f} CLP (Margen RLI 0%). Se detecta erosión tributaria severa."
+            )
+            return True, msg
+
+        # Caso 2: Caída de RLI > 70% respecto al año tributario anterior
+        if len(f22_validos) >= 2:
+            anterior = f22_validos[1]
+            rli_ant = anterior.renta_liquida_imponible
+            if rli_ant and rli_ant > 0 and rli is not None:
+                caida = (rli - rli_ant) / rli_ant
+                if caida < -0.70:
+                    pct_caida = abs(caida) * 100
+                    msg = (
+                        f"Alerta de Rentabilidad Tributaria: Caída de RLI de {pct_caida:.1f}% en F22 "
+                        f"(AT {ultimo.anio_tributario}: ${rli:,.0f} vs AT {anterior.anio_tributario}: ${rli_ant:,.0f} CLP)."
+                    )
+                    return True, msg
+
+        return False, None
+
+    @staticmethod
+    def _evaluar_vigencia_datos(tax_folder: TaxFolder) -> dict[str, Any]:
+        c = getattr(tax_folder, "contributor", None)
+        fecha_emision_raw = getattr(c, "fecha_generacion", None) if c else None
+
+        sorted_f29 = sorted(tax_folder.f29, key=lambda f: f.periodo or "")
+        sorted_mt = sorted(tax_folder.monthly_taxes, key=lambda m: m.periodo or "")
+        ultimo_periodo = (
+            sorted_f29[-1].periodo
+            if sorted_f29 and sorted_f29[-1].periodo
+            else (sorted_mt[-1].periodo if sorted_mt and sorted_mt[-1].periodo else "No informado")
+        )
+
+        emision_y, emision_m = 2026, 1
+        if fecha_emision_raw:
+            try:
+                date_part = str(fecha_emision_raw).strip().split()[0]
+                if "/" in date_part:
+                    p = date_part.split("/")
+                    if len(p) == 3:
+                        emision_m, emision_y = int(p[1]), int(p[2])
+                elif "-" in date_part:
+                    p = date_part.split("-")
+                    if len(p) == 3:
+                        if len(p[0]) == 4:
+                            emision_y, emision_m = int(p[0]), int(p[1])
+                        else:
+                            emision_m, emision_y = int(p[1]), int(p[2])
+            except (ValueError, IndexError):
+                pass
+
+        meses_desfase = 0
+        if ultimo_periodo and len(ultimo_periodo) == 7 and "-" in ultimo_periodo:
+            try:
+                ult_y, ult_m = int(ultimo_periodo[:4]), int(ultimo_periodo[5:7])
+                meses_desfase = max(0, (emision_y - ult_y) * 12 + (emision_m - ult_m))
+            except (ValueError, IndexError):
+                pass
+
+        if meses_desfase <= 2:
+            nivel = "ALTA"
+            alerta = None
+        elif meses_desfase <= 4:
+            nivel = "MEDIA"
+            alerta = None
+        else:
+            nivel = "BAJA"
+            alerta = (
+                f"Alerta de Vigencia: Carpeta tributaria con desfase de {meses_desfase} meses (> 4 meses). "
+                f"Se sugiere solicitar carpeta tributaria actualizada."
+            )
+
+        return {
+            "fecha_emision": fecha_emision_raw or "No informada",
+            "ultimo_periodo": ultimo_periodo,
+            "meses_desfase": meses_desfase,
+            "nivel_confianza": nivel,
+            "alerta": alerta,
+        }
+
+    @staticmethod
+    def _calcular_conciliacion_f29_f22(tax_folder: TaxFolder) -> dict[str, Any] | None:
+        f22_con_ingresos = sorted(
+            [f for f in tax_folder.f22 if f.anio_tributario and f.ingresos and f.ingresos > 0],
+            key=lambda f: f.anio_tributario or "",
+            reverse=True,
+        )
+        if not f22_con_ingresos:
+            return None
+
+        for f22_item in f22_con_ingresos:
+            try:
+                at = int(f22_item.anio_tributario)
+                ac = at - 1
+            except (ValueError, TypeError):
+                continue
+
+            prefijo = f"{ac}-"
+            meses_ac = [
+                mt for mt in tax_folder.monthly_taxes
+                if mt.periodo and mt.periodo.startswith(prefijo)
+            ]
+            if len(meses_ac) >= 6:
+                ventas_f29 = sum(mt.total_ventas or Decimal("0") for mt in meses_ac)
+                ingresos_f22 = f22_item.ingresos
+                dif_monto = abs(int(ventas_f29) - ingresos_f22)
+                dif_pct = round(dif_monto / float(ingresos_f22) * 100.0, 1) if ingresos_f22 else 0.0
+
+                if dif_pct <= 10.0:
+                    estado = "CONCILIADO (< 10% dif.)"
+                elif dif_pct <= 15.0:
+                    estado = "TOLERANCIA ACEPTABLE (10-15% dif.)"
+                else:
+                    estado = "DESVIACIÓN RELEVANTE (> 15% dif.)"
+
+                v_m = int(ventas_f29 // 1000)
+                i_m = int(ingresos_f22 // 1000)
+                detalle = (
+                    f"Ventas F29 año comercial {ac} (M$ {v_m:,}) vs Ingresos F22 AT {at} (M$ {i_m:,}) "
+                    f"— Diferencia: {dif_pct}% ({estado})."
+                ).replace(",", ".")
+
+                return {
+                    "anio_tributario": str(at),
+                    "anio_comercial": str(ac),
+                    "meses_f29_contabilizados": len(meses_ac),
+                    "ventas_f29_anual": int(ventas_f29),
+                    "ingresos_f22": int(ingresos_f22),
+                    "diferencia_monto": int(dif_monto),
+                    "diferencia_pct": dif_pct,
+                    "estado": estado,
+                    "detalle": detalle,
+                }
+        return None
+
+    @staticmethod
+    def _resumen_bienes_raices(tax_folder: TaxFolder) -> str:
+        props = getattr(tax_folder, "properties", []) or []
+        if props:
+            return f"Registra {len(props)} bien(es) raíz(ces) en la carpeta tributaria"
+        return "No registra bienes raíces en carpeta"
+
     # ------------------------------------------------------------------
     # Hechos (sin calificar)
     # ------------------------------------------------------------------
@@ -247,15 +437,26 @@ class CreditRiskEngine:
     ) -> tuple[int, dict[str, Any], bool]:
         ma = tax_folder.monthly_analysis
 
-        # Paso A: Base de Absorción de Compras
-        prom_compras_op_12m = float(
-            ma.promedio_compras_operacionales_12m
-            or ma.promedio_compras_mensual
-            or Decimal("0")
-        ) if ma else 0.0
-        prom_ventas_12m = float(ma.promedio_ventas_mensual or Decimal("0")) if ma else 0.0
-        ventas_u12 = float(ma.ventas_ultimos_12 or Decimal("0")) if ma else 0.0
-        compras_u12 = prom_compras_op_12m * 12
+        # Paso A: Base de Absorción de Compras sobre los 12 meses más recientes
+        sorted_mt = sorted(tax_folder.monthly_taxes, key=lambda m: m.periodo or "")
+        last_12_mt = sorted_mt[-12:] if len(sorted_mt) >= 12 else sorted_mt
+        periodo_inicio = last_12_mt[0].periodo if last_12_mt else ""
+        periodo_fin = last_12_mt[-1].periodo if last_12_mt else ""
+
+        compras_op_sum = sum(
+            float(mt.compras_operacionales if mt.compras_operacionales is not None else (mt.compras or Decimal("0")))
+            for mt in last_12_mt
+        )
+        prom_compras_op_12m = (compras_op_sum / len(last_12_mt)) if last_12_mt else (
+            float(ma.promedio_compras_operacionales_12m or ma.promedio_compras_mensual or Decimal("0")) if ma else 0.0
+        )
+
+        ventas_sum = sum(float(mt.total_ventas or Decimal("0")) for mt in last_12_mt)
+        prom_ventas_12m = (ventas_sum / len(last_12_mt)) if last_12_mt else (
+            float(ma.promedio_ventas_mensual or Decimal("0")) if ma else 0.0
+        )
+        ventas_u12 = ventas_sum if last_12_mt else (float(ma.ventas_ultimos_12 or Decimal("0")) if ma else 0.0)
+        compras_u12 = compras_op_sum if last_12_mt else (prom_compras_op_12m * 12)
 
         # Tratamiento de empresas de giro exento, servicios o rentistas (compras < 15% ventas)
         es_servicios_o_exento = (
@@ -277,18 +478,15 @@ class CreditRiskEngine:
         else:
             c_base = 0.30 * prom_ventas_12m if prom_ventas_12m > 0 else 0.0
 
-        # Paso B: Techo Operativo (8% de compras mensuales para crédito proveedor v2.2)
+        # Paso B: Techo Operativo (8% de compras mensuales para crédito proveedor v2.2/v2.3)
         techo_operativo = c_base * 0.08
 
         # Freno por Flujo Operacional Neto Mensual: máx 25% del Margen Operacional Mensual Depurado
         # max(0, ventas_mensuales_prom - costo_operativo_mensual_prom - iva_determinado_prom)
         iva_det_prom = 0.0
-        if tax_folder.monthly_taxes:
-            sorted_mt = sorted(tax_folder.monthly_taxes, key=lambda m: m.periodo or "")
-            last_12_mt = sorted_mt[-12:]
-            if last_12_mt:
-                iva_det_sum = sum(float(mt.iva_determinado or Decimal("0")) for mt in last_12_mt)
-                iva_det_prom = iva_det_sum / len(last_12_mt)
+        if last_12_mt:
+            iva_det_sum = sum(float(mt.iva_determinado or Decimal("0")) for mt in last_12_mt)
+            iva_det_prom = iva_det_sum / len(last_12_mt)
 
         margen_operacional_depurado = max(0.0, prom_ventas_12m - c_base - iva_det_prom)
         freno_flujo = 0.25 * margen_operacional_depurado
@@ -404,13 +602,19 @@ class CreditRiskEngine:
             cupo_maximo_sugerido = 0
 
         memoria = {
+            "periodo_inicio": periodo_inicio,
+            "periodo_fin": periodo_fin,
+            "ventas_netas_mensuales_prom": int(round(prom_ventas_12m)),
             "base_compras_c_base": int(round(c_base)),
+            "iva_determinado_prom": int(round(iva_det_prom)),
+            "brecha_operacional_proxy": int(round(margen_operacional_depurado)),
             "techo_operativo_8pct": int(round(techo_operativo)),
             "techo_operativo_20pct": int(round(techo_operativo)),
             "techo_operativo": int(round(techo_operativo)),
-            "margen_operacional_depurado_mensual": int(round(margen_operacional_depurado)),
             "freno_flujo_operacional_25pct": int(round(freno_flujo)),
+            "margen_operacional_depurado_mensual": int(round(margen_operacional_depurado)),
             "factor_riesgo_phi": round(phi, 2),
+            "factor_ajuste_conductual_pct": int(round(phi * 100)),
             "cupo_preliminar": int(round(cupo_preliminar)),
             "capital_propio_tributario": cpt,
             "tope_patrimonial_12pct_cpt": int(round(tope_cpt)) if tope_cpt is not None else None,
@@ -600,10 +804,167 @@ class CreditRiskEngine:
         )
 
     # ------------------------------------------------------------------
+    # Desglose del Score Tributario en 5 Pilares (100 pts)
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _calcular_desglose_score(
+        tax_folder: TaxFolder,
+        calidad: CalidadDatos,
+        hechos: Hechos,
+        indicadores: Indicadores,
+        memoria: dict[str, Any],
+        rli_comprimida: bool,
+    ) -> list[PilarScore]:
+        pilares: list[PilarScore] = []
+
+        # 1. Antigüedad y Continuidad F29 (20 pts)
+        n_meses = len(tax_folder.monthly_taxes) or len(tax_folder.f29)
+        lagunas = len(calidad.meses_f29_faltantes)
+        if n_meses >= 24 and lagunas == 0:
+            p1 = 20
+            det1 = f"{n_meses} meses continuos declarados sin lagunas tributarias (Historial extendido)"
+        elif n_meses >= 12 and lagunas == 0:
+            p1 = 18
+            det1 = f"{n_meses} meses continuos declarados sin lagunas tributarias (Historial anual estándar)"
+        elif n_meses >= 6 and lagunas == 0:
+            p1 = 15
+            det1 = f"{n_meses} meses de operación formal evaluada"
+        else:
+            base_m = min(15, n_meses * 2)
+            penal = lagunas * 8
+            p1 = max(0, base_m - penal)
+            det1 = f"{n_meses} meses evaluados con {lagunas} mes(es) de omisión/laguna"
+        pilares.append(PilarScore(
+            nombre="Antigüedad y Continuidad F29",
+            puntaje_obtenido=p1,
+            puntaje_maximo=20,
+            detalle=det1,
+        ))
+
+        # 2. Tendencia y Estabilidad de Ventas (25 pts)
+        ma = tax_folder.monthly_analysis
+        var_3m = float(ma.variacion_ventas_3m_pct) if (ma and ma.variacion_ventas_3m_pct is not None) else 0.0
+        var_yoy = float(ma.variacion_ventas_yoy_3m_pct) if (ma and getattr(ma, "variacion_ventas_yoy_3m_pct", None) is not None) else None
+        if var_3m >= 15.0:
+            p2 = 25
+            det2 = f"Crecimiento trimestral robusto (+{var_3m:.1f}%)"
+        elif var_3m >= 0.0:
+            p2 = 22
+            det2 = f"Ventas estables con ligera expansión (+{var_3m:.1f}%)"
+        elif var_3m >= -15.0:
+            p2 = 18
+            det2 = f"Variación trimestral controlada ({var_3m:.1f}%)"
+        elif var_yoy is not None and var_yoy >= -10.0:
+            p2 = 18
+            det2 = f"Contracción trimestral estacional ({var_3m:.1f}%) compensada por estabilidad YoY ({var_yoy:+.1f}%)"
+        elif var_3m >= -30.0:
+            p2 = 12
+            det2 = f"Contracción de ventas moderada ({var_3m:.1f}%)"
+        else:
+            p2 = 5
+            det2 = f"Contracción severa de ventas reciente ({var_3m:.1f}%)"
+        pilares.append(PilarScore(
+            nombre="Tendencia y Estabilidad de Ventas",
+            puntaje_obtenido=p2,
+            puntaje_maximo=25,
+            detalle=det2,
+        ))
+
+        # 3. Capacidad de Absorción y Margen Proxy (20 pts)
+        ratio = indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else None
+        if ratio is not None:
+            if ratio >= 1.40:
+                p3 = 20
+                det3 = f"Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: {ratio:.2f}x)"
+            elif ratio >= 1.20:
+                p3 = 17
+                det3 = f"Margen operacional suficiente (Ratio Débito/Crédito: {ratio:.2f}x)"
+            elif ratio >= 1.05:
+                p3 = 14
+                det3 = f"Margen operacional ajustado (Ratio Débito/Crédito: {ratio:.2f}x)"
+            elif ratio >= 0.95:
+                p3 = 10
+                det3 = f"Equilibrio fiscal neutro (Ratio Débito/Crédito: {ratio:.2f}x)"
+            else:
+                p3 = 5
+                det3 = f"Crédito fiscal persistente sobre ventas (Ratio: {ratio:.2f}x)"
+        else:
+            p3 = 14
+            det3 = "Margen operativo referencial estándar del giro"
+        pilares.append(PilarScore(
+            nombre="Capacidad de Absorción y Margen Proxy",
+            puntaje_obtenido=p3,
+            puntaje_maximo=20,
+            detalle=det3,
+        ))
+
+        # 4. Solvencia y Rentabilidad Anual F22 (20 pts)
+        cpt = memoria.get("capital_propio_tributario")
+        if cpt is not None:
+            if cpt <= 0:
+                p4 = 0
+                det4 = f"Quiebra patrimonial técnica / CPT Negativo (${cpt:,.0f} CLP)"
+            else:
+                cupo_ref = memoria.get("cupo_maximo_sugerido") or 5_000_000
+                veces = cpt / cupo_ref if cupo_ref else 1.0
+                if veces >= 2.0:
+                    p4 = 20
+                    det4 = f"Patrimonio CPT holgado ({veces:.1f}x cobertura de línea comercial)"
+                elif veces >= 1.0:
+                    p4 = 17
+                    det4 = f"Patrimonio CPT suficiente ({veces:.1f}x cobertura)"
+                else:
+                    p4 = 12
+                    det4 = f"Patrimonio CPT acotado frente a la línea ({veces:.1f}x cobertura)"
+        else:
+            p4 = 12
+            det4 = "Sin declaración F22 con CPT informado"
+
+        if rli_comprimida:
+            p4 = max(0, p4 - 8)
+            det4 += " [Penalización -8 pts por Alerta de Compresión de RLI en último F22]"
+
+        pilares.append(PilarScore(
+            nombre="Solvencia y Rentabilidad Anual F22",
+            puntaje_obtenido=p4,
+            puntaje_maximo=20,
+            detalle=det4,
+        ))
+
+        # 5. Cumplimiento Fiscal sin Mora/Postergación (15 pts)
+        mora = indicadores.mora_efectiva.meses_con_recargo if indicadores.mora_efectiva else 0
+        posterg = hechos.postergaciones_iva.meses_con_postergacion if hechos and hechos.postergaciones_iva else 0
+        if mora == 0 and posterg <= 1:
+            p5 = 15
+            det5 = "Impecable cumplimiento fiscal: 0 meses de mora y sin postergaciones recurrentes"
+        elif mora == 0 and posterg >= 2:
+            p5 = 11
+            det5 = f"Sin mora en F29, pero registra {posterg} meses de postergación de IVA"
+        elif mora == 1:
+            p5 = 8
+            det5 = f"Registra 1 mes con recargo/interés por mora en F29"
+        elif mora == 2:
+            p5 = 4
+            det5 = f"Registra 2 meses con recargo por mora en F29"
+        else:
+            p5 = 0
+            det5 = f"Mora fiscal recurrente ({mora} meses con recargo Cód. 94)"
+        pilares.append(PilarScore(
+            nombre="Cumplimiento Fiscal sin Mora/Postergación",
+            puntaje_obtenido=p5,
+            puntaje_maximo=15,
+            detalle=det5,
+        ))
+
+        return pilares
+
+    # ------------------------------------------------------------------
     # Composición final
     # ------------------------------------------------------------------
     @staticmethod
-    def _componer_score(indicadores: Indicadores) -> int | None:
+    def _componer_score(
+        indicadores: Indicadores, desglose: list[PilarScore] | None = None
+    ) -> int | None:
         scores = [
             s.score
             for s in (
@@ -615,6 +976,8 @@ class CreditRiskEngine:
         ]
         if len(scores) < 2:
             return None
+        if desglose:
+            return sum(p.puntaje_obtenido for p in desglose)
         return round(sum(scores) / len(scores))
 
     @staticmethod
@@ -627,6 +990,7 @@ class CreditRiskEngine:
         memoria: dict[str, Any],
         aval_obligatorio: bool,
         tax_folder: TaxFolder | None = None,
+        rli_comprimida: bool = False,
     ) -> Decision:
         # Extraer representantes legales para resguardos personalizados
         rep_names = []
@@ -641,6 +1005,8 @@ class CreditRiskEngine:
         cpt_negativo = cpt_val is not None and cpt_val <= 0
         cupo_excepcional = memoria.get("cupo_excepcional_garantizado")
 
+        prefix_base = "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, "
+
         # 4 Tramos de Resguardo Comercial y Evaluación Referencial
         if score_compuesto is None:
             resultado_base = "NO_EVALUABLE"
@@ -651,12 +1017,13 @@ class CreditRiskEngine:
             protocolo = "Completar información tributaria faltante (mínimo 6 meses F29 y F22)."
         elif cpt_negativo:
             resultado_base = "RECHAZADO"
-            evaluacion_referencial = "RIESGO ALTO — Se Sugiere Venta al Contado"
+            evaluacion_referencial = "RIESGO TRIBUTARIO ALTO — Se Sugiere Operar al Contado"
             cupo_aprobado = 0
             plazo_dias = 0
             excep_m = (cupo_excepcional // 1000) if cupo_excepcional else 0
             resguardo = (
-                f"Línea de crédito no sugerida por CPT negativo (${cpt_val:,.0f} CLP). "
+                prefix_base
+                + f"línea sugerida M$ 0 por CPT negativo (${cpt_val:,.0f} CLP) — operación al contado anticipado previo al despacho. "
                 f"Únicamente evaluable cupo excepcional de hasta M$ {excep_m:,}".replace(",", ".")
                 + f" con Pagaré Notarial y Aval Solidario de persona natural externa{reps_str} con patrimonio acreditado fuera de la sociedad."
             )
@@ -666,48 +1033,66 @@ class CreditRiskEngine:
             )
         elif cupo_maximo == 0 or score_compuesto < 35:
             resultado_base = "RECHAZADO"
-            evaluacion_referencial = "RIESGO ALTO — Se Sugiere Venta al Contado"
+            evaluacion_referencial = "RIESGO TRIBUTARIO ALTO — Se Sugiere Operar al Contado"
             cupo_aprobado = 0
             plazo_dias = 0
-            resguardo = "Línea de crédito no sugerida (Venta exclusiva al contado / Pago anticipado contra entrega)."
+            resguardo = (
+                prefix_base
+                + "línea de crédito no sugerida M$ 0 (Venta exclusiva al contado / Pago anticipado previo al despacho)."
+            )
             protocolo = "No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado."
-        elif score_compuesto >= 75 and memoria.get("factor_riesgo_phi", 1.0) >= 0.8:
+        elif score_compuesto >= 75 and memoria.get("factor_riesgo_phi", 1.0) >= 0.8 and not rli_comprimida:
             resultado_base = "APROBADO"
-            evaluacion_referencial = "RIESGO BAJO — Línea Sugerida"
+            evaluacion_referencial = "RIESGO TRIBUTARIO BAJO — Línea Sugerida (Sujeta a Validación Comercial)"
             cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
             cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
             plazo_dias = 30
-            resguardo = "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar)."
+            resguardo = (
+                prefix_base
+                + "cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983)."
+            )
             protocolo = (
                 f"Solicitud de crédito y ficha de cliente firmada por representante legal{reps_str} "
                 "+ despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983)."
             )
-        elif score_compuesto >= 50:
+        elif score_compuesto >= 50 or (score_compuesto >= 75 and rli_comprimida):
             resultado_base = "APROBADO_CON_CONDICIONES"
-            evaluacion_referencial = "RIESGO MEDIO — Sugerido con Resguardo"
+            evaluacion_referencial = "RIESGO TRIBUTARIO MEDIO — Línea Condicionada a Resguardo"
             cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
             cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
             plazo_dias = 30
-            resguardo = f"Pagaré a la vista suscrito por Representante Legal{reps_str} o Seguro de Crédito que cubra la línea."
-            protocolo = "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho."
+            resguardo = (
+                prefix_base
+                + f"Pagaré a la vista suscrito ante notario por Representante Legal{reps_str} o Seguro de Crédito que cubra la línea; "
+                "alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días)."
+            )
+            protocolo = (
+                "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) "
+                "o pagaré firmado en original ante notario antes del primer despacho."
+                + (" Solicitar balances tributarios recientes por alerta de compresión de RLI." if rli_comprimida else "")
+            )
         else:
             # Score 35 a 49
             resultado_base = "APROBADO_CON_CONDICIONES"
-            evaluacion_referencial = "RIESGO MEDIO-ALTO — Requiere Garantía Notarial"
+            evaluacion_referencial = "RIESGO TRIBUTARIO MEDIO-ALTO — Requiere Garantía Notarial"
             cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
             cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
             plazo_dias = 30
-            resguardo = f"Pagaré Notarial con Avalista y Codeudor Solidario suscrito personalmente por los socios/representantes legales{reps_str} con patrimonio acreditado, o Garantía Real / Boleta Bancaria."
+            resguardo = (
+                prefix_base
+                + f"Pagaré Notarial con Avalista y Codeudor Solidario suscrito personalmente por los socios/representantes legales{reps_str} "
+                "con patrimonio acreditado fuera de la sociedad, o Boleta de Garantía Bancaria."
+            )
             protocolo = "Despacho estrictamente condicionado a la recepción y validación de pagaré con cláusula de codeudor solidario notariado."
 
         # Regla de Consistencia: Si cupo resulta $0, resultado es RIESGO ALTO Contado
         if cupo_aprobado == 0 and score_compuesto is not None:
             resultado_base = "RECHAZADO"
-            evaluacion_referencial = "RIESGO ALTO — Se Sugiere Venta al Contado"
+            evaluacion_referencial = "RIESGO TRIBUTARIO ALTO — Se Sugiere Operar al Contado"
             plazo_dias = 0
             if not cpt_negativo:
-                resguardo = "Línea de crédito no sugerida (Venta exclusiva al contado / Pago anticipado)."
-                protocolo = "Operación recomendada exclusivamente al contado o pago anticipado."
+                resguardo = prefix_base + "línea de crédito no sugerida M$ 0 (Venta exclusiva al contado / Pago anticipado previo al despacho)."
+                protocolo = "Operación recomendada exclusivamente al contado o pago anticipado contra entrega."
 
         caminos: list[CaminoMitigacion] = []
         alto_facturado = (hechos.composicion_ventas.pct_facturado or 0) > 0.6
@@ -839,7 +1224,7 @@ class CreditRiskEngine:
         )
 
         lines = [
-            f"CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial",
+            f"CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial",
             f"Contribuyente: {razon} (RUT: {rut})",
             "",
             f"Evaluación: {decision.evaluacion_referencial} | Score: {score or '—'}/100",
@@ -850,6 +1235,7 @@ class CreditRiskEngine:
             "1. Memoria Cuantitativa de Asignación:",
             f"- Base Mensual de Absorción (C_base): ${memoria.get('base_compras_c_base', 0):,.0f} CLP",
             f"- Techo Operativo Proveedor (8%): ${memoria.get('techo_operativo_8pct', 0):,.0f} CLP",
+            f"- Freno Flujo Operacional (25%): ${memoria.get('freno_flujo_operacional_25pct', 0):,.0f} CLP",
             f"- Factor de Ajuste Conductual: {int(round(memoria.get('factor_riesgo_phi', 1.0) * 100))}%",
             f"- Capital Propio Tributario (CPT): ${memoria.get('capital_propio_tributario') or 0:,.0f} CLP",
         ]

@@ -83,11 +83,11 @@ class ExcelReport:
         c = getattr(tf, "contributor", None)
 
         # Título
-        ws.cell(row=1, column=1, value="CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial").font = self.font_title
+        ws.cell(row=1, column=1, value="CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial").font = self.font_title
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.2)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.3)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -97,7 +97,7 @@ class ExcelReport:
 
         # Resumen de Evaluación Referencial
         row = 5
-        self._apply_headers(ws, row, ["Parámetro de Evaluación", "Recomendación Referencial", "Detalle / Resguardo"])
+        self._apply_headers(ws, row, ["Parámetro de Evaluación", "Recomendación Referencial", "Detalle / Modalidad Sugerida"])
         row += 1
 
         evaluacion = str(
@@ -113,10 +113,10 @@ class ExcelReport:
 
         params = [
             ("Evaluación Referencial", evaluacion, f"Categoría de Riesgo: {cat_val}"),
-            ("Score Crediticio", f"{score_val:.1f} / 100", f"Evaluación cuantitativa sobre declaraciones tributarias SII"),
+            ("Score Crediticio", f"{score_val:.0f} / 100", f"Evaluación cuantitativa sobre declaraciones tributarias SII"),
             ("Línea Máxima Sugerida (M$)", round(cupo_ap / 1000.0) if cupo_ap else 0, f"Equivalente a {format_mclp(cupo_ap)}"),
             ("Plazo Sugerido", f"{plazo_dias} días" if plazo_dias else "Contado", "Estándar máximo 30 días para crédito comercial" if plazo_dias else "Pago anticipado o contra entrega"),
-            ("Resguardo Comercial Sugerido", resguardo, "Condición legal recomendada para mitigación de riesgo"),
+            ("Modalidad y Resguardo Sugerido", resguardo, "Condición legal recomendada para mitigación de riesgo"),
             ("Protocolo Operativo Sugerido", protocolo, "Procedimiento recomendado para despacho y facturación"),
         ]
 
@@ -134,7 +134,25 @@ class ExcelReport:
                 ws.cell(row=row, column=col).border = self.border_thin
             row += 1
 
-        # Memoria de Cálculo
+        # Desglose del Score Tributario (5 Pilares)
+        desglose = getattr(cr, "desglose_score", []) or []
+        if desglose:
+            row += 2
+            ws.cell(row=row, column=1, value="Desglose del Score Tributario (100 Puntos)").font = self.font_title
+            row += 1
+            self._apply_headers(ws, row, ["Pilar Cuantitativo", "Puntaje", "Detalle y Fundamento"])
+            row += 1
+            for p in desglose:
+                ws.cell(row=row, column=1, value=p.nombre).font = self.font_bold
+                p_cell = ws.cell(row=row, column=2, value=f"{p.puntaje_obtenido} / {p.puntaje_maximo} pts")
+                p_cell.font = self.font_bold
+                p_cell.alignment = Alignment(horizontal="center")
+                ws.cell(row=row, column=3, value=p.detalle).font = self.font_regular
+                for col in range(1, 4):
+                    ws.cell(row=row, column=col).border = self.border_thin
+                row += 1
+
+        # Memoria de Cálculo (9 Filas de Trazabilidad)
         row += 2
         ws.cell(row=row, column=1, value="Memoria de Cálculo Cuantitativa de Línea Comercial (M$)").font = self.font_title
         row += 1
@@ -142,24 +160,32 @@ class ExcelReport:
         row += 1
 
         mem = getattr(cr, "memoria_calculo", {}) if cr and isinstance(cr.memoria_calculo, dict) else {}
-        base_c = mem.get("base_compras_c_base") or mem.get("base_compras_mensual_operacional", 0)
+        p_ini = mem.get("periodo_inicio", "")
+        p_fin = mem.get("periodo_fin", "")
+        v_prom = mem.get("ventas_netas_mensuales_prom", 0)
+        base_c = mem.get("base_compras_c_base", 0)
+        iva_prom = mem.get("iva_determinado_prom", 0)
+        brecha = mem.get("brecha_operacional_proxy", 0)
         techo_op = mem.get("techo_operativo_8pct") or mem.get("techo_operativo", 0)
         freno_flujo = mem.get("freno_flujo_operacional_25pct", 0)
-        phi_v = mem.get("factor_riesgo_phi") or mem.get("factor_phi_calidad_crediticia", 1.0)
-        cupo_pre = mem.get("cupo_preliminar", 0)
+        phi_pct = mem.get("factor_ajuste_conductual_pct", int(round(mem.get("factor_riesgo_phi", 1.0) * 100)))
         cpt_val = mem.get("capital_propio_tributario")
-        tope_cpt = mem.get("tope_patrimonial_cpt") or mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_35pct_cpt")
+        tope_cpt = mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
         cupo_max = mem.get("cupo_maximo_sugerido", 0)
 
+        rango_str = f" ({p_ini} a {p_fin})" if p_ini and p_fin else ""
+        cpt_str = f"M$ {int(cpt_val // 1000):,}".replace(",", ".") if cpt_val is not None else "Sin F22"
+
         calc_steps = [
-            ("Paso A: Base de Compras Operacionales (C_base)", round(base_c / 1000.0) if base_c else 0, "Promedio mensual compras netas 12M o costo operativo proxy"),
-            ("Paso B: Techo Operativo Proveedor (8%)", round(techo_op / 1000.0) if techo_op else 0, "Techo de absorción individual conservador por proveedor (8%)"),
-            ("Freno de Flujo Operacional Neto (25%)", round(freno_flujo / 1000.0) if freno_flujo else 0, "25% del Margen Operacional Mensual Depurado [Ventas - Compras - IVA Det.]"),
-            ("Paso C: Factor de Ajuste Conductual", round(phi_v, 2), "Factor de ajuste conductual por mora F29, postergación y variaciones de venta"),
-            ("Cupo Preliminar Ajustado por Riesgo", round(cupo_pre / 1000.0) if cupo_pre else 0, "min(Techo 8%, Freno Flujo 25%) × Factor Conductual"),
-            ("Capital Propio Tributario (CPT)", round(cpt_val / 1000.0) if cpt_val is not None else "Sin F22", "Patrimonio tributario según declaración anual de renta (F22)"),
-            ("Paso D: Freno Patrimonial CPT", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", "12% CPT en línea limpia / 20% con garantías ($0 si CPT <= 0)"),
-            ("Línea Máxima Sugerida Final", round(cupo_max / 1000.0) if cupo_max else 0, "Redondeo limpio a múltiplos de M$ 100 ($100.000 CLP)"),
+            (f"Ventas Netas Mensuales Promedio{rango_str}", round(v_prom / 1000.0) if v_prom else 0, "Promedio mensual de ventas de los 12 meses analizados"),
+            ("(-) Paso A: Compras Op. Mensuales Promedio (C_base)", round(base_c / 1000.0) if base_c else 0, "Base mensual de compras operacionales 12M (o costo operativo proxy)"),
+            ("(-) IVA Determinado Mensual Promedio", round(iva_prom / 1000.0) if iva_prom else 0, "Promedio mensual Cód. 89 F29 últimos 12 meses"),
+            ("(=) Brecha Operacional Tributaria Mensual Proxy", round(brecha / 1000.0) if brecha else 0, "Margen operacional neto depurado [Ventas - Compras - IVA Det.]"),
+            ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (estándar bancario individual conservador)"),
+            ("Paso B2: Freno por Absorción Operacional (25% Brecha)", round(freno_flujo / 1000.0) if freno_flujo else 0, "Máximo 25% del margen operacional neto depurado"),
+            ("Paso C: Factor de Ajuste Conductual", f"{phi_pct}%", "Ajuste por mora F29, postergación IVA y estabilidad YoY"),
+            (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", "12% CPT en línea limpia ($0 si CPT <= 0)"),
+            ("(=) Línea Máxima Sugerida Final", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Flujo 25%) × Factor Conductual con Tope CPT (M$ 100)"),
         ]
 
         for s, v, f in calc_steps:

@@ -5840,26 +5840,32 @@
         "criterio": "CPT es proxy tributario, no liquidez real"
       }
     },
-    "score_compuesto": 90,
+    "score_compuesto": 76,
     "decision": {
       "resultado_base": "APROBADO_CON_CONDICIONES",
-      "evaluacion_referencial": "RIESGO MEDIO — Sugerido con Resguardo",
+      "evaluacion_referencial": "RIESGO TRIBUTARIO MEDIO — Línea Condicionada a Resguardo",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 3400000,
       "cupo_aprobado": 3400000,
       "linea_maxima_sugerida": 3400000,
       "plazo_sugerido_dias": 30,
-      "garantia_exigida": "Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
-      "resguardo_comercial_sugerido": "Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
-      "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.",
+      "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario antes del primer despacho.",
       "memoria_calculo": {
+        "periodo_inicio": "2019-01",
+        "periodo_fin": "2019-12",
+        "ventas_netas_mensuales_prom": 198006404,
         "base_compras_c_base": 85798360,
+        "iva_determinado_prom": 7829506,
+        "brecha_operacional_proxy": 104378538,
         "techo_operativo_8pct": 6863869,
         "techo_operativo_20pct": 6863869,
         "techo_operativo": 6863869,
-        "margen_operacional_depurado_mensual": 104378538,
         "freno_flujo_operacional_25pct": 26094635,
+        "margen_operacional_depurado_mensual": 104378538,
         "factor_riesgo_phi": 0.5,
+        "factor_ajuste_conductual_pct": 50,
         "cupo_preliminar": 3431934,
         "capital_propio_tributario": 6559199969,
         "tope_patrimonial_12pct_cpt": 1311839994,
@@ -5872,11 +5878,11 @@
         ]
       },
       "hoja_ruta_comercial": [
-        "Evaluación Referencial: RIESGO MEDIO — Sugerido con Resguardo.",
+        "Evaluación Referencial: RIESGO TRIBUTARIO MEDIO — Línea Condicionada a Resguardo.",
         "Línea de crédito comercial sugerida: M$ 3.400 (Tope máximo sugerido: M$ 3.400).",
         "Plazo sugerido: 30 días.",
-        "Resguardo comercial sugerido: Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
-        "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.",
+        "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+        "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario antes del primer despacho.",
         "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
       ],
       "caminos_mitigacion": [
@@ -5894,7 +5900,48 @@
           "cupo_sugerido": null,
           "justificacion": "historial sin recargos por mora en declaraciones tributarias"
         }
-      ]
+      ],
+      "desglose_score": [
+        {
+          "nombre": "Antigüedad y Continuidad F29",
+          "puntaje_obtenido": 20,
+          "puntaje_maximo": 20,
+          "detalle": "35 meses continuos declarados sin lagunas tributarias (Historial extendido)"
+        },
+        {
+          "nombre": "Tendencia y Estabilidad de Ventas",
+          "puntaje_obtenido": 5,
+          "puntaje_maximo": 25,
+          "detalle": "Contracción severa de ventas reciente (-48.9%)"
+        },
+        {
+          "nombre": "Capacidad de Absorción y Margen Proxy",
+          "puntaje_obtenido": 20,
+          "puntaje_maximo": 20,
+          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 2.45x)"
+        },
+        {
+          "nombre": "Solvencia y Rentabilidad Anual F22",
+          "puntaje_obtenido": 20,
+          "puntaje_maximo": 20,
+          "detalle": "Patrimonio CPT holgado (1929.2x cobertura de línea comercial)"
+        },
+        {
+          "nombre": "Cumplimiento Fiscal sin Mora/Postergación",
+          "puntaje_obtenido": 11,
+          "puntaje_maximo": 15,
+          "detalle": "Sin mora en F29, pero registra 9 meses de postergación de IVA"
+        }
+      ],
+      "vigencia_datos": {
+        "fecha_emision": "30/01/2020 10:38",
+        "ultimo_periodo": "2019-12",
+        "meses_desfase": 1,
+        "nivel_confianza": "ALTA",
+        "alerta": null
+      },
+      "conciliacion_f29_f22": null,
+      "bienes_raices_resumen": "No registra bienes raíces en carpeta"
     },
     "alertas": [
       "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
@@ -5904,26 +5951,32 @@
       "Respaldo patrimonial sólido: CPT positivo de $6,559,199,969 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial\nContribuyente: AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\nEvaluación: RIESGO MEDIO — Sugerido con Resguardo | Score: 90/100\nLínea Máxima Sugerida: $3,400,000 CLP | Plazo: 30 días\nResguardo Sugerido: Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.\nProtocolo Operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): $85,798,360 CLP\n- Techo Operativo Proveedor (8%): $6,863,869 CLP\n- Factor de Ajuste Conductual: 50%\n- Capital Propio Tributario (CPT): $6,559,199,969 CLP\n- Ajustes de Riesgo Aplicados:\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n3. Recomendaciones Operativas:\n- ✅ Evaluación Referencial: RIESGO MEDIO — Sugerido con Resguardo.\n- ✅ Línea de crédito comercial sugerida: M$ 3.400 (Tope máximo sugerido: M$ 3.400).\n- ✅ Plazo sugerido: 30 días.\n- ✅ Resguardo comercial sugerido: Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
-    "veredicto": "RIESGO MEDIO — Sugerido con Resguardo",
-    "evaluacion_referencial": "RIESGO MEDIO — Sugerido con Resguardo",
-    "score_crediticio": 90.0,
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\nEvaluación: RIESGO TRIBUTARIO MEDIO — Línea Condicionada a Resguardo | Score: 76/100\nLínea Máxima Sugerida: $3,400,000 CLP | Plazo: 30 días\nResguardo Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\nProtocolo Operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario antes del primer despacho.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): $85,798,360 CLP\n- Techo Operativo Proveedor (8%): $6,863,869 CLP\n- Freno Flujo Operacional (25%): $26,094,635 CLP\n- Factor de Ajuste Conductual: 50%\n- Capital Propio Tributario (CPT): $6,559,199,969 CLP\n- Ajustes de Riesgo Aplicados:\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n3. Recomendaciones Operativas:\n- ✅ Evaluación Referencial: RIESGO TRIBUTARIO MEDIO — Línea Condicionada a Resguardo.\n- ✅ Línea de crédito comercial sugerida: M$ 3.400 (Tope máximo sugerido: M$ 3.400).\n- ✅ Plazo sugerido: 30 días.\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
+    "veredicto": "RIESGO TRIBUTARIO MEDIO — Línea Condicionada a Resguardo",
+    "evaluacion_referencial": "RIESGO TRIBUTARIO MEDIO — Línea Condicionada a Resguardo",
+    "score_crediticio": 76.0,
     "categoria_riesgo": "BAJO",
     "cupo_maximo_sugerido": 3400000,
     "cupo_aprobado": 3400000,
     "linea_maxima_sugerida": 3400000,
     "plazo_sugerido_dias": 30,
-    "garantia_exigida": "Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
-    "resguardo_comercial_sugerido": "Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
-    "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.",
+    "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+    "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+    "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario antes del primer despacho.",
     "memoria_calculo": {
+      "periodo_inicio": "2019-01",
+      "periodo_fin": "2019-12",
+      "ventas_netas_mensuales_prom": 198006404,
       "base_compras_c_base": 85798360,
+      "iva_determinado_prom": 7829506,
+      "brecha_operacional_proxy": 104378538,
       "techo_operativo_8pct": 6863869,
       "techo_operativo_20pct": 6863869,
       "techo_operativo": 6863869,
-      "margen_operacional_depurado_mensual": 104378538,
       "freno_flujo_operacional_25pct": 26094635,
+      "margen_operacional_depurado_mensual": 104378538,
       "factor_riesgo_phi": 0.5,
+      "factor_ajuste_conductual_pct": 50,
       "cupo_preliminar": 3431934,
       "capital_propio_tributario": 6559199969,
       "tope_patrimonial_12pct_cpt": 1311839994,
@@ -5936,13 +5989,54 @@
       ]
     },
     "hoja_ruta_comercial": [
-      "Evaluación Referencial: RIESGO MEDIO — Sugerido con Resguardo.",
+      "Evaluación Referencial: RIESGO TRIBUTARIO MEDIO — Línea Condicionada a Resguardo.",
       "Línea de crédito comercial sugerida: M$ 3.400 (Tope máximo sugerido: M$ 3.400).",
       "Plazo sugerido: 30 días.",
-      "Resguardo comercial sugerido: Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
-      "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.",
+      "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario antes del primer despacho.",
       "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
-    ]
+    ],
+    "desglose_score": [
+      {
+        "nombre": "Antigüedad y Continuidad F29",
+        "puntaje_obtenido": 20,
+        "puntaje_maximo": 20,
+        "detalle": "35 meses continuos declarados sin lagunas tributarias (Historial extendido)"
+      },
+      {
+        "nombre": "Tendencia y Estabilidad de Ventas",
+        "puntaje_obtenido": 5,
+        "puntaje_maximo": 25,
+        "detalle": "Contracción severa de ventas reciente (-48.9%)"
+      },
+      {
+        "nombre": "Capacidad de Absorción y Margen Proxy",
+        "puntaje_obtenido": 20,
+        "puntaje_maximo": 20,
+        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 2.45x)"
+      },
+      {
+        "nombre": "Solvencia y Rentabilidad Anual F22",
+        "puntaje_obtenido": 20,
+        "puntaje_maximo": 20,
+        "detalle": "Patrimonio CPT holgado (1929.2x cobertura de línea comercial)"
+      },
+      {
+        "nombre": "Cumplimiento Fiscal sin Mora/Postergación",
+        "puntaje_obtenido": 11,
+        "puntaje_maximo": 15,
+        "detalle": "Sin mora en F29, pero registra 9 meses de postergación de IVA"
+      }
+    ],
+    "vigencia_datos": {
+      "fecha_emision": "30/01/2020 10:38",
+      "ultimo_periodo": "2019-12",
+      "meses_desfase": 1,
+      "nivel_confianza": "ALTA",
+      "alerta": null
+    },
+    "conciliacion_f29_f22": null,
+    "bienes_raices_resumen": "No registra bienes raíces en carpeta"
   },
   "metadata": {
     "source_file": "",

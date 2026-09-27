@@ -3906,26 +3906,32 @@
         "criterio": "CPT es proxy tributario, no liquidez real"
       }
     },
-    "score_compuesto": 95,
+    "score_compuesto": 93,
     "decision": {
       "resultado_base": "APROBADO",
-      "evaluacion_referencial": "RIESGO BAJO — Línea Sugerida",
+      "evaluacion_referencial": "RIESGO TRIBUTARIO BAJO — Línea Sugerida (Sujeta a Validación Comercial)",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 700000,
       "cupo_aprobado": 700000,
       "linea_maxima_sugerida": 700000,
       "plazo_sugerido_dias": 30,
-      "garantia_exigida": "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
-      "resguardo_comercial_sugerido": "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+      "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983).",
+      "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983).",
       "protocolo_operativo": "Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).",
       "memoria_calculo": {
+        "periodo_inicio": "2018-12",
+        "periodo_fin": "2019-11",
+        "ventas_netas_mensuales_prom": 27590169,
         "base_compras_c_base": 8277051,
+        "iva_determinado_prom": 0,
+        "brecha_operacional_proxy": 19313118,
         "techo_operativo_8pct": 662164,
         "techo_operativo_20pct": 662164,
         "techo_operativo": 662164,
-        "margen_operacional_depurado_mensual": 19313118,
         "freno_flujo_operacional_25pct": 4828280,
+        "margen_operacional_depurado_mensual": 19313118,
         "factor_riesgo_phi": 1.0,
+        "factor_ajuste_conductual_pct": 100,
         "cupo_preliminar": 662164,
         "capital_propio_tributario": 5515454480,
         "tope_patrimonial_12pct_cpt": 661854538,
@@ -3938,10 +3944,10 @@
         ]
       },
       "hoja_ruta_comercial": [
-        "Evaluación Referencial: RIESGO BAJO — Línea Sugerida.",
+        "Evaluación Referencial: RIESGO TRIBUTARIO BAJO — Línea Sugerida (Sujeta a Validación Comercial).",
         "Línea de crédito comercial sugerida: M$ 700 (Tope máximo sugerido: M$ 700).",
         "Plazo sugerido: 30 días.",
-        "Resguardo comercial sugerido: Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+        "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983).",
         "Protocolo operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).",
         "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
       ],
@@ -3960,7 +3966,48 @@
           "cupo_sugerido": null,
           "justificacion": "historial sin recargos por mora en declaraciones tributarias"
         }
-      ]
+      ],
+      "desglose_score": [
+        {
+          "nombre": "Antigüedad y Continuidad F29",
+          "puntaje_obtenido": 20,
+          "puntaje_maximo": 20,
+          "detalle": "34 meses continuos declarados sin lagunas tributarias (Historial extendido)"
+        },
+        {
+          "nombre": "Tendencia y Estabilidad de Ventas",
+          "puntaje_obtenido": 22,
+          "puntaje_maximo": 25,
+          "detalle": "Ventas estables con ligera expansión (+0.0%)"
+        },
+        {
+          "nombre": "Capacidad de Absorción y Margen Proxy",
+          "puntaje_obtenido": 20,
+          "puntaje_maximo": 20,
+          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 3.33x)"
+        },
+        {
+          "nombre": "Solvencia y Rentabilidad Anual F22",
+          "puntaje_obtenido": 20,
+          "puntaje_maximo": 20,
+          "detalle": "Patrimonio CPT holgado (7879.2x cobertura de línea comercial)"
+        },
+        {
+          "nombre": "Cumplimiento Fiscal sin Mora/Postergación",
+          "puntaje_obtenido": 11,
+          "puntaje_maximo": 15,
+          "detalle": "Sin mora en F29, pero registra 4 meses de postergación de IVA"
+        }
+      ],
+      "vigencia_datos": {
+        "fecha_emision": "30/01/2020 12:40",
+        "ultimo_periodo": "2019-11",
+        "meses_desfase": 2,
+        "nivel_confianza": "ALTA",
+        "alerta": null
+      },
+      "conciliacion_f29_f22": null,
+      "bienes_raices_resumen": "No registra bienes raíces en carpeta"
     },
     "alertas": [
       "Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)"
@@ -3970,26 +4017,32 @@
       "Respaldo patrimonial sólido: CPT positivo de $5,515,454,480 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nEvaluación: RIESGO BAJO — Línea Sugerida | Score: 95/100\nLínea Máxima Sugerida: $700,000 CLP | Plazo: 30 días\nResguardo Sugerido: Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).\nProtocolo Operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): $8,277,051 CLP\n- Techo Operativo Proveedor (8%): $662,164 CLP\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): $5,515,454,480 CLP\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n\n3. Recomendaciones Operativas:\n- ✅ Evaluación Referencial: RIESGO BAJO — Línea Sugerida.\n- ✅ Línea de crédito comercial sugerida: M$ 700 (Tope máximo sugerido: M$ 700).\n- ✅ Plazo sugerido: 30 días.\n- ✅ Resguardo comercial sugerido: Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).\n- ✅ Protocolo operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
-    "veredicto": "RIESGO BAJO — Línea Sugerida",
-    "evaluacion_referencial": "RIESGO BAJO — Línea Sugerida",
-    "score_crediticio": 95.0,
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nEvaluación: RIESGO TRIBUTARIO BAJO — Línea Sugerida (Sujeta a Validación Comercial) | Score: 93/100\nLínea Máxima Sugerida: $700,000 CLP | Plazo: 30 días\nResguardo Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983).\nProtocolo Operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): $8,277,051 CLP\n- Techo Operativo Proveedor (8%): $662,164 CLP\n- Freno Flujo Operacional (25%): $4,828,280 CLP\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): $5,515,454,480 CLP\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n\n3. Recomendaciones Operativas:\n- ✅ Evaluación Referencial: RIESGO TRIBUTARIO BAJO — Línea Sugerida (Sujeta a Validación Comercial).\n- ✅ Línea de crédito comercial sugerida: M$ 700 (Tope máximo sugerido: M$ 700).\n- ✅ Plazo sugerido: 30 días.\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983).\n- ✅ Protocolo operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
+    "veredicto": "RIESGO TRIBUTARIO BAJO — Línea Sugerida (Sujeta a Validación Comercial)",
+    "evaluacion_referencial": "RIESGO TRIBUTARIO BAJO — Línea Sugerida (Sujeta a Validación Comercial)",
+    "score_crediticio": 93.0,
     "categoria_riesgo": "BAJO",
     "cupo_maximo_sugerido": 700000,
     "cupo_aprobado": 700000,
     "linea_maxima_sugerida": 700000,
     "plazo_sugerido_dias": 30,
-    "garantia_exigida": "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
-    "resguardo_comercial_sugerido": "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+    "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983).",
+    "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983).",
     "protocolo_operativo": "Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).",
     "memoria_calculo": {
+      "periodo_inicio": "2018-12",
+      "periodo_fin": "2019-11",
+      "ventas_netas_mensuales_prom": 27590169,
       "base_compras_c_base": 8277051,
+      "iva_determinado_prom": 0,
+      "brecha_operacional_proxy": 19313118,
       "techo_operativo_8pct": 662164,
       "techo_operativo_20pct": 662164,
       "techo_operativo": 662164,
-      "margen_operacional_depurado_mensual": 19313118,
       "freno_flujo_operacional_25pct": 4828280,
+      "margen_operacional_depurado_mensual": 19313118,
       "factor_riesgo_phi": 1.0,
+      "factor_ajuste_conductual_pct": 100,
       "cupo_preliminar": 662164,
       "capital_propio_tributario": 5515454480,
       "tope_patrimonial_12pct_cpt": 661854538,
@@ -4002,13 +4055,54 @@
       ]
     },
     "hoja_ruta_comercial": [
-      "Evaluación Referencial: RIESGO BAJO — Línea Sugerida.",
+      "Evaluación Referencial: RIESGO TRIBUTARIO BAJO — Línea Sugerida (Sujeta a Validación Comercial).",
       "Línea de crédito comercial sugerida: M$ 700 (Tope máximo sugerido: M$ 700).",
       "Plazo sugerido: 30 días.",
-      "Resguardo comercial sugerido: Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+      "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983).",
       "Protocolo operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).",
       "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
-    ]
+    ],
+    "desglose_score": [
+      {
+        "nombre": "Antigüedad y Continuidad F29",
+        "puntaje_obtenido": 20,
+        "puntaje_maximo": 20,
+        "detalle": "34 meses continuos declarados sin lagunas tributarias (Historial extendido)"
+      },
+      {
+        "nombre": "Tendencia y Estabilidad de Ventas",
+        "puntaje_obtenido": 22,
+        "puntaje_maximo": 25,
+        "detalle": "Ventas estables con ligera expansión (+0.0%)"
+      },
+      {
+        "nombre": "Capacidad de Absorción y Margen Proxy",
+        "puntaje_obtenido": 20,
+        "puntaje_maximo": 20,
+        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 3.33x)"
+      },
+      {
+        "nombre": "Solvencia y Rentabilidad Anual F22",
+        "puntaje_obtenido": 20,
+        "puntaje_maximo": 20,
+        "detalle": "Patrimonio CPT holgado (7879.2x cobertura de línea comercial)"
+      },
+      {
+        "nombre": "Cumplimiento Fiscal sin Mora/Postergación",
+        "puntaje_obtenido": 11,
+        "puntaje_maximo": 15,
+        "detalle": "Sin mora en F29, pero registra 4 meses de postergación de IVA"
+      }
+    ],
+    "vigencia_datos": {
+      "fecha_emision": "30/01/2020 12:40",
+      "ultimo_periodo": "2019-11",
+      "meses_desfase": 2,
+      "nivel_confianza": "ALTA",
+      "alerta": null
+    },
+    "conciliacion_f29_f22": null,
+    "bienes_raices_resumen": "No registra bienes raíces en carpeta"
   },
   "metadata": {
     "source_file": "",

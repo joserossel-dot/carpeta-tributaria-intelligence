@@ -262,3 +262,102 @@ class TestCalibracionConservadoraV22:
         assert mem["cupo_excepcional_garantizado"] > 0
         assert "CPT negativo" in result.decision.garantia_exigida
 
+
+class TestVersion23Audit:
+    def test_c_base_coincide_exactamente_con_promedio_f29_12m(self, benchmark_vacio) -> None:
+        """Verifica que el promedio de Compras Operacionales de los 12 meses F29 sea exactamente idéntico a C_base."""
+        from src.services.monthly_tax_service import MonthlyTaxService
+
+        # 12 meses con diferentes compras operacionales
+        compras_valores = [8_000_000, 9_500_000, 11_000_000, 7_800_000, 12_400_000, 10_200_000,
+                           9_000_000, 10_500_000, 8_600_000, 11_200_000, 9_800_000, 10_000_000]
+        monthly = [
+            MonthlyTax(
+                periodo=f"2025-{m:02d}",
+                total_ventas=Decimal("30000000"),
+                compras=Decimal(str(compras_valores[m - 1])),
+                compras_operacionales=Decimal(str(compras_valores[m - 1])),
+                debito_fiscal=Decimal("5700000"),
+                credito_fiscal=Decimal(str(int(compras_valores[m - 1] * 0.19))),
+                iva_determinado=Decimal("1500000"),
+            )
+            for m in range(1, 13)
+        ]
+        f29_list = [_f29(f"2025-{m:02d}", **{"502": "30000000"}) for m in range(1, 13)]
+        f22 = AnnualTaxReturn(anio_tributario="2024", capital_propio_tributario=200_000_000)
+        tf = _tax_folder(f29_list=f29_list, monthly_taxes=monthly, f22_list=[f22])
+        tf.monthly_analysis = MonthlyTaxService().analyze(monthly)
+
+        result = CreditRiskEngine(benchmark_vacio).calculate(tf)
+        promedio_esperado = sum(compras_valores) // 12
+        assert result.memoria_calculo["base_compras_c_base"] == promedio_esperado
+
+    def test_detector_compresion_rli_f22(self, benchmark_vacio) -> None:
+        """Verifica que si Ingresos > 0 pero RLI <= 0, se alerte y se reste puntaje en Pilar 4."""
+        from src.services.monthly_tax_service import MonthlyTaxService
+
+        f29_list = [_f29(f"2025-{m:02d}", **{"502": "50000000"}) for m in range(1, 13)]
+        monthly = [
+            MonthlyTax(
+                periodo=f"2025-{m:02d}",
+                total_ventas=Decimal("50000000"),
+                compras=Decimal("15000000"),
+                compras_operacionales=Decimal("15000000"),
+                debito_fiscal=Decimal("9500000"),
+                credito_fiscal=Decimal("2850000"),
+                iva_determinado=Decimal("6650000"),
+            )
+            for m in range(1, 13)
+        ]
+        # F22 con ingresos gigantescos pero RLI 0 (estilo ALVAL)
+        f22 = AnnualTaxReturn(
+            anio_tributario="2026",
+            ingresos=7_121_034_000,
+            renta_liquida_imponible=0,
+            capital_propio_tributario=500_000_000,
+        )
+        tf = _tax_folder(f29_list=f29_list, monthly_taxes=monthly, f22_list=[f22])
+        tf.monthly_analysis = MonthlyTaxService().analyze(monthly)
+
+        result = CreditRiskEngine(benchmark_vacio).calculate(tf)
+        assert any("Alerta de Rentabilidad Tributaria" in a for a in result.alertas)
+        # Se condiciona a resguardo
+        assert "Línea Condicionada a Resguardo" in result.decision.evaluacion_referencial
+        # Pilar 4 debe tener la penalización
+        pilar4 = next(p for p in result.desglose_score if p.nombre == "Solvencia y Rentabilidad Anual F22")
+        assert "Penalización -8 pts" in pilar4.detalle
+
+    def test_desglose_5_pilares_suma_score(self, benchmark_vacio) -> None:
+        """Verifica que el desglose de 5 pilares sume 100 puntos máximos y coincida con el score."""
+        from src.services.monthly_tax_service import MonthlyTaxService
+
+        f29_list = [_f29(f"2025-{m:02d}", **{"502": "40000000"}) for m in range(1, 13)]
+        monthly = [
+            MonthlyTax(
+                periodo=f"2025-{m:02d}",
+                total_ventas=Decimal("40000000"),
+                compras=Decimal("10000000"),
+                compras_operacionales=Decimal("10000000"),
+                debito_fiscal=Decimal("7600000"),
+                credito_fiscal=Decimal("1900000"),
+                iva_determinado=Decimal("5700000"),
+            )
+            for m in range(1, 13)
+        ]
+        f22 = AnnualTaxReturn(
+            anio_tributario="2025",
+            ingresos=480_000_000,
+            renta_liquida_imponible=50_000_000,
+            capital_propio_tributario=300_000_000,
+        )
+        tf = _tax_folder(f29_list=f29_list, monthly_taxes=monthly, f22_list=[f22])
+        tf.monthly_analysis = MonthlyTaxService().analyze(monthly)
+
+        result = CreditRiskEngine(benchmark_vacio).calculate(tf)
+        assert len(result.desglose_score) == 5
+        max_total = sum(p.puntaje_maximo for p in result.desglose_score)
+        assert max_total == 100
+        obtenido_total = sum(p.puntaje_obtenido for p in result.desglose_score)
+        assert result.score_compuesto == obtenido_total
+
+

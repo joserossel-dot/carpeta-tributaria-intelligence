@@ -30,8 +30,8 @@ class PDFReport:
             pagesize=letter,
             leftMargin=14 * mm,
             rightMargin=14 * mm,
-            topMargin=12 * mm,
-            bottomMargin=12 * mm,
+            topMargin=10 * mm,
+            bottomMargin=10 * mm,
         )
 
         styles = getSampleStyleSheet()
@@ -39,34 +39,34 @@ class PDFReport:
             "DocTitle",
             parent=styles["Normal"],
             fontName="Helvetica-Bold",
-            fontSize=15,
-            leading=18,
+            fontSize=14,
+            leading=17,
             textColor=colors.HexColor("#0F172A"),
         )
         subtitle_style = ParagraphStyle(
             "DocSubTitle",
             parent=styles["Normal"],
             fontName="Helvetica",
-            fontSize=9.5,
-            leading=12,
+            fontSize=8.5,
+            leading=11,
             textColor=colors.HexColor("#475569"),
         )
         h2_style = ParagraphStyle(
             "SectionH2",
             parent=styles["Normal"],
             fontName="Helvetica-Bold",
-            fontSize=11,
-            leading=14,
+            fontSize=10,
+            leading=13,
             textColor=colors.HexColor("#0F172A"),
-            spaceBefore=6,
-            spaceAfter=4,
+            spaceBefore=4,
+            spaceAfter=3,
         )
         body_style = ParagraphStyle(
             "DocBody",
             parent=styles["Normal"],
             fontName="Helvetica",
-            fontSize=8,
-            leading=10.5,
+            fontSize=7.5,
+            leading=9.5,
             textColor=colors.HexColor("#1E293B"),
         )
         body_bold = ParagraphStyle(
@@ -78,8 +78,8 @@ class PDFReport:
             "TableCell",
             parent=styles["Normal"],
             fontName="Helvetica",
-            fontSize=7.5,
-            leading=9.5,
+            fontSize=7,
+            leading=8.5,
             textColor=colors.HexColor("#1E293B"),
         )
         table_cell_bold = ParagraphStyle(
@@ -97,8 +97,8 @@ class PDFReport:
             "BadgeStyle",
             parent=styles["Normal"],
             fontName="Helvetica-Bold",
-            fontSize=9,
-            leading=11,
+            fontSize=8.5,
+            leading=10.5,
             alignment=1,
             textColor=colors.white,
         )
@@ -106,18 +106,20 @@ class PDFReport:
         story: list[Any] = []
 
         # 1. ENCABEZADO CORPORATIVO
-        story.append(Paragraph("CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial", title_style))
+        story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.2)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.3)",
                 subtitle_style,
             )
         )
-        story.append(Spacer(1, 3 * mm))
+        story.append(Spacer(1, 2 * mm))
 
-        # 2. IDENTIFICACIÓN DEL CONTRIBUYENTE
+        # 2. IDENTIFICACIÓN DEL CONTRIBUYENTE Y VIGENCIA
         c = getattr(tax_folder, "contributor", None)
         kpis = getattr(tax_folder, "kpis", None)
+        cr = getattr(tax_folder, "credit_risk", None)
+
         rut = getattr(c, "rut", None) or "No informado"
         razon_social = getattr(c, "razon_social", None) or "No informada"
         domicilio = getattr(c, "domicilio", None) or "No informado"
@@ -125,6 +127,13 @@ class PDFReport:
         ini_act = fmt_date(getattr(c, "fecha_inicio_actividades", None)) or "No informado"
         regimen = getattr(c, "regimen_tributario", None) or "No informado"
         giro_prin = getattr(kpis, "principal_activity", None) or "No informada"
+
+        vigencia = getattr(cr, "vigencia_datos", {}) or {}
+        bienes_raices = getattr(cr, "bienes_raices_resumen", None) or "No registra bienes raíces en carpeta"
+        fecha_emision = vigencia.get("fecha_emision", "No informada")
+        ult_periodo = vigencia.get("ultimo_periodo", "No informado")
+        desfase_m = vigencia.get("meses_desfase", 0)
+        confianza_vig = vigencia.get("nivel_confianza", "MEDIA")
 
         contrib_data = [
             [
@@ -141,7 +150,11 @@ class PDFReport:
             ],
             [
                 Paragraph("<b>Giro Principal SII:</b> " + giro_prin, body_style),
-                Paragraph("<b>Meses F29 Auditados:</b> " + str(getattr(kpis, "f29_count", 0)), body_style),
+                Paragraph(f"<b>Bienes Raíces:</b> {bienes_raices}", body_style),
+            ],
+            [
+                Paragraph(f"<b>Emisión Carpeta:</b> {fecha_emision} | <b>Último F29:</b> {ult_periodo}", body_style),
+                Paragraph(f"<b>Antigüedad del Dato:</b> {desfase_m} meses (Confianza: <b>{confianza_vig}</b>)", body_style),
             ],
         ]
         contrib_table = Table(contrib_data, colWidths=[92.5 * mm, 92.5 * mm])
@@ -150,17 +163,16 @@ class PDFReport:
                 ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#F8FAFC")),
                 ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
-                ("TOPPADDING", (0, 0), (-1, -1), 2.5),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5),
-                ("LEFTPADDING", (0, 0), (-1, -1), 5),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+                ("TOPPADDING", (0, 0), (-1, -1), 2),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+                ("LEFTPADDING", (0, 0), (-1, -1), 4),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 4),
             ])
         )
         story.append(contrib_table)
-        story.append(Spacer(1, 3 * mm))
+        story.append(Spacer(1, 2.5 * mm))
 
         # 3. RESUMEN RECOMENDACIÓN REFERENCIAL
-        cr = getattr(tax_folder, "credit_risk", None)
         evaluacion = str(
             getattr(cr, "evaluacion_referencial", None)
             or getattr(cr, "veredicto", "OBSERVADO")
@@ -172,11 +184,11 @@ class PDFReport:
         resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
 
         # Color de la evaluación referencial
-        if "BAJO" in evaluacion or "APROBADO" in evaluacion and "CONDICIONES" not in evaluacion:
+        if "BAJO" in evaluacion:
             badge_bg = colors.HexColor("#16A34A")
         elif "MEDIO-ALTO" in evaluacion:
             badge_bg = colors.HexColor("#EA580C")
-        elif "MEDIO" in evaluacion or "CONDICIONES" in evaluacion or "OBSERVADO" in evaluacion:
+        elif "MEDIO" in evaluacion or "CONDICIONES" in evaluacion:
             badge_bg = colors.HexColor("#D97706")
         elif "ALTO" in evaluacion or "RECHAZADO" in evaluacion:
             badge_bg = colors.HexColor("#DC2626")
@@ -192,16 +204,16 @@ class PDFReport:
                 Paragraph("<b>EVALUACIÓN REFERENCIAL</b>", table_cell_header),
                 Paragraph("<b>SCORE CREDITICIO</b>", table_cell_header),
                 Paragraph("<b>LÍNEA MÁXIMA SUGERIDA (M$)</b>", table_cell_header),
-                Paragraph("<b>RESGUARDO SUGERIDO</b>", table_cell_header),
+                Paragraph("<b>MODALIDAD Y RESGUARDO SUGERIDO</b>", table_cell_header),
             ],
             [
                 evaluacion_cell,
-                Paragraph(f"<b>{score_val:.1f} / 100</b><br/>Riesgo {cat_val}", table_cell_bold),
-                Paragraph(f"<font size=11><b>{cupo_ap_txt}</b></font>", table_cell_bold),
-                Paragraph(f"<b>{plazo_txt}</b><br/><font size=6.5>{resguardo}</font>", table_cell),
+                Paragraph(f"<b>{score_val:.0f} / 100</b><br/>Riesgo {cat_val}", table_cell_bold),
+                Paragraph(f"<font size=10><b>{cupo_ap_txt}</b></font>", table_cell_bold),
+                Paragraph(f"<b>{plazo_txt}</b><br/><font size=6>{resguardo}</font>", table_cell),
             ],
         ]
-        panel_table = Table(panel_data, colWidths=[52 * mm, 38 * mm, 45 * mm, 50 * mm])
+        panel_table = Table(panel_data, colWidths=[52 * mm, 34 * mm, 44 * mm, 55 * mm])
         panel_table.setStyle(
             TableStyle([
                 ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
@@ -211,72 +223,125 @@ class PDFReport:
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
                 ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("TOPPADDING", (0, 0), (-1, -1), 4),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                ("TOPPADDING", (0, 0), (-1, -1), 3),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
             ])
         )
         story.append(panel_table)
-        story.append(Spacer(1, 3 * mm))
+        story.append(Spacer(1, 2.5 * mm))
 
-        # 4. MEMORIA DE CÁLCULO CUANTITATIVA (M$)
+        # 4. DESGLOSE DEL SCORE TRIBUTARIO (5 PILARES - 100 PTS)
+        desglose = getattr(cr, "desglose_score", []) or []
+        if desglose:
+            score_rows = [
+                [
+                    Paragraph("<b>Pilar Cuantitativo</b>", table_cell_header),
+                    Paragraph("<b>Puntaje</b>", table_cell_header),
+                    Paragraph("<b>Máx.</b>", table_cell_header),
+                    Paragraph("<b>Fundamento y Detalle del Indicador</b>", table_cell_header),
+                ]
+            ]
+            for p in desglose:
+                score_rows.append([
+                    Paragraph(getattr(p, "nombre", ""), table_cell_bold),
+                    Paragraph(f"{getattr(p, 'puntaje_obtenido', 0)} pts", table_cell_bold),
+                    Paragraph(f"{getattr(p, 'puntaje_maximo', 0)} pts", table_cell),
+                    Paragraph(getattr(p, "detalle", ""), table_cell),
+                ])
+            score_rows.append([
+                Paragraph("<b>Total Score Compuesto</b>", table_cell_bold),
+                Paragraph(f"<b>{score_val:.0f} pts</b>", table_cell_bold),
+                Paragraph("<b>100 pts</b>", table_cell_bold),
+                Paragraph(f"<b>Calificación Global: Riesgo {cat_val}</b>", table_cell_bold),
+            ])
+            score_table = Table(score_rows, colWidths=[55 * mm, 20 * mm, 18 * mm, 92 * mm])
+            score_table.setStyle(
+                TableStyle([
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
+                    ("BACKGROUND", (0, 1), (-1, -2), colors.HexColor("#FFFFFF")),
+                    ("BACKGROUND", (0, -1), (-1, -1), colors.HexColor("#F1F5F9")),
+                    ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
+                    ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
+                    ("TOPPADDING", (0, 0), (-1, -1), 1.8),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 1.8),
+                    ("ALIGN", (1, 0), (2, -1), "CENTER"),
+                ])
+            )
+            story.append(Paragraph("Desglose del Score Tributario (100 Puntos)", h2_style))
+            story.append(score_table)
+            story.append(Spacer(1, 2 * mm))
+
+        # 5. MEMORIA DE CÁLCULO CUANTITATIVA (M$) — 9 FILAS DE TRAZABILIDAD
         mem = getattr(cr, "memoria_calculo", {}) if cr and isinstance(cr.memoria_calculo, dict) else {}
-        base_c = mem.get("base_compras_c_base") or mem.get("base_compras_mensual_operacional", 0)
+        p_ini = mem.get("periodo_inicio", "")
+        p_fin = mem.get("periodo_fin", "")
+        v_prom = mem.get("ventas_netas_mensuales_prom", 0)
+        base_c = mem.get("base_compras_c_base", 0)
+        iva_prom = mem.get("iva_determinado_prom", 0)
+        brecha = mem.get("brecha_operacional_proxy", 0)
         techo_op = mem.get("techo_operativo_8pct") or mem.get("techo_operativo", 0)
         freno_flujo = mem.get("freno_flujo_operacional_25pct", 0)
-        phi_v = mem.get("factor_riesgo_phi") or mem.get("factor_phi_calidad_crediticia", 1.0)
-        cupo_pre = mem.get("cupo_preliminar", 0)
+        phi_pct = mem.get("factor_ajuste_conductual_pct", int(round(mem.get("factor_riesgo_phi", 1.0) * 100)))
         cpt_val = mem.get("capital_propio_tributario")
-        tope_cpt = mem.get("tope_patrimonial_cpt") or mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_35pct_cpt")
+        tope_cpt = mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
         cupo_max = mem.get("cupo_maximo_sugerido", 0)
+
+        rango_str = f" ({p_ini} a {p_fin})" if p_ini and p_fin else ""
+        cpt_str = format_mclp(cpt_val) if cpt_val is not None else "Sin F22"
 
         mem_rows = [
             [
-                Paragraph("<b>Etapa Cuantitativa</b>", table_cell_header),
-                Paragraph("<b>Fórmula / Parámetro Estándar</b>", table_cell_header),
+                Paragraph("<b>Paso de Memoria Cuantitativa</b>", table_cell_header),
+                Paragraph("<b>Metodología / Fundamento Operacional</b>", table_cell_header),
                 Paragraph("<b>Monto (M$)</b>", table_cell_header),
             ],
             [
-                Paragraph("Paso A: Base de Compras (C_base)", table_cell_bold),
-                Paragraph("Promedio mensual compras operacionales 12M (o costo proxy)", table_cell),
+                Paragraph(f"Ventas Netas Mensuales Promedio{rango_str}", table_cell_bold),
+                Paragraph("Promedio mensual ventas de los 12 meses analizados", table_cell),
+                Paragraph(format_mclp(v_prom), table_cell_bold),
+            ],
+            [
+                Paragraph("(-) Paso A: Compras Op. Mensuales Promedio (C_base)", table_cell_bold),
+                Paragraph("Base mensual de compras operacionales 12M (o costo proxy)", table_cell),
                 Paragraph(format_mclp(base_c), table_cell_bold),
             ],
             [
-                Paragraph("Paso B: Techo Operativo Proveedor (8%)", table_cell_bold),
-                Paragraph("8% sobre C_base (estándar bancario individual)", table_cell),
+                Paragraph("(-) IVA Determinado Mensual Promedio", table_cell_bold),
+                Paragraph("Promedio Cód. 89 F29 de los últimos 12 meses", table_cell),
+                Paragraph(format_mclp(iva_prom), table_cell_bold),
+            ],
+            [
+                Paragraph("(=) Brecha Operacional Tributaria Mensual Proxy", table_cell_bold),
+                Paragraph("Margen operacional neto depurado [Ventas - Compras - IVA Det.]", table_cell),
+                Paragraph(format_mclp(brecha), table_cell_bold),
+            ],
+            [
+                Paragraph("Paso B1: Techo por Volumen de Compras (8% C_base)", table_cell_bold),
+                Paragraph("8% sobre C_base (estándar bancario individual de crédito)", table_cell),
                 Paragraph(format_mclp(techo_op), table_cell_bold),
             ],
             [
-                Paragraph("Freno Flujo Neto Depurado (25%)", table_cell_bold),
-                Paragraph("Máx. 25% de [Ventas 12M - Compras Op. 12M - IVA Det. 12M]", table_cell),
+                Paragraph("Paso B2: Freno por Absorción Operacional (25% Brecha)", table_cell_bold),
+                Paragraph("Máximo 25% del margen operacional neto depurado", table_cell),
                 Paragraph(format_mclp(freno_flujo), table_cell_bold),
             ],
             [
                 Paragraph("Paso C: Factor de Ajuste Conductual", table_cell_bold),
-                Paragraph("Ajuste por mora F29, postergación IVA y variaciones de venta", table_cell),
-                Paragraph(f"{int(round(phi_v * 100))}%", table_cell_bold),
+                Paragraph("Ajuste por mora F29, postergación IVA y estabilidad YoY", table_cell),
+                Paragraph(f"{phi_pct}%", table_cell_bold),
             ],
             [
-                Paragraph("Cupo Preliminar Ajustado por Riesgo", table_cell_bold),
-                Paragraph("min(Techo 8%, Freno Flujo 25%) × Factor Conductual", table_cell),
-                Paragraph(format_mclp(cupo_pre), table_cell_bold),
-            ],
-            [
-                Paragraph("Capital Propio Tributario (CPT)", table_cell_bold),
-                Paragraph("Patrimonio fiscal declarado en último F22 disponible", table_cell),
-                Paragraph(format_mclp(cpt_val) if cpt_val is not None else "Sin F22", table_cell_bold),
-            ],
-            [
-                Paragraph("Paso D: Freno Patrimonial CPT", table_cell_bold),
-                Paragraph("12% CPT en línea limpia / 20% con aval ($0 si CPT <= 0)", table_cell),
+                Paragraph(f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", table_cell_bold),
+                Paragraph("12% CPT en línea limpia ($0 si CPT <= 0)", table_cell),
                 Paragraph(format_mclp(tope_cpt) if tope_cpt is not None else "Sin tope", table_cell_bold),
             ],
             [
-                Paragraph("Línea Máxima Sugerida Final", table_cell_bold),
-                Paragraph("Redondeo a múltiplos de $100.000 CLP (M$ 100)", table_cell),
+                Paragraph("(=) Línea Máxima Sugerida Final", table_cell_bold),
+                Paragraph("min(Techo 8%, Freno Flujo 25%) × Factor Conductual con Tope CPT (M$ 100)", table_cell),
                 Paragraph(format_mclp(cupo_max), table_cell_bold),
             ],
         ]
-        mem_table = Table(mem_rows, colWidths=[60 * mm, 95 * mm, 30 * mm])
+        mem_table = Table(mem_rows, colWidths=[70 * mm, 85 * mm, 30 * mm])
         mem_table.setStyle(
             TableStyle([
                 ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
@@ -287,19 +352,20 @@ class PDFReport:
                 ("BACKGROUND", (0, 5), (-1, 5), colors.HexColor("#FFFFFF")),
                 ("BACKGROUND", (0, 6), (-1, 6), colors.HexColor("#F8FAFC")),
                 ("BACKGROUND", (0, 7), (-1, 7), colors.HexColor("#FFFFFF")),
-                ("BACKGROUND", (0, 8), (-1, 8), colors.HexColor("#E2E8F0")),
+                ("BACKGROUND", (0, 8), (-1, 8), colors.HexColor("#F8FAFC")),
+                ("BACKGROUND", (0, 9), (-1, 9), colors.HexColor("#E2E8F0")),
                 ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
-                ("TOPPADDING", (0, 0), (-1, -1), 2.2),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 2.2),
+                ("TOPPADDING", (0, 0), (-1, -1), 1.8),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 1.8),
                 ("ALIGN", (2, 0), (2, -1), "RIGHT"),
             ])
         )
-        story.append(Paragraph("Memoria de Cálculo Cuantitativa (M$)", h2_style))
+        story.append(Paragraph("Memoria de Cálculo Cuantitativa de Línea Comercial (M$)", h2_style))
         story.append(mem_table)
         story.append(Spacer(1, 2 * mm))
 
-        # 5. BANDERAS ROJAS Y RECOMENDACIONES OPERATIVAS
+        # 6. BANDERAS ROJAS Y RECOMENDACIONES OPERATIVAS
         banderas = getattr(cr, "banderas_rojas", []) if cr else []
         hoja_ruta = getattr(cr, "hoja_ruta_comercial", []) if cr else []
 
@@ -308,12 +374,12 @@ class PDFReport:
             for b in banderas:
                 flags_p.append(Paragraph(f"🔴 <b>Alerta:</b> {b}", body_style))
         else:
-            flags_p.append(Paragraph("🟢 <i>Sin banderas rojas críticas detectadas en el análisis.</i>", body_style))
+            flags_p.append(Paragraph("🟢 <i>Sin alertas críticas detectadas en la carpeta.</i>", body_style))
 
         hr_p = []
         if hoja_ruta:
             for r in hoja_ruta:
-                hr_p.append(Paragraph(f"🧭 <b>Protocolo / Sugerencia:</b> {r}", body_style))
+                hr_p.append(Paragraph(f"🧭 <b>Protocolo:</b> {r}", body_style))
         else:
             hr_p.append(Paragraph("<i>Sin recomendaciones adicionales.</i>", body_style))
 
@@ -323,61 +389,113 @@ class PDFReport:
                 ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#F8FAFC")),
                 ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
-                ("TOPPADDING", (0, 0), (-1, -1), 3),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+                ("TOPPADDING", (0, 0), (-1, -1), 2.5),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5),
                 ("LEFTPADDING", (0, 0), (-1, -1), 4),
                 ("RIGHTPADDING", (0, 0), (-1, -1), 4),
             ])
         )
         story.append(flags_table)
-        story.append(Spacer(1, 3 * mm))
+        story.append(Spacer(1, 2.5 * mm))
 
-        # 6. TABLA RESUMEN F29 (Últimos 12 meses más recientes en M$)
+        # 7. TABLA RESUMEN F29 (Últimos 12 meses cronológicos en M$)
         monthly_taxes = getattr(tax_folder, "monthly_taxes", []) or []
         if monthly_taxes:
-            sorted_mt = sorted(monthly_taxes, key=lambda m: m.periodo or "", reverse=True)[:12]
+            sorted_mt = sorted(monthly_taxes, key=lambda m: m.periodo or "")
+            last_12_mt = sorted_mt[-12:] if len(sorted_mt) >= 12 else sorted_mt
+            mes_inicio = last_12_mt[0].periodo if last_12_mt else ""
+            mes_fin = last_12_mt[-1].periodo if last_12_mt else ""
+
             f29_header = [
                 Paragraph("<b>Período</b>", table_cell_header),
-                Paragraph("<b>Ventas (M$)</b>", table_cell_header),
+                Paragraph("<b>Ventas Netas (M$)</b>", table_cell_header),
                 Paragraph("<b>Compras Op. (M$)</b>", table_cell_header),
-                Paragraph("<b>Débito (M$)</b>", table_cell_header),
-                Paragraph("<b>Crédito (M$)</b>", table_cell_header),
-                Paragraph("<b>IVA Det. (M$)</b>", table_cell_header),
+                Paragraph("<b>Débito Fiscal (M$)</b>", table_cell_header),
+                Paragraph("<b>Crédito Fiscal (M$)</b>", table_cell_header),
+                Paragraph("<b>IVA Det. SII (M$)</b>", table_cell_header),
             ]
             f29_rows = [f29_header]
-            for mt in sorted_mt:
-                compras_val = getattr(mt, "compras_operacionales", None) or getattr(mt, "compras", None)
+
+            tot_v = Decimal("0")
+            tot_cop = Decimal("0")
+            tot_deb = Decimal("0")
+            tot_cred = Decimal("0")
+            tot_iva = Decimal("0")
+
+            for mt in last_12_mt:
+                v = mt.total_ventas or Decimal("0")
+                cop = mt.compras_operacionales if mt.compras_operacionales is not None else (mt.compras or Decimal("0"))
+                deb = mt.debito_fiscal or Decimal("0")
+                cred = mt.credito_fiscal or Decimal("0")
+                iva = mt.iva_determinado or Decimal("0")
+
+                tot_v += v
+                tot_cop += cop
+                tot_deb += deb
+                tot_cred += cred
+                tot_iva += iva
+
                 f29_rows.append([
                     Paragraph(getattr(mt, "periodo", ""), table_cell),
-                    Paragraph(format_mclp(getattr(mt, "total_ventas", None)), table_cell),
-                    Paragraph(format_mclp(compras_val), table_cell),
-                    Paragraph(format_mclp(getattr(mt, "debito_fiscal", None)), table_cell),
-                    Paragraph(format_mclp(getattr(mt, "credito_fiscal", None)), table_cell),
-                    Paragraph(format_mclp(getattr(mt, "iva_determinado", None)), table_cell),
+                    Paragraph(format_mclp(v), table_cell),
+                    Paragraph(format_mclp(cop), table_cell),
+                    Paragraph(format_mclp(deb), table_cell),
+                    Paragraph(format_mclp(cred), table_cell),
+                    Paragraph(format_mclp(iva), table_cell),
                 ])
+
+            n_12 = Decimal(str(len(last_12_mt))) if last_12_mt else Decimal("1")
+            prom_v_row = tot_v / n_12
+            prom_cop_row = base_c  # Coincide matemáticamente con Paso A C_base
+            prom_deb_row = tot_deb / n_12
+            prom_cred_row = tot_cred / n_12
+            prom_iva_row = tot_iva / n_12
+
+            # Fila de Promedio Mensual (12M)
+            f29_rows.append([
+                Paragraph("<b>Promedio Mensual (12M)</b>", table_cell_bold),
+                Paragraph(format_mclp(prom_v_row), table_cell_bold),
+                Paragraph(format_mclp(prom_cop_row), table_cell_bold),
+                Paragraph(format_mclp(prom_deb_row), table_cell_bold),
+                Paragraph(format_mclp(prom_cred_row), table_cell_bold),
+                Paragraph(format_mclp(prom_iva_row), table_cell_bold),
+            ])
+
+            # Fila de Total Acumulado (12M)
+            f29_rows.append([
+                Paragraph("<b>Total Acumulado (12M)</b>", table_cell_bold),
+                Paragraph(format_mclp(tot_v), table_cell_bold),
+                Paragraph(format_mclp(tot_cop), table_cell_bold),
+                Paragraph(format_mclp(tot_deb), table_cell_bold),
+                Paragraph(format_mclp(tot_cred), table_cell_bold),
+                Paragraph(format_mclp(tot_iva), table_cell_bold),
+            ])
+
             f29_table = Table(f29_rows, colWidths=[25 * mm, 32 * mm, 32 * mm, 32 * mm, 32 * mm, 32 * mm])
             f29_table.setStyle(
                 TableStyle([
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
+                    ("BACKGROUND", (0, -2), (-1, -2), colors.HexColor("#F1F5F9")),
+                    ("BACKGROUND", (0, -1), (-1, -1), colors.HexColor("#E2E8F0")),
                     ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                     ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
-                    ("TOPPADDING", (0, 0), (-1, -1), 1.8),
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 1.8),
+                    ("TOPPADDING", (0, 0), (-1, -1), 1.5),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 1.5),
                     ("ALIGN", (1, 0), (-1, -1), "RIGHT"),
                 ])
             )
             story.append(KeepTogether([
-                Paragraph("Resumen de Declaraciones Mensuales F29 (12 Meses Más Recientes en M$)", h2_style),
+                Paragraph(f"Resumen F29 — Período Analizado: {mes_inicio} a {mes_fin} (Últimos 12 Meses Declarados)", h2_style),
                 f29_table,
             ]))
 
-        # 7. TABLA RESUMEN F22 (Anual en M$)
+        # 8. TABLA RESUMEN F22 Y CONCILIACIÓN CRUZADA (M$)
         f22_list = getattr(tax_folder, "f22", []) or []
         if f22_list:
             sorted_f22 = sorted(f22_list, key=lambda f: f.anio_tributario or "", reverse=True)
             story.append(Spacer(1, 2 * mm))
             f22_header = [
-                Paragraph("<b>Año</b>", table_cell_header),
+                Paragraph("<b>Año Tributario</b>", table_cell_header),
                 Paragraph("<b>Ingresos (M$)</b>", table_cell_header),
                 Paragraph("<b>RLI (M$)</b>", table_cell_header),
                 Paragraph("<b>Capital Propio CPT (M$)</b>", table_cell_header),
@@ -398,8 +516,8 @@ class PDFReport:
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
                     ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                     ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
-                    ("TOPPADDING", (0, 0), (-1, -1), 1.8),
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 1.8),
+                    ("TOPPADDING", (0, 0), (-1, -1), 1.5),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 1.5),
                     ("ALIGN", (1, 0), (-1, -1), "RIGHT"),
                 ])
             )
@@ -408,15 +526,24 @@ class PDFReport:
                 f22_table,
             ]))
 
+        # Conciliación Cruzada F29 vs F22
+        conciliacion = getattr(cr, "conciliacion_f29_f22", None)
+        if conciliacion:
+            story.append(Spacer(1, 1.5 * mm))
+            conc_text = (
+                f"<b>Conciliación Cruzada F29 vs F22:</b> {conciliacion.get('detalle', '')}"
+            )
+            story.append(Paragraph(conc_text, body_style))
+
         # Footer nota M$ y nota legal
-        story.append(Spacer(1, 3 * mm))
-        story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor("#CBD5E1"), spaceAfter=3))
+        story.append(Spacer(1, 2.5 * mm))
+        story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor("#CBD5E1"), spaceAfter=2))
         nota_pie = (
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
             "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor.</i>"
         )
-        story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=7, leading=9, textColor=colors.HexColor("#64748B"))))
+        story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 
         doc.build(story)
         return buffer.getvalue()

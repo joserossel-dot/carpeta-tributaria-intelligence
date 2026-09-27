@@ -13,8 +13,9 @@ class MonthlyTaxService:
             return MonthlyTaxResult(monthly_taxes=[], total_months=0)
 
         total = len(monthly_taxes)
-        last_12 = monthly_taxes[-12:] if total >= 12 else monthly_taxes
-        last_3 = monthly_taxes[-3:] if total >= 3 else monthly_taxes
+        sorted_taxes = sorted(monthly_taxes, key=lambda m: m.periodo or "")
+        last_12 = sorted_taxes[-12:] if total >= 12 else sorted_taxes
+        last_3 = sorted_taxes[-3:] if total >= 3 else sorted_taxes
 
         ventas_u12 = self._sum_field(last_12, "total_ventas")
         compras_u12 = self._sum_field(last_12, "compras")
@@ -26,18 +27,20 @@ class MonthlyTaxService:
         prom_ventas_3m = ventas_u3 / Decimal(str(len(last_3))) if ventas_u3 is not None else None
         prom_compras_3m = compras_u3 / Decimal(str(len(last_3))) if compras_u3 is not None else None
 
-        compras_op_u12 = self._sum_field(last_12, "compras_operacionales")
-        if compras_op_u12 is None:
-            compras_op_u12 = compras_u12
+        compras_op_sum = sum(
+            (m.compras_operacionales if m.compras_operacionales is not None else (m.compras or Decimal("0")))
+            for m in last_12
+        )
         prom_compras_op_12m = (
-            compras_op_u12 / Decimal(str(len(last_12))) if compras_op_u12 is not None else None
+            compras_op_sum / Decimal(str(len(last_12))) if last_12 else None
         )
 
-        compras_op_u3 = self._sum_field(last_3, "compras_operacionales")
-        if compras_op_u3 is None:
-            compras_op_u3 = compras_u3
+        compras_op_sum_3m = sum(
+            (m.compras_operacionales if m.compras_operacionales is not None else (m.compras or Decimal("0")))
+            for m in last_3
+        )
         prom_compras_op_3m = (
-            compras_op_u3 / Decimal(str(len(last_3))) if compras_op_u3 is not None else None
+            compras_op_sum_3m / Decimal(str(len(last_3))) if last_3 else None
         )
 
         # Variación porcentual ventas 3M vs 12M
@@ -85,10 +88,10 @@ class MonthlyTaxService:
 
         costo_proxy_aplica = False
         if ventas_u12 and ventas_u12 > 0:
-            cop_total = compras_op_u12 or compras_u12 or Decimal("0")
+            cop_total = compras_op_sum or compras_u12 or Decimal("0")
             if cop_total < (ventas_u12 * Decimal("0.15")):
                 costo_proxy_aplica = True
-        elif not compras_op_u12 or compras_op_u12 == 0:
+        elif not compras_op_sum or compras_op_sum == 0:
             costo_proxy_aplica = True
 
         # Variación YoY trimestral (mismos 3 meses del año anterior)
@@ -133,7 +136,7 @@ class MonthlyTaxService:
         # Margen operacional implícito promedio (12M): (Ventas - Compras Op) / Ventas
         margen_op_prom = None
         if ventas_u12 and ventas_u12 > 0:
-            c_op = compras_op_u12 if compras_op_u12 is not None else compras_u12
+            c_op = compras_op_sum if compras_op_sum is not None else compras_u12
             if c_op is not None:
                 margen_op_prom = float((ventas_u12 - c_op) / ventas_u12)
         elif margen_12 is not None:
