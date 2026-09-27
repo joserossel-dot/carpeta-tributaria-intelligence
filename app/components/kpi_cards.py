@@ -1,18 +1,18 @@
 import streamlit as st
 
-from app.utils.formatting import fmt_currency, fmt_miles
+from app.utils.formatting import fmt_currency
 from src.models.tax_folder import TaxFolder
 
 
 def show_kpi_cards(tax_folder: TaxFolder) -> None:
-    ma = tax_folder.monthly_analysis
-    kpis = tax_folder.kpis
+    ma = getattr(tax_folder, "monthly_analysis", None)
+    kpis = getattr(tax_folder, "kpis", None)
 
-    ventas_12m = ma.ventas_ultimos_12 if ma and ma.ventas_ultimos_12 is not None else None
-    compras_12m = ma.compras_ultimos_12 if ma and ma.compras_ultimos_12 is not None else None
-    prom_ventas = ma.promedio_ventas_mensual if ma and ma.promedio_ventas_mensual is not None else None
-    prom_compras = ma.promedio_compras_mensual if ma and ma.promedio_compras_mensual is not None else None
-    cant_f29 = kpis.f29_count if kpis else 0
+    ventas_12m = getattr(ma, "ventas_ultimos_12", None)
+    compras_12m = getattr(ma, "compras_ultimos_12", None)
+    prom_ventas = getattr(ma, "promedio_ventas_mensual", None)
+    prom_compras = getattr(ma, "promedio_compras_mensual", None)
+    cant_f29 = getattr(kpis, "f29_count", 0)
 
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1:

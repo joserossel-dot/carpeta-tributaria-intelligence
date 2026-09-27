@@ -7,20 +7,23 @@ from src.models.tax_folder import TaxFolder
 
 def show_monthly_chart(tax_folder: TaxFolder) -> None:
     st.subheader("IVA mensual")
-    if not tax_folder.monthly_taxes:
+    monthly_taxes = getattr(tax_folder, "monthly_taxes", []) or []
+    if not monthly_taxes:
         st.info("No se encontraron datos de IVA mensual.")
         return
 
     rows = []
-    for mt in tax_folder.monthly_taxes:
-        ventas = float(mt.total_ventas) if mt.total_ventas is not None else 0.0
-        compras = float(mt.compras) if mt.compras is not None else 0.0
+    for mt in monthly_taxes:
+        t_ventas = getattr(mt, "total_ventas", None)
+        t_compras = getattr(mt, "compras", None)
+        ventas = float(t_ventas) if t_ventas is not None else 0.0
+        compras = float(t_compras) if t_compras is not None else 0.0
         rows.append({
-            "Período": mt.periodo,
+            "Período": getattr(mt, "periodo", ""),
             "Ventas": ventas,
             "Compras": compras,
-            "_ventas_str": fmt_currency(mt.total_ventas),
-            "_compras_str": fmt_currency(mt.compras),
+            "_ventas_str": fmt_currency(t_ventas),
+            "_compras_str": fmt_currency(t_compras),
         })
 
     df = pd.DataFrame(rows)

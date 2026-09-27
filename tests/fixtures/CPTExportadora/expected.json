@@ -5873,7 +5873,10 @@
     "retenciones_totales_3m": "1662015",
     "variacion_ventas_yoy_3m_pct": "-43.40",
     "promedio_costo_operativo_proxy_12m": "608470810.5681818181818181816",
-    "costo_operativo_proxy_aplica": false
+    "costo_operativo_proxy_aplica": false,
+    "tasa_crecimiento_ventas_trimestral": -0.49023689448250224,
+    "tasa_crecimiento_compras_trimestral": 0.1146037849841148,
+    "margen_operacional_implicito_promedio": 0.535273411796634
   },
   "corporate": {
     "tipo_sociedad": null,
@@ -5990,7 +5993,7 @@
         "codigo_actividad": "461001",
         "descripcion_actividad": "CORRETAJE AL POR MAYOR DE PRODUCTOS AGRICOLAS",
         "ratio_promedio_sector": null,
-        "n_empresas_referencia": 0,
+        "n_empresas_referencia": 1,
         "confianza": "media",
         "criterio": "proxy de margen bruto (débito/crédito fiscal), no incluye remuneraciones; requiere benchmark propio por giro con muestra mínima antes de calificar con confianza alta"
       },

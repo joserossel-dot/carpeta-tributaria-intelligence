@@ -7,40 +7,43 @@ from src.models.tax_folder import TaxFolder
 
 def show_corporate_info(tax_folder: TaxFolder) -> None:
     st.subheader("Socios y Administración")
-    c = tax_folder.corporate
+    c = getattr(tax_folder, "corporate", None)
     if not c:
         st.info("No se encontró información societaria.")
         return
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown(f"**Tipo de sociedad**  \n{c.tipo_sociedad or '—'}")
+        st.markdown(f"**Tipo de sociedad**  \n{getattr(c, 'tipo_sociedad', None) or '—'}")
     with col2:
-        st.markdown(f"**Fecha de constitución**  \n{fmt_date(c.fecha_constitucion)}")
+        st.markdown(f"**Fecha de constitución**  \n{fmt_date(getattr(c, 'fecha_constitucion', None))}")
     with col3:
-        st.markdown(f"**Capital**  \n{c.capital or '—'}")
+        st.markdown(f"**Capital**  \n{getattr(c, 'capital', None) or '—'}")
 
-    if c.socios:
+    socios = getattr(c, "socios", []) or []
+    if socios:
         st.markdown("### Socios")
         socios_rows = []
-        for s in c.socios:
+        for s in socios:
+            part = getattr(s, "participacion", None)
             socios_rows.append({
-                "RUT": s.rut,
-                "Nombre": s.nombre,
-                "Participación": f"{s.participacion}%" if s.participacion else "—",
+                "RUT": getattr(s, "rut", "—"),
+                "Nombre": getattr(s, "nombre", "—"),
+                "Participación": f"{part}%" if part is not None else "—",
             })
         st.dataframe(pd.DataFrame(socios_rows), width="stretch", hide_index=True)
 
-    if c.representantes:
+    representantes = getattr(c, "representantes", []) or []
+    if representantes:
         st.markdown("### Representantes Legales")
         repr_rows = []
-        for r in c.representantes:
+        for r in representantes:
             repr_rows.append({
-                "RUT": r.rut,
-                "Nombre": r.nombre,
-                "Cargo": r.cargo or "—",
+                "RUT": getattr(r, "rut", "—"),
+                "Nombre": getattr(r, "nombre", "—"),
+                "Cargo": getattr(r, "cargo", None) or "—",
             })
         st.dataframe(pd.DataFrame(repr_rows), width="stretch", hide_index=True)
 
-    if not c.socios and not c.representantes:
+    if not socios and not representantes:
         st.info("No se encontraron socios ni representantes.")

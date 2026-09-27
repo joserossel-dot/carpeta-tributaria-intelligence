@@ -6,16 +6,19 @@ from src.models.tax_folder import TaxFolder
 
 def show_company_info(tax_folder: TaxFolder) -> None:
     st.subheader("Empresa")
-    c = tax_folder.contributor
+    c = getattr(tax_folder, "contributor", None)
     if not c:
         st.info("No se encontraron datos del contribuyente.")
         return
 
+    kpis = getattr(tax_folder, "kpis", None)
+    principal_act = getattr(kpis, "principal_activity", None) if kpis else "—"
+
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown(f"**Razón social**  \n{c.razon_social or '—'}")
-        st.markdown(f"**RUT**  \n{c.rut or '—'}")
-        st.markdown(f"**Giro principal**  \n{tax_folder.kpis.principal_activity if tax_folder.kpis and tax_folder.kpis.principal_activity else '—'}")
+        st.markdown(f"**Razón social**  \n{getattr(c, 'razon_social', None) or '—'}")
+        st.markdown(f"**RUT**  \n{getattr(c, 'rut', None) or '—'}")
+        st.markdown(f"**Giro principal**  \n{principal_act or '—'}")
     with col2:
-        st.markdown(f"**Régimen**  \n{c.regimen_tributario or '—'}")
-        st.markdown(f"**Inicio actividades**  \n{fmt_date(c.fecha_inicio_actividades)}")
+        st.markdown(f"**Régimen**  \n{getattr(c, 'regimen_tributario', None) or '—'}")
+        st.markdown(f"**Inicio actividades**  \n{fmt_date(getattr(c, 'fecha_inicio_actividades', None))}")

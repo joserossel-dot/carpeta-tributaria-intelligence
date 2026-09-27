@@ -5713,7 +5713,10 @@
     "retenciones_totales_3m": "703075",
     "variacion_ventas_yoy_3m_pct": "-71.51",
     "promedio_costo_operativo_proxy_12m": "90252198.219696969696969697",
-    "costo_operativo_proxy_aplica": false
+    "costo_operativo_proxy_aplica": false,
+    "tasa_crecimiento_ventas_trimestral": -0.48916405145348557,
+    "tasa_crecimiento_compras_trimestral": 0.14729304045161687,
+    "margen_operacional_implicito_promedio": 0.5666889669133854
   },
   "corporate": {
     "tipo_sociedad": null,
@@ -5823,7 +5826,7 @@
         "codigo_actividad": "016100",
         "descripcion_actividad": "ACTIVIDADES DE APOYO A LA AGRICULTURA",
         "ratio_promedio_sector": null,
-        "n_empresas_referencia": 0,
+        "n_empresas_referencia": 1,
         "confianza": "media",
         "criterio": "proxy de margen bruto (débito/crédito fiscal), no incluye remuneraciones; requiere benchmark propio por giro con muestra mínima antes de calificar con confianza alta"
       },

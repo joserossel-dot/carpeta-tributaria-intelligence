@@ -7,18 +7,19 @@ from src.models.tax_folder import TaxFolder
 
 def show_activities(tax_folder: TaxFolder) -> None:
     st.subheader("Actividades")
-    if not tax_folder.activities:
+    activities = getattr(tax_folder, "activities", []) or []
+    if not activities:
         st.info("No se encontraron actividades económicas.")
         return
 
     rows = []
-    for a in tax_folder.activities:
+    for a in activities:
         rows.append({
-            "Código": a.codigo,
-            "Descripción": a.descripcion,
-            "Principal": "Sí" if a.principal else "No",
-            "Categoría": a.categoria or "",
-            "Inicio": fmt_date(a.fecha_inicio),
+            "Código": getattr(a, "codigo", "—"),
+            "Descripción": getattr(a, "descripcion", "—"),
+            "Principal": "Sí" if getattr(a, "principal", False) else "No",
+            "Categoría": getattr(a, "categoria", "") or "",
+            "Inicio": fmt_date(getattr(a, "fecha_inicio", None)),
         })
     df = pd.DataFrame(rows)
     st.dataframe(df, width="stretch", hide_index=True)

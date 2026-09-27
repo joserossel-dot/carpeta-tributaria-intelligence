@@ -1,33 +1,10 @@
 from decimal import Decimal
 
-from pydantic import BaseModel
-
-from src.models.monthly_tax import MonthlyTax
-
-
-class MonthlyTaxResult(BaseModel):
-    monthly_taxes: list[MonthlyTax]
-    total_months: int
-    ventas_ultimos_12: Decimal | None = None
-    compras_ultimos_12: Decimal | None = None
-    promedio_ventas_mensual: Decimal | None = None
-    promedio_compras_mensual: Decimal | None = None
-    crecimiento_anual: Decimal | None = None
-    meses_sin_movimiento: int = 0
-    mejor_mes: str | None = None
-    peor_mes: str | None = None
-    promedio_ventas_ultimos_3m: Decimal | None = None
-    promedio_compras_ultimos_3m: Decimal | None = None
-    promedio_compras_operacionales_12m: Decimal | None = None
-    promedio_compras_operacionales_3m: Decimal | None = None
-    variacion_ventas_3m_pct: Decimal | None = None
-    margen_implicito_12m: Decimal | None = None
-    margen_implicito_3m: Decimal | None = None
-    retenciones_totales_12m: Decimal | None = None
-    retenciones_totales_3m: Decimal | None = None
-    variacion_ventas_yoy_3m_pct: Decimal | None = None
-    promedio_costo_operativo_proxy_12m: Decimal | None = None
-    costo_operativo_proxy_aplica: bool = False
+from src.models.monthly_tax import (
+    MonthlyTax,
+    MonthlyTaxAnalysis,
+    MonthlyTaxResult,
+)
 
 
 class MonthlyTaxService:
@@ -141,6 +118,27 @@ class MonthlyTaxService:
             if (m.total_ventas is None or m.total_ventas == 0)
         )
 
+        # Tendencia ventas trimestral (3M vs 12M promedio)
+        tasa_crec_ventas_3m = None
+        if prom_ventas and prom_ventas > 0 and prom_ventas_3m is not None:
+            tasa_crec_ventas_3m = float((prom_ventas_3m - prom_ventas) / prom_ventas)
+        elif var_ventas_3m is not None:
+            tasa_crec_ventas_3m = float(var_ventas_3m) / 100.0
+
+        # Tendencia compras trimestral (3M vs 12M promedio)
+        tasa_crec_compras_3m = None
+        if prom_compras and prom_compras > 0 and prom_compras_3m is not None:
+            tasa_crec_compras_3m = float((prom_compras_3m - prom_compras) / prom_compras)
+
+        # Margen operacional implícito promedio (12M): (Ventas - Compras Op) / Ventas
+        margen_op_prom = None
+        if ventas_u12 and ventas_u12 > 0:
+            c_op = compras_op_u12 if compras_op_u12 is not None else compras_u12
+            if c_op is not None:
+                margen_op_prom = float((ventas_u12 - c_op) / ventas_u12)
+        elif margen_12 is not None:
+            margen_op_prom = float(margen_12)
+
         mejor, peor = self._best_worst_month(monthly_taxes)
 
         return MonthlyTaxResult(
@@ -166,6 +164,9 @@ class MonthlyTaxService:
             margen_implicito_3m=margen_3,
             retenciones_totales_12m=ret_12,
             retenciones_totales_3m=ret_3,
+            tasa_crecimiento_ventas_trimestral=tasa_crec_ventas_3m,
+            tasa_crecimiento_compras_trimestral=tasa_crec_compras_3m,
+            margen_operacional_implicito_promedio=margen_op_prom,
         )
 
 

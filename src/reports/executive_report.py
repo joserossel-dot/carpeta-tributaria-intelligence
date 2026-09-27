@@ -7,10 +7,12 @@ class ExecutiveReport:
     def generate(
         self,
         tax_folder: TaxFolder,
-        kpis: KPIResult,
-        analysis: AnalysisResult,
+        kpis: KPIResult | None = None,
+        analysis: AnalysisResult | None = None,
     ) -> str:
         lines: list[str] = []
+        kpis = kpis if kpis is not None else (getattr(tax_folder, "kpis", None) or KPIResult())
+        analysis = analysis if analysis is not None else (getattr(tax_folder, "analysis", None) or AnalysisResult())
 
         self._add_header(lines)
         self._add_general_data(lines, tax_folder)
@@ -95,39 +97,49 @@ class ExecutiveReport:
 
     @staticmethod
     def _add_credit_committee(lines: list[str], tf: TaxFolder) -> None:
-        if not tf.credit_risk:
+        cr = getattr(tf, "credit_risk", None)
+        if not cr:
             return
-        cr = tf.credit_risk
         lines.append("## Dictamen de Comité de Crédito B2B v2.0\n")
-        lines.append(f"- **Veredicto:** {cr.veredicto}")
-        lines.append(f"- **Score Crediticio:** {cr.score_crediticio:.1f}/100 ({cr.categoria_riesgo})")
-        if cr.cupo_aprobado is not None:
-            lines.append(f"- **Cupo Aprobado:** ${cr.cupo_aprobado:,.0f}".replace(",", "."))
-        if cr.cupo_maximo_sugerido is not None:
-            lines.append(f"- **Cupo Máximo Sugerido:** ${cr.cupo_maximo_sugerido:,.0f}".replace(",", "."))
-        if cr.plazo_sugerido_dias is not None:
-            lines.append(f"- **Plazo Sugerido:** {cr.plazo_sugerido_dias} días")
-        if cr.garantia_exigida:
-            lines.append(f"- **Garantía Exigida:** {cr.garantia_exigida}")
-        if cr.dictamen_ejecutivo:
-            lines.append(f"\n> **Dictamen:** {cr.dictamen_ejecutivo}\n")
+        lines.append(f"- **Veredicto:** {getattr(cr, 'veredicto', 'OBSERVADO')}")
+        score_val = getattr(cr, "score_crediticio", 0.0)
+        cat_val = getattr(cr, "categoria_riesgo", "MEDIO")
+        lines.append(f"- **Score Crediticio:** {score_val:.1f}/100 ({cat_val})")
+        cupo_ap = getattr(cr, "cupo_aprobado", None)
+        if cupo_ap is not None:
+            lines.append(f"- **Cupo Aprobado:** ${cupo_ap:,.0f}".replace(",", "."))
+        cupo_max = getattr(cr, "cupo_maximo_sugerido", None)
+        if cupo_max is not None:
+            lines.append(f"- **Cupo Máximo Sugerido:** ${cupo_max:,.0f}".replace(",", "."))
+        plazo = getattr(cr, "plazo_sugerido_dias", None)
+        if plazo is not None:
+            lines.append(f"- **Plazo Sugerido:** {plazo} días")
+        garantia = getattr(cr, "garantia_exigida", None)
+        if garantia:
+            lines.append(f"- **Garantía Exigida:** {garantia}")
+        dictamen = getattr(cr, "dictamen_ejecutivo", None)
+        if dictamen:
+            lines.append(f"\n> **Dictamen:** {dictamen}\n")
 
-        if cr.memoria_calculo:
+        memoria = getattr(cr, "memoria_calculo", None)
+        if memoria and isinstance(memoria, dict):
             lines.append("### Memoria de Cálculo Cuantitativa")
-            for k, v in cr.memoria_calculo.items():
+            for k, v in memoria.items():
                 label = k.replace("_", " ").capitalize()
                 lines.append(f"- **{label}:** {v}")
             lines.append("")
 
-        if cr.banderas_rojas:
+        banderas = getattr(cr, "banderas_rojas", [])
+        if banderas:
             lines.append("### Banderas Rojas")
-            for b in cr.banderas_rojas:
+            for b in banderas:
                 lines.append(f"- 🔴 {b}")
             lines.append("")
 
-        if cr.hoja_ruta_comercial:
+        hoja_ruta = getattr(cr, "hoja_ruta_comercial", [])
+        if hoja_ruta:
             lines.append("### Hoja de Ruta Comercial")
-            for r in cr.hoja_ruta_comercial:
+            for r in hoja_ruta:
                 lines.append(f"- 🧭 {r}")
             lines.append("")
 

@@ -3769,7 +3769,10 @@
     "retenciones_totales_3m": "30000",
     "variacion_ventas_yoy_3m_pct": null,
     "promedio_costo_operativo_proxy_12m": "8277050.6250",
-    "costo_operativo_proxy_aplica": true
+    "costo_operativo_proxy_aplica": true,
+    "tasa_crecimiento_ventas_trimestral": null,
+    "tasa_crecimiento_compras_trimestral": -0.5713473997696634,
+    "margen_operacional_implicito_promedio": 0.953242565796195
   },
   "corporate": {
     "tipo_sociedad": null,
@@ -3889,7 +3892,7 @@
         "codigo_actividad": "681012",
         "descripcion_actividad": "COMPRA, VENTA Y ALQUILER (EXCEPTO AMOBLADOS) DE INMUEBLES",
         "ratio_promedio_sector": null,
-        "n_empresas_referencia": 0,
+        "n_empresas_referencia": 1,
         "confianza": "media",
         "criterio": "proxy de margen bruto (débito/crédito fiscal), no incluye remuneraciones; requiere benchmark propio por giro con muestra mínima antes de calificar con confianza alta"
       },
