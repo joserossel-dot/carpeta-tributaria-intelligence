@@ -5,10 +5,52 @@ from app.utils.exporter import generate_csv, generate_excel
 from app.utils.formatting import fmt_currency
 from src.credit.sector_benchmark import SectorBenchmark
 from src.models.tax_folder import TaxFolder
+from src.reports.excel_report import ExcelReport
+from src.reports.pdf_report import PDFReport
 
 
 def show_export(tax_folder: TaxFolder, auth_role: str = "client") -> None:
-    st.subheader("Exportar Ventas y Compras")
+    st.subheader("Informes y Exportaciones de Datos")
+
+    # Descargas Ejecutivas Oficiales
+    col_rep1, col_rep2 = st.columns(2)
+    rut_val = getattr(getattr(tax_folder, "contributor", None), "rut", "empresa") or "empresa"
+    rut_clean = str(rut_val).replace(".", "").replace("-", "").strip()
+
+    with col_rep1:
+        st.markdown("**Dictamen Oficial de Comité (PDF)**")
+        st.caption("Documento formal con veredicto, cupo en M$, memoria de cálculo y sellos.")
+        try:
+            pdf_bytes = PDFReport().generate(tax_folder)
+            st.download_button(
+                label="📄 Descargar Dictamen Ejecutivo (PDF)",
+                data=pdf_bytes,
+                file_name=f"dictamen_comite_{rut_clean}.pdf",
+                mime="application/pdf",
+                use_container_width=True,
+                key="btn_export_pdf",
+            )
+        except Exception as e:
+            st.error(f"Error generando PDF: {e}")
+
+    with col_rep2:
+        st.markdown("**Cartola Completa y Dictamen (Excel)**")
+        st.caption("Libro Excel con 4 pestañas: Dictamen, Flujos F29, Patrimonio F22 y Ficha Socios.")
+        try:
+            excel_bytes = ExcelReport().generate(tax_folder)
+            st.download_button(
+                label="📊 Descargar Cartola y Dictamen (Excel .xlsx)",
+                data=excel_bytes,
+                file_name=f"cartola_dictamen_{rut_clean}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True,
+                key="btn_export_excel",
+            )
+        except Exception as e:
+            st.error(f"Error generando Excel: {e}")
+
+    st.divider()
+    st.subheader("Exportación Personalizada de Ventas y Compras")
     if not tax_folder.monthly_taxes:
         st.info("No hay datos mensuales para exportar.")
         return

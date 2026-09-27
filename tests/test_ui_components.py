@@ -88,11 +88,19 @@ class TestUIComponentsWithRealData:
         show_alerts(tf)
         show_export(tf, auth_role="admin")
         show_export(tf, auth_role="client")
-        show_downloads(b"{}", b"# Report")
+        show_downloads(tf)
 
         report = ExecutiveReport().generate(tf, tf.kpis, tf.analysis)
         assert isinstance(report, str)
         assert len(report) > 100
+
+        pdf_bytes = ExecutiveReport().generate_pdf(tf)
+        assert isinstance(pdf_bytes, bytes)
+        assert pdf_bytes.startswith(b"%PDF-")
+
+        excel_bytes = ExecutiveReport().generate_excel(tf)
+        assert isinstance(excel_bytes, bytes)
+        assert len(excel_bytes) > 1000
 
     def test_all_components_render_exportadora(self, sample_folder_exportadora):
         tf = sample_folder_exportadora
@@ -107,10 +115,19 @@ class TestUIComponentsWithRealData:
         show_alerts(tf)
         show_export(tf, auth_role="admin")
         show_export(tf, auth_role="client")
+        show_downloads(tf)
 
         report = ExecutiveReport().generate(tf, tf.kpis, tf.analysis)
         assert isinstance(report, str)
         assert len(report) > 100
+
+        pdf_bytes = ExecutiveReport().generate_pdf(tf)
+        assert isinstance(pdf_bytes, bytes)
+        assert pdf_bytes.startswith(b"%PDF-")
+
+        excel_bytes = ExecutiveReport().generate_excel(tf)
+        assert isinstance(excel_bytes, bytes)
+        assert len(excel_bytes) > 1000
 
     def test_all_components_with_empty_folder(self):
         """Test defensive behavior when TaxFolder has no data / None fields."""

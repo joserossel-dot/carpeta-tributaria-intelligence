@@ -202,3 +202,63 @@ class TestCaminosMitigacion:
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
         factoring = next(c for c in result.decision.caminos_mitigacion if c.condicion == "cesion_facturas_factoring")
         assert factoring.aplica is False
+
+
+class TestCalibracionConservadoraV22:
+    def test_techo_operativo_8pct_compras(self, benchmark_vacio) -> None:
+        # 12 meses de F29 con ventas y compras
+        f29_list = [_f29(f"2025-{m:02d}", **{"502": "50000000"}) for m in range(1, 13)]
+        # Compras operacionales de 10.000.000 mensuales
+        monthly = [
+            MonthlyTax(
+                periodo=f"2025-{m:02d}",
+                total_ventas=Decimal("50000000"),
+                compras=Decimal("10000000"),
+                compras_operacionales=Decimal("10000000"),
+                debito_fiscal=Decimal("9500000"),
+                credito_fiscal=Decimal("1900000"),
+                iva_determinado=Decimal("7600000"),
+            )
+            for m in range(1, 13)
+        ]
+        f22 = AnnualTaxReturn(anio_tributario="2024", capital_propio_tributario=500_000_000)
+        tf = _tax_folder(f29_list=f29_list, monthly_taxes=monthly, f22_list=[f22])
+        # Run monthly analysis first so monthly_analysis is present
+        from src.services.monthly_tax_service import MonthlyTaxService
+        tf.monthly_analysis = MonthlyTaxService().analyze(monthly)
+
+        result = CreditRiskEngine(benchmark_vacio).calculate(tf)
+        # Techo 8% de compras: 10.000.000 * 0.08 = 800.000
+        mem = result.decision.memoria_calculo
+        assert mem["techo_operativo_8pct"] == 800_000
+        assert result.decision.plazo_sugerido_dias <= 30
+        assert result.decision.cupo_maximo_sugerido == 800_000
+
+    def test_cpt_negativo_da_cupo_cero_y_aval_obligatorio(self, benchmark_vacio) -> None:
+        f29_list = [_f29(f"2025-{m:02d}", **{"502": "50000000"}) for m in range(1, 13)]
+        monthly = [
+            MonthlyTax(
+                periodo=f"2025-{m:02d}",
+                total_ventas=Decimal("50000000"),
+                compras=Decimal("10000000"),
+                compras_operacionales=Decimal("10000000"),
+                debito_fiscal=Decimal("9500000"),
+                credito_fiscal=Decimal("1900000"),
+                iva_determinado=Decimal("7600000"),
+            )
+            for m in range(1, 13)
+        ]
+        # CPT negativo
+        f22 = AnnualTaxReturn(anio_tributario="2024", capital_propio_tributario=-50_000_000)
+        tf = _tax_folder(f29_list=f29_list, monthly_taxes=monthly, f22_list=[f22])
+        from src.services.monthly_tax_service import MonthlyTaxService
+        tf.monthly_analysis = MonthlyTaxService().analyze(monthly)
+
+        result = CreditRiskEngine(benchmark_vacio).calculate(tf)
+        assert result.decision.cupo_aprobado == 0
+        assert result.decision.resultado_base == "RECHAZADO"
+        assert result.decision.plazo_sugerido_dias == 0
+        mem = result.decision.memoria_calculo
+        assert mem["cupo_excepcional_garantizado"] > 0
+        assert "CPT negativo" in result.decision.garantia_exigida
+

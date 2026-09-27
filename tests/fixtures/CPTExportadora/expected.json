@@ -6001,8 +6001,8 @@
         "score": 100,
         "capital_propio_tributario": 3883625370,
         "cupo_solicitado": null,
-        "cupo_referencia": 12000000,
-        "veces_cobertura": 323.64,
+        "cupo_referencia": 5000000,
+        "veces_cobertura": 776.73,
         "confianza": "alta",
         "criterio": "CPT es proxy tributario, no liquidez real"
       }
@@ -6011,18 +6011,25 @@
     "decision": {
       "resultado_base": "APROBADO_CON_CONDICIONES",
       "producto_evaluado": "credito_30_dias",
-      "cupo_maximo_sugerido": 12000000,
-      "cupo_aprobado": 12000000,
+      "cupo_maximo_sugerido": 4800000,
+      "cupo_aprobado": 4800000,
       "plazo_sugerido_dias": 30,
-      "garantia_exigida": "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring",
+      "garantia_exigida": "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días",
       "memoria_calculo": {
         "base_compras_c_base": 602011865,
-        "techo_operativo_20pct": 120402373,
+        "techo_operativo_8pct": 48160949,
+        "techo_operativo_20pct": 48160949,
+        "techo_operativo": 48160949,
+        "margen_operacional_depurado_mensual": 690945121,
+        "freno_flujo_operacional_25pct": 172736280,
         "factor_riesgo_phi": 0.1,
-        "cupo_preliminar": 12040237,
+        "cupo_preliminar": 4816095,
         "capital_propio_tributario": 3883625370,
-        "tope_patrimonial_35pct_cpt": 1359268880,
-        "cupo_maximo_sugerido": 12000000,
+        "tope_patrimonial_12pct_cpt": 776725074,
+        "tope_patrimonial_35pct_cpt": 776725074,
+        "tope_patrimonial_cpt": 776725074,
+        "cupo_maximo_sugerido": 4800000,
+        "cupo_excepcional_garantizado": null,
         "castigos_aplicados": [
           "Contracción crítica de ventas confirmada YoY (3M vs 12M: -49.0%, YoY: -43.4%): -0.50",
           "1 mes sin declaración F29: -0.40"
@@ -6030,17 +6037,17 @@
       },
       "hoja_ruta_comercial": [
         "Veredicto del Comité: APROBADO CON CONDICIONES.",
-        "Línea de crédito comercial autorizada: $12,000,000 CLP (Tope máximo sugerido: $12,000,000 CLP).",
+        "Línea de crédito comercial autorizada: M$ 4.800 (Tope máximo sugerido: M$ 4.800).",
         "Plazo máximo sugerido: 30 días.",
-        "Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring.",
-        "Habilitada alternativa de factoring o cesión de créditos para compras sobre el cupo."
+        "Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días.",
+        "Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo."
       ],
       "caminos_mitigacion": [
         {
           "condicion": "cesion_facturas_factoring",
           "aplica": true,
           "resultado": "APROBADO",
-          "cupo_sugerido": 12000000,
+          "cupo_sugerido": 4800000,
           "justificacion": "alta proporción de ventas facturadas B2B permite ceder facturas como garantía de cobro"
         },
         {
@@ -6062,22 +6069,29 @@
       "Respaldo patrimonial sólido: CPT positivo de $3,883,625,370 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "# DICTAMEN DE COMITÉ DE CRÉDITO B2B — EXPORTADORA GONZAGRI S A (RUT: 99556090-9)\n\n**VEREDICTO:** APROBADO CON CONDICIONES | **SCORE:** 70/100\n**CUPO MÁXIMO SUGERIDO:** $12,000,000 CLP | **PLAZO:** 30 días\n**GARANTÍA EXIGIDA:** Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring\n\n## 1. Memoria Cuantitativa de Asignación de Cupo\n- **Base Mensual de Absorción (C_base):** $602,011,865 CLP\n- **Techo Operativo Proveedor (20%):** $120,402,373 CLP\n- **Factor de Descuento por Riesgo (Phi):** 0.10\n- **Capital Propio Tributario (CPT):** $3,883,625,370 CLP\n- **Ajustes de Riesgo Aplicados:**\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -49.0%, YoY: -43.4%): -0.50\n  * 1 mes sin declaración F29: -0.40\n\n## 3. Hoja de Ruta Comercial\n- ✅ Veredicto del Comité: APROBADO CON CONDICIONES.\n- ✅ Línea de crédito comercial autorizada: $12,000,000 CLP (Tope máximo sugerido: $12,000,000 CLP).\n- ✅ Plazo máximo sugerido: 30 días.\n- ✅ Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring.\n- ✅ Habilitada alternativa de factoring o cesión de créditos para compras sobre el cupo.",
+    "dictamen_ejecutivo": "# DICTAMEN DE COMITÉ DE CRÉDITO B2B — EXPORTADORA GONZAGRI S A (RUT: 99556090-9)\n\n**VEREDICTO:** APROBADO CON CONDICIONES | **SCORE:** 70/100\n**CUPO MÁXIMO SUGERIDO:** $4,800,000 CLP | **PLAZO:** 30 días\n**GARANTÍA EXIGIDA:** Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días\n\n## 1. Memoria Cuantitativa de Asignación de Cupo\n- **Base Mensual de Absorción (C_base):** $602,011,865 CLP\n- **Techo Operativo Proveedor (20%):** $48,160,949 CLP\n- **Factor de Descuento por Riesgo (Phi):** 0.10\n- **Capital Propio Tributario (CPT):** $3,883,625,370 CLP\n- **Ajustes de Riesgo Aplicados:**\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -49.0%, YoY: -43.4%): -0.50\n  * 1 mes sin declaración F29: -0.40\n\n## 3. Hoja de Ruta Comercial\n- ✅ Veredicto del Comité: APROBADO CON CONDICIONES.\n- ✅ Línea de crédito comercial autorizada: M$ 4.800 (Tope máximo sugerido: M$ 4.800).\n- ✅ Plazo máximo sugerido: 30 días.\n- ✅ Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo.",
     "veredicto": "APROBADO_CON_CONDICIONES",
     "score_crediticio": 70.0,
     "categoria_riesgo": "MEDIO",
-    "cupo_maximo_sugerido": 12000000,
-    "cupo_aprobado": 12000000,
+    "cupo_maximo_sugerido": 4800000,
+    "cupo_aprobado": 4800000,
     "plazo_sugerido_dias": 30,
-    "garantia_exigida": "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring",
+    "garantia_exigida": "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días",
     "memoria_calculo": {
       "base_compras_c_base": 602011865,
-      "techo_operativo_20pct": 120402373,
+      "techo_operativo_8pct": 48160949,
+      "techo_operativo_20pct": 48160949,
+      "techo_operativo": 48160949,
+      "margen_operacional_depurado_mensual": 690945121,
+      "freno_flujo_operacional_25pct": 172736280,
       "factor_riesgo_phi": 0.1,
-      "cupo_preliminar": 12040237,
+      "cupo_preliminar": 4816095,
       "capital_propio_tributario": 3883625370,
-      "tope_patrimonial_35pct_cpt": 1359268880,
-      "cupo_maximo_sugerido": 12000000,
+      "tope_patrimonial_12pct_cpt": 776725074,
+      "tope_patrimonial_35pct_cpt": 776725074,
+      "tope_patrimonial_cpt": 776725074,
+      "cupo_maximo_sugerido": 4800000,
+      "cupo_excepcional_garantizado": null,
       "castigos_aplicados": [
         "Contracción crítica de ventas confirmada YoY (3M vs 12M: -49.0%, YoY: -43.4%): -0.50",
         "1 mes sin declaración F29: -0.40"
@@ -6085,10 +6099,10 @@
     },
     "hoja_ruta_comercial": [
       "Veredicto del Comité: APROBADO CON CONDICIONES.",
-      "Línea de crédito comercial autorizada: $12,000,000 CLP (Tope máximo sugerido: $12,000,000 CLP).",
+      "Línea de crédito comercial autorizada: M$ 4.800 (Tope máximo sugerido: M$ 4.800).",
       "Plazo máximo sugerido: 30 días.",
-      "Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring.",
-      "Habilitada alternativa de factoring o cesión de créditos para compras sobre el cupo."
+      "Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días.",
+      "Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo."
     ]
   },
   "metadata": {

@@ -272,8 +272,28 @@ class CreditRiskEngine:
         else:
             c_base = 0.30 * prom_ventas_12m if prom_ventas_12m > 0 else 0.0
 
-        # Paso B: Techo Operativo (20% de compras mensuales para crédito 30 días)
-        techo_operativo = c_base * 0.20
+        # Paso B: Techo Operativo (8% de compras mensuales para crédito proveedor v2.2)
+        techo_operativo = c_base * 0.08
+
+        # Freno por Flujo Operacional Neto Mensual: máx 25% del Margen Operacional Mensual Depurado
+        # max(0, ventas_mensuales_prom - costo_operativo_mensual_prom - iva_determinado_prom)
+        iva_det_prom = 0.0
+        if tax_folder.monthly_taxes:
+            last_12_mt = tax_folder.monthly_taxes[:12]
+            if last_12_mt:
+                iva_det_sum = sum(float(mt.iva_determinado or Decimal("0")) for mt in last_12_mt)
+                iva_det_prom = iva_det_sum / len(last_12_mt)
+
+        margen_operacional_depurado = max(0.0, prom_ventas_12m - c_base - iva_det_prom)
+        freno_flujo = 0.25 * margen_operacional_depurado
+
+        # El cupo base no puede superar el 25% del margen operacional depurado
+        techo_con_flujo = min(techo_operativo, freno_flujo)
+        if freno_flujo < techo_operativo:
+            castigos.append(
+                f"Freno de Flujo Operacional Neto (25% margen depurado: ${freno_flujo:,.0f}): "
+                f"reduce techo de compras de ${techo_operativo:,.0f} a ${freno_flujo:,.0f}"
+            )
 
         # Paso C: Factor de Castigo por Riesgo (Phi)
         phi = 1.0
@@ -333,9 +353,9 @@ class CreditRiskEngine:
             castigos.append("1 mes sin declaración F29: -0.40")
 
         phi = max(0.0, phi)
-        cupo_preliminar = techo_operativo * phi
+        cupo_preliminar = techo_con_flujo * phi
 
-        # Paso D: Freno Patrimonial por CPT
+        # Paso D: Freno Patrimonial por CPT (12% línea limpia, hasta 20% con garantías, $0 si CPT <= 0)
         cpt = None
         f22_validos = [f for f in tax_folder.f22 if f.capital_propio_tributario is not None]
         if f22_validos:
@@ -343,37 +363,54 @@ class CreditRiskEngine:
 
         tope_cpt = None
         aval_obligatorio = False
+        cupo_excepcional = None
+
         if cpt is not None:
             if cpt > 0:
-                tope_cpt = float(cpt) * 0.35
+                requiere_garantia_conductual = (phi < 0.80) or (mora_12m > 0) or (posterg_6m >= 2)
+                pct_cpt = 0.20 if requiere_garantia_conductual else 0.12
+                tope_cpt = float(cpt) * pct_cpt
                 cupo_ajustado = min(cupo_preliminar, tope_cpt)
+                if cupo_preliminar > tope_cpt:
+                    castigos.append(
+                        f"Tope Patrimonial CPT ({int(pct_cpt * 100)}% de CPT: ${tope_cpt:,.0f}): "
+                        f"cupo preliminar ajustado a ${cupo_ajustado:,.0f}"
+                    )
             else:
-                # CPT Negativo: castigo adicional de 50% al techo preliminar y aval obligatorio
-                cupo_ajustado = cupo_preliminar * 0.50
+                # CPT Negativo / Quiebra Técnica: Cupo directo en línea limpia es $0
+                cupo_ajustado = 0.0
                 aval_obligatorio = True
-                castigos.append("Capital Propio Tributario Negativo: Castigo 50% y Aval Solidario Obligatorio")
+                cupo_excepcional = int(round(min(c_base * 0.03, 5_000_000) / 100_000.0) * 100_000)
+                castigos.append(
+                    f"Capital Propio Tributario Negativo (${cpt:,.0f} CLP) — Quiebra Técnica: "
+                    f"Cupo directo en línea limpia rechazado ($0). "
+                    f"Solo evaluable cupo excepcional garantizado de hasta ${cupo_excepcional:,.0f} CLP "
+                    f"contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad"
+                )
         else:
             cupo_ajustado = cupo_preliminar
 
-        # Redondeo calibrado de cupo sugerido:
-        # Entre $200.000 y $1.000.000 -> múltiplos de $100.000 CLP
-        # >= $1.000.000 -> múltiplos de $500.000 CLP
-        # < $200.000 -> 0
-        if cupo_ajustado >= 1_000_000:
-            cupo_maximo_sugerido = int(round(cupo_ajustado / 500_000.0) * 500_000)
-        elif cupo_ajustado >= 200_000:
+        # Redondeo final calibrado a múltiplos limpios de $100.000 CLP (M$ 100)
+        if cupo_ajustado >= 100_000:
             cupo_maximo_sugerido = int(round(cupo_ajustado / 100_000.0) * 100_000)
         else:
             cupo_maximo_sugerido = 0
 
         memoria = {
             "base_compras_c_base": int(round(c_base)),
+            "techo_operativo_8pct": int(round(techo_operativo)),
             "techo_operativo_20pct": int(round(techo_operativo)),
+            "techo_operativo": int(round(techo_operativo)),
+            "margen_operacional_depurado_mensual": int(round(margen_operacional_depurado)),
+            "freno_flujo_operacional_25pct": int(round(freno_flujo)),
             "factor_riesgo_phi": round(phi, 2),
             "cupo_preliminar": int(round(cupo_preliminar)),
             "capital_propio_tributario": cpt,
-            "tope_patrimonial_35pct_cpt": int(round(tope_cpt)) if tope_cpt else None,
+            "tope_patrimonial_12pct_cpt": int(round(tope_cpt)) if tope_cpt is not None else None,
+            "tope_patrimonial_35pct_cpt": int(round(tope_cpt)) if tope_cpt is not None else None,
+            "tope_patrimonial_cpt": int(round(tope_cpt)) if tope_cpt is not None else None,
             "cupo_maximo_sugerido": cupo_maximo_sugerido,
+            "cupo_excepcional_garantizado": cupo_excepcional,
             "castigos_aplicados": castigos,
         }
 
@@ -593,19 +630,35 @@ class CreditRiskEngine:
             resultado_base = "RECHAZADO"
 
         # Determinación de cupo aprobado y garantías
-        if resultado_base == "APROBADO":
+        cpt_val = memoria.get("capital_propio_tributario")
+        cpt_negativo = cpt_val is not None and cpt_val <= 0
+        cupo_excepcional = memoria.get("cupo_excepcional_garantizado")
+
+        if cpt_negativo:
+            resultado_base = "RECHAZADO"
+            cupo_aprobado = 0
+            plazo_dias = 0
+            excep_m = cupo_excepcional // 1000 if cupo_excepcional else 0
+            garantia = (
+                f"Línea limpia directa rechazada ($0) por CPT negativo. "
+                f"Solo evaluable cupo excepcional garantizado de hasta M$ {excep_m:,}".replace(",", ".")
+                + " contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad."
+            )
+        elif resultado_base == "APROBADO":
             cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            plazo_dias = 60 if score_compuesto >= 85 else 30
-            garantia = f"Factura comercial a {plazo_dias} días sin garantías adicionales"
+            cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
+            plazo_dias = 30  # Estándar conservador máximo 30 días
+            garantia = "Factura comercial a 30 días sin garantías adicionales (Línea limpia)"
         elif resultado_base == "APROBADO_CON_CONDICIONES":
             cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            plazo_dias = 30
+            cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
+            plazo_dias = 30  # Estándar conservador máximo 30 días
             if aval_obligatorio:
-                garantia = "Pagaré notarial con aval solidario de los socios controladores (obligatorio por CPT negativo)"
+                garantia = "Pagaré notarial con aval solidario de los socios controladores con patrimonio acreditado"
             elif (hechos.composicion_ventas.pct_facturado or 0) > 0.6:
-                garantia = "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) apta para cesión/factoring"
+                garantia = "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días"
             else:
-                garantia = "Pagaré a la vista firmado por representante legal"
+                garantia = "Pagaré a la vista a 30 días firmado por representante legal"
         else:
             cupo_aprobado = 0
             plazo_dias = 0
@@ -616,7 +669,8 @@ class CreditRiskEngine:
             if resultado_base in ("APROBADO", "APROBADO_CON_CONDICIONES"):
                 resultado_base = "RECHAZADO"
             plazo_dias = 0
-            garantia = "Venta exclusiva al contado / Pago anticipado contra entrega"
+            if not cpt_negativo:
+                garantia = "Venta exclusiva al contado / Pago anticipado contra entrega"
 
         caminos: list[CaminoMitigacion] = []
         alto_facturado = (hechos.composicion_ventas.pct_facturado or 0) > 0.6
@@ -648,14 +702,21 @@ class CreditRiskEngine:
             )
         )
 
+        aprobado_m = cupo_aprobado // 1000
+        maximo_m = cupo_maximo // 1000
         hoja_ruta = [
             f"Veredicto del Comité: {resultado_base.replace('_', ' ')}.",
-            f"Línea de crédito comercial autorizada: ${cupo_aprobado:,.0f} CLP (Tope máximo sugerido: ${cupo_maximo:,.0f} CLP).",
+            f"Línea de crédito comercial autorizada: M$ {aprobado_m:,}".replace(",", ".") + f" (Tope máximo sugerido: M$ {maximo_m:,}).".replace(",", "."),
             f"Plazo máximo sugerido: {plazo_dias} días.",
             f"Condición de respaldo: {garantia}.",
         ]
         if alto_facturado:
-            hoja_ruta.append("Habilitada alternativa de factoring o cesión de créditos para compras sobre el cupo.")
+            hoja_ruta.append("Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo.")
+        if cpt_negativo and cupo_excepcional:
+            hoja_ruta.append(
+                f"Protocolo de mitigación CPT negativo: solo evaluable cupo excepcional de hasta M$ {cupo_excepcional // 1000:,}".replace(",", ".")
+                + " con Aval Solidario calificado con patrimonio acreditado fuera de la sociedad."
+            )
 
         return Decision(
             resultado_base=resultado_base,

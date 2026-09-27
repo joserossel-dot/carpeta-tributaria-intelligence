@@ -14,6 +14,7 @@ from app.components.f22_summary import show_f22_summary
 from app.components.kpi_cards import show_kpi_cards
 from app.components.monthly_chart import show_monthly_chart
 from app.components.representatives import show_representatives
+from app.utils.formatting import format_mclp
 from app.utils.pdf_processor import process_pdf
 from src.leads.lead_manager import LeadManager, validar_email
 
@@ -193,15 +194,20 @@ st.info(
     "Solo se procesan coeficientes estadísticos anónimos para calibración sectorial."
 )
 
-cupo_solicitado = st.number_input(
-    "Cupo de crédito solicitado (CLP, opcional)",
-    min_value=0,
-    value=0,
-    step=1_000_000,
-    help="Se usa para calcular el indicador de Respaldo Estructural (Capital "
-    "Propio Tributario vs. cupo). Si lo dejas en 0, ese indicador queda sin "
-    "calificar.",
-)
+col_cupo1, col_cupo2 = st.columns([3, 1])
+with col_cupo1:
+    cupo_solicitado = st.number_input(
+        "Cupo de crédito solicitado (CLP, opcional)",
+        min_value=0,
+        value=0,
+        step=500_000,
+        help="Se usa para calcular el indicador de Respaldo Estructural (Capital "
+        "Propio Tributario vs. cupo). Si lo dejas en 0, ese indicador queda sin "
+        "calificar.",
+    )
+with col_cupo2:
+    st.caption("Equivalencia en M$")
+    st.markdown(f"**{format_mclp(cupo_solicitado) if cupo_solicitado else 'M$ 0'}**")
 
 col_btn1, col_btn2 = st.columns([1, 4])
 with col_btn1:
@@ -319,4 +325,4 @@ if "result" in st.session_state:
         show_export(result, auth_role=access_tier)
 
     st.divider()
-    show_downloads(json_bytes, markdown_bytes)
+    show_downloads(result)

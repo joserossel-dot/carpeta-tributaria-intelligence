@@ -1,6 +1,6 @@
 import streamlit as st
 
-from app.utils.formatting import fmt_currency
+from app.utils.formatting import format_mclp
 from src.models.tax_folder import TaxFolder
 
 
@@ -16,12 +16,14 @@ def show_kpi_cards(tax_folder: TaxFolder) -> None:
 
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
-        st.metric("Ventas últimos 12 meses", fmt_currency(ventas_12m))
+        st.metric("Ventas 12M", format_mclp(ventas_12m))
     with col2:
-        st.metric("Compras últimos 12 meses", fmt_currency(compras_12m))
+        st.metric("Compras 12M", format_mclp(compras_12m))
     with col3:
-        st.metric("Promedio ventas mensual", fmt_currency(prom_ventas))
+        st.metric("Prom. ventas mensual", format_mclp(prom_ventas))
     with col4:
-        st.metric("Promedio compras mensual", fmt_currency(prom_compras))
+        st.metric("Prom. compras mensual", format_mclp(prom_compras))
     with col5:
         st.metric("F29 procesados", str(cant_f29))
+
+    st.caption("ℹ️ Cifras expresadas en Miles de Pesos Chilenos (M$)")

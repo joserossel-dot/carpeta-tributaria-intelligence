@@ -27,6 +27,16 @@ class ExecutiveReport:
 
         return "\n".join(lines)
 
+    def generate_pdf(self, tax_folder: TaxFolder) -> bytes:
+        """Genera un PDF corporativo del Dictamen Ejecutivo 100% en memoria RAM (Zero-PII)."""
+        from src.reports.pdf_report import PDFReport
+        return PDFReport().generate(tax_folder)
+
+    def generate_excel(self, tax_folder: TaxFolder) -> bytes:
+        """Genera una Cartola y Dictamen en Excel (.xlsx) con 4 pestañas 100% en RAM."""
+        from src.reports.excel_report import ExcelReport
+        return ExcelReport().generate(tax_folder)
+
     @staticmethod
     def _add_header(lines: list[str]) -> None:
         lines.append("# Informe Ejecutivo — Carpeta Tributaria\n")
