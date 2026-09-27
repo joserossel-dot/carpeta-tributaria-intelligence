@@ -75,45 +75,49 @@ class ExcelReport:
             ws.column_dimensions[col_letter].width = min(max(max_len + 3, min_width), max_width)
 
     # ------------------------------------------------------------------
-    # Pestaña 1: Dictamen Comité (M$)
+    # Pestaña 1: Recomendación Línea (M$)
     # ------------------------------------------------------------------
     def _build_dictamen_sheet(self, wb: openpyxl.Workbook, tf: TaxFolder) -> None:
-        ws = wb.create_sheet(title="Dictamen Comité (M$)")
+        ws = wb.create_sheet(title="Recomendación Línea (M$)")
         cr = getattr(tf, "credit_risk", None)
         c = getattr(tf, "contributor", None)
 
         # Título
-        ws.cell(row=1, column=1, value="CAVILARIA SpA — Comité de Crédito B2B").font = self.font_title
+        ws.cell(row=1, column=1, value="CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial").font = self.font_title
         ws.cell(
             row=2,
             column=1,
-            value="Dictamen Ejecutivo de Asignación de Cupo Comercial y Memoria Cuantitativa (v2.2)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.2)",
         ).font = self.font_caption
         ws.cell(
             row=3,
             column=1,
-            value="ℹ️ Cifras expresadas en Miles de Pesos Chilenos (M$) — Sello de Retención Cero (Zero-PII Ley 21.719)",
+            value="Nota Legal: Cifras en Miles de Pesos Chilenos (M$). Recomendación referencial y no vinculante basada en declaraciones tributarias SII.",
         ).font = self.font_caption
 
-        # Resumen de Dictamen
+        # Resumen de Evaluación Referencial
         row = 5
-        self._apply_headers(ws, row, ["Parámetro Ejecutivo de Evaluación", "Resultado del Comité", "Detalle / Resguardo"])
+        self._apply_headers(ws, row, ["Parámetro de Evaluación", "Recomendación Referencial", "Detalle / Resguardo"])
         row += 1
 
-        veredicto = str(getattr(cr, "veredicto", "OBSERVADO")).replace("_", " ") if cr else "OBSERVADO"
+        evaluacion = str(
+            getattr(cr, "evaluacion_referencial", None)
+            or getattr(cr, "veredicto", "OBSERVADO")
+        ).replace("_", " ") if cr else "OBSERVADO"
         score_val = getattr(cr, "score_crediticio", 0.0) if cr else 0.0
         cat_val = getattr(cr, "categoria_riesgo", "MEDIO") if cr else "MEDIO"
         cupo_ap = getattr(cr, "cupo_aprobado", 0) if cr else 0
         plazo_dias = getattr(cr, "plazo_sugerido_dias", 0) if cr else 0
-        garantia = getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
-        dictamen = getattr(cr, "dictamen_ejecutivo", "En evaluación") if cr else "En evaluación"
+        resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
+        protocolo = getattr(cr, "protocolo_operativo", None) or "Procedimiento comercial estándar"
 
         params = [
-            ("Veredicto de Crédito", veredicto, dictamen),
-            ("Score Crediticio", f"{score_val:.1f} / 100", f"Categoría de Riesgo: {cat_val}"),
-            ("Cupo Aprobado (M$)", round(cupo_ap / 1000.0) if cupo_ap else 0, f"Equivalente a {format_mclp(cupo_ap)}"),
-            ("Plazo Recomendado", f"{plazo_dias} días" if plazo_dias else "Contado", "Estándar máximo 30 días para crédito comercial"),
-            ("Garantía Exigida", garantia, "Condición legal habilitante para liberación de línea"),
+            ("Evaluación Referencial", evaluacion, f"Categoría de Riesgo: {cat_val}"),
+            ("Score Crediticio", f"{score_val:.1f} / 100", f"Evaluación cuantitativa sobre declaraciones tributarias SII"),
+            ("Línea Máxima Sugerida (M$)", round(cupo_ap / 1000.0) if cupo_ap else 0, f"Equivalente a {format_mclp(cupo_ap)}"),
+            ("Plazo Sugerido", f"{plazo_dias} días" if plazo_dias else "Contado", "Estándar máximo 30 días para crédito comercial" if plazo_dias else "Pago anticipado o contra entrega"),
+            ("Resguardo Comercial Sugerido", resguardo, "Condición legal recomendada para mitigación de riesgo"),
+            ("Protocolo Operativo Sugerido", protocolo, "Procedimiento recomendado para despacho y facturación"),
         ]
 
         for p, r, d in params:
@@ -132,7 +136,7 @@ class ExcelReport:
 
         # Memoria de Cálculo
         row += 2
-        ws.cell(row=row, column=1, value="Memoria de Cálculo Cuantitativa del Cupo Comercial (M$)").font = self.font_title
+        ws.cell(row=row, column=1, value="Memoria de Cálculo Cuantitativa de Línea Comercial (M$)").font = self.font_title
         row += 1
         self._apply_headers(ws, row, ["Paso del Algoritmo", "Monto (M$)", "Metodología / Fundamento Cuantitativo"])
         row += 1
@@ -151,11 +155,11 @@ class ExcelReport:
             ("Paso A: Base de Compras Operacionales (C_base)", round(base_c / 1000.0) if base_c else 0, "Promedio mensual compras netas 12M o costo operativo proxy"),
             ("Paso B: Techo Operativo Proveedor (8%)", round(techo_op / 1000.0) if techo_op else 0, "Techo de absorción individual conservador por proveedor (8%)"),
             ("Freno de Flujo Operacional Neto (25%)", round(freno_flujo / 1000.0) if freno_flujo else 0, "25% del Margen Operacional Mensual Depurado [Ventas - Compras - IVA Det.]"),
-            ("Paso C: Factor de Calidad Crediticia (Φ)", round(phi_v, 2), "Factor de ajuste conductual por mora F29, postergación y caída YoY"),
-            ("Cupo Preliminar Ajustado por Riesgo", round(cupo_pre / 1000.0) if cupo_pre else 0, "min(Techo 8%, Freno Flujo 25%) × Φ"),
+            ("Paso C: Factor de Ajuste Conductual", round(phi_v, 2), "Factor de ajuste conductual por mora F29, postergación y variaciones de venta"),
+            ("Cupo Preliminar Ajustado por Riesgo", round(cupo_pre / 1000.0) if cupo_pre else 0, "min(Techo 8%, Freno Flujo 25%) × Factor Conductual"),
             ("Capital Propio Tributario (CPT)", round(cpt_val / 1000.0) if cpt_val is not None else "Sin F22", "Patrimonio tributario según declaración anual de renta (F22)"),
             ("Paso D: Freno Patrimonial CPT", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", "12% CPT en línea limpia / 20% con garantías ($0 si CPT <= 0)"),
-            ("Cupo Máximo Sugerido Final", round(cupo_max / 1000.0) if cupo_max else 0, "Redondeo limpio a múltiplos de M$ 100 ($100.000 CLP)"),
+            ("Línea Máxima Sugerida Final", round(cupo_max / 1000.0) if cupo_max else 0, "Redondeo limpio a múltiplos de M$ 100 ($100.000 CLP)"),
         ]
 
         for s, v, f in calc_steps:
@@ -172,16 +176,16 @@ class ExcelReport:
                 ws.cell(row=row, column=col).border = self.border_thin
             row += 1
 
-        # Banderas Rojas y Hoja de Ruta
+        # Alertas y Hoja de Ruta
         row += 2
-        ws.cell(row=row, column=1, value="Banderas Rojas y Hoja de Ruta").font = self.font_title
+        ws.cell(row=row, column=1, value="Alertas y Recomendaciones Comerciales").font = self.font_title
         row += 1
-        self._apply_headers(ws, row, ["Tipo", "Descripción", "Impacto en Riesgo"])
+        self._apply_headers(ws, row, ["Tipo", "Descripción", "Observación / Sugerencia"])
         row += 1
 
         banderas = getattr(cr, "banderas_rojas", []) if cr else []
         for b in banderas:
-            ws.cell(row=row, column=1, value="Bandera Roja").font = self.font_bold
+            ws.cell(row=row, column=1, value="Alerta Forense").font = self.font_bold
             ws.cell(row=row, column=2, value=b).font = self.font_regular
             ws.cell(row=row, column=3, value="Riesgo de insolvencia o mora tributaria").font = self.font_caption
             for col in range(1, 4):
@@ -190,9 +194,9 @@ class ExcelReport:
 
         hoja_ruta = getattr(cr, "hoja_ruta_comercial", []) if cr else []
         for r in hoja_ruta:
-            ws.cell(row=row, column=1, value="Hoja de Ruta").font = self.font_bold
+            ws.cell(row=row, column=1, value="Sugerencia / Protocolo").font = self.font_bold
             ws.cell(row=row, column=2, value=r).font = self.font_regular
-            ws.cell(row=row, column=3, value="Recomendación comercial del Comité").font = self.font_caption
+            ws.cell(row=row, column=3, value="Recomendación operativa y comercial").font = self.font_caption
             for col in range(1, 4):
                 ws.cell(row=row, column=col).border = self.border_thin
             row += 1
@@ -204,8 +208,8 @@ class ExcelReport:
     # ------------------------------------------------------------------
     def _build_f29_sheet(self, wb: openpyxl.Workbook, tf: TaxFolder) -> None:
         ws = wb.create_sheet(title="Flujos F29 (M$)")
-        ws.cell(row=1, column=1, value="Serie Histórica de Declaraciones Mensuales F29 (M$)").font = self.font_title
-        ws.cell(row=2, column=1, value="Cifras en Miles de Pesos Chilenos (M$) — Fuente: F29 SII").font = self.font_caption
+        ws.cell(row=1, column=1, value="Serie Histórica Completa de Declaraciones Mensuales F29 (M$)").font = self.font_title
+        ws.cell(row=2, column=1, value="Cifras en Miles de Pesos Chilenos (M$) — Orden: Más reciente a más antiguo").font = self.font_caption
 
         headers = [
             "Período",
@@ -226,8 +230,11 @@ class ExcelReport:
         monthly_taxes = getattr(tf, "monthly_taxes", []) or []
         f29_map = {f.periodo: f for f in getattr(tf, "f29", []) or [] if getattr(f, "periodo", None)}
 
+        # Ordenar todos los meses disponibles desde el más reciente al más antiguo
+        sorted_mt = sorted(monthly_taxes, key=lambda m: m.periodo or "", reverse=True)
+
         row = 5
-        for mt in monthly_taxes[:24]:
+        for mt in sorted_mt:
             p = getattr(mt, "periodo", "")
             f29_obj = f29_map.get(p)
             posterg = "NO"
@@ -244,14 +251,21 @@ class ExcelReport:
                     return 0
                 return round(float(val) / 1000.0)
 
+            compras_op = getattr(mt, "compras_operacionales", None)
+            activo_fijo = getattr(mt, "activo_fijo", None)
+            if compras_op is not None:
+                total_compras = compras_op + (activo_fijo or Decimal("0"))
+            else:
+                total_compras = getattr(mt, "compras", None)
+
             vals = [
                 p,
                 to_m(getattr(mt, "ventas_afectas", None)),
                 to_m(getattr(mt, "ventas_exentas", None)),
                 to_m(getattr(mt, "ventas_exportacion", None)),
                 to_m(getattr(mt, "total_ventas", None)),
-                to_m(getattr(mt, "compras_operacionales", None)),
-                to_m(getattr(mt, "compras", None)),
+                to_m(compras_op),
+                to_m(total_compras),
                 to_m(getattr(mt, "debito_fiscal", None)),
                 to_m(getattr(mt, "credito_fiscal", None)),
                 to_m(getattr(mt, "iva_determinado", None)),
@@ -299,8 +313,9 @@ class ExcelReport:
         self._apply_headers(ws, 4, headers)
 
         f22_list = getattr(tf, "f22", []) or []
+        sorted_f22 = sorted(f22_list, key=lambda f: f.anio_tributario or "", reverse=True)
         row = 5
-        for f in f22_list:
+        for f in sorted_f22:
             def to_m(val):
                 if val is None:
                     return 0

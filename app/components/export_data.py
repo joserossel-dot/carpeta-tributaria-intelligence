@@ -18,14 +18,14 @@ def show_export(tax_folder: TaxFolder, auth_role: str = "client") -> None:
     rut_clean = str(rut_val).replace(".", "").replace("-", "").strip()
 
     with col_rep1:
-        st.markdown("**Dictamen Oficial de Comité (PDF)**")
-        st.caption("Documento formal con veredicto, cupo en M$, memoria de cálculo y sellos.")
+        st.markdown("**Informe de Riesgo y Evaluación Comercial (PDF)**")
+        st.caption("Documento formal con evaluación referencial, línea en M$, memoria de cálculo y resguardos.")
         try:
             pdf_bytes = PDFReport().generate(tax_folder)
             st.download_button(
-                label="📄 Descargar Dictamen Ejecutivo (PDF)",
+                label="📄 Descargar Informe de Riesgo (PDF)",
                 data=pdf_bytes,
-                file_name=f"dictamen_comite_{rut_clean}.pdf",
+                file_name=f"informe_riesgo_{rut_clean}.pdf",
                 mime="application/pdf",
                 use_container_width=True,
                 key="btn_export_pdf",
@@ -34,14 +34,14 @@ def show_export(tax_folder: TaxFolder, auth_role: str = "client") -> None:
             st.error(f"Error generando PDF: {e}")
 
     with col_rep2:
-        st.markdown("**Cartola Completa y Dictamen (Excel)**")
-        st.caption("Libro Excel con 4 pestañas: Dictamen, Flujos F29, Patrimonio F22 y Ficha Socios.")
+        st.markdown("**Cartola Completa de Evaluación (Excel)**")
+        st.caption("Libro Excel con 4 pestañas: Recomendación, Flujos F29, Patrimonio F22 y Ficha Socios.")
         try:
             excel_bytes = ExcelReport().generate(tax_folder)
             st.download_button(
-                label="📊 Descargar Cartola y Dictamen (Excel .xlsx)",
+                label="📊 Descargar Cartola de Evaluación (Excel .xlsx)",
                 data=excel_bytes,
-                file_name=f"cartola_dictamen_{rut_clean}.xlsx",
+                file_name=f"cartola_evaluacion_{rut_clean}.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 use_container_width=True,
                 key="btn_export_excel",

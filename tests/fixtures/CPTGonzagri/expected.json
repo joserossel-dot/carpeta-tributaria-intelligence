@@ -3909,11 +3909,15 @@
     "score_compuesto": 95,
     "decision": {
       "resultado_base": "APROBADO",
+      "evaluacion_referencial": "RIESGO BAJO — Línea Sugerida",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 700000,
       "cupo_aprobado": 700000,
+      "linea_maxima_sugerida": 700000,
       "plazo_sugerido_dias": 30,
-      "garantia_exigida": "Factura comercial a 30 días sin garantías adicionales (Línea limpia)",
+      "garantia_exigida": "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+      "resguardo_comercial_sugerido": "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+      "protocolo_operativo": "Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).",
       "memoria_calculo": {
         "base_compras_c_base": 8277051,
         "techo_operativo_8pct": 662164,
@@ -3934,11 +3938,12 @@
         ]
       },
       "hoja_ruta_comercial": [
-        "Veredicto del Comité: APROBADO.",
-        "Línea de crédito comercial autorizada: M$ 700 (Tope máximo sugerido: M$ 700).",
-        "Plazo máximo sugerido: 30 días.",
-        "Condición de respaldo: Factura comercial a 30 días sin garantías adicionales (Línea limpia).",
-        "Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo."
+        "Evaluación Referencial: RIESGO BAJO — Línea Sugerida.",
+        "Línea de crédito comercial sugerida: M$ 700 (Tope máximo sugerido: M$ 700).",
+        "Plazo sugerido: 30 días.",
+        "Resguardo comercial sugerido: Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+        "Protocolo operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).",
+        "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
       ],
       "caminos_mitigacion": [
         {
@@ -3965,14 +3970,18 @@
       "Respaldo patrimonial sólido: CPT positivo de $5,515,454,480 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "# DICTAMEN DE COMITÉ DE CRÉDITO B2B — GONZAGRI S.A. (RUT: 76444470-1)\n\n**VEREDICTO:** APROBADO | **SCORE:** 95/100\n**CUPO MÁXIMO SUGERIDO:** $700,000 CLP | **PLAZO:** 30 días\n**GARANTÍA EXIGIDA:** Factura comercial a 30 días sin garantías adicionales (Línea limpia)\n\n## 1. Memoria Cuantitativa de Asignación de Cupo\n- **Base Mensual de Absorción (C_base):** $8,277,051 CLP\n- **Techo Operativo Proveedor (20%):** $662,164 CLP\n- **Factor de Descuento por Riesgo (Phi):** 1.00\n- **Capital Propio Tributario (CPT):** $5,515,454,480 CLP\n- **Ajustes de Riesgo Aplicados:**\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n\n## 3. Hoja de Ruta Comercial\n- ✅ Veredicto del Comité: APROBADO.\n- ✅ Línea de crédito comercial autorizada: M$ 700 (Tope máximo sugerido: M$ 700).\n- ✅ Plazo máximo sugerido: 30 días.\n- ✅ Condición de respaldo: Factura comercial a 30 días sin garantías adicionales (Línea limpia).\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo.",
-    "veredicto": "APROBADO",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nEvaluación: RIESGO BAJO — Línea Sugerida | Score: 95/100\nLínea Máxima Sugerida: $700,000 CLP | Plazo: 30 días\nResguardo Sugerido: Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).\nProtocolo Operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): $8,277,051 CLP\n- Techo Operativo Proveedor (8%): $662,164 CLP\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): $5,515,454,480 CLP\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n\n3. Recomendaciones Operativas:\n- ✅ Evaluación Referencial: RIESGO BAJO — Línea Sugerida.\n- ✅ Línea de crédito comercial sugerida: M$ 700 (Tope máximo sugerido: M$ 700).\n- ✅ Plazo sugerido: 30 días.\n- ✅ Resguardo comercial sugerido: Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).\n- ✅ Protocolo operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
+    "veredicto": "RIESGO BAJO — Línea Sugerida",
+    "evaluacion_referencial": "RIESGO BAJO — Línea Sugerida",
     "score_crediticio": 95.0,
     "categoria_riesgo": "BAJO",
     "cupo_maximo_sugerido": 700000,
     "cupo_aprobado": 700000,
+    "linea_maxima_sugerida": 700000,
     "plazo_sugerido_dias": 30,
-    "garantia_exigida": "Factura comercial a 30 días sin garantías adicionales (Línea limpia)",
+    "garantia_exigida": "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+    "resguardo_comercial_sugerido": "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+    "protocolo_operativo": "Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).",
     "memoria_calculo": {
       "base_compras_c_base": 8277051,
       "techo_operativo_8pct": 662164,
@@ -3993,11 +4002,12 @@
       ]
     },
     "hoja_ruta_comercial": [
-      "Veredicto del Comité: APROBADO.",
-      "Línea de crédito comercial autorizada: M$ 700 (Tope máximo sugerido: M$ 700).",
-      "Plazo máximo sugerido: 30 días.",
-      "Condición de respaldo: Factura comercial a 30 días sin garantías adicionales (Línea limpia).",
-      "Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo."
+      "Evaluación Referencial: RIESGO BAJO — Línea Sugerida.",
+      "Línea de crédito comercial sugerida: M$ 700 (Tope máximo sugerido: M$ 700).",
+      "Plazo sugerido: 30 días.",
+      "Resguardo comercial sugerido: Línea sugerida abierta sin pagaré previo (Crédito comercial estándar).",
+      "Protocolo operativo: Solicitud de crédito y ficha de cliente firmada por representante legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES, CARLOS DAMIAN BOADA CAMPOS + despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983).",
+      "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
     ]
   },
   "metadata": {

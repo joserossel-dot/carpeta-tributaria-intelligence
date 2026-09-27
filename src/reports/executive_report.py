@@ -110,26 +110,30 @@ class ExecutiveReport:
         cr = getattr(tf, "credit_risk", None)
         if not cr:
             return
-        lines.append("## Dictamen de Comité de Crédito B2B v2.0\n")
-        lines.append(f"- **Veredicto:** {getattr(cr, 'veredicto', 'OBSERVADO')}")
+        lines.append("## Evaluación Tributaria y Recomendación de Crédito Comercial\n")
+        eval_ref = getattr(cr, 'evaluacion_referencial', getattr(cr, 'veredicto', 'OBSERVADO'))
+        lines.append(f"- **Evaluación Referencial:** {eval_ref}")
         score_val = getattr(cr, "score_crediticio", 0.0)
         cat_val = getattr(cr, "categoria_riesgo", "MEDIO")
         lines.append(f"- **Score Crediticio:** {score_val:.1f}/100 ({cat_val})")
         cupo_ap = getattr(cr, "cupo_aprobado", None)
         if cupo_ap is not None:
-            lines.append(f"- **Cupo Aprobado:** ${cupo_ap:,.0f}".replace(",", "."))
+            lines.append(f"- **Línea Máxima Sugerida:** ${cupo_ap:,.0f}".replace(",", "."))
         cupo_max = getattr(cr, "cupo_maximo_sugerido", None)
         if cupo_max is not None:
-            lines.append(f"- **Cupo Máximo Sugerido:** ${cupo_max:,.0f}".replace(",", "."))
+            lines.append(f"- **Tope Máximo Sugerido:** ${cupo_max:,.0f}".replace(",", "."))
         plazo = getattr(cr, "plazo_sugerido_dias", None)
         if plazo is not None:
-            lines.append(f"- **Plazo Sugerido:** {plazo} días")
-        garantia = getattr(cr, "garantia_exigida", None)
+            lines.append(f"- **Plazo Sugerido:** {plazo} días" if plazo else "- **Plazo Sugerido:** Contado (0 días)")
+        garantia = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", None)
         if garantia:
-            lines.append(f"- **Garantía Exigida:** {garantia}")
+            lines.append(f"- **Resguardo Comercial Sugerido:** {garantia}")
+        protocolo = getattr(cr, "protocolo_operativo", None)
+        if protocolo:
+            lines.append(f"- **Protocolo Operativo:** {protocolo}")
         dictamen = getattr(cr, "dictamen_ejecutivo", None)
         if dictamen:
-            lines.append(f"\n> **Dictamen:** {dictamen}\n")
+            lines.append(f"\n> **Recomendación Referencial:**\n> {dictamen}\n")
 
         memoria = getattr(cr, "memoria_calculo", None)
         if memoria and isinstance(memoria, dict):

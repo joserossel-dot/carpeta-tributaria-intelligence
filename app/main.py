@@ -20,7 +20,7 @@ from src.leads.lead_manager import LeadManager, validar_email
 
 # 1. Configuración de Marca Blanca y Paginación
 st.set_page_config(
-    page_title="Cavilaria | Comité de Crédito B2B",
+    page_title="Cavilaria | Evaluación Tributaria y Crédito B2B",
     page_icon="🏢",
     layout="wide",
 )
@@ -46,12 +46,12 @@ st.markdown(
     """
     <div style="padding: 0.5rem 0 1.25rem 0; border-bottom: 2px solid #E2E8F0; margin-bottom: 1.5rem;">
       <h1 style="color: #0F172A; margin: 0; font-size: 1.85rem; font-weight: 800; letter-spacing: -0.5px;">
-        CAVILARIA SpA — Comité de Crédito y Riesgo B2B
+        CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial
       </h1>
       <p style="color: #64748B; margin: 0.35rem 0 0 0; font-size: 0.95rem;">
-        Motor cuantitativo de evaluación de riesgo comercial y asignación de cupo.
+        Motor cuantitativo de evaluación tributaria y recomendación de línea de crédito comercial B2B.
         <span style="display: inline-block; margin-left: 8px; padding: 2px 8px; background: #EEF2F6; border-radius: 4px; font-size: 0.85rem; color: #1E293B;">
-          🔒 Sello de <strong>Retención Cero (Ley N° 21.719)</strong> — 
+          🔒 Cumplimiento <strong>Ley N° 21.719</strong> — 
           <a href="https://cavilaria.com/politica-de-privacidad/" target="_blank" style="color: #0284C7; text-decoration: underline; font-weight: 500;">
             Política de Privacidad
           </a>
@@ -75,10 +75,10 @@ if not st.session_state.get("authenticated", False):
     )
 
     with tab_free:
-        st.markdown("#### Activa tu Prueba Gratuita de Comité de Crédito B2B")
+        st.markdown("#### Activa tu Prueba Gratuita (2 Evaluaciones)")
         st.markdown(
             "Ingresa tus datos comerciales para evaluar hasta **2 Carpetas Tributarias completas** "
-            "sin costo y obtener el dictamen cuantitativo de cupo al instante."
+            "sin costo y obtener la recomendación cuantitativa de crédito al instante."
         )
         with st.form("free_trial_form"):
             col_f1, col_f2 = st.columns(2)
@@ -189,9 +189,7 @@ uploaded_file = st.file_uploader(
 )
 
 st.info(
-    "🔒 **Privacidad Garantizada (Zero-PII):** Su PDF se procesa exclusivamente en memoria RAM volátil "
-    "y se destruye al instante. No almacenamos RUTs, razones sociales ni documentos. "
-    "Solo se procesan coeficientes estadísticos anónimos para calibración sectorial."
+    "🔒 **Privacidad (Ley N° 21.719):** Los documentos se procesan exclusivamente en memoria temporal para generar este análisis y no son almacenados por Cavilaria SpA."
 )
 
 col_cupo1, col_cupo2 = st.columns([3, 1])

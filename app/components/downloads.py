@@ -5,12 +5,9 @@ from src.reports.pdf_report import PDFReport
 
 
 def show_downloads(target: TaxFolder | bytes, markdown_bytes: bytes | None = None) -> None:
-    """Muestra los botones de descarga de Dictamen Ejecutivo en PDF y Cartola en Excel.
-    
-    Generación 100% en memoria RAM (Zero-PII) sin tocar disco.
-    """
-    st.subheader("Descargas Ejecutivas de Comité (Zero-PII)")
-    st.caption("Documentos oficiales generados en memoria volátil conforme a la Ley 21.719.")
+    """Muestra los botones de descarga de Informe de Riesgo en PDF y Cartola de Evaluación en Excel."""
+    st.subheader("Descarga de Informes y Cartola de Evaluación")
+    st.caption("Cifras en Miles de Pesos Chilenos (M$). Procesamiento seguro en memoria temporal.")
 
     if isinstance(target, TaxFolder):
         tf = target
@@ -27,17 +24,17 @@ def show_downloads(target: TaxFolder | bytes, markdown_bytes: bytes | None = Non
         col1, col2 = st.columns(2)
         with col1:
             st.download_button(
-                label="📄 Descargar Dictamen Ejecutivo (PDF)",
+                label="📄 Descargar Informe de Riesgo (PDF)",
                 data=pdf_data,
-                file_name=f"dictamen_comite_{rut_clean}.pdf",
+                file_name=f"informe_riesgo_{rut_clean}.pdf",
                 mime="application/pdf",
                 use_container_width=True,
             )
         with col2:
             st.download_button(
-                label="📊 Descargar Cartola y Dictamen (Excel .xlsx)",
+                label="📊 Descargar Cartola de Evaluación (Excel .xlsx)",
                 data=excel_data,
-                file_name=f"cartola_dictamen_{rut_clean}.xlsx",
+                file_name=f"cartola_evaluacion_{rut_clean}.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 use_container_width=True,
             )

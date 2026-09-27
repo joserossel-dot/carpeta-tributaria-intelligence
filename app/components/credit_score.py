@@ -13,7 +13,7 @@ _CONFIANZA_LABEL = {
 
 
 def show_credit_score(tax_folder: TaxFolder) -> None:
-    st.subheader("Comité de Crédito B2B v2.0 — Asignación de Cupo Comercial")
+    st.subheader("CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial")
 
     cr = getattr(tax_folder, "credit_risk", None)
     if cr is None:
@@ -32,40 +32,40 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
 
     st.divider()
 
-    # --- PANEL EJECUTIVO DE COMITÉ ---
+    # --- PANEL EJECUTIVO DE EVALUACIÓN REFERENCIAL ---
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         score_val = getattr(cr, "score_crediticio", 0.0)
         cat_val = getattr(cr, "categoria_riesgo", "MEDIO")
-        st.metric("Score Crediticio", f"{score_val:.1f}/100", cat_val)
+        st.metric("Score Crediticio", f"{score_val:.1f}/100", f"Riesgo {cat_val}")
     with c2:
-        veredicto_val = getattr(cr, "veredicto", "OBSERVADO")
-        _show_veredicto_badge(veredicto_val)
+        eval_val = getattr(cr, "evaluacion_referencial", None) or getattr(cr, "veredicto", "OBSERVADO")
+        _show_veredicto_badge(eval_val)
     with c3:
         cupo_ap = getattr(cr, "cupo_aprobado", None)
         cupo_str = format_mclp(cupo_ap) if cupo_ap is not None else "—"
-        st.metric("Cupo Aprobado", cupo_str)
+        st.metric("Línea Máxima Sugerida", cupo_str)
     with c4:
         plazo = getattr(cr, "plazo_sugerido_dias", None)
         plazo_str = f"{plazo} días" if plazo else "Contado"
-        garantia = getattr(cr, "garantia_exigida", None) or "Sin garantía"
+        garantia = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", None) or "Sin garantía"
         st.metric("Plazo Sugerido", plazo_str, garantia)
 
     st.caption("ℹ️ Cifras expresadas en Miles de Pesos Chilenos (M$)")
 
     dictamen = getattr(cr, "dictamen_ejecutivo", None)
     if dictamen:
-        if "RECHAZADO" in str(veredicto_val):
-            st.error(f"**Dictamen de Comité:** {dictamen}")
-        elif "APROBADO" in str(veredicto_val) and "CONDICIONES" not in str(veredicto_val):
-            st.success(f"**Dictamen de Comité:** {dictamen}")
+        if "ALTO" in str(eval_val) or "RECHAZADO" in str(eval_val):
+            st.error(f"**Recomendación Referencial:**\n\n{dictamen}")
+        elif "BAJO" in str(eval_val) or ("APROBADO" in str(eval_val) and "CONDICIONES" not in str(eval_val)):
+            st.success(f"**Recomendación Referencial:**\n\n{dictamen}")
         else:
-            st.warning(f"**Dictamen de Comité:** {dictamen}")
+            st.warning(f"**Recomendación Referencial:**\n\n{dictamen}")
 
     # --- MEMORIA DE CÁLCULO CUANTITATIVA ---
     memoria = getattr(cr, "memoria_calculo", None)
     if memoria and isinstance(memoria, dict):
-        with st.expander("📊 Memoria de Cálculo Cuantitativa de Cupo (M$)", expanded=True):
+        with st.expander("📊 Memoria de Cálculo Cuantitativa de Línea (M$)", expanded=True):
             mc_c1, mc_c2, mc_c3, mc_c4 = st.columns(4)
             with mc_c1:
                 st.caption("Paso A: Base Compras (C_base)")
@@ -80,9 +80,9 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
                 freno_flujo = memoria.get("freno_flujo_operacional_25pct", 0)
                 st.markdown(f"**{format_mclp(freno_flujo)}**")
             with mc_c4:
-                st.caption("Paso C: Calidad Riesgo (Φ)")
+                st.caption("Paso C: Ajuste Conductual")
                 phi_v = memoria.get("factor_riesgo_phi") or memoria.get("factor_phi_calidad_crediticia", 1.0)
-                st.markdown(f"**{phi_v:.2f}**")
+                st.markdown(f"**{int(round(phi_v * 100))}%**")
 
             mc_c5, mc_c6, mc_c7, mc_c8 = st.columns(4)
             with mc_c5:
@@ -98,7 +98,7 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
                 tope_c = memoria.get("tope_patrimonial_cpt") or memoria.get("tope_patrimonial_12pct_cpt") or memoria.get("tope_patrimonial_35pct_cpt")
                 st.markdown(f"**{format_mclp(tope_c)}**" if tope_c is not None else "**Sin límite**")
             with mc_c8:
-                st.caption("Cupo Máximo Sugerido")
+                st.caption("Línea Máxima Sugerida")
                 cupo_max = memoria.get("cupo_maximo_sugerido", 0)
                 st.markdown(f"**{format_mclp(cupo_max)}**")
 
@@ -209,15 +209,18 @@ def _show_calidad_datos(calidad) -> None:
 
 
 def _show_veredicto_badge(resultado: str) -> None:
-    colores = {
-        "APROBADO": "green",
-        "APROBADO_CON_CONDICIONES": "orange",
-        "RECHAZADO": "red",
-        "OBSERVADO": "orange",
-        "NO_EVALUABLE": "gray",
-    }
-    color = colores.get(str(resultado), "gray")
-    st.markdown(f"### :{color}[**{str(resultado).replace('_', ' ')}**]")
+    res = str(resultado)
+    if "BAJO" in res or ("APROBADO" in res and "CONDICIONES" not in res):
+        color = "green"
+    elif "MEDIO-ALTO" in res:
+        color = "orange"
+    elif "MEDIO" in res or "CONDICIONES" in res or "OBSERVADO" in res:
+        color = "orange"
+    elif "ALTO" in res or "RECHAZADO" in res:
+        color = "red"
+    else:
+        color = "gray"
+    st.markdown(f"### :{color}[**{res.replace('_', ' ')}**]")
 
 
 def _show_resultado_badge(resultado: str) -> None:

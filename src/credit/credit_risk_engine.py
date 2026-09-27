@@ -62,6 +62,7 @@ class CreditRiskEngine:
             cupo_maximo,
             memoria,
             aval_obligatorio,
+            tax_folder=tax_folder,
         )
         alertas, fortalezas, banderas_rojas = self._alertas_y_fortalezas(
             hechos, indicadores, memoria, calidad
@@ -71,12 +72,12 @@ class CreditRiskEngine:
             tax_folder, score_compuesto, decision, memoria, banderas_rojas
         )
 
-        veredicto = decision.resultado_base or "OBSERVADO"
+        veredicto = decision.evaluacion_referencial or decision.resultado_base or "OBSERVADO"
         score_val = float(score_compuesto) if score_compuesto is not None else 0.0
         cat_riesgo = (
             "BAJO"
             if score_val >= 75
-            else ("MEDIO" if score_val >= 50 else ("ALTO" if score_val >= 25 else "CRITICO"))
+            else ("MEDIO" if score_val >= 50 else ("MEDIO-ALTO" if score_val >= 35 else "ALTO"))
         )
 
         return CreditRiskResult(
@@ -90,12 +91,16 @@ class CreditRiskEngine:
             banderas_rojas=banderas_rojas,
             dictamen_ejecutivo=dictamen,
             veredicto=veredicto,
+            evaluacion_referencial=veredicto,
             score_crediticio=score_val,
             categoria_riesgo=cat_riesgo,
             cupo_maximo_sugerido=decision.cupo_maximo_sugerido,
             cupo_aprobado=decision.cupo_aprobado,
+            linea_maxima_sugerida=decision.cupo_aprobado,
             plazo_sugerido_dias=decision.plazo_sugerido_dias,
             garantia_exigida=decision.garantia_exigida,
+            resguardo_comercial_sugerido=decision.resguardo_comercial_sugerido,
+            protocolo_operativo=decision.protocolo_operativo,
             memoria_calculo=decision.memoria_calculo,
             hoja_ruta_comercial=decision.hoja_ruta_comercial,
         )
@@ -279,7 +284,8 @@ class CreditRiskEngine:
         # max(0, ventas_mensuales_prom - costo_operativo_mensual_prom - iva_determinado_prom)
         iva_det_prom = 0.0
         if tax_folder.monthly_taxes:
-            last_12_mt = tax_folder.monthly_taxes[:12]
+            sorted_mt = sorted(tax_folder.monthly_taxes, key=lambda m: m.periodo or "")
+            last_12_mt = sorted_mt[-12:]
             if last_12_mt:
                 iva_det_sum = sum(float(mt.iva_determinado or Decimal("0")) for mt in last_12_mt)
                 iva_det_prom = iva_det_sum / len(last_12_mt)
@@ -324,8 +330,9 @@ class CreditRiskEngine:
                 phi -= 0.25
                 castigos.append("Caída significativa de ventas 3M vs 12M (>20%): -0.25")
 
-        # 2. Mora efectiva últimos 12 meses
-        last_12_f29 = tax_folder.f29[:12] if len(tax_folder.f29) >= 12 else tax_folder.f29
+        # 2. Mora efectiva últimos 12 meses (tomar los 12 meses más recientes)
+        sorted_f29 = sorted(tax_folder.f29, key=lambda f: f.periodo or "")
+        last_12_f29 = sorted_f29[-12:] if len(sorted_f29) >= 12 else sorted_f29
         mora_12m = sum(
             1 for f in last_12_f29 for d in f.detalles if d.codigo == "94" and _parse_monto(d.valor) > 0
         )
@@ -334,8 +341,8 @@ class CreditRiskEngine:
             phi -= penal_mora
             castigos.append(f"{mora_12m} mes(es) con mora efectiva F29 en últimos 12M: -{penal_mora:.2f}")
 
-        # 3. Postergación de IVA repetida en últimos 6 meses
-        last_6_f29 = tax_folder.f29[:6] if len(tax_folder.f29) >= 6 else tax_folder.f29
+        # 3. Postergación de IVA repetida en últimos 6 meses más recientes
+        last_6_f29 = sorted_f29[-6:] if len(sorted_f29) >= 6 else sorted_f29
         posterg_6m = sum(
             1 for f in last_6_f29 for d in f.detalles if d.codigo in ("779", "755", "756") and _parse_monto(d.valor) > 0
         )
@@ -619,58 +626,88 @@ class CreditRiskEngine:
         cupo_maximo: int,
         memoria: dict[str, Any],
         aval_obligatorio: bool,
+        tax_folder: TaxFolder | None = None,
     ) -> Decision:
-        if score_compuesto is None:
-            resultado_base = "NO_EVALUABLE"
-        elif score_compuesto >= 75 and memoria.get("factor_riesgo_phi", 1.0) >= 0.8 and cupo_maximo > 0:
-            resultado_base = "APROBADO"
-        elif score_compuesto >= 50 and cupo_maximo > 0:
-            resultado_base = "APROBADO_CON_CONDICIONES"
-        else:
-            resultado_base = "RECHAZADO"
+        # Extraer representantes legales para resguardos personalizados
+        rep_names = []
+        if tax_folder and getattr(tax_folder, "representatives", None):
+            for r in tax_folder.representatives:
+                nom = getattr(r, "nombre", None) or (r.get("nombre") if isinstance(r, dict) else None)
+                if nom and str(nom).strip():
+                    rep_names.append(str(nom).strip())
+        reps_str = f" por Don/Doña {', '.join(rep_names[:2])}" if rep_names else ""
 
-        # Determinación de cupo aprobado y garantías
         cpt_val = memoria.get("capital_propio_tributario")
         cpt_negativo = cpt_val is not None and cpt_val <= 0
         cupo_excepcional = memoria.get("cupo_excepcional_garantizado")
 
-        if cpt_negativo:
+        # 4 Tramos de Resguardo Comercial y Evaluación Referencial
+        if score_compuesto is None:
+            resultado_base = "NO_EVALUABLE"
+            evaluacion_referencial = "NO_EVALUABLE"
+            cupo_aprobado = 0
+            plazo_dias = 0
+            resguardo = "Carpeta sin información suficiente para evaluar línea de crédito."
+            protocolo = "Completar información tributaria faltante (mínimo 6 meses F29 y F22)."
+        elif cpt_negativo:
             resultado_base = "RECHAZADO"
+            evaluacion_referencial = "RIESGO ALTO — Se Sugiere Venta al Contado"
             cupo_aprobado = 0
             plazo_dias = 0
-            excep_m = cupo_excepcional // 1000 if cupo_excepcional else 0
-            garantia = (
-                f"Línea limpia directa rechazada ($0) por CPT negativo. "
-                f"Solo evaluable cupo excepcional garantizado de hasta M$ {excep_m:,}".replace(",", ".")
-                + " contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad."
+            excep_m = (cupo_excepcional // 1000) if cupo_excepcional else 0
+            resguardo = (
+                f"Línea de crédito no sugerida por CPT negativo (${cpt_val:,.0f} CLP). "
+                f"Únicamente evaluable cupo excepcional de hasta M$ {excep_m:,}".replace(",", ".")
+                + f" con Pagaré Notarial y Aval Solidario de persona natural externa{reps_str} con patrimonio acreditado fuera de la sociedad."
             )
-        elif resultado_base == "APROBADO":
-            cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
-            plazo_dias = 30  # Estándar conservador máximo 30 días
-            garantia = "Factura comercial a 30 días sin garantías adicionales (Línea limpia)"
-        elif resultado_base == "APROBADO_CON_CONDICIONES":
-            cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
-            plazo_dias = 30  # Estándar conservador máximo 30 días
-            if aval_obligatorio:
-                garantia = "Pagaré notarial con aval solidario de los socios controladores con patrimonio acreditado"
-            elif (hechos.composicion_ventas.pct_facturado or 0) > 0.6:
-                garantia = "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días"
-            else:
-                garantia = "Pagaré a la vista a 30 días firmado por representante legal"
-        else:
+            protocolo = (
+                "No despachar a crédito sin resguardo notarial de avalista externo calificado. "
+                "Venta al contado con pago contra entrega."
+            )
+        elif cupo_maximo == 0 or score_compuesto < 35:
+            resultado_base = "RECHAZADO"
+            evaluacion_referencial = "RIESGO ALTO — Se Sugiere Venta al Contado"
             cupo_aprobado = 0
             plazo_dias = 0
-            garantia = "Venta exclusiva al contado / Pago anticipado contra entrega"
+            resguardo = "Línea de crédito no sugerida (Venta exclusiva al contado / Pago anticipado contra entrega)."
+            protocolo = "No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado."
+        elif score_compuesto >= 75 and memoria.get("factor_riesgo_phi", 1.0) >= 0.8:
+            resultado_base = "APROBADO"
+            evaluacion_referencial = "RIESGO BAJO — Línea Sugerida"
+            cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
+            cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
+            plazo_dias = 30
+            resguardo = "Línea sugerida abierta sin pagaré previo (Crédito comercial estándar)."
+            protocolo = (
+                f"Solicitud de crédito y ficha de cliente firmada por representante legal{reps_str} "
+                "+ despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983)."
+            )
+        elif score_compuesto >= 50:
+            resultado_base = "APROBADO_CON_CONDICIONES"
+            evaluacion_referencial = "RIESGO MEDIO — Sugerido con Resguardo"
+            cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
+            cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
+            plazo_dias = 30
+            resguardo = f"Pagaré a la vista suscrito por Representante Legal{reps_str} o Seguro de Crédito que cubra la línea."
+            protocolo = "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho."
+        else:
+            # Score 35 a 49
+            resultado_base = "APROBADO_CON_CONDICIONES"
+            evaluacion_referencial = "RIESGO MEDIO-ALTO — Requiere Garantía Notarial"
+            cupo_aprobado = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
+            cupo_aprobado = int(round(cupo_aprobado / 100_000.0) * 100_000)
+            plazo_dias = 30
+            resguardo = f"Pagaré Notarial con Avalista y Codeudor Solidario suscrito personalmente por los socios/representantes legales{reps_str} con patrimonio acreditado, o Garantía Real / Boleta Bancaria."
+            protocolo = "Despacho estrictamente condicionado a la recepción y validación de pagaré con cláusula de codeudor solidario notariado."
 
-        # Regla de Oro: Prohibición de APROBADO con cupo $0
-        if cupo_aprobado == 0:
-            if resultado_base in ("APROBADO", "APROBADO_CON_CONDICIONES"):
-                resultado_base = "RECHAZADO"
+        # Regla de Consistencia: Si cupo resulta $0, resultado es RIESGO ALTO Contado
+        if cupo_aprobado == 0 and score_compuesto is not None:
+            resultado_base = "RECHAZADO"
+            evaluacion_referencial = "RIESGO ALTO — Se Sugiere Venta al Contado"
             plazo_dias = 0
             if not cpt_negativo:
-                garantia = "Venta exclusiva al contado / Pago anticipado contra entrega"
+                resguardo = "Línea de crédito no sugerida (Venta exclusiva al contado / Pago anticipado)."
+                protocolo = "Operación recomendada exclusivamente al contado o pago anticipado."
 
         caminos: list[CaminoMitigacion] = []
         alto_facturado = (hechos.composicion_ventas.pct_facturado or 0) > 0.6
@@ -705,26 +742,31 @@ class CreditRiskEngine:
         aprobado_m = cupo_aprobado // 1000
         maximo_m = cupo_maximo // 1000
         hoja_ruta = [
-            f"Veredicto del Comité: {resultado_base.replace('_', ' ')}.",
-            f"Línea de crédito comercial autorizada: M$ {aprobado_m:,}".replace(",", ".") + f" (Tope máximo sugerido: M$ {maximo_m:,}).".replace(",", "."),
-            f"Plazo máximo sugerido: {plazo_dias} días.",
-            f"Condición de respaldo: {garantia}.",
+            f"Evaluación Referencial: {evaluacion_referencial}.",
+            f"Línea de crédito comercial sugerida: M$ {aprobado_m:,}".replace(",", ".") + f" (Tope máximo sugerido: M$ {maximo_m:,}).".replace(",", "."),
+            f"Plazo sugerido: {plazo_dias} días." if plazo_dias > 0 else "Plazo sugerido: Contado (0 días).",
+            f"Resguardo comercial sugerido: {resguardo}",
+            f"Protocolo operativo: {protocolo}",
         ]
-        if alto_facturado:
-            hoja_ruta.append("Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo.")
+        if alto_facturado and cupo_aprobado > 0:
+            hoja_ruta.append("Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.")
         if cpt_negativo and cupo_excepcional:
             hoja_ruta.append(
-                f"Protocolo de mitigación CPT negativo: solo evaluable cupo excepcional de hasta M$ {cupo_excepcional // 1000:,}".replace(",", ".")
+                f"Protocolo CPT negativo: solo evaluable cupo excepcional de hasta M$ {cupo_excepcional // 1000:,}".replace(",", ".")
                 + " con Aval Solidario calificado con patrimonio acreditado fuera de la sociedad."
             )
 
         return Decision(
             resultado_base=resultado_base,
+            evaluacion_referencial=evaluacion_referencial,
             producto_evaluado="credito_30_dias",
             cupo_maximo_sugerido=cupo_maximo,
             cupo_aprobado=cupo_aprobado,
+            linea_maxima_sugerida=cupo_aprobado,
             plazo_sugerido_dias=plazo_dias,
-            garantia_exigida=garantia,
+            garantia_exigida=resguardo,
+            resguardo_comercial_sugerido=resguardo,
+            protocolo_operativo=protocolo,
             memoria_calculo=memoria,
             hoja_ruta_comercial=hoja_ruta,
             caminos_mitigacion=caminos,
@@ -797,31 +839,33 @@ class CreditRiskEngine:
         )
 
         lines = [
-            f"# DICTAMEN DE COMITÉ DE CRÉDITO B2B — {razon} (RUT: {rut})",
+            f"CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial",
+            f"Contribuyente: {razon} (RUT: {rut})",
             "",
-            f"**VEREDICTO:** {decision.resultado_base.replace('_', ' ')} | **SCORE:** {score or '—'}/100",
-            f"**CUPO MÁXIMO SUGERIDO:** ${decision.cupo_maximo_sugerido:,.0f} CLP | **PLAZO:** {decision.plazo_sugerido_dias} días",
-            f"**GARANTÍA EXIGIDA:** {decision.garantia_exigida}",
+            f"Evaluación: {decision.evaluacion_referencial} | Score: {score or '—'}/100",
+            f"Línea Máxima Sugerida: ${decision.cupo_aprobado:,.0f} CLP | Plazo: {decision.plazo_sugerido_dias} días",
+            f"Resguardo Sugerido: {decision.resguardo_comercial_sugerido}",
+            f"Protocolo Operativo: {decision.protocolo_operativo}",
             "",
-            "## 1. Memoria Cuantitativa de Asignación de Cupo",
-            f"- **Base Mensual de Absorción (C_base):** ${memoria.get('base_compras_c_base', 0):,.0f} CLP",
-            f"- **Techo Operativo Proveedor (20%):** ${memoria.get('techo_operativo_20pct', 0):,.0f} CLP",
-            f"- **Factor de Descuento por Riesgo (Phi):** {memoria.get('factor_riesgo_phi', 1.0):.2f}",
-            f"- **Capital Propio Tributario (CPT):** ${memoria.get('capital_propio_tributario') or 0:,.0f} CLP",
+            "1. Memoria Cuantitativa de Asignación:",
+            f"- Base Mensual de Absorción (C_base): ${memoria.get('base_compras_c_base', 0):,.0f} CLP",
+            f"- Techo Operativo Proveedor (8%): ${memoria.get('techo_operativo_8pct', 0):,.0f} CLP",
+            f"- Factor de Ajuste Conductual: {int(round(memoria.get('factor_riesgo_phi', 1.0) * 100))}%",
+            f"- Capital Propio Tributario (CPT): ${memoria.get('capital_propio_tributario') or 0:,.0f} CLP",
         ]
         if memoria.get("castigos_aplicados"):
-            lines.append("- **Ajustes de Riesgo Aplicados:**")
+            lines.append("- Ajustes de Riesgo Aplicados:")
             for ca in memoria["castigos_aplicados"]:
                 lines.append(f"  * {ca}")
 
         if banderas_rojas:
             lines.append("")
-            lines.append("## 2. Banderas Rojas Forenses")
+            lines.append("2. Banderas Rojas Forenses:")
             for b in banderas_rojas:
                 lines.append(f"- 🔴 {b}")
 
         lines.append("")
-        lines.append("## 3. Hoja de Ruta Comercial")
+        lines.append("3. Recomendaciones Operativas:")
         for h in decision.hoja_ruta_comercial:
             lines.append(f"- ✅ {h}")
 

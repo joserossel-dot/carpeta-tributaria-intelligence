@@ -106,33 +106,13 @@ class PDFReport:
         story: list[Any] = []
 
         # 1. ENCABEZADO CORPORATIVO
-        story.append(Paragraph("CAVILARIA SpA — Comité de Crédito B2B", title_style))
+        story.append(Paragraph("CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial", title_style))
         story.append(
             Paragraph(
-                "Dictamen Ejecutivo de Evaluación Cuantitativa y Asignación de Cupo Comercial (v2.2)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.2)",
                 subtitle_style,
             )
         )
-        story.append(Spacer(1, 2 * mm))
-
-        # Sello de Retención Cero
-        sello_html = (
-            "<b>🔒 SELLO DE RETENCIÓN CERO (Zero-PII):</b> Procesado 100% en memoria volátil RAM. "
-            "Sin persistencia de archivos, Razón Social ni RUTs en disco conforme a la Ley N° 21.719."
-        )
-        sello_data = [[Paragraph(sello_html, body_style)]]
-        sello_table = Table(sello_data, colWidths=[185 * mm])
-        sello_table.setStyle(
-            TableStyle([
-                ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#F1F5F9")),
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
-                ("TOPPADDING", (0, 0), (-1, -1), 3),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-                ("LEFTPADDING", (0, 0), (-1, -1), 6),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-            ])
-        )
-        story.append(sello_table)
         story.append(Spacer(1, 3 * mm))
 
         # 2. IDENTIFICACIÓN DEL CONTRIBUYENTE
@@ -168,7 +148,7 @@ class PDFReport:
         contrib_table.setStyle(
             TableStyle([
                 ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#F8FAFC")),
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
+                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
                 ("TOPPADDING", (0, 0), (-1, -1), 2.5),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5),
@@ -179,45 +159,49 @@ class PDFReport:
         story.append(contrib_table)
         story.append(Spacer(1, 3 * mm))
 
-        # 3. VEREDICTO DE COMITÉ Y CUPO APROBADO
+        # 3. RESUMEN RECOMENDACIÓN REFERENCIAL
         cr = getattr(tax_folder, "credit_risk", None)
-        veredicto = str(getattr(cr, "veredicto", "OBSERVADO")) if cr else "OBSERVADO"
+        evaluacion = str(
+            getattr(cr, "evaluacion_referencial", None)
+            or getattr(cr, "veredicto", "OBSERVADO")
+        ) if cr else "OBSERVADO"
         score_val = getattr(cr, "score_crediticio", 0.0) if cr else 0.0
         cat_val = getattr(cr, "categoria_riesgo", "MEDIO") if cr else "MEDIO"
         cupo_ap = getattr(cr, "cupo_aprobado", 0) if cr else 0
         plazo_dias = getattr(cr, "plazo_sugerido_dias", 0) if cr else 0
-        garantia = getattr(cr, "garantia_exigida", "Venta contado") if cr else "Venta contado"
-        dictamen = getattr(cr, "dictamen_ejecutivo", "En evaluación") if cr else "En evaluación"
+        resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
 
-        # Color del veredicto
-        if "RECHAZADO" in veredicto:
-            badge_bg = colors.HexColor("#DC2626")
-        elif "APROBADO_CON_CONDICIONES" in veredicto:
-            badge_bg = colors.HexColor("#D97706")
-        elif "APROBADO" in veredicto:
+        # Color de la evaluación referencial
+        if "BAJO" in evaluacion or "APROBADO" in evaluacion and "CONDICIONES" not in evaluacion:
             badge_bg = colors.HexColor("#16A34A")
+        elif "MEDIO-ALTO" in evaluacion:
+            badge_bg = colors.HexColor("#EA580C")
+        elif "MEDIO" in evaluacion or "CONDICIONES" in evaluacion or "OBSERVADO" in evaluacion:
+            badge_bg = colors.HexColor("#D97706")
+        elif "ALTO" in evaluacion or "RECHAZADO" in evaluacion:
+            badge_bg = colors.HexColor("#DC2626")
         else:
             badge_bg = colors.HexColor("#475569")
 
-        veredicto_txt = veredicto.replace("_", " ")
-        veredicto_cell = Paragraph(f"<b>{veredicto_txt}</b>", badge_style)
+        evaluacion_cell = Paragraph(f"<b>{evaluacion}</b>", badge_style)
         cupo_ap_txt = format_mclp(cupo_ap)
+        plazo_txt = f"{plazo_dias} días" if plazo_dias > 0 else "Contado"
 
         panel_data = [
             [
-                Paragraph("<b>VEREDICTO COMITÉ</b>", table_cell_header),
+                Paragraph("<b>EVALUACIÓN REFERENCIAL</b>", table_cell_header),
                 Paragraph("<b>SCORE CREDITICIO</b>", table_cell_header),
-                Paragraph("<b>CUPO APROBADO (M$)</b>", table_cell_header),
-                Paragraph("<b>PLAZO Y GARANTÍA</b>", table_cell_header),
+                Paragraph("<b>LÍNEA MÁXIMA SUGERIDA (M$)</b>", table_cell_header),
+                Paragraph("<b>RESGUARDO SUGERIDO</b>", table_cell_header),
             ],
             [
-                veredicto_cell,
-                Paragraph(f"<b>{score_val:.1f} / 100</b><br/>{cat_val}", table_cell_bold),
+                evaluacion_cell,
+                Paragraph(f"<b>{score_val:.1f} / 100</b><br/>Riesgo {cat_val}", table_cell_bold),
                 Paragraph(f"<font size=11><b>{cupo_ap_txt}</b></font>", table_cell_bold),
-                Paragraph(f"<b>{plazo_dias} días</b><br/>{garantia}", table_cell),
+                Paragraph(f"<b>{plazo_txt}</b><br/><font size=6.5>{resguardo}</font>", table_cell),
             ],
         ]
-        panel_table = Table(panel_data, colWidths=[46 * mm, 42 * mm, 47 * mm, 50 * mm])
+        panel_table = Table(panel_data, colWidths=[52 * mm, 38 * mm, 45 * mm, 50 * mm])
         panel_table.setStyle(
             TableStyle([
                 ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
@@ -232,22 +216,6 @@ class PDFReport:
             ])
         )
         story.append(panel_table)
-
-        # Dictamen
-        story.append(Spacer(1, 2 * mm))
-        dictamen_html = f"<b>Dictamen del Comité:</b> {dictamen}"
-        dictamen_table = Table([[Paragraph(dictamen_html, body_style)]], colWidths=[185 * mm])
-        dictamen_table.setStyle(
-            TableStyle([
-                ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#EFF6FF")),
-                ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#BFDBFE")),
-                ("TOPPADDING", (0, 0), (-1, -1), 3),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-                ("LEFTPADDING", (0, 0), (-1, -1), 5),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 5),
-            ])
-        )
-        story.append(dictamen_table)
         story.append(Spacer(1, 3 * mm))
 
         # 4. MEMORIA DE CÁLCULO CUANTITATIVA (M$)
@@ -283,13 +251,13 @@ class PDFReport:
                 Paragraph(format_mclp(freno_flujo), table_cell_bold),
             ],
             [
-                Paragraph("Paso C: Factor de Calidad Crediticia (Φ)", table_cell_bold),
-                Paragraph("Castigos objetivos por mora F29, postergación IVA y caída YoY", table_cell),
-                Paragraph(f"Φ = {phi_v:.2f}", table_cell_bold),
+                Paragraph("Paso C: Factor de Ajuste Conductual", table_cell_bold),
+                Paragraph("Ajuste por mora F29, postergación IVA y variaciones de venta", table_cell),
+                Paragraph(f"{int(round(phi_v * 100))}%", table_cell_bold),
             ],
             [
                 Paragraph("Cupo Preliminar Ajustado por Riesgo", table_cell_bold),
-                Paragraph("min(Techo 8%, Freno Flujo 25%) × Φ", table_cell),
+                Paragraph("min(Techo 8%, Freno Flujo 25%) × Factor Conductual", table_cell),
                 Paragraph(format_mclp(cupo_pre), table_cell_bold),
             ],
             [
@@ -303,7 +271,7 @@ class PDFReport:
                 Paragraph(format_mclp(tope_cpt) if tope_cpt is not None else "Sin tope", table_cell_bold),
             ],
             [
-                Paragraph("Cupo Máximo Sugerido Final", table_cell_bold),
+                Paragraph("Línea Máxima Sugerida Final", table_cell_bold),
                 Paragraph("Redondeo a múltiplos de $100.000 CLP (M$ 100)", table_cell),
                 Paragraph(format_mclp(cupo_max), table_cell_bold),
             ],
@@ -331,21 +299,21 @@ class PDFReport:
         story.append(mem_table)
         story.append(Spacer(1, 2 * mm))
 
-        # 5. BANDERAS ROJAS Y HOJA DE RUTA
+        # 5. BANDERAS ROJAS Y RECOMENDACIONES OPERATIVAS
         banderas = getattr(cr, "banderas_rojas", []) if cr else []
         hoja_ruta = getattr(cr, "hoja_ruta_comercial", []) if cr else []
 
         flags_p = []
         if banderas:
             for b in banderas:
-                flags_p.append(Paragraph(f"🔴 <b>Bandera Roja:</b> {b}", body_style))
+                flags_p.append(Paragraph(f"🔴 <b>Alerta:</b> {b}", body_style))
         else:
             flags_p.append(Paragraph("🟢 <i>Sin banderas rojas críticas detectadas en el análisis.</i>", body_style))
 
         hr_p = []
         if hoja_ruta:
             for r in hoja_ruta:
-                hr_p.append(Paragraph(f"🧭 <b>Recomendación:</b> {r}", body_style))
+                hr_p.append(Paragraph(f"🧭 <b>Protocolo / Sugerencia:</b> {r}", body_style))
         else:
             hr_p.append(Paragraph("<i>Sin recomendaciones adicionales.</i>", body_style))
 
@@ -364,23 +332,25 @@ class PDFReport:
         story.append(flags_table)
         story.append(Spacer(1, 3 * mm))
 
-        # 6. TABLA RESUMEN F29 (Últimos 12 meses en M$)
+        # 6. TABLA RESUMEN F29 (Últimos 12 meses más recientes en M$)
         monthly_taxes = getattr(tax_folder, "monthly_taxes", []) or []
         if monthly_taxes:
+            sorted_mt = sorted(monthly_taxes, key=lambda m: m.periodo or "", reverse=True)[:12]
             f29_header = [
                 Paragraph("<b>Período</b>", table_cell_header),
                 Paragraph("<b>Ventas (M$)</b>", table_cell_header),
-                Paragraph("<b>Compras (M$)</b>", table_cell_header),
+                Paragraph("<b>Compras Op. (M$)</b>", table_cell_header),
                 Paragraph("<b>Débito (M$)</b>", table_cell_header),
                 Paragraph("<b>Crédito (M$)</b>", table_cell_header),
                 Paragraph("<b>IVA Det. (M$)</b>", table_cell_header),
             ]
             f29_rows = [f29_header]
-            for mt in monthly_taxes[:12]:
+            for mt in sorted_mt:
+                compras_val = getattr(mt, "compras_operacionales", None) or getattr(mt, "compras", None)
                 f29_rows.append([
                     Paragraph(getattr(mt, "periodo", ""), table_cell),
                     Paragraph(format_mclp(getattr(mt, "total_ventas", None)), table_cell),
-                    Paragraph(format_mclp(getattr(mt, "compras", None)), table_cell),
+                    Paragraph(format_mclp(compras_val), table_cell),
                     Paragraph(format_mclp(getattr(mt, "debito_fiscal", None)), table_cell),
                     Paragraph(format_mclp(getattr(mt, "credito_fiscal", None)), table_cell),
                     Paragraph(format_mclp(getattr(mt, "iva_determinado", None)), table_cell),
@@ -397,13 +367,14 @@ class PDFReport:
                 ])
             )
             story.append(KeepTogether([
-                Paragraph("Resumen de Declaraciones Mensuales F29 (Últimos 12 Meses en M$)", h2_style),
+                Paragraph("Resumen de Declaraciones Mensuales F29 (12 Meses Más Recientes en M$)", h2_style),
                 f29_table,
             ]))
 
         # 7. TABLA RESUMEN F22 (Anual en M$)
         f22_list = getattr(tax_folder, "f22", []) or []
         if f22_list:
+            sorted_f22 = sorted(f22_list, key=lambda f: f.anio_tributario or "", reverse=True)
             story.append(Spacer(1, 2 * mm))
             f22_header = [
                 Paragraph("<b>Año</b>", table_cell_header),
@@ -413,7 +384,7 @@ class PDFReport:
                 Paragraph("<b>Impuesto Det. (M$)</b>", table_cell_header),
             ]
             f22_rows = [f22_header]
-            for f in f22_list:
+            for f in sorted_f22:
                 f22_rows.append([
                     Paragraph(str(getattr(f, "anio_tributario", "")), table_cell),
                     Paragraph(format_mclp(getattr(f, "ingresos", None)), table_cell),
@@ -437,13 +408,13 @@ class PDFReport:
                 f22_table,
             ]))
 
-        # Footer nota M$
+        # Footer nota M$ y nota legal
         story.append(Spacer(1, 3 * mm))
         story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor("#CBD5E1"), spaceAfter=3))
         nota_pie = (
-            "<i>Nota: Cifras expresadas en Miles de Pesos Chilenos (M$). "
-            "Dictamen emitido automáticamente conforme a los criterios objetivos del Comité de Riesgo y Crédito B2B de Cavilaria SpA. "
-            "Procesamiento seguro en RAM sin almacenamiento de datos (Zero-PII).</i>"
+            "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
+            "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
+            "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor.</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=7, leading=9, textColor=colors.HexColor("#64748B"))))
 

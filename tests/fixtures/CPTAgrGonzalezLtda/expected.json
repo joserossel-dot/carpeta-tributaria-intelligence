@@ -5843,18 +5843,22 @@
     "score_compuesto": 90,
     "decision": {
       "resultado_base": "APROBADO_CON_CONDICIONES",
+      "evaluacion_referencial": "RIESGO MEDIO — Sugerido con Resguardo",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 3400000,
       "cupo_aprobado": 3400000,
+      "linea_maxima_sugerida": 3400000,
       "plazo_sugerido_dias": 30,
-      "garantia_exigida": "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días",
+      "garantia_exigida": "Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
+      "resguardo_comercial_sugerido": "Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
+      "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.",
       "memoria_calculo": {
         "base_compras_c_base": 85798360,
         "techo_operativo_8pct": 6863869,
         "techo_operativo_20pct": 6863869,
         "techo_operativo": 6863869,
-        "margen_operacional_depurado_mensual": 111742870,
-        "freno_flujo_operacional_25pct": 27935717,
+        "margen_operacional_depurado_mensual": 104378538,
+        "freno_flujo_operacional_25pct": 26094635,
         "factor_riesgo_phi": 0.5,
         "cupo_preliminar": 3431934,
         "capital_propio_tributario": 6559199969,
@@ -5868,11 +5872,12 @@
         ]
       },
       "hoja_ruta_comercial": [
-        "Veredicto del Comité: APROBADO CON CONDICIONES.",
-        "Línea de crédito comercial autorizada: M$ 3.400 (Tope máximo sugerido: M$ 3.400).",
-        "Plazo máximo sugerido: 30 días.",
-        "Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días.",
-        "Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo."
+        "Evaluación Referencial: RIESGO MEDIO — Sugerido con Resguardo.",
+        "Línea de crédito comercial sugerida: M$ 3.400 (Tope máximo sugerido: M$ 3.400).",
+        "Plazo sugerido: 30 días.",
+        "Resguardo comercial sugerido: Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
+        "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.",
+        "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
       ],
       "caminos_mitigacion": [
         {
@@ -5899,21 +5904,25 @@
       "Respaldo patrimonial sólido: CPT positivo de $6,559,199,969 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "# DICTAMEN DE COMITÉ DE CRÉDITO B2B — AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\n**VEREDICTO:** APROBADO CON CONDICIONES | **SCORE:** 90/100\n**CUPO MÁXIMO SUGERIDO:** $3,400,000 CLP | **PLAZO:** 30 días\n**GARANTÍA EXIGIDA:** Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días\n\n## 1. Memoria Cuantitativa de Asignación de Cupo\n- **Base Mensual de Absorción (C_base):** $85,798,360 CLP\n- **Techo Operativo Proveedor (20%):** $6,863,869 CLP\n- **Factor de Descuento por Riesgo (Phi):** 0.50\n- **Capital Propio Tributario (CPT):** $6,559,199,969 CLP\n- **Ajustes de Riesgo Aplicados:**\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n## 3. Hoja de Ruta Comercial\n- ✅ Veredicto del Comité: APROBADO CON CONDICIONES.\n- ✅ Línea de crédito comercial autorizada: M$ 3.400 (Tope máximo sugerido: M$ 3.400).\n- ✅ Plazo máximo sugerido: 30 días.\n- ✅ Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo.",
-    "veredicto": "APROBADO_CON_CONDICIONES",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Evaluación Tributaria y Recomendación de Crédito Comercial\nContribuyente: AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\nEvaluación: RIESGO MEDIO — Sugerido con Resguardo | Score: 90/100\nLínea Máxima Sugerida: $3,400,000 CLP | Plazo: 30 días\nResguardo Sugerido: Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.\nProtocolo Operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): $85,798,360 CLP\n- Techo Operativo Proveedor (8%): $6,863,869 CLP\n- Factor de Ajuste Conductual: 50%\n- Capital Propio Tributario (CPT): $6,559,199,969 CLP\n- Ajustes de Riesgo Aplicados:\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n3. Recomendaciones Operativas:\n- ✅ Evaluación Referencial: RIESGO MEDIO — Sugerido con Resguardo.\n- ✅ Línea de crédito comercial sugerida: M$ 3.400 (Tope máximo sugerido: M$ 3.400).\n- ✅ Plazo sugerido: 30 días.\n- ✅ Resguardo comercial sugerido: Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
+    "veredicto": "RIESGO MEDIO — Sugerido con Resguardo",
+    "evaluacion_referencial": "RIESGO MEDIO — Sugerido con Resguardo",
     "score_crediticio": 90.0,
     "categoria_riesgo": "BAJO",
     "cupo_maximo_sugerido": 3400000,
     "cupo_aprobado": 3400000,
+    "linea_maxima_sugerida": 3400000,
     "plazo_sugerido_dias": 30,
-    "garantia_exigida": "Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días",
+    "garantia_exigida": "Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
+    "resguardo_comercial_sugerido": "Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
+    "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.",
     "memoria_calculo": {
       "base_compras_c_base": 85798360,
       "techo_operativo_8pct": 6863869,
       "techo_operativo_20pct": 6863869,
       "techo_operativo": 6863869,
-      "margen_operacional_depurado_mensual": 111742870,
-      "freno_flujo_operacional_25pct": 27935717,
+      "margen_operacional_depurado_mensual": 104378538,
+      "freno_flujo_operacional_25pct": 26094635,
       "factor_riesgo_phi": 0.5,
       "cupo_preliminar": 3431934,
       "capital_propio_tributario": 6559199969,
@@ -5927,11 +5936,12 @@
       ]
     },
     "hoja_ruta_comercial": [
-      "Veredicto del Comité: APROBADO CON CONDICIONES.",
-      "Línea de crédito comercial autorizada: M$ 3.400 (Tope máximo sugerido: M$ 3.400).",
-      "Plazo máximo sugerido: 30 días.",
-      "Condición de respaldo: Liberación contra Aceptación Expresa de Factura en SII (Mérito Ejecutivo Ley 19.983 en máx. 8 días) a 30 días.",
-      "Habilitada alternativa de factoring o cesión de facturas para compras sobre el cupo."
+      "Evaluación Referencial: RIESGO MEDIO — Sugerido con Resguardo.",
+      "Línea de crédito comercial sugerida: M$ 3.400 (Tope máximo sugerido: M$ 3.400).",
+      "Plazo sugerido: 30 días.",
+      "Resguardo comercial sugerido: Pagaré a la vista suscrito por Representante Legal por Don/Doña BENJAMIN DE LAS MERCEDES GONZALEZ CANALES o Seguro de Crédito que cubra la línea.",
+      "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original antes del primer despacho.",
+      "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
     ]
   },
   "metadata": {
