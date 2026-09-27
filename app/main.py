@@ -1,5 +1,6 @@
 import gc
 import hashlib
+import json
 import os
 import streamlit as st
 
@@ -16,6 +17,7 @@ from app.components.monthly_chart import show_monthly_chart
 from app.components.representatives import show_representatives
 from app.utils.formatting import format_mclp
 from app.utils.pdf_processor import process_pdf
+from src.credit.sector_benchmark import SectorBenchmark
 from src.leads.lead_manager import LeadManager, validar_email
 
 # 1. Configuración de Marca Blanca y Paginación
@@ -95,6 +97,16 @@ if not st.session_state.get("authenticated", False):
                     placeholder="+56 9 1234 5678",
                 )
 
+            # Casillas de Consentimiento (Ley N° 21.719)
+            acepto_privacidad = st.checkbox(
+                "He leído y acepto la [Política de Privacidad (v1.1)](https://cavilaria.com/politica-de-privacidad) de Cavilaria SpA para el tratamiento de mis datos de contacto.",
+                value=False,
+            )
+            acepto_comercial = st.checkbox(
+                "Acepto recibir comunicaciones comerciales, seguimiento de mi evaluación y novedades de Cavilaria SpA.",
+                value=False,
+            )
+
             submit_free = st.form_submit_button(
                 "Activar Acceso Gratuito Ahora", type="primary"
             )
@@ -106,6 +118,8 @@ if not st.session_state.get("authenticated", False):
                     st.error("Por favor ingresa el nombre de tu empresa.")
                 elif not validar_email(email):
                     st.error("Por favor ingresa un correo electrónico válido.")
+                elif not acepto_privacidad:
+                    st.error("Debes aceptar la Política de Privacidad para continuar.")
                 else:
                     try:
                         lm = LeadManager()
@@ -114,6 +128,9 @@ if not st.session_state.get("authenticated", False):
                             empresa=empresa,
                             email=email,
                             telefono=telefono,
+                            privacy_opt_in=acepto_privacidad,
+                            marketing_opt_in=acepto_comercial,
+                            policy_version="v1.1",
                         )
                     except Exception:
                         pass
@@ -178,6 +195,52 @@ with col_auth_action:
         st.session_state.clear()
         gc.collect()
         st.rerun()
+
+# Panel de Control Administrador (Visible de inmediato para Socios/Admin sin requerir PDF)
+if access_tier == "ADMIN":
+    with st.expander("🛠️ Panel de Control Administrador — Prospectos Inscritos y Benchmark (Solo Socios)", expanded=False):
+        lm = LeadManager()
+        leads = lm.obtener_leads()
+        total_leads = len(leads)
+        optin_marketing = sum(1 for l in leads if l.get("marketing_opt_in") is True)
+
+        col_adm_m1, col_adm_m2 = st.columns(2)
+        with col_adm_m1:
+            st.metric("Total Prospectos Registrados", total_leads)
+        with col_adm_m2:
+            st.metric("Con Opt-In Comercial Activo", optin_marketing)
+
+        st.markdown("##### Listado de Prospectos en Vivo")
+        if leads:
+            st.dataframe(leads, use_container_width=True)
+        else:
+            st.info("Aún no se han registrado prospectos.")
+
+        st.markdown("##### Descargas de Gestión")
+        col_adm_dl1, col_adm_dl2 = st.columns(2)
+        with col_adm_dl1:
+            leads_csv = lm.exportar_csv()
+            st.download_button(
+                label="👥 Descargar Prospectos Registrados (CSV Excel)",
+                data=leads_csv,
+                file_name="leads_registrados.csv",
+                mime="text/csv",
+                key="btn_admin_leads_csv",
+                use_container_width=True,
+            )
+        with col_adm_dl2:
+            bench = SectorBenchmark()
+            bench_data = json.dumps(
+                bench.get_all(include_private=False), indent=2, ensure_ascii=False
+            ).encode("utf-8")
+            st.download_button(
+                label="📊 Descargar Benchmark Sectorial (JSON)",
+                data=bench_data,
+                file_name="sector_benchmarks.json",
+                mime="application/json",
+                key="btn_admin_benchmark_json",
+                use_container_width=True,
+            )
 
 st.divider()
 

@@ -35,6 +35,12 @@ class LeadRecord(BaseModel):
     )
     access_tier: str = "FREE_TRIAL"
     evaluaciones_realizadas: int = 0
+    privacy_opt_in: bool = True
+    marketing_opt_in: bool = False
+    policy_version: str = "v1.1"
+    consent_timestamp_utc: str = Field(
+        default_factory=lambda: datetime.now(timezone.utc).isoformat()
+    )
 
 
 def validar_email(email: str) -> bool:
@@ -100,6 +106,10 @@ class LeadManager:
         empresa: str,
         email: str,
         telefono: str | None = None,
+        privacy_opt_in: bool = True,
+        marketing_opt_in: bool = False,
+        policy_version: str = "v1.1",
+        consent_timestamp_utc: str | None = None,
     ) -> LeadRecord:
         """Registra un nuevo prospecto en el sistema."""
         nombre_clean = nombre.strip()
@@ -113,6 +123,10 @@ class LeadManager:
             raise ValueError("La empresa es obligatoria.")
         if not validar_email(email_clean):
             raise ValueError("El correo electrónico no tiene un formato válido.")
+        if not privacy_opt_in:
+            raise ValueError("Debe aceptar la Política de Privacidad para continuar.")
+
+        timestamp = consent_timestamp_utc or datetime.now(timezone.utc).isoformat()
 
         # Buscar si ya existe para actualizar o reingresar
         lead = LeadRecord(
@@ -120,6 +134,10 @@ class LeadManager:
             empresa=empresa_clean,
             email=email_clean,
             telefono=telefono_clean,
+            privacy_opt_in=privacy_opt_in,
+            marketing_opt_in=marketing_opt_in,
+            policy_version=policy_version,
+            consent_timestamp_utc=timestamp,
         )
 
         # Actualizar si existe el mismo email o agregar nuevo
@@ -140,7 +158,20 @@ class LeadManager:
     def exportar_csv(self) -> bytes:
         """Exporta los prospectos a CSV con codificación utf-8-sig para Excel."""
         output = io.StringIO()
-        fieldnames = ["id", "fecha_registro", "nombre", "empresa", "email", "telefono", "access_tier", "evaluaciones_realizadas"]
+        fieldnames = [
+            "id",
+            "fecha_registro",
+            "nombre",
+            "empresa",
+            "email",
+            "telefono",
+            "access_tier",
+            "evaluaciones_realizadas",
+            "privacy_opt_in",
+            "marketing_opt_in",
+            "policy_version",
+            "consent_timestamp_utc",
+        ]
         writer = csv.DictWriter(output, fieldnames=fieldnames)
         writer.writeheader()
         for item in self._leads:

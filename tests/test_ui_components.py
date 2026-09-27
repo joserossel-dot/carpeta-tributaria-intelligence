@@ -170,3 +170,19 @@ class TestUIComponentsWithRealData:
         show_alerts(partial_tf)
         show_export(partial_tf, auth_role="admin")
         show_export(partial_tf, auth_role="client")
+
+    def test_admin_panel_leads_and_telemetry_ui(self, tmp_path):
+        from src.leads.lead_manager import LeadManager
+        lm = LeadManager(tmp_path / "leads_ui_test.json")
+        lm.registrar_lead("Admin Test", "Admin SpA", "admin@spa.cl", marketing_opt_in=True)
+        leads = lm.obtener_leads()
+        assert len(leads) == 1
+        assert leads[0]["marketing_opt_in"] is True
+        assert leads[0]["privacy_opt_in"] is True
+        assert leads[0]["policy_version"] == "v1.1"
+
+        csv_data = lm.exportar_csv()
+        assert b"privacy_opt_in" in csv_data
+        assert b"marketing_opt_in" in csv_data
+        assert b"policy_version" in csv_data
+        assert b"consent_timestamp_utc" in csv_data
