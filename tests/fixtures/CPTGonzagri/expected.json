@@ -2250,7 +2250,13 @@
       "observaciones": [
         "No se encontraron Ingresos del Giro",
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
-      ]
+      ],
+      "idpc_determinado": null,
+      "ppm_imputados": null,
+      "saldo_liquidacion_anual": null,
+      "rli_source_code": "1109",
+      "cpt_source_code": "645",
+      "ingresos_source_code": null
     },
     {
       "anio_tributario": "2018",
@@ -2267,7 +2273,13 @@
         "No se encontraron Ingresos del Giro",
         "No se encontró Renta Líquida Imponible",
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
-      ]
+      ],
+      "idpc_determinado": null,
+      "ppm_imputados": null,
+      "saldo_liquidacion_anual": null,
+      "rli_source_code": null,
+      "cpt_source_code": "645",
+      "ingresos_source_code": null
     },
     {
       "anio_tributario": "2017",
@@ -2284,7 +2296,13 @@
         "No se encontraron Ingresos del Giro",
         "No se encontró Renta Líquida Imponible",
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
-      ]
+      ],
+      "idpc_determinado": 961,
+      "ppm_imputados": null,
+      "saldo_liquidacion_anual": null,
+      "rli_source_code": null,
+      "cpt_source_code": "645",
+      "ingresos_source_code": null
     }
   ],
   "properties": [],
@@ -3928,8 +3946,8 @@
     "score_compuesto": 90,
     "decision": {
       "resultado_base": "RECHAZADO",
-      "evaluacion_referencial": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.)",
-      "clasificacion_riesgo": "PERFIL TRIBUTARIO DÉBIL",
+      "evaluacion_referencial": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
+      "clasificacion_riesgo": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
       "desempeno_tributario_texto": "Desempeño Tributario Alto",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 0,
@@ -3942,7 +3960,7 @@
       "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
       "garantia_exigida": "Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
       "resguardo_comercial_sugerido": "Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
-      "protocolo_operativo": "No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado.",
+      "protocolo_operativo": "No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada.",
       "memoria_calculo": {
         "periodo_inicio": "2018-12",
         "periodo_fin": "2019-11",
@@ -3962,7 +3980,7 @@
         "freno_absorcion_operacional": 0,
         "margen_operacional_depurado_mensual": 19313118,
         "factor_riesgo_phi": 1.0,
-        "factor_ajuste_conductual_pct": 100,
+        "factor_ajuste_conductual_pct": 0,
         "cupo_preliminar": 0,
         "capital_propio_tributario": 5515454480,
         "tope_patrimonial_12pct_cpt": 661854538,
@@ -3970,15 +3988,17 @@
         "tope_patrimonial_cpt": 661854538,
         "rli_declarada_le_zero": true,
         "ausencia_f22": false,
+        "contraccion_severa": false,
         "cupo_maximo_sugerido": 0,
         "cupo_excepcional_garantizado": null,
         "castigos_aplicados": [
           "Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)",
           "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)"
         ],
+        "glosa_paso_c": "Tramo Score >=85: 0% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
         "pct_apertura": 0,
         "tramo_score": ">=85",
-        "glosa_apertura": "0% de Apertura para Score >=85 (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+        "glosa_apertura": "0% de Apertura para Score >=85 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
         "linea_maxima_tecnica": 0,
         "linea_inicial_recomendada": 0,
         "linea_maxima_condicionada": 0,
@@ -3990,13 +4010,13 @@
         "historial_pago": "Cliente nuevo (Sin historial previo)"
       },
       "hoja_ruta_comercial": [
-        "Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.).",
+        "Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).",
         "Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).",
         "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
         "Línea Máxima Condicionada: M$ 0.",
         "Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
         "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
-        "Protocolo operativo: No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado."
+        "Protocolo operativo: No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada."
       ],
       "caminos_mitigacion": [
         {
@@ -4070,7 +4090,7 @@
         {
           "parametro": "Representantes Legales Identificados",
           "estado": "CUMPLE",
-          "detalle": "3 representante(s) registrado(s)"
+          "detalle": "3 representante(s) registrado(s) (Nota SII: facultades cambiarias deben acreditarse según estatutos vigentes)"
         },
         {
           "parametro": "Continuidad F29 Reciente",
@@ -4102,10 +4122,10 @@
       "Respaldo patrimonial sólido: CPT positivo de $5,515,454,480 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nClasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.)\nPuntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 8.277\n- Techo Operativo Proveedor (8%): M$ 662\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 19.313\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 5.515.454\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.).\n- ✅ Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado.",
-    "veredicto": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.)",
-    "evaluacion_referencial": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.)",
-    "clasificacion_riesgo": "PERFIL TRIBUTARIO DÉBIL",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nClasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)\nPuntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 8.277\n- Techo Operativo Proveedor (8%): M$ 662\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 19.313\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 5.515.454\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).\n- ✅ Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada.",
+    "veredicto": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
+    "evaluacion_referencial": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
+    "clasificacion_riesgo": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
     "desempeno_tributario_texto": "Desempeño Tributario Alto",
     "score_crediticio": 90.0,
     "categoria_riesgo": "MEDIO",
@@ -4119,7 +4139,7 @@
     "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
     "garantia_exigida": "Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
     "resguardo_comercial_sugerido": "Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
-    "protocolo_operativo": "No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado.",
+    "protocolo_operativo": "No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada.",
     "memoria_calculo": {
       "periodo_inicio": "2018-12",
       "periodo_fin": "2019-11",
@@ -4139,7 +4159,7 @@
       "freno_absorcion_operacional": 0,
       "margen_operacional_depurado_mensual": 19313118,
       "factor_riesgo_phi": 1.0,
-      "factor_ajuste_conductual_pct": 100,
+      "factor_ajuste_conductual_pct": 0,
       "cupo_preliminar": 0,
       "capital_propio_tributario": 5515454480,
       "tope_patrimonial_12pct_cpt": 661854538,
@@ -4147,15 +4167,17 @@
       "tope_patrimonial_cpt": 661854538,
       "rli_declarada_le_zero": true,
       "ausencia_f22": false,
+      "contraccion_severa": false,
       "cupo_maximo_sugerido": 0,
       "cupo_excepcional_garantizado": null,
       "castigos_aplicados": [
         "Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)",
         "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)"
       ],
+      "glosa_paso_c": "Tramo Score >=85: 0% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
       "pct_apertura": 0,
       "tramo_score": ">=85",
-      "glosa_apertura": "0% de Apertura para Score >=85 (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+      "glosa_apertura": "0% de Apertura para Score >=85 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
       "linea_maxima_tecnica": 0,
       "linea_inicial_recomendada": 0,
       "linea_maxima_condicionada": 0,
@@ -4167,13 +4189,13 @@
       "historial_pago": "Cliente nuevo (Sin historial previo)"
     },
     "hoja_ruta_comercial": [
-      "Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.).",
+      "Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).",
       "Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).",
       "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
       "Línea Máxima Condicionada: M$ 0.",
       "Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
       "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
-      "Protocolo operativo: No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado."
+      "Protocolo operativo: No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada."
     ],
     "desglose_score": [
       {
@@ -4231,7 +4253,7 @@
       {
         "parametro": "Representantes Legales Identificados",
         "estado": "CUMPLE",
-        "detalle": "3 representante(s) registrado(s)"
+        "detalle": "3 representante(s) registrado(s) (Nota SII: facultades cambiarias deben acreditarse según estatutos vigentes)"
       },
       {
         "parametro": "Continuidad F29 Reciente",

@@ -92,7 +92,7 @@ class TestCreditValidityArchetypes:
         assert result.linea_inicial_sugerida == 0
         assert result.cupo_aprobado == 0
         assert result.decision.resultado_base == "RECHAZADO"
-        assert result.evaluacion_referencial == "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.)"
+        assert result.evaluacion_referencial == "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)"
 
     def test_archetype_3_carpeta_sin_f22_con_12m_f29_sanos(self):
         """Arquetipo 3: Carpeta sin F22 pero con 12M F29 sanos.
@@ -182,14 +182,16 @@ class TestCreditValidityArchetypes:
         p3 = next(p for p in result.desglose_score if "Holgura Débito/Crédito" in p.nombre)
         # Debe obtener puntaje no castigado (>= 17 pts, específicamente 20 pts por Ventas/Compras > 1.25x)
         assert p3.puntaje_obtenido >= 17
-        assert "exportadora/exenta" in p3.detalle.lower()
+        assert "exportadora" in p3.detalle.lower()
 
     def test_archetype_6_microempresa_tiered_floor(self):
-        """Arquetipo 6: Micro-empresa con línea técnica de M$ 345.
+        """Arquetipo 6: Micro-empresa con línea técnica escalonada.
 
-        Verifica truncado a M$ 340 (múltiplo de M$ 10) y no M$ 300 ni M$ 0.
+        Verifica truncado a M$ 340 (múltiplo de M$ 10) y soporte de tramo $10k-$100k (múltiplos de $5k).
         """
         assert _floor_tiered(345_000) == 340_000
         assert _floor_tiered(995_000) == 990_000
         assert _floor_tiered(14_417_824) == 14_400_000
-        assert _floor_tiered(99_000) == 0
+        assert _floor_tiered(84_000) == 80_000
+        assert _floor_tiered(99_000) == 95_000
+        assert _floor_tiered(9_000) == 0

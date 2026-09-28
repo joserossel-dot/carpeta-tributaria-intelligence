@@ -328,11 +328,26 @@ class ExcelReport:
             posterg = "NO"
             mora = "NO"
             if f29_obj:
+                cods = {}
                 for d in f29_obj.detalles:
-                    if d.codigo in ("779", "755", "756") and d.valor and d.valor.replace(".", "").isdigit() and int(d.valor.replace(".", "")) > 0:
-                        posterg = "SÍ"
-                    if d.codigo == "94" and d.valor and d.valor.replace(".", "").isdigit() and int(d.valor.replace(".", "")) > 0:
-                        mora = f"SÍ (${int(d.valor.replace('.', '')):,})".replace(",", ".")
+                    v_raw = d.valor.replace(".", "").replace("-", "") if d.valor else ""
+                    if v_raw.isdigit():
+                        cods[d.codigo] = int(v_raw)
+                if any(cods.get(c, 0) > 0 for c in ("779", "778", "755", "756")):
+                    posterg = "SÍ"
+                c92 = cods.get("92", 0)
+                c93 = cods.get("93", 0)
+                c94 = cods.get("94", 0)
+                c91 = cods.get("91", 0)
+                recargo = 0
+                if c92 > 0 or c93 > 0:
+                    recargo = c92 + c93
+                elif c91 > 0 and c94 > 0 and c94 > c91:
+                    recargo = c94 - c91
+                elif c94 > 0 and c91 == 0:
+                    recargo = c94
+                if recargo > 0:
+                    mora = f"SÍ (${recargo:,})".replace(",", ".")
 
             def to_m(val):
                 if val is None:

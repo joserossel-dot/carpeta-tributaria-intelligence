@@ -1,4 +1,5 @@
 import re
+from typing import Any
 
 from src.models.annual_tax_return import AnnualTaxReturn
 
@@ -42,6 +43,8 @@ class F22Parser:
     _BASE_IMPONIBLE_CODES = ["1109", "1440", "1414", "1438"]
     _PPM_CODES = ["36", "849", "1904"]
     _CREDITOS_CODES = ["82", "626"]
+    _IDPC_CODES = ["1113", "18"]
+    _SALDO_LIQUIDACION_CODES = ["305", "90"]
 
     _RE_ANIO = re.compile(r"A(?:ÑO|NO|NIO)\s+TRIBUTARIO\s*(\d{4})", re.IGNORECASE)
     _RE_SIN_DECLARACION = re.compile(r"No se registra declaraci[oó]n", re.IGNORECASE)
@@ -155,15 +158,17 @@ class F22Parser:
             return None, glosa
 
     def _extraer_datos(self, text: str, anio_tributario: str) -> AnnualTaxReturn:
-        valores: dict[str, int] = {}
+        valores: dict[str, Any] = {}
 
         # 1. Capital Propio Tributario (Positivo / Negativo)
         # Revisar códigos negativos primero
         cpt_val = None
+        cpt_source = None
         for code in self._CPT_NEGATIVO_CODES:
             val, _ = self._extract_raw_code(text, code)
             if val is not None and val > 0:
                 cpt_val = -abs(val)
+                cpt_source = code
                 break
 
         if cpt_val is None:
@@ -171,24 +176,29 @@ class F22Parser:
                 val, _ = self._extract_raw_code(text, code)
                 if val is not None and val != 0:
                     cpt_val = val
+                    cpt_source = code
                     break
 
         if cpt_val is not None:
             valores["capital_propio_tributario"] = cpt_val
+            valores["cpt_source_code"] = cpt_source
 
         # 2. Ingresos del Giro
         for code in self._INGRESOS_CODES:
             val, _ = self._extract_raw_code(text, code)
             if val is not None and val != 0:
                 valores["ingresos"] = val
+                valores["ingresos_source_code"] = code
                 break
 
         # 3. Pérdidas Tributarias
         perdidas_val = None
+        perdidas_source = None
         for code in self._PERDIDAS_CODES:
             val, _ = self._extract_raw_code(text, code)
-            if val is not None and val != 0:
+            if val is not None and val > 0:
                 perdidas_val = abs(val)
+                perdidas_source = code
                 break
 
         if perdidas_val is not None:
@@ -196,18 +206,22 @@ class F22Parser:
 
         # 4. Renta Líquida Imponible y Base Imponible
         rli_val = None
+        rli_source = None
         for code in self._RLI_CODES:
             val, _ = self._extract_raw_code(text, code)
             if val is not None and val != 0:
                 rli_val = val
+                rli_source = code
                 break
 
         if rli_val is not None:
             valores["renta_liquida_imponible"] = rli_val
+            valores["rli_source_code"] = rli_source
             if rli_val < 0 and "perdidas" not in valores:
                 valores["perdidas"] = abs(rli_val)
         elif perdidas_val is not None:
             valores["renta_liquida_imponible"] = -abs(perdidas_val)
+            valores["rli_source_code"] = perdidas_source
 
         for code in self._BASE_IMPONIBLE_CODES:
             val, _ = self._extract_raw_code(text, code)
@@ -220,6 +234,7 @@ class F22Parser:
             val, _ = self._extract_raw_code(text, code)
             if val is not None and val != 0:
                 valores["ppm"] = val
+                valores["ppm_imputados"] = val
                 break
 
         for code in self._CREDITOS_CODES:
@@ -228,13 +243,28 @@ class F22Parser:
                 valores["creditos"] = val
                 break
 
-        # 6. Impuesto Determinado / Liquidación Anual
+        # 6. IDPC determinado (Cód. 1113, 18)
+        for code in self._IDPC_CODES:
+            val_idpc, _ = self._extract_raw_code(text, code)
+            if val_idpc is not None and val_idpc != 0:
+                valores["idpc_determinado"] = val_idpc
+                break
+
+        # 7. Saldo de Liquidación Anual (Cód. 305, 90) e Impuesto Determinado
         # Nota técnica SII:
         # Cód. 1113: Impuesto de Primera Categoría (IDPC 27% régimen general 14A sobre RLI Cód. 1109/1690).
         # Cód. 305 / Cód. 90: Saldo Líquido a Pagar resultante de la liquidación anual tras deducir PPM (Cód. 36/1904) y créditos.
         val_305, glosa_305 = self._extract_raw_code(text, "305")
         if val_305 is not None and self._glosa_305_confiable(glosa_305):
             valores["impuesto_determinado"] = val_305
+            valores["saldo_liquidacion_anual"] = val_305
+        elif val_305 is not None:
+            pass
+        else:
+            val_90, _ = self._extract_raw_code(text, "090")
+            if val_90 is not None:
+                valores["saldo_liquidacion_anual"] = val_90
+                valores["impuesto_determinado"] = val_90
 
         observaciones = [
             mensaje

@@ -13,3 +13,10 @@ class AnnualTaxReturn(BaseModel):
     base_imponible: int | None = None
     resultado_tributario: int | None = None
     observaciones: list[str] = []
+    # v2.7 Trazabilidad y Mapeo Multigeneración
+    idpc_determinado: int | None = None
+    ppm_imputados: int | None = None
+    saldo_liquidacion_anual: int | None = None
+    rli_source_code: str | None = None
+    cpt_source_code: str | None = None
+    ingresos_source_code: str | None = None

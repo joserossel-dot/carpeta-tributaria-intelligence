@@ -29,16 +29,19 @@ def _floor_tiered(val: float | int | Decimal | None) -> int:
     """Truncamiento escalonado conservador (v2.7):
     - >= 1.000.000: múltiplos de 100.000 CLP.
     - 100.000 a 999.999: múltiplos de 10.000 CLP (ej. $345.000 -> $340.000).
-    - < 100.000: 0 CLP.
+    - 10.000 a 99.999: múltiplos de 5.000 CLP (ej. $84.000 -> $80.000).
+    - < 10.000: 0 CLP.
     """
     if val is None:
         return 0
     fval = float(val)
-    if fval < 100_000.0:
+    if fval < 10_000.0:
         return 0
     if fval >= 1_000_000.0:
         return int(math.floor(fval / 100_000.0) * 100_000)
-    return int(math.floor(fval / 10_000.0) * 10_000)
+    if fval >= 100_000.0:
+        return int(math.floor(fval / 10_000.0) * 10_000)
+    return int(math.floor(fval / 5_000.0) * 5_000)
 
 
 _floor_m100 = _floor_tiered
@@ -349,7 +352,9 @@ class CreditRiskEngine:
         detalle_reps = f"{len(rep_names)} representante(s) registrado(s)"
         if rep_names:
             if forma_act:
-                detalle_reps += f" (Actuación SII: {forma_act})"
+                detalle_reps += f" (Actuación SII: {forma_act} — Nota SII: actuación tributaria '{forma_act}' — no acredita poderes cambiarios)"
+            else:
+                detalle_reps += " (Nota SII: facultades cambiarias deben acreditarse según estatutos vigentes)"
         else:
             detalle_reps = "Sin representantes registrados en carpeta"
 
@@ -544,13 +549,31 @@ class CreditRiskEngine:
         )
 
     @staticmethod
+    def _f29_tiene_mora(f29: F29) -> bool:
+        cods = {d.codigo: _parse_monto(d.valor) for d in f29.detalles}
+        c92 = cods.get("92", 0)  # Reajuste Art. 53
+        c93 = cods.get("93", 0)  # Intereses y multas
+        if c92 > 0 or c93 > 0:
+            return True
+        c94 = cods.get("94", 0)
+        c91 = cods.get("91", 0)
+        if c91 > 0 and c94 > 0:
+            return (c94 - c91) > 0
+        return c94 > 0
+
+    @staticmethod
+    def _f29_tiene_postergacion(f29: F29) -> bool:
+        for det in f29.detalles:
+            if det.codigo in ("779", "778", "755", "756") and _parse_monto(det.valor) > 0:
+                return True
+        return False
+
+    @staticmethod
     def _postergaciones_iva(tax_folder: TaxFolder) -> PostergacionesIva:
         periodos = []
         for f29 in tax_folder.f29:
-            for det in f29.detalles:
-                if det.codigo in ("779", "755", "756") and _parse_monto(det.valor) > 0:
-                    periodos.append(f29.periodo)
-                    break
+            if CreditRiskEngine._f29_tiene_postergacion(f29):
+                periodos.append(f29.periodo)
 
         return PostergacionesIva(
             meses_con_postergacion=len(periodos),
@@ -617,6 +640,7 @@ class CreditRiskEngine:
         # Bloque 2: Separación estricta entre Pérdida Declarada (RLI <= 0) vs Ausencia de F22
         rli_declarada_le_zero = False
         ausencia_f22 = False
+        contraccion_severa = False
         rli_val = None
         ingresos_f22 = None
         perdidas_f22 = None
@@ -666,12 +690,25 @@ class CreditRiskEngine:
                     rli_mensual_base = float(rli_val) / 12.0
                     # Bloque 3: Ajuste de RLI por deterioro reciente en F29 (Puente temporal F22 -> F29)
                     var_ventas_3m = float(ma.variacion_ventas_3m_pct) if (ma and ma.variacion_ventas_3m_pct is not None) else 0.0
-                    if var_ventas_3m < -10.0:
+                    var_ventas_yoy = (
+                        float(ma.variacion_ventas_yoy_3m_pct)
+                        if (ma and getattr(ma, "variacion_ventas_yoy_3m_pct", None) is not None)
+                        else None
+                    )
+                    recuperacion_yoy = (var_ventas_yoy is not None and var_ventas_yoy >= -10.0)
+                    if -35.0 <= var_ventas_3m < -10.0:
                         factor_deterioro = max(0.0, 1.0 + (var_ventas_3m / 100.0))
                         rli_mensualizada = rli_mensual_base * factor_deterioro
                         castigos.append(
                             f"Contracción reciente de ventas F29 ({var_ventas_3m:.1f}%): "
                             f"RLI mensualizada ajustada preventivamente en {factor_deterioro:.2f}x"
+                        )
+                    elif var_ventas_3m < -35.0 and not recuperacion_yoy:
+                        contraccion_severa = True
+                        rli_mensualizada = 0.0
+                        castigos.append(
+                            f"Contracción severa reciente de ventas F29 ({var_ventas_3m:.1f}%): "
+                            f"Capacidad de pago histórica F22 invalidada por colapso operativo (Paso C = 0%)"
                         )
                     else:
                         rli_mensualizada = rli_mensual_base
@@ -698,37 +735,41 @@ class CreditRiskEngine:
         # Paso C: Factor de Castigo por Riesgo (Phi)
         phi = 1.0
 
-        # 1. Variación de ventas 3M vs 12M con validación YoY para descartar estacionalidad
-        var_ventas_3m = float(ma.variacion_ventas_3m_pct) if (ma and ma.variacion_ventas_3m_pct is not None) else 0.0
-        var_ventas_yoy = (
-            float(ma.variacion_ventas_yoy_3m_pct)
-            if (ma and getattr(ma, "variacion_ventas_yoy_3m_pct", None) is not None)
-            else None
-        )
-
-        if var_ventas_yoy is not None:
-            # Historia >= 15 meses: descartar ciclo estacional (e.g. estacionalidad agrícola)
-            if var_ventas_3m < -40.0 and var_ventas_yoy < -20.0:
-                phi -= 0.50
-                castigos.append(f"Contracción crítica de ventas confirmada YoY (3M vs 12M: {var_ventas_3m:.1f}%, YoY: {var_ventas_yoy:.1f}%): -0.50")
-            elif var_ventas_3m < -20.0 and var_ventas_yoy < -10.0:
-                phi -= 0.25
-                castigos.append(f"Contracción de ventas confirmada YoY (3M vs 12M: {var_ventas_3m:.1f}%, YoY: {var_ventas_yoy:.1f}%): -0.25")
-            elif var_ventas_3m < -20.0:
-                castigos.append(f"Ciclo estacional trimestral verificado y neutralizado por estabilidad interanual YoY ({var_ventas_yoy:+.1f}%)")
+        if contraccion_severa:
+            phi = 0.0
+            castigos.append("Bloqueo de línea por contracción operativa severa en F29 (>35%): Paso C = 0%")
         else:
-            if var_ventas_3m < -40.0:
-                phi -= 0.50
-                castigos.append("Caída crítica de ventas 3M vs 12M (>40%): -0.50")
-            elif var_ventas_3m < -20.0:
-                phi -= 0.25
-                castigos.append("Caída significativa de ventas 3M vs 12M (>20%): -0.25")
+            # 1. Variación de ventas 3M vs 12M con validación YoY para descartar estacionalidad
+            var_ventas_3m = float(ma.variacion_ventas_3m_pct) if (ma and ma.variacion_ventas_3m_pct is not None) else 0.0
+            var_ventas_yoy = (
+                float(ma.variacion_ventas_yoy_3m_pct)
+                if (ma and getattr(ma, "variacion_ventas_yoy_3m_pct", None) is not None)
+                else None
+            )
+
+            if var_ventas_yoy is not None:
+                # Historia >= 15 meses: descartar ciclo estacional (e.g. estacionalidad agrícola)
+                if var_ventas_3m < -40.0 and var_ventas_yoy < -20.0:
+                    phi -= 0.50
+                    castigos.append(f"Contracción crítica de ventas confirmada YoY (3M vs 12M: {var_ventas_3m:.1f}%, YoY: {var_ventas_yoy:.1f}%): -0.50")
+                elif var_ventas_3m < -20.0 and var_ventas_yoy < -10.0:
+                    phi -= 0.25
+                    castigos.append(f"Contracción de ventas confirmada YoY (3M vs 12M: {var_ventas_3m:.1f}%, YoY: {var_ventas_yoy:.1f}%): -0.25")
+                elif var_ventas_3m < -20.0:
+                    castigos.append(f"Ciclo estacional trimestral verificado y neutralizado por estabilidad interanual YoY ({var_ventas_yoy:+.1f}%)")
+            else:
+                if var_ventas_3m < -40.0:
+                    phi -= 0.50
+                    castigos.append("Caída crítica de ventas 3M vs 12M (>40%): -0.50")
+                elif var_ventas_3m < -20.0:
+                    phi -= 0.25
+                    castigos.append("Caída significativa de ventas 3M vs 12M (>20%): -0.25")
 
         # 2. Mora efectiva últimos 12 meses (tomar los 12 meses más recientes)
         sorted_f29 = sorted(tax_folder.f29, key=lambda f: f.periodo or "")
         last_12_f29 = sorted_f29[-12:] if len(sorted_f29) >= 12 else sorted_f29
         mora_12m = sum(
-            1 for f in last_12_f29 for d in f.detalles if d.codigo == "94" and _parse_monto(d.valor) > 0
+            1 for f in last_12_f29 if self._f29_tiene_mora(f)
         )
         if mora_12m > 0:
             penal_mora = min(0.60, mora_12m * 0.15)
@@ -738,7 +779,7 @@ class CreditRiskEngine:
         # 3. Postergación de IVA repetida en últimos 6 meses más recientes
         last_6_f29 = sorted_f29[-6:] if len(sorted_f29) >= 6 else sorted_f29
         posterg_6m = sum(
-            1 for f in last_6_f29 for d in f.detalles if d.codigo in ("779", "755", "756") and _parse_monto(d.valor) > 0
+            1 for f in last_6_f29 if self._f29_tiene_postergacion(f)
         )
         if posterg_6m >= 2:
             phi -= 0.20
@@ -821,6 +862,7 @@ class CreditRiskEngine:
             "tope_patrimonial_cpt": int(round(tope_cpt)) if tope_cpt is not None else None,
             "rli_declarada_le_zero": rli_declarada_le_zero,
             "ausencia_f22": ausencia_f22,
+            "contraccion_severa": contraccion_severa,
             "cupo_maximo_sugerido": cupo_maximo_sugerido,
             "cupo_excepcional_garantizado": cupo_excepcional,
             "castigos_aplicados": castigos,
@@ -850,9 +892,9 @@ class CreditRiskEngine:
         meses_con_recargo = 0
         meses_con_remanente = 0
         for f29 in tax_folder.f29:
+            if CreditRiskEngine._f29_tiene_mora(f29):
+                meses_con_recargo += 1
             for det in f29.detalles:
-                if det.codigo == "94" and _parse_monto(det.valor) > 0:
-                    meses_con_recargo += 1
                 if det.codigo == "504" and _parse_monto(det.valor) > 0:
                     meses_con_remanente += 1
 
@@ -1097,23 +1139,21 @@ class CreditRiskEngine:
                     elif d.codigo in ("562", "142"):
                         ventas_exe += _parse_monto(d.valor)
 
+        pct_exp_exe = ((ventas_exp + ventas_exe) / total_ventas_12m) if total_ventas_12m > 0 else 0.0
         pct_exp = (ventas_exp / total_ventas_12m) if total_ventas_12m > 0 else 0.0
         pct_exe = (ventas_exe / total_ventas_12m) if total_ventas_12m > 0 else 0.0
-        es_exportador_o_exento = (pct_exp > 0.20 or pct_exe > 0.20)
+        es_exportador_o_exento = (pct_exp_exe > 0.20 or pct_exp > 0.20 or pct_exe > 0.20)
 
         if es_exportador_o_exento:
             ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
-            if ratio_op >= 1.25:
+            if ratio_op >= 1.15:
                 p3 = 20
-                det3 = f"Operación exportadora/exenta con holgura operacional sólida (Ratio Ventas/Compras: {ratio_op:.2f}x)"
-            elif ratio_op >= 1.10:
-                p3 = 17
-                det3 = f"Operación exportadora/exenta con margen suficiente (Ratio Ventas/Compras: {ratio_op:.2f}x)"
+                det3 = f"Empresa exportadora: margen operacional holgado (Ventas/Compras = {ratio_op:.2f}x) y recuperación legítima de IVA"
             elif ratio_op >= 1.00:
-                p3 = 12
-                det3 = f"Operación exportadora/exenta con margen ajustado (Ratio Ventas/Compras: {ratio_op:.2f}x)"
+                p3 = 15
+                det3 = f"Operación exportadora/exenta con margen suficiente (Ratio Ventas/Compras: {ratio_op:.2f}x)"
             else:
-                p3 = 5
+                p3 = 8
                 det3 = f"Operación exportadora/exenta con compras superiores a ventas (Ratio Ventas/Compras: {ratio_op:.2f}x)"
         else:
             ratio = indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else None
@@ -1318,8 +1358,7 @@ class CreditRiskEngine:
         n_reps = len(rep_names)
         forma_act_str = forma_act or "No informada"
         clausula_pagare = (
-            f"Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas "
-            f"mediante Certificado de Vigencia y Escritura de Poderes "
+            f"Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) "
             f"(Nota informativa SII: ante el SII figuran {n_reps} representantes con actuación tributaria '{forma_act_str}': {reps_registrados})"
         )
 
@@ -1342,7 +1381,7 @@ class CreditRiskEngine:
 
         # Validación de mora F29 reciente y alertas
         mora_12m = indicadores.mora_efectiva.meses_con_recargo if indicadores.mora_efectiva else 0
-        posterg_6m = hechos.postergaciones_iva.meses_con_postergacion if hechos and hechos.postergaciones_iva else 0
+        posterc_6m = hechos.postergaciones_iva.meses_con_postergacion if hechos and hechos.postergaciones_iva else 0
         phi_val = memoria.get("factor_riesgo_phi", 1.0)
 
         tiene_morosidad_comercial = "con morosidad" in boletin_comercial.lower()
@@ -1352,6 +1391,7 @@ class CreditRiskEngine:
 
         rli_declarada_le_zero = memoria.get("rli_declarada_le_zero", False)
         ausencia_f22 = memoria.get("ausencia_f22", False)
+        contraccion_severa = memoria.get("contraccion_severa", False)
 
         condicion_escalamiento = (
             "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, "
@@ -1367,6 +1407,7 @@ class CreditRiskEngine:
             linea_inicial = 0
             linea_maxima = 0
             pct_apertura = 0.0
+            factor_score_paso_c = 0.0
             plazo_dias = 0
             plazo_inicial = "Contado (0 días)"
             resguardo = "Carpeta sin información suficiente para evaluar línea de crédito."
@@ -1374,19 +1415,37 @@ class CreditRiskEngine:
 
         elif rli_declarada_le_zero:
             resultado_base = "RECHAZADO"
-            evaluacion_referencial = "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.)"
-            clasificacion_riesgo = "PERFIL TRIBUTARIO DÉBIL"
+            evaluacion_referencial = "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)"
+            clasificacion_riesgo = "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)"
             cupo_aprobado = 0
             linea_inicial = 0
             linea_maxima = 0
             pct_apertura = 0.0
+            factor_score_paso_c = 0.0
             plazo_dias = 0
             plazo_inicial = "Contado (0 días)"
             resguardo = (
                 "Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. "
                 "Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas."
             )
-            protocolo = "No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado."
+            protocolo = "No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada."
+
+        elif contraccion_severa:
+            resultado_base = "RECHAZADO"
+            evaluacion_referencial = "PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática por Contracción Operativa Severa)"
+            clasificacion_riesgo = "PERFIL TRIBUTARIO DÉBIL"
+            cupo_aprobado = 0
+            linea_inicial = 0
+            linea_maxima = 0
+            pct_apertura = 0.0
+            factor_score_paso_c = 0.0
+            plazo_dias = 0
+            plazo_inicial = "Contado (0 días)"
+            resguardo = (
+                prefix_base
+                + "línea automática bloqueada por contracción severa de ventas en F29 (>35%). Operación exclusiva al contado anticipado previo al despacho."
+            )
+            protocolo = "No despachar a crédito. Capacidad de pago histórica invalidada por caída severa en F29. Operación recomendada exclusivamente al contado o pago anticipado."
 
         elif tiene_morosidad_comercial or cpt_negativo or cupo_maximo == 0 or score_compuesto < 65 or mora_12m >= 2:
             resultado_base = "RECHAZADO"
@@ -1396,6 +1455,7 @@ class CreditRiskEngine:
             linea_inicial = 0
             linea_maxima = 0
             pct_apertura = 0.0
+            factor_score_paso_c = 0.0
             plazo_dias = 0
             plazo_inicial = "Contado (0 días)"
             if tiene_morosidad_comercial:
@@ -1513,7 +1573,11 @@ class CreditRiskEngine:
             )
         )
         pct_ap_int = int(round(pct_apertura * 100))
-        glosa_apertura = f"{pct_ap_int}% de Apertura para Score {tramo_str} (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)"
+        factor_score_paso_c_val = factor_score_paso_c if 'factor_score_paso_c' in locals() else (1.0 if (score_compuesto and score_compuesto >= 85) else (0.8 if (score_compuesto and score_compuesto >= 75) else (0.6 if (score_compuesto and score_compuesto >= 65) else 0.0)))
+        glosa_paso_c = f"Tramo Score {tramo_str}: {int(round(factor_score_paso_c_val * 100))}% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)"
+        glosa_apertura = f"{pct_ap_int}% de Apertura para Score {tramo_str} (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)"
+        memoria["factor_ajuste_conductual_pct"] = int(round(factor_score_paso_c_val * 100))
+        memoria["glosa_paso_c"] = glosa_paso_c
         memoria["pct_apertura"] = pct_ap_int
         memoria["tramo_score"] = tramo_str
         memoria["glosa_apertura"] = glosa_apertura

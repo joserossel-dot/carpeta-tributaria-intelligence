@@ -4147,7 +4147,13 @@
         "No se encontraron Ingresos del Giro",
         "No se encontró Renta Líquida Imponible",
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
-      ]
+      ],
+      "idpc_determinado": 9,
+      "ppm_imputados": null,
+      "saldo_liquidacion_anual": null,
+      "rli_source_code": null,
+      "cpt_source_code": "645",
+      "ingresos_source_code": null
     },
     {
       "anio_tributario": "2018",
@@ -4164,7 +4170,13 @@
         "No se encontraron Ingresos del Giro",
         "No se encontró Renta Líquida Imponible",
         "No se encontró Capital Propio Tributario"
-      ]
+      ],
+      "idpc_determinado": 9,
+      "ppm_imputados": null,
+      "saldo_liquidacion_anual": null,
+      "rli_source_code": null,
+      "cpt_source_code": null,
+      "ingresos_source_code": null
     },
     {
       "anio_tributario": "2017",
@@ -4180,7 +4192,13 @@
       "observaciones": [
         "No se encontró Capital Propio Tributario",
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
-      ]
+      ],
+      "idpc_determinado": 9,
+      "ppm_imputados": null,
+      "saldo_liquidacion_anual": null,
+      "rli_source_code": "643",
+      "cpt_source_code": null,
+      "ingresos_source_code": "628"
     }
   ],
   "properties": [],
@@ -5862,8 +5880,8 @@
       "plazo_sugerido_dias": 30,
       "plazo_inicial_sugerido": "15 días (o 30 días con 50% de anticipo)",
       "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
-      "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas mediante Certificado de Vigencia y Escritura de Poderes (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
-      "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas mediante Certificado de Vigencia y Escritura de Poderes (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
       "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
       "memoria_calculo": {
         "periodo_inicio": "2019-01",
@@ -5884,7 +5902,7 @@
         "freno_absorcion_operacional": 5000000,
         "margen_operacional_depurado_mensual": 112208045,
         "factor_riesgo_phi": 0.5,
-        "factor_ajuste_conductual_pct": 50,
+        "factor_ajuste_conductual_pct": 80,
         "cupo_preliminar": 2500000,
         "capital_propio_tributario": 6559199969,
         "tope_patrimonial_12pct_cpt": 1311839994,
@@ -5892,6 +5910,7 @@
         "tope_patrimonial_cpt": 1311839994,
         "rli_declarada_le_zero": false,
         "ausencia_f22": false,
+        "contraccion_severa": false,
         "cupo_maximo_sugerido": 2500000,
         "cupo_excepcional_garantizado": null,
         "castigos_aplicados": [
@@ -5899,9 +5918,10 @@
           "Freno por Absorción Operacional (8% Spread F29 preventivo ($5,000,000)): reduce techo de compras de $6,863,869 a $5,000,000",
           "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
         ],
+        "glosa_paso_c": "Tramo Score 75-84: 80% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
         "pct_apertura": 40,
         "tramo_score": "75-84",
-        "glosa_apertura": "40% de Apertura para Score 75-84 (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+        "glosa_apertura": "40% de Apertura para Score 75-84 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
         "linea_maxima_tecnica": 2000000,
         "linea_inicial_recomendada": 800000,
         "linea_maxima_condicionada": 2000000,
@@ -5917,7 +5937,7 @@
         "Puntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio).",
         "Línea Inicial Recomendada (Etapa 1 - 40% Apertura): M$ 800 (Plazo: 15 días (o 30 días con 50% de anticipo)).",
         "Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 (Plazo: 30 días).",
-        "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas mediante Certificado de Vigencia y Escritura de Poderes (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+        "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
         "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
         "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
         "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
@@ -5994,7 +6014,7 @@
         {
           "parametro": "Representantes Legales Identificados",
           "estado": "CUMPLE",
-          "detalle": "1 representante(s) registrado(s)"
+          "detalle": "1 representante(s) registrado(s) (Nota SII: facultades cambiarias deben acreditarse según estatutos vigentes)"
         },
         {
           "parametro": "Continuidad F29 Reciente",
@@ -6027,7 +6047,7 @@
       "Respaldo patrimonial sólido: CPT positivo de $6,559,199,969 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\nClasificación y Recomendación: PERFIL TRIBUTARIO MODERADO (Línea Condicionada)\nPuntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 800 | Plazo Inicial: 15 días (o 30 días con 50% de anticipo)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 | Plazo Máximo: 30 días\nResguardo Comercial Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas mediante Certificado de Vigencia y Escritura de Poderes (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 85.798\n- Techo Operativo Proveedor (8%): M$ 6.864\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 112.208\n- Freno Flujo Operacional (25%): M$ 5.000\n- Factor de Ajuste Conductual: 50%\n- Capital Propio Tributario (CPT): M$ 6.559.200\n- Línea Máxima Condicionada (Techo Técnico): M$ 2.000\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 800\n- Ajustes de Riesgo Aplicados:\n  * F22 sin RLI positiva informada: línea acotada preventivamente al 8% del Spread F29\n  * Freno por Absorción Operacional (8% Spread F29 preventivo ($5,000,000)): reduce techo de compras de $6,863,869 a $5,000,000\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: PERFIL TRIBUTARIO MODERADO (Línea Condicionada).\n- ✅ Puntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio).\n- ✅ Línea Inicial Recomendada (Etapa 1 - 40% Apertura): M$ 800 (Plazo: 15 días (o 30 días con 50% de anticipo)).\n- ✅ Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 (Plazo: 30 días).\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas mediante Certificado de Vigencia y Escritura de Poderes (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\nClasificación y Recomendación: PERFIL TRIBUTARIO MODERADO (Línea Condicionada)\nPuntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 800 | Plazo Inicial: 15 días (o 30 días con 50% de anticipo)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 | Plazo Máximo: 30 días\nResguardo Comercial Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 85.798\n- Techo Operativo Proveedor (8%): M$ 6.864\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 112.208\n- Freno Flujo Operacional (25%): M$ 5.000\n- Factor de Ajuste Conductual: 50%\n- Capital Propio Tributario (CPT): M$ 6.559.200\n- Línea Máxima Condicionada (Techo Técnico): M$ 2.000\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 800\n- Ajustes de Riesgo Aplicados:\n  * F22 sin RLI positiva informada: línea acotada preventivamente al 8% del Spread F29\n  * Freno por Absorción Operacional (8% Spread F29 preventivo ($5,000,000)): reduce techo de compras de $6,863,869 a $5,000,000\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: PERFIL TRIBUTARIO MODERADO (Línea Condicionada).\n- ✅ Puntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio).\n- ✅ Línea Inicial Recomendada (Etapa 1 - 40% Apertura): M$ 800 (Plazo: 15 días (o 30 días con 50% de anticipo)).\n- ✅ Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 (Plazo: 30 días).\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
     "veredicto": "PERFIL TRIBUTARIO MODERADO (Línea Condicionada)",
     "evaluacion_referencial": "PERFIL TRIBUTARIO MODERADO (Línea Condicionada)",
     "clasificacion_riesgo": "PERFIL TRIBUTARIO MODERADO",
@@ -6042,8 +6062,8 @@
     "plazo_sugerido_dias": 30,
     "plazo_inicial_sugerido": "15 días (o 30 días con 50% de anticipo)",
     "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
-    "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas mediante Certificado de Vigencia y Escritura de Poderes (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
-    "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas mediante Certificado de Vigencia y Escritura de Poderes (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+    "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+    "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
     "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
     "memoria_calculo": {
       "periodo_inicio": "2019-01",
@@ -6064,7 +6084,7 @@
       "freno_absorcion_operacional": 5000000,
       "margen_operacional_depurado_mensual": 112208045,
       "factor_riesgo_phi": 0.5,
-      "factor_ajuste_conductual_pct": 50,
+      "factor_ajuste_conductual_pct": 80,
       "cupo_preliminar": 2500000,
       "capital_propio_tributario": 6559199969,
       "tope_patrimonial_12pct_cpt": 1311839994,
@@ -6072,6 +6092,7 @@
       "tope_patrimonial_cpt": 1311839994,
       "rli_declarada_le_zero": false,
       "ausencia_f22": false,
+      "contraccion_severa": false,
       "cupo_maximo_sugerido": 2500000,
       "cupo_excepcional_garantizado": null,
       "castigos_aplicados": [
@@ -6079,9 +6100,10 @@
         "Freno por Absorción Operacional (8% Spread F29 preventivo ($5,000,000)): reduce techo de compras de $6,863,869 a $5,000,000",
         "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
       ],
+      "glosa_paso_c": "Tramo Score 75-84: 80% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
       "pct_apertura": 40,
       "tramo_score": "75-84",
-      "glosa_apertura": "40% de Apertura para Score 75-84 (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+      "glosa_apertura": "40% de Apertura para Score 75-84 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
       "linea_maxima_tecnica": 2000000,
       "linea_inicial_recomendada": 800000,
       "linea_maxima_condicionada": 2000000,
@@ -6097,7 +6119,7 @@
       "Puntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio).",
       "Línea Inicial Recomendada (Etapa 1 - 40% Apertura): M$ 800 (Plazo: 15 días (o 30 días con 50% de anticipo)).",
       "Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 (Plazo: 30 días).",
-      "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas mediante Certificado de Vigencia y Escritura de Poderes (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
       "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
       "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
       "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
@@ -6158,7 +6180,7 @@
       {
         "parametro": "Representantes Legales Identificados",
         "estado": "CUMPLE",
-        "detalle": "1 representante(s) registrado(s)"
+        "detalle": "1 representante(s) registrado(s) (Nota SII: facultades cambiarias deben acreditarse según estatutos vigentes)"
       },
       {
         "parametro": "Continuidad F29 Reciente",

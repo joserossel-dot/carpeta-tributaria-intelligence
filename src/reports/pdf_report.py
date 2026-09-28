@@ -235,7 +235,7 @@ class PDFReport:
             resguardo_box_txt = (
                 f"<b>Plazo Inicial:</b> {plazo_ini}. Línea no liberable sin: "
                 "(1) Dicom/Equifax sin morosidad vigente, y "
-                "(2) Pagaré notarial suscrito por apoderado(s) según estudio de poderes societarios vigentes o Seguro de Crédito; "
+                "(2) Pagaré notarial suscrito según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) o Seguro de Crédito; "
                 "o esquema mixto (50% anticipo + 50% a 30 días)."
             )
         else:
@@ -419,7 +419,11 @@ class PDFReport:
             ],
             [
                 Paragraph("Paso C: Factor de Ajuste Conductual", table_cell_bold),
-                Paragraph("Ajuste por mora F29, postergación IVA y estabilidad YoY", table_cell),
+                Paragraph(
+                    mem.get("glosa_paso_c")
+                    or f"Tramo Score {'>=85' if score_val >= 85 else ('75-84' if score_val >= 75 else ('65-74' if score_val >= 65 else '<65'))}: {phi_pct}% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
+                    table_cell,
+                ),
                 Paragraph(f"{phi_pct}%", table_cell_bold),
             ],
             [
@@ -436,7 +440,7 @@ class PDFReport:
                 Paragraph(f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)", table_cell_bold),
                 Paragraph(
                     mem.get("glosa_apertura")
-                    or f"{pct_ap}% de Apertura para Score {'>=85' if score_val >= 85 else ('75-84' if score_val >= 75 else ('65-74' if score_val >= 65 else '<65'))} (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+                    or f"{pct_ap}% de Apertura para Score {'>=85' if score_val >= 85 else ('75-84' if score_val >= 75 else ('65-74' if score_val >= 65 else '<65'))} (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
                     table_cell,
                 ),
                 Paragraph(format_mclp(cupo_ini), table_cell_bold),
@@ -610,11 +614,17 @@ class PDFReport:
             n_at = len(sorted_f22[:3])
             at_plural = "s" if n_at > 1 else ""
             f22_titulo = f"Resumen de Declaraciones Anuales F22 ({n_at} AT contenido{at_plural} en carpeta SII — Ingresos, RLI y CPT en M$)"
+            first_f22 = sorted_f22[0]
+            ing_src = getattr(first_f22, "ingresos_source_code", None) or "1657"
+            rli_src = getattr(first_f22, "rli_source_code", None) or "1694"
+            cpt_src = getattr(first_f22, "cpt_source_code", None) or "645/1696"
+            cpt_hdr = "645/1696" if cpt_src in ("645", "1696") else cpt_src
+
             f22_header = [
                 Paragraph("<b>Año Tributario</b>", table_cell_header),
-                Paragraph("<b>Ingresos Giro Cód. 1657/628 (M$)</b>", table_cell_header),
-                Paragraph("<b>RLI Cód. 1694/1690 (M$)</b>", table_cell_header),
-                Paragraph("<b>Capital Propio CPT Cód. 1696/645 (M$)</b>", table_cell_header),
+                Paragraph(f"<b>Ingresos Giro Cód. {ing_src} (M$)</b>", table_cell_header),
+                Paragraph(f"<b>RLI Cód. {rli_src} (M$)</b>", table_cell_header),
+                Paragraph(f"<b>Capital Propio CPT Cód. {cpt_hdr} (M$)</b>", table_cell_header),
             ]
             f22_rows = [f22_header]
             for f in sorted_f22[:3]:
