@@ -49,10 +49,10 @@ _round_m100 = _floor_tiered
 
 
 class CreditRiskEngine:
-    """Motor de decisión crediticia B2B v2.7.
+    """Motor de decisión crediticia B2B v2.7.1.
 
     Evolución cuantitativa y comercial:
-    1. Jerarquía explícita de códigos F22 (RLI 1694/1690 vs 1109 y CPT multigeneración 1696/645).
+    1. Jerarquía explícita de códigos F22 (RLI 1694/1690 vs 1109 y CPT multigeneración 645/1698).
     2. Separación estricta entre Pérdida Declarada en F22 (RLI <= 0 -> M$ 0) y Ausencia de F22 (fallback 8% Spread con condición suspensiva).
     3. Ajuste de RLI por deterioro reciente en F29 (puente temporal F22 -> F29 ante contracción > 10%).
     4. Acoplamiento del Puntaje Tributario SII tanto al Paso C como a la Apertura Inicial (tramos >=85, 75-84, 65-74, <65).
@@ -297,13 +297,17 @@ class CreditRiskEngine:
         if ingresos > 0 and rli is not None and rli <= 0:
             ing_m = format_mclp(ingresos)
             rli_m = format_mclp(rli)
+            res_fin = getattr(ultimo, "resultado_financiero", None)
+            extra_res_fin = ""
+            if res_fin is not None and res_fin > 0:
+                extra_res_fin = f" (Nota: F22 AT {ultimo.anio_tributario} registra Resultado Financiero contable positivo Cód. 1672 por {format_mclp(res_fin)})."
             msg = (
                 f"Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: "
                 f"Compresión severa de RLI en último F22 (AT {ultimo.anio_tributario}). "
                 f"Ingresos: {ing_m} vs RLI: {rli_m} (Margen RLI 0%). "
                 "Se exige Balance de 8 Columnas reciente para aclarar la causa de la RLI nula "
                 "(depreciación, pérdidas de arrastre, corrección monetaria o bajo margen) "
-                "antes de autorizar el escalamiento de Línea Inicial a Línea Máxima."
+                f"antes de autorizar línea en evaluación manual{extra_res_fin}"
             )
             return True, msg
 
@@ -352,7 +356,7 @@ class CreditRiskEngine:
         detalle_reps = f"{len(rep_names)} representante(s) registrado(s)"
         if rep_names:
             if forma_act:
-                detalle_reps += f" (Actuación SII: {forma_act} — Nota SII: actuación tributaria '{forma_act}' — no acredita poderes cambiarios)"
+                detalle_reps += f" (Nota SII: actuación tributaria '{forma_act}' — no acredita poderes cambiarios)"
             else:
                 detalle_reps += " (Nota SII: facultades cambiarias deben acreditarse según estatutos vigentes)"
         else:
@@ -672,7 +676,9 @@ class CreditRiskEngine:
                 # Caso A: Pérdida tributaria declarada (RLI <= 0 o Cód. 1690/1143/etc.)
                 rli_declarada_le_zero = True
                 freno_flujo = 0.0
-                glosa_b2 = "M$ 0 (Pérdida Tributaria Declarada en F22)"
+                rli_code_b2 = getattr(ultimo_f22, "rli_source_code", None) or "1695"
+                rli_m_b2 = format_mclp(rli_val) if rli_val is not None else "-M$ 0"
+                glosa_b2 = f"N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. {rli_code_b2}: {rli_m_b2})"
                 castigos.append(
                     "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)"
                 )
@@ -852,6 +858,7 @@ class CreditRiskEngine:
             "techo_operativo": int(round(techo_operativo)),
             "freno_flujo_operacional_25pct": int(round(freno_flujo)),
             "freno_absorcion_operacional": int(round(freno_flujo)),
+            "glosa_b2": glosa_b2,
             "margen_operacional_depurado_mensual": int(round(spread_operacional_f29)),
             "factor_riesgo_phi": round(phi, 2),
             "factor_ajuste_conductual_pct": int(round(phi * 100)),
@@ -1099,7 +1106,7 @@ class CreditRiskEngine:
             det2 = f"Crecimiento trimestral robusto (+{var_3m:.1f}%)"
         elif var_3m >= 0.0:
             p2 = 17
-            det2 = f"Ventas estables con ligera expansión (+{var_3m:.1f}%)"
+            det2 = f"Variación prom. últ. 3M vs. promedio 12M (+{var_3m:.1f}%): ventas estables con ligera expansión"
         elif var_3m >= -15.0:
             p2 = 14
             det2 = f"Variación prom. últ. 3M vs. promedio 12M ({var_3m:.1f}%)"
@@ -1157,22 +1164,27 @@ class CreditRiskEngine:
                 det3 = f"Operación exportadora/exenta con compras superiores a ventas (Ratio Ventas/Compras: {ratio_op:.2f}x)"
         else:
             ratio = indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else None
+            tiene_remanente = (
+                (indicadores.mora_efectiva and indicadores.mora_efectiva.meses_con_remanente_credito > 0)
+                or any(getattr(m, "remanente_anterior", None) and getattr(m, "remanente_anterior", 0) > 0 for m in tax_folder.monthly_taxes)
+            )
+            ratio_lbl = "Ratio Débito / Crédito del giro s/remanente" if tiene_remanente else "Ratio Débito/Crédito"
             if ratio is not None:
                 if ratio >= 1.40:
                     p3 = 20
-                    det3 = f"Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: {ratio:.2f}x)"
+                    det3 = f"Generación neta de Débito Fiscal sólida ({ratio_lbl}: {ratio:.2f}x)"
                 elif ratio >= 1.20:
                     p3 = 17
-                    det3 = f"Margen operacional suficiente (Ratio Débito/Crédito: {ratio:.2f}x)"
+                    det3 = f"Margen operacional suficiente ({ratio_lbl}: {ratio:.2f}x)"
                 elif ratio >= 1.05:
                     p3 = 14
-                    det3 = f"Margen operacional ajustado (Ratio Débito/Crédito: {ratio:.2f}x)"
+                    det3 = f"Margen operacional ajustado ({ratio_lbl}: {ratio:.2f}x)"
                 elif ratio >= 0.95:
                     p3 = 10
-                    det3 = f"Equilibrio fiscal neutro (Ratio Débito/Crédito: {ratio:.2f}x)"
+                    det3 = f"Equilibrio fiscal neutro ({ratio_lbl}: {ratio:.2f}x)"
                 else:
                     p3 = 5
-                    det3 = f"Crédito fiscal persistente sobre ventas (Ratio: {ratio:.2f}x)"
+                    det3 = f"Crédito fiscal persistente sobre ventas ({ratio_lbl}: {ratio:.2f}x)"
             else:
                 p3 = 14
                 det3 = "Margen operativo referencial estándar del giro"
@@ -1193,13 +1205,18 @@ class CreditRiskEngine:
 
         rli_val_pilar = ultimo_f22.renta_liquida_imponible if ultimo_f22 else None
         ing_val_pilar = ultimo_f22.ingresos if ultimo_f22 else None
+        res_fin_pilar = getattr(ultimo_f22, "resultado_financiero", None) if ultimo_f22 else None
         at_pilar = str(ultimo_f22.anio_tributario or "").replace(":", "").strip() if ultimo_f22 else ""
 
         if rli_val_pilar is not None:
             rli_fmt = format_mclp(rli_val_pilar)
+            extra_res_fin = ""
+            if res_fin_pilar is not None and res_fin_pilar > 0:
+                extra_res_fin = f"; Res. Financiero Cód. 1672: +{format_mclp(res_fin_pilar)}"
+
             if ing_val_pilar and ing_val_pilar > 0:
                 pct_ing = round(float(rli_val_pilar) / float(ing_val_pilar) * 100.0, 1)
-                rli_txt = f"RLI AT {at_pilar}: {rli_fmt} ({pct_ing}% s/ingresos)"
+                rli_txt = f"RLI AT {at_pilar}: {rli_fmt} ({pct_ing}% s/ingresos{extra_res_fin})"
             else:
                 rli_txt = f"RLI AT {at_pilar}: {rli_fmt}"
         else:
@@ -1214,8 +1231,11 @@ class CreditRiskEngine:
             else:
                 cupo_ref = memoria.get("cupo_maximo_sugerido") or 5_000_000
                 veces = cpt / cupo_ref if cupo_ref else 1.0
-                cobertura = "cobertura holgada" if veces >= 2.0 else ("cobertura suficiente" if veces >= 1.0 else "cobertura acotada")
-                ref_txt = f"{rli_txt} | CPT: {cpt_fmt} (Respaldo contable no líquido: {cobertura})"
+                if rli_val_pilar is not None and rli_val_pilar <= 0:
+                    ref_txt = f"{rli_txt} | CPT: {cpt_fmt} (Respaldo no líquido)"
+                else:
+                    cobertura = "cobertura holgada" if veces >= 2.0 else ("cobertura suficiente" if veces >= 1.0 else "cobertura acotada")
+                    ref_txt = f"{rli_txt} | CPT: {cpt_fmt} (Respaldo contable no líquido: {cobertura})"
                 if veces >= 2.0:
                     p4 = 15
                     det4 = ref_txt
@@ -1229,9 +1249,12 @@ class CreditRiskEngine:
             p4 = 8
             det4 = f"{rli_txt} | Sin declaración F22 con CPT informado"
 
-        if rli_comprimida:
+        if rli_comprimida or (rli_val_pilar is not None and rli_val_pilar <= 0):
             p4 = max(0, p4 - 6)
-            det4 += " [Penalización -6 pts por Alerta de Compresión de RLI en último F22]"
+            if rli_val_pilar is not None and rli_val_pilar <= 0:
+                det4 += " [Penalización -6 pts por RLI <= 0]"
+            else:
+                det4 += " [Penalización -6 pts por Alerta de Compresión de RLI en último F22]"
 
         pilares.append(PilarScore(
             nombre="Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -1559,23 +1582,32 @@ class CreditRiskEngine:
             resguardo += f" [{condicion_f22}]"
             condicion_escalamiento = f"{condicion_f22} {condicion_escalamiento}"
 
-        tramo_str = (
-            ">=85"
-            if (score_compuesto and score_compuesto >= 85)
-            else (
-                "75-84"
-                if (score_compuesto and score_compuesto >= 75)
+        rli_le_zero = memoria.get("rli_declarada_le_zero", False)
+        if rli_le_zero:
+            factor_score_paso_c_val = 0.0
+            glosa_paso_c = "N/A — Línea bloqueada por pérdida tributaria en F22 (Override a 0%)"
+            glosa_apertura = "N/A — Línea bloqueada por pérdida tributaria en F22 (Evaluación manual con EE.FF.)"
+            tramo_str = ">=85" if (score_compuesto and score_compuesto >= 85) else "75-84"
+            pct_ap_int = 0
+        else:
+            tramo_str = (
+                ">=85"
+                if (score_compuesto and score_compuesto >= 85)
                 else (
-                    "65-74"
-                    if (score_compuesto and score_compuesto >= 65)
-                    else "<65"
+                    "75-84"
+                    if (score_compuesto and score_compuesto >= 75)
+                    else (
+                        "65-74"
+                        if (score_compuesto and score_compuesto >= 65)
+                        else "<65"
+                    )
                 )
             )
-        )
-        pct_ap_int = int(round(pct_apertura * 100))
-        factor_score_paso_c_val = factor_score_paso_c if 'factor_score_paso_c' in locals() else (1.0 if (score_compuesto and score_compuesto >= 85) else (0.8 if (score_compuesto and score_compuesto >= 75) else (0.6 if (score_compuesto and score_compuesto >= 65) else 0.0)))
-        glosa_paso_c = f"Tramo Score {tramo_str}: {int(round(factor_score_paso_c_val * 100))}% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)"
-        glosa_apertura = f"{pct_ap_int}% de Apertura para Score {tramo_str} (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)"
+            pct_ap_int = int(round(pct_apertura * 100))
+            factor_score_paso_c_val = factor_score_paso_c if 'factor_score_paso_c' in locals() else (1.0 if (score_compuesto and score_compuesto >= 85) else (0.8 if (score_compuesto and score_compuesto >= 75) else (0.6 if (score_compuesto and score_compuesto >= 65) else 0.0)))
+            glosa_paso_c = f"Tramo Score {tramo_str}: {int(round(factor_score_paso_c_val * 100))}% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)"
+            glosa_apertura = f"{pct_ap_int}% de Apertura para Score {tramo_str} (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)"
+
         memoria["factor_ajuste_conductual_pct"] = int(round(factor_score_paso_c_val * 100))
         memoria["glosa_paso_c"] = glosa_paso_c
         memoria["pct_apertura"] = pct_ap_int

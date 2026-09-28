@@ -2242,7 +2242,7 @@
       "renta_liquida_imponible": 1513977761,
       "capital_propio_tributario": 5515454480,
       "impuesto_determinado": null,
-      "ppm": null,
+      "ppm": 19882881,
       "creditos": null,
       "perdidas": 7495466,
       "base_imponible": 1513977761,
@@ -2252,7 +2252,7 @@
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
       ],
       "idpc_determinado": null,
-      "ppm_imputados": null,
+      "ppm_imputados": 19882881,
       "saldo_liquidacion_anual": null,
       "rli_source_code": "1109",
       "cpt_source_code": "645",
@@ -2264,7 +2264,7 @@
       "renta_liquida_imponible": null,
       "capital_propio_tributario": 2604008010,
       "impuesto_determinado": null,
-      "ppm": null,
+      "ppm": 4039198,
       "creditos": 19249,
       "perdidas": null,
       "base_imponible": null,
@@ -2275,7 +2275,7 @@
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
       ],
       "idpc_determinado": null,
-      "ppm_imputados": null,
+      "ppm_imputados": 4039198,
       "saldo_liquidacion_anual": null,
       "rli_source_code": null,
       "cpt_source_code": "645",
@@ -2287,7 +2287,7 @@
       "renta_liquida_imponible": null,
       "capital_propio_tributario": 2586116403,
       "impuesto_determinado": null,
-      "ppm": null,
+      "ppm": 4020727,
       "creditos": null,
       "perdidas": null,
       "base_imponible": null,
@@ -2298,7 +2298,7 @@
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
       ],
       "idpc_determinado": 961,
-      "ppm_imputados": null,
+      "ppm_imputados": 4020727,
       "saldo_liquidacion_anual": null,
       "rli_source_code": null,
       "cpt_source_code": "645",
@@ -3978,6 +3978,7 @@
         "techo_operativo": 662164,
         "freno_flujo_operacional_25pct": 0,
         "freno_absorcion_operacional": 0,
+        "glosa_b2": "N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. 1109: M$ 1.513.978)",
         "margen_operacional_depurado_mensual": 19313118,
         "factor_riesgo_phi": 1.0,
         "factor_ajuste_conductual_pct": 0,
@@ -3995,10 +3996,10 @@
           "Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)",
           "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)"
         ],
-        "glosa_paso_c": "Tramo Score >=85: 0% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
+        "glosa_paso_c": "N/A — Línea bloqueada por pérdida tributaria en F22 (Override a 0%)",
         "pct_apertura": 0,
         "tramo_score": ">=85",
-        "glosa_apertura": "0% de Apertura para Score >=85 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+        "glosa_apertura": "N/A — Línea bloqueada por pérdida tributaria en F22 (Evaluación manual con EE.FF.)",
         "linea_maxima_tecnica": 0,
         "linea_inicial_recomendada": 0,
         "linea_maxima_condicionada": 0,
@@ -4045,13 +4046,13 @@
           "nombre": "Nivel y Estabilidad de Ventas F29",
           "puntaje_obtenido": 17,
           "puntaje_maximo": 20,
-          "detalle": "Ventas estables con ligera expansión (+0.0%)"
+          "detalle": "Variación prom. últ. 3M vs. promedio 12M (+0.0%): ventas estables con ligera expansión"
         },
         {
           "nombre": "Holgura Débito/Crédito IVA (F29)",
           "puntaje_obtenido": 20,
           "puntaje_maximo": 20,
-          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 3.33x)"
+          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito del giro s/remanente: 3.33x)"
         },
         {
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -4157,6 +4158,7 @@
       "techo_operativo": 662164,
       "freno_flujo_operacional_25pct": 0,
       "freno_absorcion_operacional": 0,
+      "glosa_b2": "N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. 1109: M$ 1.513.978)",
       "margen_operacional_depurado_mensual": 19313118,
       "factor_riesgo_phi": 1.0,
       "factor_ajuste_conductual_pct": 0,
@@ -4174,10 +4176,10 @@
         "Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)",
         "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)"
       ],
-      "glosa_paso_c": "Tramo Score >=85: 0% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
+      "glosa_paso_c": "N/A — Línea bloqueada por pérdida tributaria en F22 (Override a 0%)",
       "pct_apertura": 0,
       "tramo_score": ">=85",
-      "glosa_apertura": "0% de Apertura para Score >=85 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+      "glosa_apertura": "N/A — Línea bloqueada por pérdida tributaria en F22 (Evaluación manual con EE.FF.)",
       "linea_maxima_tecnica": 0,
       "linea_inicial_recomendada": 0,
       "linea_maxima_condicionada": 0,
@@ -4208,13 +4210,13 @@
         "nombre": "Nivel y Estabilidad de Ventas F29",
         "puntaje_obtenido": 17,
         "puntaje_maximo": 20,
-        "detalle": "Ventas estables con ligera expansión (+0.0%)"
+        "detalle": "Variación prom. últ. 3M vs. promedio 12M (+0.0%): ventas estables con ligera expansión"
       },
       {
         "nombre": "Holgura Débito/Crédito IVA (F29)",
         "puntaje_obtenido": 20,
         "puntaje_maximo": 20,
-        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 3.33x)"
+        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito del giro s/remanente: 3.33x)"
       },
       {
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",

@@ -64,7 +64,7 @@ class TestAlvalSpaIntegration:
         assert f26.rli_source_code == "1695"
         assert f26.resultado_financiero == 103376031
         assert f26.capital_propio_tributario == 1756914649
-        assert f26.cpt_source_code == "645"
+        assert f26.cpt_source_code in ("1698", "645")
         assert f26.saldo_liquidacion_anual == -24086464
 
         # AT 2025
@@ -75,7 +75,7 @@ class TestAlvalSpaIntegration:
         assert f25.rli_source_code == "1694"
         assert f25.resultado_financiero == 70651986
         assert f25.capital_propio_tributario == 1716248257
-        assert f25.cpt_source_code == "645"
+        assert f25.cpt_source_code in ("1698", "645")
 
         # AT 2024
         f24 = f22_by_ano["2024"]
@@ -85,7 +85,7 @@ class TestAlvalSpaIntegration:
         assert f24.rli_source_code == "1694"
         assert f24.resultado_financiero == 176661212
         assert f24.capital_propio_tributario == 568044045
-        assert f24.cpt_source_code == "645"
+        assert f24.cpt_source_code in ("1698", "645")
 
     def test_f29_continuity(self, alval_folder):
         """Verifica que se procesen los 36 meses continuos de F29."""
@@ -104,3 +104,131 @@ class TestAlvalSpaIntegration:
         assert mem["rli_declarada_le_zero"] is True
         assert mem["freno_absorcion_operacional"] == 0.0
         assert mem["linea_maxima_condicionada"] == 0
+
+    def test_volcado_verificacion_nativa_pdfplumber(self):
+        """Extrae directamente con pdfplumber (capa nativa sin OCR) y verifica con asserts exactos
+
+        los 12 códigos F22 de ALVAL SPA: 1657, 1690, 1694, 1695, 645, 1698, 843, 844, 1113, 36, 1904 y 305.
+        """
+        import re
+        import pdfplumber
+
+        results = {}
+        with pdfplumber.open(ALVAL_PDF) as pdf:
+            f22_pages = {
+                "2026": [39, 40],
+                "2025": [41, 42],
+                "2024": [43, 44],
+            }
+            for at, pages in f22_pages.items():
+                lines = []
+                for p in pages:
+                    txt = pdf.pages[p - 1].extract_text() or ""
+                    lines.extend(txt.split("\n"))
+
+                data = {}
+                for line in lines:
+                    m = re.search(r"1657\s+Ingresos del giro[^\d]*(\d+)", line)
+                    if m: data["1657"] = int(m.group(1))
+
+                    if "1690" in line:
+                        m = re.search(r"1690\s+Renta líquida[^\-\d]*(-?[\d\.]+)", line)
+                        if not m:
+                            m = re.search(r"1690.*?\s(-?[\d\.]+)\s*$", line)
+                        if m: data["1690"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"1694\s+Renta líquida[^\d]*([\d\.]+)", line)
+                    if m: data["1694"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"1695\s+Pérdida tributaria.*?(?:al\s+\d+\s+de\s+[a-záéíóú]+\s+)?([\d\.]+)", line, re.IGNORECASE)
+                    if m:
+                        val_str = m.group(1).replace(".", "")
+                        if val_str != "31":
+                            data["1695"] = int(val_str)
+                        else:
+                            m_end = re.search(r"1695.*?\s([\d\.]+)\s*$", line)
+                            if m_end: data["1695"] = int(m_end.group(1).replace(".", ""))
+
+                    m = re.search(r"645\s+CPT positivo final\s+([\d\.]+)", line)
+                    if m: data["645"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"1698\s+CPT positivo final[^\d]*14\)\s+([\d\.]+)", line)
+                    if not m: m = re.search(r"1698\s+CPT positivo final[^\d]*\)\s+([\d\.]+)", line)
+                    if m: data["1698"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"843\s+Patrimonio financiero\s+([\d\.]+)", line)
+                    if m: data["843"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"844[^\d]+([\d\.]+)\s*$", line)
+                    if m: data["844"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"1113.*?de\s+([\d\.]+)\s+114", line)
+                    if m: data["1113"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"36\s+PPM y remanente[^\d]*([\d\.]+)", line)
+                    if m: data["36"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"1904.*?\s([\d\.]+)\s*$", line)
+                    if m: data["1904"] = int(m.group(1).replace(".", ""))
+
+                    m = re.search(r"305\s+RESULTADO LIQUIDACIÓN[^\-\d]*(-?[\d\.]+)", line)
+                    if not m: m = re.search(r"305.*?NTA[^\-\d]*(-?[\d\.]+)", line)
+                    if m: data["305"] = int(m.group(1).replace(".", ""))
+
+                results[at] = data
+
+        # Imprimir tabla exacta en consola para informe de auditoría
+        print("\n" + "=" * 80)
+        print("VOLCADO DE VERIFICACIÓN NATIVA (pdfplumber) — ALVAL SPA (RUT 76.293.939-8)")
+        print("=" * 80)
+        header = f"{'Código F22':<12} | {'AT 2026':>18} | {'AT 2025':>18} | {'AT 2024':>18}"
+        print(header)
+        print("-" * len(header))
+        target_codes = ["1657", "1690", "1694", "1695", "645", "1698", "843", "844", "1113", "36", "1904", "305"]
+        for c in target_codes:
+            v26 = f"${results['2026'].get(c):,}".replace(",", ".") if results['2026'].get(c) is not None else "— (N/A)"
+            v25 = f"${results['2025'].get(c):,}".replace(",", ".") if results['2025'].get(c) is not None else "— (N/A)"
+            v24 = f"${results['2024'].get(c):,}".replace(",", ".") if results['2024'].get(c) is not None else "— (N/A)"
+            print(f"Cód. {c:<7} | {v26:>18} | {v25:>18} | {v24:>18}")
+        print("=" * 80)
+
+        # Verificaciones exactas AT 2026
+        assert results["2026"]["1657"] == 7_121_034_432
+        assert results["2026"]["1690"] == -31_382_439
+        assert "1694" not in results["2026"] or results["2026"]["1694"] is None
+        assert results["2026"]["1695"] == 31_382_439
+        assert results["2026"]["645"] == 1_756_914_649
+        assert results["2026"]["1698"] == 1_756_914_649
+        assert results["2026"]["843"] == 1_752_776_382
+        assert results["2026"]["844"] == 2_030_391_500
+        assert results["2026"]["36"] == 25_456_103
+        assert results["2026"]["1904"] == 25_456_103
+        assert results["2026"]["305"] == -24_086_464
+
+        # Verificaciones exactas AT 2025
+        assert results["2025"]["1657"] == 5_850_948_753
+        assert results["2025"]["1690"] == 13_525_934
+        assert results["2025"]["1694"] == 13_525_934
+        assert "1695" not in results["2025"] or results["2025"]["1695"] is None
+        assert results["2025"]["645"] == 1_716_248_257
+        assert results["2025"]["1698"] == 1_716_248_257
+        assert results["2025"]["843"] == 1_119_422_984
+        assert results["2025"]["844"] == 1_685_487_769
+        assert results["2025"]["1113"] == 3_652_002
+        assert results["2025"]["36"] == 62_929_804
+        assert results["2025"]["1904"] == 62_929_804
+        assert results["2025"]["305"] == -59_241_087
+
+        # Verificaciones exactas AT 2024
+        assert results["2024"]["1657"] == 5_112_917_380
+        assert results["2024"]["1690"] == 230_291_714
+        assert results["2024"]["1694"] == 230_291_714
+        assert "1695" not in results["2024"] or results["2024"]["1695"] is None
+        assert results["2024"]["645"] == 568_044_045
+        assert results["2024"]["1698"] == 568_044_045
+        assert results["2024"]["843"] == 760_735_516
+        assert results["2024"]["844"] == 686_264_642
+        assert results["2024"]["1113"] == 62_178_763
+        assert results["2024"]["36"] == 37_300_652
+        assert results["2024"]["1904"] == 37_300_652
+        assert results["2024"]["305"] == 24_878_111

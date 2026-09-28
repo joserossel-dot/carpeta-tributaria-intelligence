@@ -88,7 +88,7 @@ class ExcelReport:
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.7)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.7.1)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -215,7 +215,11 @@ class ExcelReport:
 
         spread_15 = int(round(spread_f29 * 0.15))
         rli_fallback = mem.get("rli_fallback_8pct", False)
-        if not rli_fallback and rli_mens and rli_mens > 0:
+        rli_declarada_le_zero = mem.get("rli_declarada_le_zero", False)
+        if rli_declarada_le_zero:
+            rli_m_val = format_mclp(mem.get("rli_ultimo_f22"))
+            metodologia_b2 = mem.get("glosa_b2") or f"N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. 1695: {rli_m_val})"
+        elif not rli_fallback and rli_mens and rli_mens > 0:
             rli_25 = int(round(rli_mens * 0.25))
             metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}]) (Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)"
         else:
@@ -233,13 +237,16 @@ class ExcelReport:
         else:
             glosa_d = "Sin F22 vigente"
 
+        phi_val_excel = f"{mem.get('factor_ajuste_conductual_pct', phi_pct)}%"
+        glosa_c_excel = mem.get("glosa_paso_c") or "Ajuste por mora F29, postergación IVA y estabilidad YoY"
+
         calc_steps = [
             (f"Ventas Netas Mensuales Promedio{rango_str}", round(v_prom / 1000.0) if v_prom else 0, "Promedio mensual de ventas de los 12 meses analizados"),
             ("(-) Paso A: Compras Op. Mensuales Promedio (C_base)", round(base_c / 1000.0) if base_c else 0, "Base mensual de compras operacionales 12M (o costo operativo proxy)"),
             ("(=) Spread Operacional Tributario F29", round(spread_f29 / 1000.0) if spread_f29 else 0, "Ventas Netas Mensuales Promedio - Compras Op. Mensuales Promedio"),
             ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (parámetro prudencial de exposición por proveedor: 8% C_base)"),
             ("Paso B2: Freno por Absorción Operacional", round(freno_flujo / 1000.0) if freno_flujo else 0, metodologia_b2),
-            ("Paso C: Factor de Ajuste Conductual", f"{phi_pct}%", "Ajuste por mora F29, postergación IVA y estabilidad YoY"),
+            ("Paso C: Factor de Ajuste Conductual", phi_val_excel, glosa_c_excel),
             (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", glosa_d),
             ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) x Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)"),
             (

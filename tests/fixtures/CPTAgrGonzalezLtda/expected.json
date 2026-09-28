@@ -4138,7 +4138,7 @@
       "renta_liquida_imponible": null,
       "capital_propio_tributario": 6559199969,
       "impuesto_determinado": null,
-      "ppm": null,
+      "ppm": 45021251,
       "creditos": null,
       "perdidas": null,
       "base_imponible": null,
@@ -4149,7 +4149,7 @@
         "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
       ],
       "idpc_determinado": 9,
-      "ppm_imputados": null,
+      "ppm_imputados": 45021251,
       "saldo_liquidacion_anual": null,
       "rli_source_code": null,
       "cpt_source_code": "645",
@@ -5900,6 +5900,7 @@
         "techo_operativo": 6863869,
         "freno_flujo_operacional_25pct": 5000000,
         "freno_absorcion_operacional": 5000000,
+        "glosa_b2": "8% Spread F29 preventivo ($5,000,000)",
         "margen_operacional_depurado_mensual": 112208045,
         "factor_riesgo_phi": 0.5,
         "factor_ajuste_conductual_pct": 80,
@@ -5975,7 +5976,7 @@
           "nombre": "Holgura Débito/Crédito IVA (F29)",
           "puntaje_obtenido": 20,
           "puntaje_maximo": 20,
-          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 2.45x)"
+          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito del giro s/remanente: 2.45x)"
         },
         {
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -6082,6 +6083,7 @@
       "techo_operativo": 6863869,
       "freno_flujo_operacional_25pct": 5000000,
       "freno_absorcion_operacional": 5000000,
+      "glosa_b2": "8% Spread F29 preventivo ($5,000,000)",
       "margen_operacional_depurado_mensual": 112208045,
       "factor_riesgo_phi": 0.5,
       "factor_ajuste_conductual_pct": 80,
@@ -6141,7 +6143,7 @@
         "nombre": "Holgura Débito/Crédito IVA (F29)",
         "puntaje_obtenido": 20,
         "puntaje_maximo": 20,
-        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 2.45x)"
+        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito del giro s/remanente: 2.45x)"
       },
       {
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",

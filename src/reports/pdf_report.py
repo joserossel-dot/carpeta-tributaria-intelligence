@@ -110,7 +110,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.7)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.7.1)",
                 subtitle_style,
             )
         )
@@ -169,7 +169,7 @@ class PDFReport:
             ],
             [
                 Paragraph(f"<b>Boletín Comercial (Dicom):</b> {boletin_com}", body_style),
-                Paragraph(f"<b>Historial con Proveedor:</b> {hist_pago} | <b>Actuación SII:</b> {forma_act or 'No informada'}", body_style),
+                Paragraph(f"<b>Historial con Proveedor:</b> {hist_pago}", body_style),
             ],
         ]
         contrib_table = Table(contrib_data, colWidths=[92.5 * mm, 92.5 * mm])
@@ -368,7 +368,11 @@ class PDFReport:
 
         spread_15 = int(round(spread_f29 * 0.15))
         rli_fallback = mem.get("rli_fallback_8pct", False)
-        if not rli_fallback and rli_mens and rli_mens > 0:
+        rli_declarada_le_zero = mem.get("rli_declarada_le_zero", False)
+        if rli_declarada_le_zero:
+            rli_m_val = format_mclp(mem.get("rli_ultimo_f22"))
+            metodologia_b2 = mem.get("glosa_b2") or f"N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. 1695: {rli_m_val})"
+        elif not rli_fallback and rli_mens and rli_mens > 0:
             rli_25 = int(round(rli_mens * 0.25))
             metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}]) (Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)"
         else:
@@ -554,11 +558,11 @@ class PDFReport:
 
                 f29_rows.append([
                     Paragraph(getattr(mt, "periodo", ""), table_cell),
-                    Paragraph(format_mclp(v), table_cell),
-                    Paragraph(format_mclp(cop), table_cell),
-                    Paragraph(format_mclp(deb), table_cell),
-                    Paragraph(format_mclp(cred), table_cell),
-                    Paragraph(format_mclp(iva), table_cell),
+                    Paragraph(format_mclp(v).replace(" ", "&nbsp;"), table_cell),
+                    Paragraph(format_mclp(cop).replace(" ", "&nbsp;"), table_cell),
+                    Paragraph(format_mclp(deb).replace(" ", "&nbsp;"), table_cell),
+                    Paragraph(format_mclp(cred).replace(" ", "&nbsp;"), table_cell),
+                    Paragraph(format_mclp(iva).replace(" ", "&nbsp;"), table_cell),
                 ])
 
             n_12 = Decimal(str(len(last_12_mt))) if last_12_mt else Decimal("1")
@@ -571,24 +575,24 @@ class PDFReport:
             # Fila de Promedio Mensual (12M)
             f29_rows.append([
                 Paragraph("<b>Promedio Mensual (12M)</b>", table_cell_bold),
-                Paragraph(format_mclp(prom_v_row), table_cell_bold),
-                Paragraph(format_mclp(prom_cop_row), table_cell_bold),
-                Paragraph(format_mclp(prom_deb_row), table_cell_bold),
-                Paragraph(format_mclp(prom_cred_row), table_cell_bold),
-                Paragraph(format_mclp(prom_iva_row), table_cell_bold),
+                Paragraph(format_mclp(prom_v_row).replace(" ", "&nbsp;"), table_cell_bold),
+                Paragraph(format_mclp(prom_cop_row).replace(" ", "&nbsp;"), table_cell_bold),
+                Paragraph(format_mclp(prom_deb_row).replace(" ", "&nbsp;"), table_cell_bold),
+                Paragraph(format_mclp(prom_cred_row).replace(" ", "&nbsp;"), table_cell_bold),
+                Paragraph(format_mclp(prom_iva_row).replace(" ", "&nbsp;"), table_cell_bold),
             ])
 
             # Fila de Total Acumulado (12M)
             f29_rows.append([
                 Paragraph("<b>Total Acumulado (12M)</b>", table_cell_bold),
-                Paragraph(format_mclp(tot_v), table_cell_bold),
-                Paragraph(format_mclp(tot_cop), table_cell_bold),
-                Paragraph(format_mclp(tot_deb), table_cell_bold),
-                Paragraph(format_mclp(tot_cred), table_cell_bold),
-                Paragraph(format_mclp(tot_iva), table_cell_bold),
+                Paragraph(format_mclp(tot_v).replace(" ", "&nbsp;"), table_cell_bold),
+                Paragraph(format_mclp(tot_cop).replace(" ", "&nbsp;"), table_cell_bold),
+                Paragraph(format_mclp(tot_deb).replace(" ", "&nbsp;"), table_cell_bold),
+                Paragraph(format_mclp(tot_cred).replace(" ", "&nbsp;"), table_cell_bold),
+                Paragraph(format_mclp(tot_iva).replace(" ", "&nbsp;"), table_cell_bold),
             ])
 
-            f29_table = Table(f29_rows, colWidths=[25 * mm, 32 * mm, 32 * mm, 32 * mm, 32 * mm, 32 * mm])
+            f29_table = Table(f29_rows, colWidths=[22 * mm, 32.6 * mm, 32.6 * mm, 32.6 * mm, 32.6 * mm, 32.6 * mm])
             f29_table.setStyle(
                 TableStyle([
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
@@ -614,17 +618,11 @@ class PDFReport:
             n_at = len(sorted_f22[:3])
             at_plural = "s" if n_at > 1 else ""
             f22_titulo = f"Resumen de Declaraciones Anuales F22 ({n_at} AT contenido{at_plural} en carpeta SII — Ingresos, RLI y CPT en M$)"
-            first_f22 = sorted_f22[0]
-            ing_src = getattr(first_f22, "ingresos_source_code", None) or "1657"
-            rli_src = getattr(first_f22, "rli_source_code", None) or "1694"
-            cpt_src = getattr(first_f22, "cpt_source_code", None) or "645/1696"
-            cpt_hdr = "645/1696" if cpt_src in ("645", "1696") else cpt_src
-
             f22_header = [
                 Paragraph("<b>Año Tributario</b>", table_cell_header),
-                Paragraph(f"<b>Ingresos Giro Cód. {ing_src} (M$)</b>", table_cell_header),
-                Paragraph(f"<b>RLI Cód. {rli_src} (M$)</b>", table_cell_header),
-                Paragraph(f"<b>Capital Propio CPT Cód. {cpt_hdr} (M$)</b>", table_cell_header),
+                Paragraph("<b>Ingresos Giro Cód. 1657 (M$)</b>", table_cell_header),
+                Paragraph("<b>RLI / Pérdida Cód. 1694/1695 (M$)</b>", table_cell_header),
+                Paragraph("<b>Capital Propio CPT Cód. 645/1698 (M$)</b>", table_cell_header),
             ]
             f22_rows = [f22_header]
             for f in sorted_f22[:3]:
@@ -632,13 +630,18 @@ class PDFReport:
                 rli = getattr(f, "renta_liquida_imponible", None)
                 cpt_f = getattr(f, "capital_propio_tributario", None)
                 anio_clean = str(getattr(f, "anio_tributario", "")).replace(":", "").strip()
+                rli_code = getattr(f, "rli_source_code", None)
+                if not rli_code:
+                    rli_code = "1695" if (rli is not None and rli < 0) else "1694"
+                rli_fmt = format_mclp(rli).replace(":", "").strip()
+                rli_cell_txt = f"{rli_fmt} (Cód. {rli_code})" if (rli is not None and rli_fmt != "—") else rli_fmt
                 f22_rows.append([
                     Paragraph(anio_clean, table_cell),
                     Paragraph(format_mclp(ing).replace(":", "").strip(), table_cell),
-                    Paragraph(format_mclp(rli).replace(":", "").strip(), table_cell),
+                    Paragraph(rli_cell_txt, table_cell),
                     Paragraph(format_mclp(cpt_f).replace(":", "").strip(), table_cell),
                 ])
-            f22_table = Table(f22_rows, colWidths=[30 * mm, 50 * mm, 50 * mm, 55 * mm])
+            f22_table = Table(f22_rows, colWidths=[28 * mm, 50 * mm, 58 * mm, 49 * mm])
             f22_table.setStyle(
                 TableStyle([
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
@@ -670,7 +673,7 @@ class PDFReport:
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
             "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor. "
-            "[Motor Determinista Cavilaria v2.7 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=12% CPT, Apertura=50%/40%/30%/0%]</i>"
+            "[Motor Determinista Cavilaria v2.7.1 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=12% CPT, Apertura=50%/40%/30%/0%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 

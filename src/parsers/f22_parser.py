@@ -34,8 +34,8 @@ class F22Parser:
     # Jerarquía explícita v2.7:
     # CPT Negativo: 646 (Anverso actual), 1704 (Recuadro 14), 845 (histórico), 1546
     _CPT_NEGATIVO_CODES = ["646", "1704", "845", "1546"]
-    # CPT Positivo: 1696 (Recuadro 14), 645 (Anverso actual), 844 (histórico 2017-2019), 1545, 1703
-    _CPT_POSITIVO_CODES = ["1696", "645", "844", "1545", "1703"]
+    # CPT Positivo: 1698 (Recuadro 14), 645 (Anverso actual), 844 (histórico 2017-2019), 1545, 1703, 1696
+    _CPT_POSITIVO_CODES = ["1698", "645", "844", "1545", "1703", "1696"]
     _INGRESOS_CODES = ["1657", "1400", "1410", "628"]
     # RLI: 1694/1690 (Recuadro 12 RLI 14A), 1440/1580 (ProPyme 14D3/14D8), 1414, 1438, 643, 225, fallback 1109
     _RLI_CODES = ["1694", "1690", "1440", "1580", "1414", "1438", "643", "225", "1109"]
@@ -145,7 +145,10 @@ class F22Parser:
 
         # Si el número capturado forma parte de una fecha o texto de la glosa (ej. "31 de diciembre", "N° 14"),
         # continuar buscando la cifra tributaria real en el resto de la línea.
-        while re.match(r"^\s*(?:de\s+[a-záéíóú]+|art\b|inciso\b|n[°º]\s*\d+)", resto, re.IGNORECASE):
+        while (
+            re.search(r"(?:recuadro|n[°º]|art|art[ií]culo|inciso)\s*$", glosa, re.IGNORECASE)
+            or re.match(r"^\s*(?:\)|de\s+[a-záéíóú]+|art\b|inciso\b|n[°º]\s*\d+)", resto, re.IGNORECASE)
+        ):
             m2 = re.search(r"(-?[\d.,]+)(.*)", resto)
             if m2:
                 glosa = (glosa + " " + raw_num + " " + resto[: m2.start()]).strip()
