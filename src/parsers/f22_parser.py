@@ -25,7 +25,8 @@ class F22Parser:
       36   = Pagos Provisionales Mensuales (PPM)
       82   = Creditos
       1109 = Base Imponible
-      305  = Resultado de la liquidacion anual del Impuesto a la Renta
+      1113 = Impuesto de Primera Categoría (IDPC 27% sobre RLI Cód. 1109/1690)
+      305  = Resultado/Saldo Líquido a Pagar tras deducir PPM (Cód. 36/1904) y créditos
     """
 
     # Códigos para régimen 14A, ProPyme (14 D3, 14 D8) y formularios históricos
@@ -223,7 +224,10 @@ class F22Parser:
                 valores["creditos"] = val
                 break
 
-        # 6. Impuesto Determinado (Cód. 305)
+        # 6. Impuesto Determinado / Liquidación Anual
+        # Nota técnica SII:
+        # Cód. 1113: Impuesto de Primera Categoría (IDPC 27% régimen general 14A sobre RLI Cód. 1109/1690).
+        # Cód. 305 / Cód. 90: Saldo Líquido a Pagar resultante de la liquidación anual tras deducir PPM (Cód. 36/1904) y créditos.
         val_305, glosa_305 = self._extract_raw_code(text, "305")
         if val_305 is not None and self._glosa_305_confiable(glosa_305):
             valores["impuesto_determinado"] = val_305

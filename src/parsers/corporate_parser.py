@@ -33,6 +33,11 @@ class CorporateParser:
         re.IGNORECASE,
     )
 
+    _RE_FORMA_ACTUACION = re.compile(
+        r"(en\s+conjunto|indistinta(?:mente)?|individual(?:mente)?|de\s+acuerdo\s+a\s+estatutos)",
+        re.IGNORECASE,
+    )
+
     def parse(
         self, extract_result: ExtractResult, section_result: SectionResult
     ) -> CorporateInfo:
@@ -51,7 +56,12 @@ class CorporateParser:
             conformacion_text or representantes_text
         )
         socios = self._extract_personas(conformacion_text, Socio, participacion=True)
-        representantes = self._extract_personas(representantes_text, Representante, participacion=False)
+        representantes, forma_act_global = self._extract_representantes_from_tables(extract_result)
+        if not representantes:
+            representantes = self._extract_personas(representantes_text, Representante, participacion=False)
+            for r in representantes:
+                if getattr(r, "forma_actuacion", None) and not forma_act_global:
+                    forma_act_global = r.forma_actuacion
 
         return CorporateInfo(
             tipo_sociedad=tipo_sociedad,
@@ -59,7 +69,85 @@ class CorporateParser:
             capital=capital,
             socios=socios,
             representantes=representantes,
+            forma_actuacion_representantes=forma_act_global,
         )
+
+    def _extract_representantes_from_tables(
+        self, extract_result: ExtractResult
+    ) -> tuple[list[Representante], str | None]:
+        representantes: list[Representante] = []
+        forma_global: str | None = None
+        seen_ruts: set[str] = set()
+
+        for page in getattr(extract_result, "pages", []):
+            tables = getattr(page, "tables", []) or []
+            for table in tables:
+                in_rep_block = False
+                for row in table:
+                    row_str = " ".join(str(c or "") for c in row)
+                    if re.search(r"REPRESENTANTE(?:\(?S\)?)?\s+LEGAL(?:\(?ES\)?)?", row_str, re.IGNORECASE):
+                        in_rep_block = True
+                    elif re.search(r"^\s*\(1\)|DECLARACION|ACTIVIDAD|FORMULARIO", row_str, re.IGNORECASE):
+                        in_rep_block = False
+                        break
+
+                    if in_rep_block:
+                        rut_match = None
+                        rut_idx = -1
+                        for idx, cell in enumerate(row):
+                            if cell and self._RE_RUT.search(str(cell)):
+                                rut_match = self._RE_RUT.search(str(cell)).group(1)
+                                rut_idx = idx
+                                break
+
+                        if rut_match and rut_idx > 0:
+                            name_cands = [
+                                row[i] for i in range(rut_idx)
+                                if row[i] and str(row[i]).strip()
+                                and not re.search(r"REPRESENTANTE(?:\(?S\)?)?\s+LEGAL(?:\(?ES\)?)?", str(row[i]), re.IGNORECASE)
+                                and not re.search(r"Nombre\s+o\s+Raz", str(row[i]), re.IGNORECASE)
+                            ]
+                            if name_cands:
+                                raw_name = str(name_cands[-1]).replace("\n", " ").replace("\r", " ").strip()
+                                nombre = re.sub(r"\s+", " ", raw_name).strip(" .-")
+
+                                fecha_inc = None
+                                forma_act = None
+                                vigente = True
+
+                                for cell in row[rut_idx + 1:]:
+                                    c_str = str(cell or "").strip()
+                                    if not c_str:
+                                        continue
+                                    m_f = self._RE_FECHA.search(c_str)
+                                    if m_f and not fecha_inc:
+                                        fecha_inc = m_f.group(1)
+                                    m_forma = self._RE_FORMA_ACTUACION.search(c_str)
+                                    if m_forma and not forma_act:
+                                        # Usar el texto exacto capitalizado como en SII (ej. "En conjunto")
+                                        raw_forma = m_forma.group(1).strip()
+                                        forma_act = "En conjunto" if "conjunto" in raw_forma.lower() else raw_forma.capitalize()
+                                        if not forma_global:
+                                            forma_global = forma_act
+
+                                    if re.search(r"t[eé]rmino|cese|inactivo|revocado", c_str, re.IGNORECASE):
+                                        vigente = False
+
+                                if nombre and len(nombre) >= 4 and rut_match not in seen_ruts:
+                                    seen_ruts.add(rut_match)
+                                    if vigente:
+                                        representantes.append(
+                                            Representante(
+                                                rut=rut_match,
+                                                nombre=nombre,
+                                                cargo=None,
+                                                fecha_incorporacion=fecha_inc,
+                                                forma_actuacion=forma_act,
+                                                vigente=vigente,
+                                            )
+                                        )
+
+        return representantes, forma_global
 
     def _slice_after(self, text: str, heading_patterns: list[str]) -> str:
         """Devuelve el texto desde el encabezado buscado hasta el proximo
@@ -101,27 +189,48 @@ class CorporateParser:
 
         personas = []
         seen = set()
-        for line in text.split("\n"):
-            line = line.strip()
-            if not line or len(line) < 8:
+        lines = [line.strip() for line in text.split("\n") if line.strip()]
+
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            if len(line) < 8:
+                i += 1
                 continue
 
             rut_match = self._RE_RUT.search(line)
             if not rut_match:
+                i += 1
                 continue
 
             rut = rut_match.group(1)
             nombre = line[: rut_match.start()].strip(" .-")
             nombre = re.sub(r"\s+", " ", nombre)
 
+            # Si la línea siguiente es una continuación de apellido/nombre (sin RUT, sin dígitos ni stop headings)
+            if i + 1 < len(lines):
+                next_l = lines[i + 1]
+                if (
+                    not self._RE_RUT.search(next_l)
+                    and not self._RE_FECHA.search(next_l)
+                    and not self._STOP_HEADINGS.search(next_l)
+                    and not any(k in next_l.upper() for k in ["DECLARACI", "ACTIVIDAD", "FORMULARIO", "(1)"])
+                    and len(next_l.split()) <= 3
+                    and re.match(r"^[A-Za-zÁ-Úá-ú\s]+$", next_l)
+                ):
+                    nombre = f"{nombre} {next_l}".strip()
+                    nombre = re.sub(r"\s+", " ", nombre)
+
             # Filtra encabezados de tabla ("Nombre o Razon Social RUT...")
             # que no son una fila de datos real.
             if not nombre or len(nombre) < 4 or "RAZ" in nombre.upper():
+                i += 1
                 continue
 
             resto = line[rut_match.end():].strip()
 
             if rut in seen:
+                i += 1
                 continue
             seen.add(rut)
 
@@ -135,6 +244,10 @@ class CorporateParser:
                     )
                 )
             else:
-                personas.append(model_cls(rut=rut, nombre=nombre, cargo=None))
+                forma_match = self._RE_FORMA_ACTUACION.search(resto)
+                forma = forma_match.group(1).capitalize() if forma_match else None
+                personas.append(model_cls(rut=rut, nombre=nombre, cargo=None, forma_actuacion=forma))
+
+            i += 1
 
         return personas

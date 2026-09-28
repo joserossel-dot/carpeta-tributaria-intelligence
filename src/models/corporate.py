@@ -11,6 +11,9 @@ class Representante(BaseModel):
     rut: str
     nombre: str
     cargo: str | None = None
+    fecha_incorporacion: str | None = None
+    forma_actuacion: str | None = None
+    vigente: bool = True
 
 
 class CorporateInfo(BaseModel):
@@ -19,3 +22,4 @@ class CorporateInfo(BaseModel):
     capital: str | None = None
     socios: list[Socio] = []
     representantes: list[Representante] = []
+    forma_actuacion_representantes: str | None = None

@@ -34,3 +34,8 @@ class TaxFolder(BaseModel):
     corporate: CorporateInfo | None = None
     credit_risk: CreditRiskResult | None = None
     metadata: Metadata
+
+    @property
+    def corporate_info(self) -> CorporateInfo | None:
+        return self.corporate
+

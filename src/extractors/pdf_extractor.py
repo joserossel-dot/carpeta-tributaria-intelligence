@@ -43,7 +43,8 @@ class PDFExtractor:
         with pdfplumber.open(pdf_source) as pdf:
             for i, page in enumerate(pdf.pages, start=1):
                 text = page.extract_text() or ""
-                pages.append(PageResult(page=i, text=text))
+                tables = page.extract_tables() or []
+                pages.append(PageResult(page=i, text=text, tables=tables))
 
         return ExtractResult(pages=pages)
 

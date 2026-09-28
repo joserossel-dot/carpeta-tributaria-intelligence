@@ -109,7 +109,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.5)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.6)",
                 subtitle_style,
             )
         )
@@ -195,11 +195,13 @@ class PDFReport:
         resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
 
         # Color de la evaluación referencial
-        if "BAJO" in evaluacion:
+        if "SÓLIDO" in evaluacion or "SOLIDO" in evaluacion or "BAJO" in evaluacion:
             badge_bg = colors.HexColor("#16A34A")
-        elif "MODERADO" in evaluacion or "MEDIO" in evaluacion or "CONDICIONES" in evaluacion:
+        elif "MODERADO" in evaluacion or "MEDIO" in evaluacion:
             badge_bg = colors.HexColor("#D97706")
-        elif "ALTO" in evaluacion or "RECHAZADO" in evaluacion:
+        elif "ACOTADO" in evaluacion or "CONDICIONES" in evaluacion:
+            badge_bg = colors.HexColor("#EA580C")
+        elif "DÉBIL" in evaluacion or "DEBIL" in evaluacion or "ALTO" in evaluacion or "RECHAZADO" in evaluacion:
             badge_bg = colors.HexColor("#DC2626")
         else:
             badge_bg = colors.HexColor("#475569")
@@ -212,10 +214,30 @@ class PDFReport:
             "ResguardoStyle",
             parent=table_cell,
             fontName="Helvetica",
-            fontSize=5.2,
-            leading=6.6,
+            fontSize=6.8,
+            leading=8.2,
             textColor=colors.HexColor("#1E293B"),
         )
+
+        reps_list = getattr(tax_folder.corporate, "representantes", []) if getattr(tax_folder, "corporate", None) else []
+        n_reps = len(reps_list)
+        forma_act = getattr(tax_folder.corporate, "forma_actuacion_representantes", None) if getattr(tax_folder, "corporate", None) else None
+        act_txt = f"Actuación SII: {forma_act} — " if forma_act else ""
+
+        if linea_ini > 0:
+            if n_reps > 1:
+                pod_str = f"Pagaré notarial suscrito según poderes vigentes ({act_txt}{n_reps} representantes en detalle inferior)"
+            elif n_reps == 1:
+                pod_str = f"Pagaré notarial suscrito según poderes vigentes ({act_txt}{reps_list[0].nombre})"
+            else:
+                pod_str = "Pagaré notarial suscrito según poderes vigentes"
+
+            resguardo_box_txt = (
+                f"<b>Plazo Inicial:</b> {plazo_ini}. <b>Condición previa:</b> Dicom/Equifax sin morosidad vigente, "
+                f"{pod_str} o Seguro de Crédito; o esquema mixto (50% anticipo + 50% a 30 días)."
+            )
+        else:
+            resguardo_box_txt = f"<b>Plazo Inicial:</b> {plazo_ini}.<br/>{resguardo}"
 
         panel_data = [
             [
@@ -228,7 +250,7 @@ class PDFReport:
                 evaluacion_cell,
                 Paragraph(f"<b>{score_val:.0f} / 100 pts</b><br/>{desempeno_texto}<br/><font size=5.5 color='#64748B'>No reemplaza informe comercial</font>", table_cell_bold),
                 Paragraph(f"<b>Inicial: {linea_ini_txt}</b><br/><font size=6.5>Máxima: {linea_max_txt}</font>", table_cell_bold),
-                Paragraph(f"<font size=6.5><b>Plazo Inicial: {plazo_ini}</b></font><br/>{resguardo}", resguardo_style),
+                Paragraph(resguardo_box_txt, resguardo_style),
             ],
         ]
         panel_table = Table(panel_data, colWidths=[52 * mm, 37 * mm, 37 * mm, 59 * mm])
@@ -343,11 +365,24 @@ class PDFReport:
         cpt_str = format_mclp(cpt_val) if cpt_val is not None else "Sin F22"
 
         spread_15 = int(round(spread_f29 * 0.15))
-        if rli_mens and rli_mens > 0:
+        rli_fallback = mem.get("rli_fallback_8pct", False)
+        if not rli_fallback and rli_mens and rli_mens > 0:
             rli_25 = int(round(rli_mens * 0.25))
             metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}])"
         else:
-            metodologia_b2 = f"12% Spread F29 [{format_mclp(int(round(spread_f29 * 0.12)))}] (penalizado por RLI no disponible o <= 0)"
+            spread_8 = int(round(spread_f29 * 0.08))
+            metodologia_b2 = f"8% Spread F29 [{format_mclp(spread_8)}] (penalizado por RLI <= 0 o sin F22)"
+
+        min_b1_b2 = min(techo_op, freno_flujo)
+        if tope_cpt is not None:
+            if tope_cpt > min_b1_b2:
+                glosa_d = "12% CPT en línea limpia (Tope patrimonial no restrictivo en este RUT)"
+            else:
+                glosa_d = "12% CPT (Freno patrimonial ACTIVO por bajo CPT)"
+        elif cpt_val is not None and cpt_val <= 0:
+            glosa_d = "CPT <= 0 ($0 en línea limpia por quiebra técnica)"
+        else:
+            glosa_d = "Sin F22 vigente"
 
         mem_rows = [
             [
@@ -387,12 +422,12 @@ class PDFReport:
             ],
             [
                 Paragraph(f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", table_cell_bold),
-                Paragraph("12% CPT en línea limpia ($0 si CPT <= 0)", table_cell),
+                Paragraph(glosa_d, table_cell),
                 Paragraph(format_mclp(tope_cpt) if tope_cpt is not None else "Sin tope", table_cell_bold),
             ],
             [
                 Paragraph("(=) Línea Máxima Condicionada (Techo Técnico)", table_cell_bold),
-                Paragraph("min(Techo 8%, Freno Absorción) × Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)", table_cell),
+                Paragraph("min(Techo 8%, Freno Absorción) x Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)", table_cell),
                 Paragraph(format_mclp(cupo_max), table_cell_bold),
             ],
             [
@@ -464,8 +499,10 @@ class PDFReport:
                 ("RIGHTPADDING", (0, 0), (-1, -1), 4),
             ])
         )
-        story.append(Paragraph("Condiciones Suspensivas, Alertas y Monitoreo Sugerido", h2_style))
-        story.append(flags_table)
+        story.append(KeepTogether([
+            Paragraph("Condiciones Suspensivas, Alertas y Monitoreo Sugerido", h2_style),
+            flags_table,
+        ]))
         story.append(Spacer(1, 2.5 * mm))
 
         # 7. TABLA RESUMEN F29 (Últimos 12 meses cronológicos en M$)
@@ -564,11 +601,14 @@ class PDFReport:
         if f22_list:
             sorted_f22 = sorted(f22_list, key=lambda f: f.anio_tributario or "", reverse=True)
             story.append(Spacer(1, 2 * mm))
+            n_at = len(sorted_f22[:3])
+            at_plural = "s" if n_at > 1 else ""
+            f22_titulo = f"Resumen de Declaraciones Anuales F22 ({n_at} AT contenido{at_plural} en carpeta SII — Ingresos, RLI y CPT en M$)"
             f22_header = [
                 Paragraph("<b>Año Tributario</b>", table_cell_header),
-                Paragraph("<b>Ingresos Anuales (M$)</b>", table_cell_header),
-                Paragraph("<b>RLI (M$)</b>", table_cell_header),
-                Paragraph("<b>Capital Propio CPT (M$)</b>", table_cell_header),
+                Paragraph("<b>Ingresos Giro Cód. 1657/628 (M$)</b>", table_cell_header),
+                Paragraph("<b>RLI Cód. 1109/1690 (M$)</b>", table_cell_header),
+                Paragraph("<b>Capital Propio CPT Cód. 645 (M$)</b>", table_cell_header),
             ]
             f22_rows = [f22_header]
             for f in sorted_f22[:3]:
@@ -594,7 +634,7 @@ class PDFReport:
                 ])
             )
             story.append(KeepTogether([
-                Paragraph("Resumen de Declaraciones Anuales F22 (Ingresos, RLI y Capital Propio en M$)", h2_style),
+                Paragraph(f22_titulo, h2_style),
                 f22_table,
             ]))
 
@@ -613,7 +653,8 @@ class PDFReport:
         nota_pie = (
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
-            "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor.</i>"
+            "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor. "
+            "[Motor Determinista Cavilaria v2.6 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; fallback 8% Spread), D=12% CPT, Apertura=50%/35%/25%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 

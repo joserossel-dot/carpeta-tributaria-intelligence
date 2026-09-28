@@ -87,7 +87,7 @@ class ExcelReport:
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.5)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.6)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -213,11 +213,24 @@ class ExcelReport:
         cpt_str = f"M$ {int(cpt_val // 1000):,}".replace(",", ".") if cpt_val is not None else "Sin F22"
 
         spread_15 = int(round(spread_f29 * 0.15))
-        if rli_mens and rli_mens > 0:
+        rli_fallback = mem.get("rli_fallback_8pct", False)
+        if not rli_fallback and rli_mens and rli_mens > 0:
             rli_25 = int(round(rli_mens * 0.25))
             metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}])"
         else:
-            metodologia_b2 = f"12% Spread F29 [{format_mclp(int(round(spread_f29 * 0.12)))}] (penalizado por RLI no disponible o <= 0)"
+            spread_8 = int(round(spread_f29 * 0.08))
+            metodologia_b2 = f"8% Spread F29 [{format_mclp(spread_8)}] (penalizado por RLI <= 0 o sin F22)"
+
+        min_b1_b2 = min(techo_op, freno_flujo)
+        if tope_cpt is not None:
+            if tope_cpt > min_b1_b2:
+                glosa_d = "12% CPT en línea limpia (Tope patrimonial no restrictivo en este RUT)"
+            else:
+                glosa_d = "12% CPT (Freno patrimonial ACTIVO por bajo CPT)"
+        elif cpt_val is not None and cpt_val <= 0:
+            glosa_d = "CPT <= 0 ($0 en línea limpia por quiebra técnica)"
+        else:
+            glosa_d = "Sin F22 vigente"
 
         calc_steps = [
             (f"Ventas Netas Mensuales Promedio{rango_str}", round(v_prom / 1000.0) if v_prom else 0, "Promedio mensual de ventas de los 12 meses analizados"),
@@ -226,8 +239,8 @@ class ExcelReport:
             ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (parámetro prudencial de exposición por proveedor: 8% C_base)"),
             ("Paso B2: Freno por Absorción Operacional", round(freno_flujo / 1000.0) if freno_flujo else 0, metodologia_b2),
             ("Paso C: Factor de Ajuste Conductual", f"{phi_pct}%", "Ajuste por mora F29, postergación IVA y estabilidad YoY"),
-            (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", "12% CPT en línea limpia ($0 si CPT <= 0)"),
-            ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) × Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)"),
+            (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", glosa_d),
+            ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) x Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)"),
             (f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)", round(cupo_ini / 1000.0) if cupo_ini else 0, f"{pct_ap}% de la Línea Máxima Técnica según Puntaje SII"),
         ]
 

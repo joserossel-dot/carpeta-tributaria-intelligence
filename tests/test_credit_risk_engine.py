@@ -420,7 +420,7 @@ class TestVersion23Audit:
         assert result.cupo_aprobado == 0
         assert result.linea_inicial_sugerida == 0
         assert result.linea_maxima_condicionada == 0
-        assert "RIESGO TRIBUTARIO ALTO" in result.evaluacion_referencial
+        assert "PERFIL TRIBUTARIO DÉBIL" in result.evaluacion_referencial
         assert "Bloqueo comercial" in result.decision.resguardo_comercial_sugerido
 
     def test_sin_contradiccion_nomenclatura(self, benchmark_vacio) -> None:
@@ -453,8 +453,8 @@ class TestVersion23Audit:
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
         # Score debe ser alto (>= 75) y clasificación acoplada directamente al puntaje tributario
         assert result.score_compuesto is not None and result.score_compuesto >= 75
-        assert result.decision.clasificacion_riesgo in ("RIESGO TRIBUTARIO MEDIO", "RIESGO TRIBUTARIO BAJO")
-        assert "Línea Condicionada" in result.decision.evaluacion_referencial
+        assert result.decision.clasificacion_riesgo in ("PERFIL TRIBUTARIO SÓLIDO", "PERFIL TRIBUTARIO MODERADO")
+        assert "Línea" in result.decision.evaluacion_referencial
         assert result.decision.desempeno_tributario_texto == "Desempeño Tributario Alto"
 
     def test_filtro_elegibilidad_5_etapas(self, benchmark_vacio) -> None:

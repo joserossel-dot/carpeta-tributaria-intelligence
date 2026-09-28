@@ -14,17 +14,26 @@
     {
       "rut": "5603821−3",
       "nombre": "BENJAMIN DE LAS MERCEDES GONZALEZ CANALES",
-      "cargo": null
+      "cargo": null,
+      "fecha_incorporacion": null,
+      "forma_actuacion": null,
+      "vigente": true
     },
     {
       "rut": "8417660−5",
       "nombre": "CARLOS DAMIAN BOADA CAMPOS",
-      "cargo": null
+      "cargo": null,
+      "fecha_incorporacion": null,
+      "forma_actuacion": null,
+      "vigente": true
     },
     {
       "rut": "10664274−5",
       "nombre": "LORENA CAROLINA FOLATRE BRIONES",
-      "cargo": null
+      "cargo": null,
+      "fecha_incorporacion": null,
+      "forma_actuacion": null,
+      "vigente": true
     }
   ],
   "activities": [
@@ -3804,19 +3813,29 @@
       {
         "rut": "5603821−3",
         "nombre": "BENJAMIN DE LAS MERCEDES GONZALEZ CANALES",
-        "cargo": null
+        "cargo": null,
+        "fecha_incorporacion": null,
+        "forma_actuacion": null,
+        "vigente": true
       },
       {
         "rut": "8417660−5",
         "nombre": "CARLOS DAMIAN BOADA CAMPOS",
-        "cargo": null
+        "cargo": null,
+        "fecha_incorporacion": null,
+        "forma_actuacion": null,
+        "vigente": true
       },
       {
         "rut": "10664274−5",
         "nombre": "LORENA CAROLINA FOLATRE BRIONES",
-        "cargo": null
+        "cargo": null,
+        "fecha_incorporacion": null,
+        "forma_actuacion": null,
+        "vigente": true
       }
-    ]
+    ],
+    "forma_actuacion_representantes": null
   },
   "credit_risk": {
     "calidad_datos": {
@@ -3909,8 +3928,8 @@
     "score_compuesto": 90,
     "decision": {
       "resultado_base": "APROBADO",
-      "evaluacion_referencial": "RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom)",
-      "clasificacion_riesgo": "RIESGO TRIBUTARIO BAJO",
+      "evaluacion_referencial": "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)",
+      "clasificacion_riesgo": "PERFIL TRIBUTARIO SÓLIDO",
       "desempeno_tributario_texto": "Desempeño Tributario Alto",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 600000,
@@ -3921,8 +3940,8 @@
       "plazo_sugerido_dias": 30,
       "plazo_inicial_sugerido": "15 días (o 30 días con 50% de anticipo)",
       "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
-      "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes registrados en SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
-      "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes registrados en SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
       "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
       "memoria_calculo": {
         "periodo_inicio": "2018-12",
@@ -3933,6 +3952,9 @@
         "brecha_operacional_proxy": 19313118,
         "rli_ultimo_f22": 1513977761,
         "rli_mensualizada_f22": 126164813,
+        "rli_valida": true,
+        "rli_fallback_8pct": false,
+        "alerta_sanity_rli": null,
         "techo_operativo_8pct": 662164,
         "techo_operativo_20pct": 662164,
         "techo_operativo": 662164,
@@ -3960,11 +3982,11 @@
         "historial_pago": "Cliente nuevo (Sin historial previo)"
       },
       "hoja_ruta_comercial": [
-        "Clasificación y Recomendación: RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom).",
+        "Clasificación y Recomendación: PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom).",
         "Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).",
         "Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 300 (Plazo: 15 días (o 30 días con 50% de anticipo)).",
         "Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 600 (Plazo: 30 días).",
-        "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes registrados en SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+        "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
         "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
         "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
         "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."
@@ -4072,13 +4094,13 @@
       "Respaldo patrimonial sólido: CPT positivo de $5,515,454,480 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nClasificación y Recomendación: RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom)\nPuntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 300 | Plazo Inicial: 15 días (o 30 días con 50% de anticipo)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 600 | Plazo Máximo: 30 días\nResguardo Comercial Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes registrados en SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 8.277\n- Techo Operativo Proveedor (8%): M$ 662\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 19.313\n- Freno Flujo Operacional (25%): M$ 2.897\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 5.515.454\n- Línea Máxima Condicionada (Techo Técnico): M$ 600\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 300\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom).\n- ✅ Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).\n- ✅ Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 300 (Plazo: 15 días (o 30 días con 50% de anticipo)).\n- ✅ Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 600 (Plazo: 30 días).\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes registrados en SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
-    "veredicto": "RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom)",
-    "evaluacion_referencial": "RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom)",
-    "clasificacion_riesgo": "RIESGO TRIBUTARIO BAJO",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nClasificación y Recomendación: PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)\nPuntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 300 | Plazo Inicial: 15 días (o 30 días con 50% de anticipo)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 600 | Plazo Máximo: 30 días\nResguardo Comercial Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 8.277\n- Techo Operativo Proveedor (8%): M$ 662\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 19.313\n- Freno Flujo Operacional (25%): M$ 2.897\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 5.515.454\n- Línea Máxima Condicionada (Techo Técnico): M$ 600\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 300\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom).\n- ✅ Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).\n- ✅ Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 300 (Plazo: 15 días (o 30 días con 50% de anticipo)).\n- ✅ Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 600 (Plazo: 30 días).\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
+    "veredicto": "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)",
+    "evaluacion_referencial": "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)",
+    "clasificacion_riesgo": "PERFIL TRIBUTARIO SÓLIDO",
     "desempeno_tributario_texto": "Desempeño Tributario Alto",
     "score_crediticio": 90.0,
-    "categoria_riesgo": "BAJO",
+    "categoria_riesgo": "MEDIO",
     "cupo_maximo_sugerido": 600000,
     "cupo_aprobado": 300000,
     "linea_maxima_sugerida": 600000,
@@ -4087,8 +4109,8 @@
     "plazo_sugerido_dias": 30,
     "plazo_inicial_sugerido": "15 días (o 30 días con 50% de anticipo)",
     "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
-    "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes registrados en SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
-    "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes registrados en SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+    "garantia_exigida": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+    "resguardo_comercial_sugerido": "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
     "protocolo_operativo": "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
     "memoria_calculo": {
       "periodo_inicio": "2018-12",
@@ -4099,6 +4121,9 @@
       "brecha_operacional_proxy": 19313118,
       "rli_ultimo_f22": 1513977761,
       "rli_mensualizada_f22": 126164813,
+      "rli_valida": true,
+      "rli_fallback_8pct": false,
+      "alerta_sanity_rli": null,
       "techo_operativo_8pct": 662164,
       "techo_operativo_20pct": 662164,
       "techo_operativo": 662164,
@@ -4126,11 +4151,11 @@
       "historial_pago": "Cliente nuevo (Sin historial previo)"
     },
     "hoja_ruta_comercial": [
-      "Clasificación y Recomendación: RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom).",
+      "Clasificación y Recomendación: PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom).",
       "Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).",
       "Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 300 (Plazo: 15 días (o 30 días con 50% de anticipo)).",
       "Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 600 (Plazo: 30 días).",
-      "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes registrados en SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
+      "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según Certificado de Vigencia y Poderes (Representantes SII: BENJAMIN DE LAS MERCEDES GONZALEZ CANALES / CARLOS DAMIAN BOADA CAMPOS / LORENA CAROLINA FOLATRE BRIONES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
       "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
       "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
       "Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida."

@@ -321,11 +321,24 @@ class CreditRiskEngine:
         rut = getattr(c, "rut", None) or "—"
         inicio_act = getattr(c, "fecha_inicio_actividades", None) or getattr(c, "inicio_actividades", None)
         rep_names = []
+        forma_act = None
         if getattr(tax_folder, "representatives", None):
             for r in tax_folder.representatives:
                 nom = getattr(r, "nombre", None) or (r.get("nombre") if isinstance(r, dict) else None)
                 if nom and str(nom).strip():
                     rep_names.append(str(nom).strip())
+                f = getattr(r, "forma_actuacion", None) or (r.get("forma_actuacion") if isinstance(r, dict) else None)
+                if f and not forma_act:
+                    forma_act = f
+        if not forma_act and getattr(tax_folder, "corporate", None):
+            forma_act = getattr(tax_folder.corporate, "forma_actuacion_representantes", None)
+
+        detalle_reps = f"{len(rep_names)} representante(s) registrado(s)"
+        if rep_names:
+            if forma_act:
+                detalle_reps += f" (Actuación SII: {forma_act})"
+        else:
+            detalle_reps = "Sin representantes registrados en carpeta"
 
         n_meses = len(tax_folder.monthly_taxes) or len(tax_folder.f29)
         lagunas = len(calidad.meses_f29_faltantes)
@@ -339,7 +352,7 @@ class CreditRiskEngine:
             {
                 "parametro": "Representantes Legales Identificados",
                 "estado": "CUMPLE" if rep_names else "OBSERVADO",
-                "detalle": f"{len(rep_names)} representante(s) registrado(s)" if rep_names else "Sin representantes registrados en carpeta",
+                "detalle": detalle_reps,
             },
             {
                 "parametro": "Continuidad F29 Reciente",
@@ -586,9 +599,6 @@ class CreditRiskEngine:
         spread_operacional_f29 = max(0.0, prom_ventas_12m - c_base)
 
         # Paso B2: Freno por Absorción Operacional
-        # Cuando exista RLI positiva en el último F22, calcular como:
-        # min(15% del Spread Operacional Tributario F29, 25% de la RLI Mensualizada F22)
-        # Si no hay F22 o RLI <= 0, usar 12% del Spread Operacional F29 con penalización.
         ultimo_f22 = None
         if tax_folder.f22:
             sorted_f22 = sorted(tax_folder.f22, key=lambda f: f.anio_tributario or "", reverse=True)
@@ -596,14 +606,33 @@ class CreditRiskEngine:
                 ultimo_f22 = sorted_f22[0]
 
         rli_val = ultimo_f22.renta_liquida_imponible if ultimo_f22 else None
-        rli_mensualizada = (float(rli_val) / 12.0) if (rli_val is not None and rli_val > 0) else None
+        ingresos_f22 = ultimo_f22.ingresos if ultimo_f22 else None
 
-        if rli_mensualizada is not None and rli_mensualizada > 0:
+        # Sanity check anti-artefactos F22: RLI > Ingresos o RLI/Ingresos > 0.50
+        rli_artefacto = False
+        alerta_sanity_rli = None
+        if rli_val is not None and ingresos_f22 is not None and ingresos_f22 > 0:
+            if rli_val > ingresos_f22 or (rli_val / float(ingresos_f22) > 0.50):
+                rli_artefacto = True
+                alerta_sanity_rli = "Magnitud RLI/Ingresos > 50% en F22: se aplica techo conservador F29"
+                castigos.append(alerta_sanity_rli)
+
+        rli_valida = (rli_val is not None and rli_val > 0 and not rli_artefacto)
+        rli_mensualizada = (float(rli_val) / 12.0) if rli_valida else None
+        rli_fallback_8pct = False
+
+        if rli_valida and rli_mensualizada is not None and rli_mensualizada > 0:
             freno_flujo = min(0.15 * spread_operacional_f29, 0.25 * rli_mensualizada)
             glosa_b2 = f"min(15% Spread F29: ${0.15 * spread_operacional_f29:,.0f}, 25% RLI Mensualizada: ${0.25 * rli_mensualizada:,.0f})"
         else:
-            freno_flujo = 0.12 * spread_operacional_f29
-            glosa_b2 = f"12% Spread Operacional F29 penalizado (${freno_flujo:,.0f})"
+            # Regla explícita para RLI <= 0 (pérdida tributaria), sin F22 o RLI artefacto:
+            # Se aplica factor castigado de 8% del Spread Operacional F29 (en vez de 15%)
+            rli_fallback_8pct = True
+            freno_flujo = 0.08 * spread_operacional_f29
+            glosa_b2 = f"8% Spread F29 preventivo (${freno_flujo:,.0f})"
+            castigos.append(
+                "F22 declara RLI <= 0 (o sin F22 vigente): línea acotada preventivamente al 8% del Spread F29 y sujeta a revisión de Balance de 8 Columnas"
+            )
 
         # El cupo base no puede superar el freno de absorción operacional
         techo_con_flujo = min(techo_operativo, freno_flujo)
@@ -721,6 +750,9 @@ class CreditRiskEngine:
             "brecha_operacional_proxy": int(round(spread_operacional_f29)),
             "rli_ultimo_f22": int(round(rli_val)) if rli_val is not None else None,
             "rli_mensualizada_f22": int(round(rli_mensualizada)) if rli_mensualizada is not None else None,
+            "rli_valida": rli_valida,
+            "rli_fallback_8pct": rli_fallback_8pct,
+            "alerta_sanity_rli": alerta_sanity_rli,
             "techo_operativo_8pct": int(round(techo_operativo)),
             "techo_operativo_20pct": int(round(techo_operativo)),
             "techo_operativo": int(round(techo_operativo)),
@@ -1152,16 +1184,23 @@ class CreditRiskEngine:
     ) -> Decision:
         # Extraer representantes legales para resguardos personalizados (todos los registrados, sin truncar)
         rep_names = []
+        forma_act = None
         if tax_folder and getattr(tax_folder, "representatives", None):
             for r in tax_folder.representatives:
                 nom = getattr(r, "nombre", None) or (r.get("nombre") if isinstance(r, dict) else None)
                 if nom and str(nom).strip():
                     rep_names.append(str(nom).strip())
-        reps_registrados = " / ".join(rep_names) if rep_names else "No informados"
+                f = getattr(r, "forma_actuacion", None) or (r.get("forma_actuacion") if isinstance(r, dict) else None)
+                if f and not forma_act:
+                    forma_act = f
+        if not forma_act and tax_folder and getattr(tax_folder, "corporate", None):
+            forma_act = getattr(tax_folder.corporate, "forma_actuacion_representantes", None)
 
+        reps_registrados = " / ".join(rep_names) if rep_names else "No informados"
+        actuacion_txt = f"Forma de actuación registrada en SII: {forma_act} — " if forma_act else ""
         clausula_pagare = (
             f"Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según "
-            f"Certificado de Vigencia y Poderes (Representantes registrados en SII: {reps_registrados})"
+            f"Certificado de Vigencia y Poderes ({actuacion_txt}Representantes SII: {reps_registrados})"
         )
 
         cpt_val = memoria.get("capital_propio_tributario")
@@ -1210,10 +1249,10 @@ class CreditRiskEngine:
             resguardo = "Carpeta sin información suficiente para evaluar línea de crédito."
             protocolo = "Completar información tributaria faltante (mínimo 6 meses F29 y F22)."
 
-        elif tiene_morosidad_comercial or cpt_negativo or cupo_maximo == 0 or score_compuesto < 70 or mora_12m >= 2:
+        elif tiene_morosidad_comercial or cpt_negativo or cupo_maximo == 0 or score_compuesto < 65 or mora_12m >= 2:
             resultado_base = "RECHAZADO"
-            evaluacion_referencial = "RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado"
-            clasificacion_riesgo = "RIESGO TRIBUTARIO ALTO"
+            evaluacion_referencial = "PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática)"
+            clasificacion_riesgo = "PERFIL TRIBUTARIO DÉBIL"
             cupo_aprobado = 0
             linea_inicial = 0
             linea_maxima = 0
@@ -1247,8 +1286,8 @@ class CreditRiskEngine:
 
         elif score_compuesto >= 85:
             resultado_base = "APROBADO"
-            evaluacion_referencial = "RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom)"
-            clasificacion_riesgo = "RIESGO TRIBUTARIO BAJO"
+            evaluacion_referencial = "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)"
+            clasificacion_riesgo = "PERFIL TRIBUTARIO SÓLIDO"
             pct_apertura = 0.50
             linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
             linea_maxima = _floor_m100(linea_maxima)
@@ -1269,8 +1308,8 @@ class CreditRiskEngine:
 
         elif score_compuesto >= 75:
             resultado_base = "APROBADO_CON_CONDICIONES"
-            evaluacion_referencial = "RIESGO TRIBUTARIO MEDIO (Línea Condicionada)"
-            clasificacion_riesgo = "RIESGO TRIBUTARIO MEDIO"
+            evaluacion_referencial = "PERFIL TRIBUTARIO MODERADO (Línea Condicionada)"
+            clasificacion_riesgo = "PERFIL TRIBUTARIO MODERADO"
             pct_apertura = 0.35
             linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
             linea_maxima = _floor_m100(linea_maxima)
@@ -1290,10 +1329,10 @@ class CreditRiskEngine:
             )
 
         else:
-            # Score 65 a 74 (o 70 a 74)
+            # Score 65 a 74
             resultado_base = "APROBADO_CON_CONDICIONES"
-            evaluacion_referencial = "RIESGO TRIBUTARIO MEDIO (Línea Condicionada)"
-            clasificacion_riesgo = "RIESGO TRIBUTARIO MEDIO"
+            evaluacion_referencial = "PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva)"
+            clasificacion_riesgo = "PERFIL TRIBUTARIO ACOTADO"
             pct_apertura = 0.25
             linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
             linea_maxima = _floor_m100(linea_maxima)
@@ -1305,6 +1344,11 @@ class CreditRiskEngine:
                 prefix_base
                 + f"{clausula_pagare} o Seguro de Crédito que cubra la línea; "
                 "alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días)."
+            )
+            protocolo = (
+                "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) "
+                "o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho."
+                + (" Solicitar Balance de 8 Columnas reciente por condición suspensiva de compresión de RLI." if rli_comprimida else "")
             )
             protocolo = (
                 "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) "

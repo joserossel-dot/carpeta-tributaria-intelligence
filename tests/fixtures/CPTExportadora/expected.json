@@ -14,17 +14,26 @@
     {
       "rut": "5603821−3",
       "nombre": "BENJAMIN DE LAS MERCEDES GONZALEZ CANALES",
-      "cargo": null
+      "cargo": null,
+      "fecha_incorporacion": null,
+      "forma_actuacion": null,
+      "vigente": true
     },
     {
       "rut": "10128457−3",
       "nombre": "LUCAS BORIS SEKUL PAVEZ",
-      "cargo": null
+      "cargo": null,
+      "fecha_incorporacion": null,
+      "forma_actuacion": null,
+      "vigente": true
     },
     {
       "rut": "10664274−5",
       "nombre": "LORENA CAROLINA FOLATRE BRIONES",
-      "cargo": null
+      "cargo": null,
+      "fecha_incorporacion": null,
+      "forma_actuacion": null,
+      "vigente": true
     }
   ],
   "activities": [
@@ -5908,19 +5917,29 @@
       {
         "rut": "5603821−3",
         "nombre": "BENJAMIN DE LAS MERCEDES GONZALEZ CANALES",
-        "cargo": null
+        "cargo": null,
+        "fecha_incorporacion": null,
+        "forma_actuacion": null,
+        "vigente": true
       },
       {
         "rut": "10128457−3",
         "nombre": "LUCAS BORIS SEKUL PAVEZ",
-        "cargo": null
+        "cargo": null,
+        "fecha_incorporacion": null,
+        "forma_actuacion": null,
+        "vigente": true
       },
       {
         "rut": "10664274−5",
         "nombre": "LORENA CAROLINA FOLATRE BRIONES",
-        "cargo": null
+        "cargo": null,
+        "fecha_incorporacion": null,
+        "forma_actuacion": null,
+        "vigente": true
       }
-    ]
+    ],
+    "forma_actuacion_representantes": null
   },
   "credit_risk": {
     "calidad_datos": {
@@ -6010,8 +6029,8 @@
     "score_compuesto": 55,
     "decision": {
       "resultado_base": "RECHAZADO",
-      "evaluacion_referencial": "RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado",
-      "clasificacion_riesgo": "RIESGO TRIBUTARIO ALTO",
+      "evaluacion_referencial": "PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática)",
+      "clasificacion_riesgo": "PERFIL TRIBUTARIO DÉBIL",
       "desempeno_tributario_texto": "Desempeño Tributario Bajo",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 0,
@@ -6034,6 +6053,9 @@
         "brecha_operacional_proxy": 693398986,
         "rli_ultimo_f22": 1451435821,
         "rli_mensualizada_f22": 120952985,
+        "rli_valida": true,
+        "rli_fallback_8pct": false,
+        "alerta_sanity_rli": null,
         "techo_operativo_8pct": 48160949,
         "techo_operativo_20pct": 48160949,
         "techo_operativo": 48160949,
@@ -6063,7 +6085,7 @@
         "historial_pago": "Cliente nuevo (Sin historial previo)"
       },
       "hoja_ruta_comercial": [
-        "Clasificación y Recomendación: RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado.",
+        "Clasificación y Recomendación: PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática).",
         "Puntaje Tributario SII: 55/100 pts (Desempeño Tributario Bajo).",
         "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
         "Línea Máxima Condicionada: M$ 0.",
@@ -6177,13 +6199,13 @@
       "Respaldo patrimonial sólido: CPT positivo de $3,883,625,370 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: EXPORTADORA GONZAGRI S A (RUT: 99556090-9)\n\nClasificación y Recomendación: RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado\nPuntaje Tributario SII: 55/100 pts (Desempeño Tributario Bajo)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, línea de crédito no sugerida M$ 0 (Venta exclusiva al contado / Pago anticipado previo al despacho).\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 602.012\n- Techo Operativo Proveedor (8%): M$ 48.161\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 693.399\n- Freno Flujo Operacional (25%): M$ 30.238\n- Factor de Ajuste Conductual: 10%\n- Capital Propio Tributario (CPT): M$ 3.883.625\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Freno por Absorción Operacional (min(15% Spread F29: $104,009,848, 25% RLI Mensualizada: $30,238,246)): reduce techo de compras de $48,160,949 a $30,238,246\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -49.0%, YoY: -43.4%): -0.50\n  * 1 mes sin declaración F29: -0.40\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado.\n- ✅ Puntaje Tributario SII: 55/100 pts (Desempeño Tributario Bajo).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, línea de crédito no sugerida M$ 0 (Venta exclusiva al contado / Pago anticipado previo al despacho).\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado.",
-    "veredicto": "RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado",
-    "evaluacion_referencial": "RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado",
-    "clasificacion_riesgo": "RIESGO TRIBUTARIO ALTO",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: EXPORTADORA GONZAGRI S A (RUT: 99556090-9)\n\nClasificación y Recomendación: PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática)\nPuntaje Tributario SII: 55/100 pts (Desempeño Tributario Bajo)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, línea de crédito no sugerida M$ 0 (Venta exclusiva al contado / Pago anticipado previo al despacho).\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 602.012\n- Techo Operativo Proveedor (8%): M$ 48.161\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 693.399\n- Freno Flujo Operacional (25%): M$ 30.238\n- Factor de Ajuste Conductual: 10%\n- Capital Propio Tributario (CPT): M$ 3.883.625\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Freno por Absorción Operacional (min(15% Spread F29: $104,009,848, 25% RLI Mensualizada: $30,238,246)): reduce techo de compras de $48,160,949 a $30,238,246\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -49.0%, YoY: -43.4%): -0.50\n  * 1 mes sin declaración F29: -0.40\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática).\n- ✅ Puntaje Tributario SII: 55/100 pts (Desempeño Tributario Bajo).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, línea de crédito no sugerida M$ 0 (Venta exclusiva al contado / Pago anticipado previo al despacho).\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado.",
+    "veredicto": "PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática)",
+    "evaluacion_referencial": "PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática)",
+    "clasificacion_riesgo": "PERFIL TRIBUTARIO DÉBIL",
     "desempeno_tributario_texto": "Desempeño Tributario Bajo",
     "score_crediticio": 55.0,
-    "categoria_riesgo": "ALTO",
+    "categoria_riesgo": "MEDIO",
     "cupo_maximo_sugerido": 0,
     "cupo_aprobado": 0,
     "linea_maxima_sugerida": 0,
@@ -6204,6 +6226,9 @@
       "brecha_operacional_proxy": 693398986,
       "rli_ultimo_f22": 1451435821,
       "rli_mensualizada_f22": 120952985,
+      "rli_valida": true,
+      "rli_fallback_8pct": false,
+      "alerta_sanity_rli": null,
       "techo_operativo_8pct": 48160949,
       "techo_operativo_20pct": 48160949,
       "techo_operativo": 48160949,
@@ -6233,7 +6258,7 @@
       "historial_pago": "Cliente nuevo (Sin historial previo)"
     },
     "hoja_ruta_comercial": [
-      "Clasificación y Recomendación: RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado.",
+      "Clasificación y Recomendación: PERFIL TRIBUTARIO DÉBIL (Sin Línea Automática).",
       "Puntaje Tributario SII: 55/100 pts (Desempeño Tributario Bajo).",
       "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
       "Línea Máxima Condicionada: M$ 0.",
