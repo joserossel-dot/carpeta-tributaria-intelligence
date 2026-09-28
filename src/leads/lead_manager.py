@@ -155,6 +155,28 @@ class LeadManager:
         """Retorna la lista de leads registrados."""
         return list(self._leads)
 
+    def obtener_lead_por_id_o_email(self, identifier: str) -> dict | None:
+        """Busca un lead por su id único o dirección de email."""
+        if not identifier:
+            return None
+        clean_id = identifier.strip().lower()
+        for item in self._leads:
+            if item.get("id", "").lower() == clean_id or item.get("email", "").lower() == clean_id:
+                return item
+        return None
+
+    def incrementar_evaluaciones(self, identifier: str) -> int:
+        """Incrementa el contador de evaluaciones realizadas para el lead."""
+        if not identifier:
+            return 0
+        clean_id = identifier.strip().lower()
+        for item in self._leads:
+            if item.get("id", "").lower() == clean_id or item.get("email", "").lower() == clean_id:
+                item["evaluaciones_realizadas"] = item.get("evaluaciones_realizadas", 0) + 1
+                self._save()
+                return item["evaluaciones_realizadas"]
+        return 0
+
     def exportar_csv(self) -> bytes:
         """Exporta los prospectos a CSV con codificación utf-8-sig para Excel."""
         output = io.StringIO()

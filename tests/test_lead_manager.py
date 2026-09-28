@@ -171,3 +171,31 @@ class TestLeadManager:
         assert payload["lead"]["marketing_opt_in"] is True
         assert payload["lead"]["policy_version"] == "v1.1"
         assert "consent_timestamp_utc" in payload["lead"]
+
+    def test_obtener_y_incrementar_evaluaciones(self, tmp_path):
+        leads_file = tmp_path / "leads_test.json"
+        lm = LeadManager(leads_file)
+
+        lead = lm.registrar_lead(
+            nombre="Tester Evaluaciones",
+            empresa="Prueba SpA",
+            email="eval@prueba.cl",
+            privacy_opt_in=True,
+        )
+
+        lead_id = lead.id
+        # Buscar por ID
+        found_by_id = lm.obtener_lead_por_id_o_email(lead_id)
+        assert found_by_id is not None
+        assert found_by_id["email"] == "eval@prueba.cl"
+        assert found_by_id.get("evaluaciones_realizadas", 0) == 0
+
+        # Incrementar evaluaciones por ID
+        lm.incrementar_evaluaciones(lead_id)
+        found_updated = lm.obtener_lead_por_id_o_email(lead_id)
+        assert found_updated["evaluaciones_realizadas"] == 1
+
+        # Incrementar por email
+        lm.incrementar_evaluaciones("eval@prueba.cl")
+        found_by_email = lm.obtener_lead_por_id_o_email("eval@prueba.cl")
+        assert found_by_email["evaluaciones_realizadas"] == 2

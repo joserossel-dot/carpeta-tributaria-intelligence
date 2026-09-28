@@ -68,6 +68,44 @@ st.markdown(
 CLIENT_CODE = os.environ.get("CAVILARIA_CLIENT_CODE", "CAVILARIA2026").strip()
 ADMIN_CODE = os.environ.get("CAVILARIA_ADMIN_CODE", "ADMIN-CAVILARIA-99").strip()
 
+# Restauración automática de sesión desde st.query_params (anti-expulsión en iframe cross-domain)
+if not st.session_state.get("authenticated", False):
+    param_code = str(st.query_params.get("access_code", "")).strip()
+    if param_code:
+        if param_code == ADMIN_CODE:
+            st.session_state["authenticated"] = True
+            st.session_state["access_tier"] = "ADMIN"
+            st.session_state["access_code"] = ADMIN_CODE
+            st.session_state["free_credits_remaining"] = 999999
+        elif param_code == CLIENT_CODE:
+            st.session_state["authenticated"] = True
+            st.session_state["access_tier"] = "CLIENT"
+            st.session_state["access_code"] = CLIENT_CODE
+            st.session_state["free_credits_remaining"] = 999999
+        elif param_code.startswith("FREE-") or param_code.startswith("FREE_"):
+            lead_id_or_hash = param_code.split("-", 1)[-1] if "-" in param_code else param_code.split("_", 1)[-1]
+            lm = LeadManager()
+            lead_found = lm.obtener_lead_por_id_o_email(lead_id_or_hash)
+            if lead_found:
+                evals = lead_found.get("evaluaciones_realizadas", 0)
+                credits_left = max(0, 2 - evals)
+                st.session_state["authenticated"] = True
+                st.session_state["access_tier"] = "FREE_TRIAL"
+                st.session_state["access_code"] = param_code
+                st.session_state["free_credits_remaining"] = credits_left
+                st.session_state["evaluated_fingerprints"] = []
+                st.session_state["user_info"] = {
+                    "nombre": lead_found.get("nombre", ""),
+                    "empresa": lead_found.get("empresa", ""),
+                    "email": lead_found.get("email", ""),
+                }
+            else:
+                st.session_state["authenticated"] = True
+                st.session_state["access_tier"] = "FREE_TRIAL"
+                st.session_state["access_code"] = param_code
+                st.session_state["free_credits_remaining"] = 2
+                st.session_state["evaluated_fingerprints"] = []
+
 if not st.session_state.get("authenticated", False):
     tab_free, tab_code = st.tabs(
         [
@@ -121,9 +159,10 @@ if not st.session_state.get("authenticated", False):
                 elif not acepto_privacidad:
                     st.error("Debes aceptar la Política de Privacidad para continuar.")
                 else:
+                    lead_rec = None
                     try:
                         lm = LeadManager()
-                        lm.registrar_lead(
+                        lead_rec = lm.registrar_lead(
                             nombre=nombre,
                             empresa=empresa,
                             email=email,
@@ -135,8 +174,12 @@ if not st.session_state.get("authenticated", False):
                     except Exception:
                         pass
 
+                    lead_id = lead_rec.id if lead_rec else hashlib.sha256(email.strip().lower().encode()).hexdigest()[:12]
+                    free_token = f"FREE-{lead_id}"
+
                     st.session_state["authenticated"] = True
                     st.session_state["access_tier"] = "FREE_TRIAL"
+                    st.session_state["access_code"] = free_token
                     st.session_state["free_credits_remaining"] = 2
                     st.session_state["evaluated_fingerprints"] = []
                     st.session_state["user_info"] = {
@@ -144,6 +187,7 @@ if not st.session_state.get("authenticated", False):
                         "empresa": empresa.strip(),
                         "email": email.strip().lower(),
                     }
+                    st.query_params["access_code"] = free_token
                     st.rerun()
 
     with tab_code:
@@ -165,12 +209,16 @@ if not st.session_state.get("authenticated", False):
                 if clean_code == ADMIN_CODE:
                     st.session_state["authenticated"] = True
                     st.session_state["access_tier"] = "ADMIN"
+                    st.session_state["access_code"] = ADMIN_CODE
                     st.session_state["free_credits_remaining"] = 999999
+                    st.query_params["access_code"] = ADMIN_CODE
                     st.rerun()
                 elif clean_code == CLIENT_CODE:
                     st.session_state["authenticated"] = True
                     st.session_state["access_tier"] = "CLIENT"
+                    st.session_state["access_code"] = CLIENT_CODE
                     st.session_state["free_credits_remaining"] = 999999
+                    st.query_params["access_code"] = CLIENT_CODE
                     st.rerun()
                 else:
                     st.error(
@@ -192,6 +240,8 @@ with col_auth_info:
         st.info(f"🎁 **Modo Prueba Gratuita:** Te quedan **{free_credits}** evaluación(es) disponible(s).")
 with col_auth_action:
     if st.button("Cerrar Sesión", key="btn_logout"):
+        if "access_code" in st.query_params:
+            del st.query_params["access_code"]
         st.session_state.clear()
         gc.collect()
         st.rerun()
@@ -303,6 +353,7 @@ with col_btn2:
         credits = st.session_state.get("free_credits_remaining")
         fps = st.session_state.get("evaluated_fingerprints")
         uinfo = st.session_state.get("user_info")
+        code = st.session_state.get("access_code")
 
         st.session_state.clear()
 
@@ -311,6 +362,9 @@ with col_btn2:
         st.session_state["free_credits_remaining"] = credits
         st.session_state["evaluated_fingerprints"] = fps
         st.session_state["user_info"] = uinfo
+        if code:
+            st.session_state["access_code"] = code
+            st.query_params["access_code"] = code
         gc.collect()
         st.rerun()
 
@@ -347,6 +401,17 @@ if uploaded_file is not None and analizar:
             if access_tier == "FREE_TRIAL" and is_distinct_file:
                 st.session_state.setdefault("evaluated_fingerprints", []).append(file_fp)
                 st.session_state["free_credits_remaining"] = max(0, free_credits - 1)
+
+                acc_code = st.session_state.get("access_code", "")
+                lead_target = acc_code[5:] if acc_code.startswith("FREE-") else (
+                    st.session_state.get("user_info", {}).get("email")
+                )
+                if lead_target:
+                    try:
+                        lm = LeadManager()
+                        lm.incrementar_evaluaciones(lead_target)
+                    except Exception:
+                        pass
         except Exception as e:
             st.error(f"Error al procesar el PDF: {e}")
             st.stop()

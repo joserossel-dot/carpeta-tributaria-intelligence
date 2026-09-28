@@ -1,3 +1,4 @@
+import gc
 import io
 from pathlib import Path
 from typing import BinaryIO
@@ -39,12 +40,30 @@ class PDFExtractor:
             pdf_source = pdf_input
 
         pages: list[PageResult] = []
+        batch_size = 10
 
-        with pdfplumber.open(pdf_source) as pdf:
-            for i, page in enumerate(pdf.pages, start=1):
-                text = page.extract_text() or ""
-                tables = page.extract_tables() or []
-                pages.append(PageResult(page=i, text=text, tables=tables))
+        if hasattr(pdf_source, "seek"):
+            pdf_source.seek(0)
+
+        with pdfplumber.open(pdf_source) as p_info:
+            total_pages = len(p_info.pages)
+
+        for start in range(1, total_pages + 1, batch_size):
+            end = min(start + batch_size, total_pages + 1)
+            page_nums = list(range(start, end))
+            if hasattr(pdf_source, "seek"):
+                pdf_source.seek(0)
+            with pdfplumber.open(pdf_source, pages=page_nums) as pdf:
+                for page in pdf.pages:
+                    i = page.page_number
+                    text = page.extract_text() or ""
+                    if i <= 3 or "REPRESENTANTE" in text.upper() or "SOCIOS" in text.upper():
+                        tables = page.extract_tables() or []
+                    else:
+                        tables = []
+                    pages.append(PageResult(page=i, text=text, tables=tables))
+                    page.flush_cache()
+            gc.collect()
 
         return ExtractResult(pages=pages)
 

@@ -1,3 +1,4 @@
+import gc
 import streamlit as st
 from src.models.tax_folder import TaxFolder
 from src.reports.excel_report import ExcelReport
@@ -18,8 +19,14 @@ def show_downloads(target: TaxFolder | bytes, markdown_bytes: bytes | None = Non
         rut_val = getattr(getattr(tf, "contributor", None), "rut", "empresa") or "empresa"
         rut_clean = str(rut_val).replace(".", "").replace("-", "").strip()
 
-        pdf_data = PDFReport().generate(tf)
-        excel_data = ExcelReport().generate(tf)
+        if "cached_pdf_data" not in st.session_state or st.session_state.get("cached_download_rut") != rut_clean:
+            st.session_state["cached_pdf_data"] = PDFReport().generate(tf)
+            st.session_state["cached_excel_data"] = ExcelReport().generate(tf)
+            st.session_state["cached_download_rut"] = rut_clean
+            gc.collect()
+
+        pdf_data = st.session_state["cached_pdf_data"]
+        excel_data = st.session_state["cached_excel_data"]
 
         col1, col2 = st.columns(2)
         with col1:
