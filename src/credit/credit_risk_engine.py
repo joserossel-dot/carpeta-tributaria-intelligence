@@ -1,3 +1,4 @@
+import math
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Any
 
@@ -24,11 +25,14 @@ from src.utils.formatting import format_mclp
 MESES_MINIMOS_PARA_SCORING = 6
 
 
-def _round_m100(val: float | int | Decimal | None) -> int:
-    if val is None or val <= 0:
+def _floor_m100(val: float | int | Decimal | None) -> int:
+    """Truncamiento/redondeo conservador hacia abajo al centenar de M$ ($100.000 CLP)."""
+    if val is None or float(val) <= 0:
         return 0
-    d = (Decimal(str(val)) / Decimal("100000")).quantize(Decimal("1"), rounding=ROUND_HALF_UP)
-    return int(d) * 100_000
+    return int(math.floor(float(val) / 100_000.0) * 100_000)
+
+
+_round_m100 = _floor_m100
 
 
 class CreditRiskEngine:
@@ -578,21 +582,34 @@ class CreditRiskEngine:
         # Paso B: Techo Operativo (8% de compras mensuales para crédito proveedor v2.2/v2.3)
         techo_operativo = c_base * 0.08
 
-        # Freno por Flujo Operacional Neto Mensual: máx 25% del Margen Operacional Mensual Depurado
-        # max(0, ventas_mensuales_prom - costo_operativo_mensual_prom - iva_determinado_prom)
-        iva_det_prom = 0.0
-        if last_12_mt:
-            iva_det_sum = sum(float(mt.iva_determinado or Decimal("0")) for mt in last_12_mt)
-            iva_det_prom = iva_det_sum / len(last_12_mt)
+        # Spread Operacional Tributario F29 = Ventas Netas Mensuales Promedio - Compras Op. Mensuales Promedio
+        spread_operacional_f29 = max(0.0, prom_ventas_12m - c_base)
 
-        margen_operacional_depurado = max(0.0, prom_ventas_12m - c_base - iva_det_prom)
-        freno_flujo = 0.25 * margen_operacional_depurado
+        # Paso B2: Freno por Absorción Operacional
+        # Cuando exista RLI positiva en el último F22, calcular como:
+        # min(15% del Spread Operacional Tributario F29, 25% de la RLI Mensualizada F22)
+        # Si no hay F22 o RLI <= 0, usar 12% del Spread Operacional F29 con penalización.
+        ultimo_f22 = None
+        if tax_folder.f22:
+            sorted_f22 = sorted(tax_folder.f22, key=lambda f: f.anio_tributario or "", reverse=True)
+            if sorted_f22:
+                ultimo_f22 = sorted_f22[0]
 
-        # El cupo base no puede superar el 25% del margen operacional depurado
+        rli_val = ultimo_f22.renta_liquida_imponible if ultimo_f22 else None
+        rli_mensualizada = (float(rli_val) / 12.0) if (rli_val is not None and rli_val > 0) else None
+
+        if rli_mensualizada is not None and rli_mensualizada > 0:
+            freno_flujo = min(0.15 * spread_operacional_f29, 0.25 * rli_mensualizada)
+            glosa_b2 = f"min(15% Spread F29: ${0.15 * spread_operacional_f29:,.0f}, 25% RLI Mensualizada: ${0.25 * rli_mensualizada:,.0f})"
+        else:
+            freno_flujo = 0.12 * spread_operacional_f29
+            glosa_b2 = f"12% Spread Operacional F29 penalizado (${freno_flujo:,.0f})"
+
+        # El cupo base no puede superar el freno de absorción operacional
         techo_con_flujo = min(techo_operativo, freno_flujo)
         if freno_flujo < techo_operativo:
             castigos.append(
-                f"Freno de Flujo Operacional Neto (25% margen depurado: ${freno_flujo:,.0f}): "
+                f"Freno por Absorción Operacional ({glosa_b2}): "
                 f"reduce techo de compras de ${techo_operativo:,.0f} a ${freno_flujo:,.0f}"
             )
 
@@ -692,24 +709,24 @@ class CreditRiskEngine:
         else:
             cupo_ajustado = cupo_preliminar
 
-        # Redondeo final calibrado a múltiplos limpios de $100.000 CLP (M$ 100)
-        if cupo_ajustado >= 100_000:
-            cupo_maximo_sugerido = int(round(cupo_ajustado / 100_000.0) * 100_000)
-        else:
-            cupo_maximo_sugerido = 0
+        # Redondeo conservador hacia abajo al centenar de M$ ($100.000 CLP)
+        cupo_maximo_sugerido = _floor_m100(cupo_ajustado)
 
         memoria = {
             "periodo_inicio": periodo_inicio,
             "periodo_fin": periodo_fin,
             "ventas_netas_mensuales_prom": int(round(prom_ventas_12m)),
             "base_compras_c_base": int(round(c_base)),
-            "iva_determinado_prom": int(round(iva_det_prom)),
-            "brecha_operacional_proxy": int(round(margen_operacional_depurado)),
+            "spread_operacional_f29": int(round(spread_operacional_f29)),
+            "brecha_operacional_proxy": int(round(spread_operacional_f29)),
+            "rli_ultimo_f22": int(round(rli_val)) if rli_val is not None else None,
+            "rli_mensualizada_f22": int(round(rli_mensualizada)) if rli_mensualizada is not None else None,
             "techo_operativo_8pct": int(round(techo_operativo)),
             "techo_operativo_20pct": int(round(techo_operativo)),
             "techo_operativo": int(round(techo_operativo)),
             "freno_flujo_operacional_25pct": int(round(freno_flujo)),
-            "margen_operacional_depurado_mensual": int(round(margen_operacional_depurado)),
+            "freno_absorcion_operacional": int(round(freno_flujo)),
+            "margen_operacional_depurado_mensual": int(round(spread_operacional_f29)),
             "factor_riesgo_phi": round(phi, 2),
             "factor_ajuste_conductual_pct": int(round(phi * 100)),
             "cupo_preliminar": int(round(cupo_preliminar)),
@@ -952,7 +969,7 @@ class CreditRiskEngine:
             det2 = f"Ventas estables con ligera expansión (+{var_3m:.1f}%)"
         elif var_3m >= -15.0:
             p2 = 14
-            det2 = f"Variación trimestral controlada ({var_3m:.1f}%)"
+            det2 = f"Variación prom. últ. 3M vs. promedio 12M ({var_3m:.1f}%)"
         elif var_yoy is not None and var_yoy >= -10.0:
             p2 = 14
             det2 = f"Contracción trimestral estacional ({var_3m:.1f}%) compensada por estabilidad YoY ({var_yoy:+.1f}%)"
@@ -1038,7 +1055,7 @@ class CreditRiskEngine:
         posterg = hechos.postergaciones_iva.meses_con_postergacion if hechos and hechos.postergaciones_iva else 0
         if mora == 0 and posterg <= 1:
             p5 = 15
-            det5 = "Impecable cumplimiento fiscal: 0 meses de mora y sin postergaciones recurrentes"
+            det5 = "Impecable cumplimiento fiscal: 0 períodos con recargos por mora fiscal en F29 (Cód. 94) y sin postergaciones recurrentes"
         elif mora == 0 and posterg >= 2:
             p5 = 11
             det5 = f"Sin mora en F29, pero registra {posterg} meses de postergación de IVA"
@@ -1133,14 +1150,19 @@ class CreditRiskEngine:
         boletin_comercial: str = "Pendiente de consulta (Condiciona línea)",
         historial_pago: str = "Cliente nuevo (Sin historial previo)",
     ) -> Decision:
-        # Extraer representantes legales para resguardos personalizados
+        # Extraer representantes legales para resguardos personalizados (todos los registrados, sin truncar)
         rep_names = []
         if tax_folder and getattr(tax_folder, "representatives", None):
             for r in tax_folder.representatives:
                 nom = getattr(r, "nombre", None) or (r.get("nombre") if isinstance(r, dict) else None)
                 if nom and str(nom).strip():
                     rep_names.append(str(nom).strip())
-        reps_str = f" ({' / '.join(rep_names[:2])})" if rep_names else ""
+        reps_registrados = " / ".join(rep_names) if rep_names else "No informados"
+
+        clausula_pagare = (
+            f"Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según "
+            f"Certificado de Vigencia y Poderes (Representantes registrados en SII: {reps_registrados})"
+        )
 
         cpt_val = memoria.get("capital_propio_tributario")
         cpt_negativo = cpt_val is not None and cpt_val <= 0
@@ -1150,11 +1172,9 @@ class CreditRiskEngine:
 
         # Desempeño Tributario SII (evalúa exclusivamente comportamiento tributario ante el SII)
         if score_compuesto is not None:
-            if score_compuesto >= 80:
+            if score_compuesto >= 85:
                 desempeno_sii = "Desempeño Tributario Alto"
-            elif score_compuesto >= 65:
-                desempeno_sii = "Desempeño Tributario Medio-Alto"
-            elif score_compuesto >= 50:
+            elif score_compuesto >= 70:
                 desempeno_sii = "Desempeño Tributario Medio"
             else:
                 desempeno_sii = "Desempeño Tributario Bajo"
@@ -1171,13 +1191,6 @@ class CreditRiskEngine:
         tiene_atrasos_previos = "atrasos previos" in historial_pago.lower()
         dicom_pendiente = "pendiente" in boletin_comercial.lower()
 
-        tiene_alertas_tributarias = (
-            rli_comprimida
-            or (phi_val < 0.80)
-            or (mora_12m > 0)
-            or (posterg_6m >= 2)
-        )
-
         condicion_escalamiento = (
             "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, "
             "sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo "
@@ -1191,18 +1204,20 @@ class CreditRiskEngine:
             cupo_aprobado = 0
             linea_inicial = 0
             linea_maxima = 0
+            pct_apertura = 0.0
             plazo_dias = 0
             plazo_inicial = "Contado (0 días)"
             resguardo = "Carpeta sin información suficiente para evaluar línea de crédito."
             protocolo = "Completar información tributaria faltante (mínimo 6 meses F29 y F22)."
 
-        elif tiene_morosidad_comercial or cpt_negativo or cupo_maximo == 0 or score_compuesto < 50 or mora_12m >= 2:
+        elif tiene_morosidad_comercial or cpt_negativo or cupo_maximo == 0 or score_compuesto < 70 or mora_12m >= 2:
             resultado_base = "RECHAZADO"
-            evaluacion_referencial = "RIESGO ALTO — Se Recomienda Operar al Contado"
-            clasificacion_riesgo = "RIESGO ALTO"
+            evaluacion_referencial = "RIESGO TRIBUTARIO ALTO — Se Recomienda Operar al Contado"
+            clasificacion_riesgo = "RIESGO TRIBUTARIO ALTO"
             cupo_aprobado = 0
             linea_inicial = 0
             linea_maxima = 0
+            pct_apertura = 0.0
             plazo_dias = 0
             plazo_inicial = "Contado (0 días)"
             if tiene_morosidad_comercial:
@@ -1217,7 +1232,7 @@ class CreditRiskEngine:
                     prefix_base
                     + f"línea sugerida M$ 0 por CPT negativo (${cpt_val:,.0f} CLP) — operación al contado anticipado previo al despacho. "
                     f"Únicamente evaluable cupo excepcional de hasta M$ {excep_m:,}".replace(",", ".")
-                    + f" con Pagaré Notarial y Aval Solidario de persona natural externa{reps_str} con patrimonio acreditado fuera de la sociedad."
+                    + f" con {clausula_pagare} y Aval Solidario con patrimonio acreditado fuera de la sociedad."
                 )
                 protocolo = (
                     "No despachar a crédito sin resguardo notarial de avalista externo calificado. "
@@ -1230,47 +1245,70 @@ class CreditRiskEngine:
                 )
                 protocolo = "No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado."
 
-        elif score_compuesto >= 80 and not tiene_alertas_tributarias and not dicom_pendiente and not tiene_atrasos_previos and not es_cliente_nuevo:
-            # RIESGO BAJO: Solo si score >= 80, sin alertas tributarias, Dicom verificado sin morosidad y cliente con historial oportuno
+        elif score_compuesto >= 85:
             resultado_base = "APROBADO"
-            evaluacion_referencial = "RIESGO BAJO — Línea Comercial Sugerida"
-            clasificacion_riesgo = "RIESGO BAJO"
+            evaluacion_referencial = "RIESGO TRIBUTARIO BAJO (Línea Condicionada a Dicom)"
+            clasificacion_riesgo = "RIESGO TRIBUTARIO BAJO"
+            pct_apertura = 0.50
             linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            linea_maxima = _round_m100(linea_maxima)
-            linea_inicial = linea_maxima
+            linea_maxima = _floor_m100(linea_maxima)
+            linea_inicial = _floor_m100(linea_maxima * pct_apertura)
             cupo_aprobado = linea_inicial
             plazo_dias = 30
-            plazo_inicial = "30 días"
+            plazo_inicial = "15 días (o 30 días con 50% de anticipo)" if (dicom_pendiente or es_cliente_nuevo) else "30 días"
             resguardo = (
                 prefix_base
-                + "cuenta abierta sin garantía real previa; orden de compra y recepción conforme contra Guía de Despacho o aceptación expresa en SII (Ley N° 19.983)."
+                + f"{clausula_pagare} o Seguro de Crédito que cubra la línea; "
+                "alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días)."
             )
             protocolo = (
-                f"Solicitud de crédito y ficha de cliente firmada por el Representante Legal{reps_str} "
-                "+ despacho contra guía/factura con acuse de recibo o aceptación expresa en SII (Ley N° 19.983)."
+                "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) "
+                "o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho."
+                + (" Solicitar Balance de 8 Columnas reciente por condición suspensiva de compresión de RLI." if rli_comprimida else "")
             )
 
-        else:
-            # RIESGO MODERADO: Recomendación Condicionada y Escalonada
-            # Aplica si existen alertas (RLI <= 0, caída ventas), si Dicom/Historial están pendientes o cliente nuevo, o score entre 50 y 79.
+        elif score_compuesto >= 75:
             resultado_base = "APROBADO_CON_CONDICIONES"
-            evaluacion_referencial = "RIESGO MODERADO — Recomendación Condicionada y Escalonada"
-            clasificacion_riesgo = "RIESGO MODERADO"
+            evaluacion_referencial = "RIESGO TRIBUTARIO MEDIO (Línea Condicionada)"
+            clasificacion_riesgo = "RIESGO TRIBUTARIO MEDIO"
+            pct_apertura = 0.35
             linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            linea_maxima = _round_m100(linea_maxima)
-            # Etapa 1: Apertura al 50% redondeada a M$ 100 con ROUND_HALF_UP
-            linea_inicial = _round_m100(linea_maxima * 0.5)
+            linea_maxima = _floor_m100(linea_maxima)
+            linea_inicial = _floor_m100(linea_maxima * pct_apertura)
             cupo_aprobado = linea_inicial
             plazo_dias = 30
             plazo_inicial = "15 días (o 30 días con 50% de anticipo)"
             resguardo = (
                 prefix_base
-                + f"Pagaré a la vista suscrito ante notario por el Representante Legal{reps_str} o Seguro de Crédito que cubra la línea; "
+                + f"{clausula_pagare} o Seguro de Crédito que cubra la línea; "
                 "alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días)."
             )
             protocolo = (
                 "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) "
-                "o pagaré firmado en original ante notario antes del primer despacho."
+                "o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho."
+                + (" Solicitar Balance de 8 Columnas reciente por condición suspensiva de compresión de RLI." if rli_comprimida else "")
+            )
+
+        else:
+            # Score 65 a 74 (o 70 a 74)
+            resultado_base = "APROBADO_CON_CONDICIONES"
+            evaluacion_referencial = "RIESGO TRIBUTARIO MEDIO (Línea Condicionada)"
+            clasificacion_riesgo = "RIESGO TRIBUTARIO MEDIO"
+            pct_apertura = 0.25
+            linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
+            linea_maxima = _floor_m100(linea_maxima)
+            linea_inicial = _floor_m100(linea_maxima * pct_apertura)
+            cupo_aprobado = linea_inicial
+            plazo_dias = 30
+            plazo_inicial = "15 días (o 30 días con 50% de anticipo)"
+            resguardo = (
+                prefix_base
+                + f"{clausula_pagare} o Seguro de Crédito que cubra la línea; "
+                "alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días)."
+            )
+            protocolo = (
+                "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) "
+                "o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho."
                 + (" Solicitar Balance de 8 Columnas reciente por condición suspensiva de compresión de RLI." if rli_comprimida else "")
             )
 
@@ -1307,8 +1345,16 @@ class CreditRiskEngine:
         hoja_ruta = [
             f"Clasificación y Recomendación: {evaluacion_referencial}.",
             f"Puntaje Tributario SII: {score_compuesto or '—'}/100 pts ({desempeno_sii}).",
-            f"Línea Inicial Recomendada (Etapa 1 - Apertura): {format_mclp(linea_inicial)} (Plazo: {plazo_inicial}).",
-            f"Línea Máxima Condicionada (Etapa 2 - Techo Técnico): {format_mclp(linea_maxima)} (Plazo: {plazo_dias} días).",
+            (
+                f"Línea Inicial Recomendada (Etapa 1 - {int(round(pct_apertura * 100))}% Apertura): {format_mclp(linea_inicial)} (Plazo: {plazo_inicial})."
+                if linea_inicial > 0
+                else "Línea Inicial Recomendada: M$ 0 (Modalidad Contado)."
+            ),
+            (
+                f"Línea Máxima Condicionada (Etapa 2 - Techo Técnico): {format_mclp(linea_maxima)} (Plazo: {plazo_dias} días)."
+                if linea_maxima > 0
+                else "Línea Máxima Condicionada: M$ 0."
+            ),
             f"Resguardo comercial sugerido: {resguardo}",
             f"Condición de escalamiento: {condicion_escalamiento}",
             f"Protocolo operativo: {protocolo}",
@@ -1324,6 +1370,7 @@ class CreditRiskEngine:
         memoria["linea_maxima_condicionada"] = linea_maxima
         memoria["linea_inicial_sugerida"] = linea_inicial
         memoria["plazo_inicial_sugerido"] = plazo_inicial
+        memoria["pct_apertura_inicial"] = int(round(pct_apertura * 100))
         memoria["condicion_escalamiento"] = condicion_escalamiento
         memoria["boletin_comercial"] = boletin_comercial
         memoria["historial_pago"] = historial_pago

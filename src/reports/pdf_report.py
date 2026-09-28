@@ -319,18 +319,24 @@ class PDFReport:
         p_fin = mem.get("periodo_fin", "")
         v_prom = mem.get("ventas_netas_mensuales_prom", 0)
         base_c = mem.get("base_compras_c_base", 0)
-        iva_prom = mem.get("iva_determinado_prom", 0)
-        brecha = mem.get("brecha_operacional_proxy", 0)
+        spread_f29 = mem.get("spread_operacional_f29") or mem.get("brecha_operacional_proxy", 0)
         techo_op = mem.get("techo_operativo_8pct") or mem.get("techo_operativo", 0)
-        freno_flujo = mem.get("freno_flujo_operacional_25pct", 0)
+        freno_flujo = mem.get("freno_absorcion_operacional") or mem.get("freno_flujo_operacional_25pct", 0)
+        rli_mens = mem.get("rli_mensualizada_f22")
         phi_pct = mem.get("factor_ajuste_conductual_pct", int(round(mem.get("factor_riesgo_phi", 1.0) * 100)))
         cpt_val = mem.get("capital_propio_tributario")
         tope_cpt = mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
         cupo_max = mem.get("linea_maxima_condicionada") or mem.get("cupo_maximo_sugerido", 0)
         cupo_ini = mem.get("linea_inicial_sugerida") or linea_ini
+        pct_ap = mem.get("pct_apertura_inicial", 50)
 
         rango_str = f" ({p_ini} a {p_fin})" if p_ini and p_fin else ""
         cpt_str = format_mclp(cpt_val) if cpt_val is not None else "Sin F22"
+
+        if rli_mens and rli_mens > 0:
+            metodologia_b2 = "min(15% Spread Operacional F29, 25% RLI Mensualizada F22)"
+        else:
+            metodologia_b2 = "12% Spread Operacional F29 (penalizado por RLI no disponible o <= 0)"
 
         mem_rows = [
             [
@@ -349,23 +355,18 @@ class PDFReport:
                 Paragraph(format_mclp(base_c), table_cell_bold),
             ],
             [
-                Paragraph("(-) IVA Determinado Mensual Promedio", table_cell_bold),
-                Paragraph("Promedio Cód. 89 F29 de los últimos 12 meses", table_cell),
-                Paragraph(format_mclp(iva_prom), table_cell_bold),
-            ],
-            [
-                Paragraph("(=) Margen Tributario F29 Proxy [Ventas − Compras Op. − IVA Det.]", table_cell_bold),
-                Paragraph("Aproximación tributaria antes de sueldos, arriendos, gastos financieros y capital de trabajo (no equivale a flujo de caja libre)", table_cell),
-                Paragraph(format_mclp(brecha), table_cell_bold),
+                Paragraph("(=) Spread Operacional Tributario F29", table_cell_bold),
+                Paragraph("Ventas Netas Mensuales Promedio − Compras Op. Mensuales Promedio", table_cell),
+                Paragraph(format_mclp(spread_f29), table_cell_bold),
             ],
             [
                 Paragraph("Paso B1: Techo por Volumen de Compras (8% C_base)", table_cell_bold),
-                Paragraph("8% sobre C_base (estándar bancario individual de crédito)", table_cell),
+                Paragraph("8% sobre C_base (parámetro prudencial de exposición por proveedor: 8% C_base)", table_cell),
                 Paragraph(format_mclp(techo_op), table_cell_bold),
             ],
             [
-                Paragraph("Paso B2: Freno por Absorción Operacional (25% Margen Proxy)", table_cell_bold),
-                Paragraph("Máximo 25% del margen tributario proxy", table_cell),
+                Paragraph("Paso B2: Freno por Absorción Operacional", table_cell_bold),
+                Paragraph(metodologia_b2, table_cell),
                 Paragraph(format_mclp(freno_flujo), table_cell_bold),
             ],
             [
@@ -380,12 +381,12 @@ class PDFReport:
             ],
             [
                 Paragraph("(=) Línea Máxima Condicionada (Techo Técnico)", table_cell_bold),
-                Paragraph("min(Techo 8%, Freno Flujo 25%) × Factor Conductual con Tope CPT (M$ 100)", table_cell),
+                Paragraph("min(Techo 8%, Freno Absorción) × Factor Conductual con Tope CPT (M$ 100)", table_cell),
                 Paragraph(format_mclp(cupo_max), table_cell_bold),
             ],
             [
-                Paragraph("(=) Línea Inicial Recomendada (Etapa 1 - 50% Apertura)", table_cell_bold),
-                Paragraph("50% de la Línea Máxima Técnica para apertura comercial controlada", table_cell),
+                Paragraph(f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)", table_cell_bold),
+                Paragraph(f"{pct_ap}% de la Línea Máxima Técnica según Puntaje SII", table_cell),
                 Paragraph(format_mclp(cupo_ini), table_cell_bold),
             ],
         ]
@@ -400,9 +401,8 @@ class PDFReport:
                 ("BACKGROUND", (0, 5), (-1, 5), colors.HexColor("#FFFFFF")),
                 ("BACKGROUND", (0, 6), (-1, 6), colors.HexColor("#F8FAFC")),
                 ("BACKGROUND", (0, 7), (-1, 7), colors.HexColor("#FFFFFF")),
-                ("BACKGROUND", (0, 8), (-1, 8), colors.HexColor("#F8FAFC")),
-                ("BACKGROUND", (0, 9), (-1, 9), colors.HexColor("#E2E8F0")),
-                ("BACKGROUND", (0, 10), (-1, 10), colors.HexColor("#FEF3C7")),
+                ("BACKGROUND", (0, 8), (-1, 8), colors.HexColor("#E2E8F0")),
+                ("BACKGROUND", (0, 9), (-1, 9), colors.HexColor("#FEF3C7")),
                 ("BOX", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#E2E8F0")),
                 ("TOPPADDING", (0, 0), (-1, -1), 1.6),
@@ -555,26 +555,23 @@ class PDFReport:
             story.append(Spacer(1, 2 * mm))
             f22_header = [
                 Paragraph("<b>Año Tributario</b>", table_cell_header),
-                Paragraph("<b>Ingresos (M$)</b>", table_cell_header),
+                Paragraph("<b>Ingresos Anuales (M$)</b>", table_cell_header),
                 Paragraph("<b>RLI (M$)</b>", table_cell_header),
                 Paragraph("<b>Capital Propio CPT (M$)</b>", table_cell_header),
-                Paragraph("<b>Impuesto Det. (M$)</b>", table_cell_header),
             ]
             f22_rows = [f22_header]
-            for f in sorted_f22:
+            for f in sorted_f22[:3]:
                 ing = getattr(f, "ingresos", None)
                 rli = getattr(f, "renta_liquida_imponible", None)
                 cpt_f = getattr(f, "capital_propio_tributario", None)
-                imp = getattr(f, "impuesto_determinado", None)
                 anio_clean = str(getattr(f, "anio_tributario", "")).replace(":", "").strip()
                 f22_rows.append([
                     Paragraph(anio_clean, table_cell),
                     Paragraph(format_mclp(ing).replace(":", "").strip(), table_cell),
                     Paragraph(format_mclp(rli).replace(":", "").strip(), table_cell),
                     Paragraph(format_mclp(cpt_f).replace(":", "").strip(), table_cell),
-                    Paragraph(format_mclp(imp).replace(":", "").strip(), table_cell),
                 ])
-            f22_table = Table(f22_rows, colWidths=[25 * mm, 40 * mm, 40 * mm, 45 * mm, 35 * mm])
+            f22_table = Table(f22_rows, colWidths=[30 * mm, 50 * mm, 50 * mm, 55 * mm])
             f22_table.setStyle(
                 TableStyle([
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),

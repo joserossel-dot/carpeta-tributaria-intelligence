@@ -43,6 +43,7 @@ class ContributorParser:
             return Contributor()
 
         primera_linea_domicilio, domicilio = self._extract_domicilio(text)
+        comuna, region = self._extract_comuna_y_region(primera_linea_domicilio or domicilio)
 
         return Contributor(
             razon_social=self._clean(self._match(self._RE_RAZON_SOCIAL, text)),
@@ -52,8 +53,58 @@ class ContributorParser:
             tipo_contribuyente=self._clean(self._match(self._RE_CATEGORIA, text)),
             regimen_tributario=self._clean(self._match(self._RE_REGIMEN, text)),
             domicilio=domicilio,
-            comuna=self._extract_comuna(primera_linea_domicilio),
+            comuna=comuna,
+            region=region,
         )
+
+    _COMUNAS_RM = {
+        "CERRILLOS", "CERRO NAVIA", "CONCHALI", "EL BOSQUE", "ESTACION CENTRAL",
+        "HUECHURABA", "INDEPENDENCIA", "LA CISTERNA", "LA FLORIDA", "LA GRANJA",
+        "LA PINTANA", "LA REINA", "LAS CONDES", "LO BARNECHEA", "LO ESPEJO",
+        "LO PRADO", "MACUL", "MAIPU", "NUNOA", "ÑUÑOA", "PEDRO AGUIRRE CERDA",
+        "PENALOLEN", "PEÑALOLEN", "PROVIDENCIA", "PUDAHUEL", "QUILICURA",
+        "QUINTA NORMAL", "RECOLETA", "RENCA", "SAN JOAQUIN", "SAN MIGUEL",
+        "SAN RAMON", "SANTIAGO", "VITACURA", "PUENTE ALTO", "PIRQUE",
+        "SAN JOSE DE MAIPO", "COLINA", "LAMPA", "TILTIL", "SAN BERNARDO",
+        "BUIN", "PAINE", "CALERA DE TANGO", "MELIPILLA", "ALHUE", "CURACAVI",
+        "MARIA PINTO", "SAN PEDRO", "TALAGANTE", "EL MONTE", "ISLA DE MAIPO",
+        "PADRE HURTADO", "PENAFLOR", "PEÑAFLOR",
+    }
+
+    @classmethod
+    def _extract_comuna_y_region(cls, domicilio: str | None) -> tuple[str | None, str | None]:
+        """Extrae comuna y región del domicilio del SII.
+        Cuando termina en ', COMUNA, CIUDAD' (ej. '..., LO ESPEJO, SANTIAGO'),
+        asigna 'LO ESPEJO' en Comuna y 'METROPOLITANA DE SANTIAGO' en Región.
+        """
+        if not domicilio:
+            return None, None
+        partes = [p.strip() for p in domicilio.split(",") if p.strip()]
+        if not partes:
+            return None, None
+
+        if len(partes) == 1:
+            return partes[0], None
+
+        p_last = partes[-1].upper()
+        p_penultimate = partes[-2].upper()
+
+        if p_last == "SANTIAGO":
+            if len(partes) >= 3 and p_penultimate != "SANTIAGO":
+                return partes[-2], "METROPOLITANA DE SANTIAGO"
+            else:
+                return "SANTIAGO", "METROPOLITANA DE SANTIAGO"
+
+        if p_last in ("METROPOLITANA", "RM", "REGION METROPOLITANA", "METROPOLITANA DE SANTIAGO"):
+            return partes[-2], "METROPOLITANA DE SANTIAGO"
+
+        if p_last in cls._COMUNAS_RM:
+            return partes[-1], "METROPOLITANA DE SANTIAGO"
+
+        if p_penultimate in cls._COMUNAS_RM:
+            return partes[-2], "METROPOLITANA DE SANTIAGO"
+
+        return partes[-1], None
 
     def _extract_domicilio(self, text: str) -> tuple[str | None, str | None]:
         """Devuelve (primera_linea, domicilio_completo).
@@ -102,9 +153,6 @@ class ContributorParser:
     def _clean(value: str | None) -> str | None:
         if value is None:
             return None
-        # Corta en el primer salto de linea: estas etiquetas son de una sola
-        # linea salvo Domicilio, que puede seguir en lineas siguientes -- se
-        # deja solo la primera linea para evitar arrastrar la seccion siguiente.
         return value.split("\n")[0].strip() or None
 
     @staticmethod
@@ -114,14 +162,7 @@ class ContributorParser:
         rut = re.sub(r"\s+", "", value.split("\n")[0])
         return rut.replace("−", "-").strip() or None
 
-    @staticmethod
-    def _extract_comuna(domicilio: str | None) -> str | None:
-        """Heuristica: el ultimo tramo separado por coma de la direccion
-        suele incluir la comuna en el formato de domicilio del SII.
-        No es exacto (el SII no separa comuna en un campo propio en el
-        texto), pero es mejor que dejarlo vacio.
-        """
-        if not domicilio:
-            return None
-        partes = [p.strip() for p in domicilio.split(",") if p.strip()]
-        return partes[-1] if partes else None
+    @classmethod
+    def _extract_comuna(cls, domicilio: str | None) -> str | None:
+        comuna, _ = cls._extract_comuna_y_region(domicilio)
+        return comuna

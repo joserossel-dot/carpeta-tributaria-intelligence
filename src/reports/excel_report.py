@@ -198,30 +198,35 @@ class ExcelReport:
         p_fin = mem.get("periodo_fin", "")
         v_prom = mem.get("ventas_netas_mensuales_prom", 0)
         base_c = mem.get("base_compras_c_base", 0)
-        iva_prom = mem.get("iva_determinado_prom", 0)
-        brecha = mem.get("brecha_operacional_proxy", 0)
+        spread_f29 = mem.get("spread_operacional_f29") or mem.get("brecha_operacional_proxy", 0)
         techo_op = mem.get("techo_operativo_8pct") or mem.get("techo_operativo", 0)
-        freno_flujo = mem.get("freno_flujo_operacional_25pct", 0)
+        freno_flujo = mem.get("freno_absorcion_operacional") or mem.get("freno_flujo_operacional_25pct", 0)
+        rli_mens = mem.get("rli_mensualizada_f22")
         phi_pct = mem.get("factor_ajuste_conductual_pct", int(round(mem.get("factor_riesgo_phi", 1.0) * 100)))
         cpt_val = mem.get("capital_propio_tributario")
         tope_cpt = mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
         cupo_max = mem.get("linea_maxima_condicionada") or mem.get("cupo_maximo_sugerido", 0)
         cupo_ini = mem.get("linea_inicial_sugerida") or linea_ini
+        pct_ap = mem.get("pct_apertura_inicial", 50)
 
         rango_str = f" ({p_ini} a {p_fin})" if p_ini and p_fin else ""
         cpt_str = f"M$ {int(cpt_val // 1000):,}".replace(",", ".") if cpt_val is not None else "Sin F22"
 
+        if rli_mens and rli_mens > 0:
+            metodologia_b2 = "min(15% Spread Operacional F29, 25% RLI Mensualizada F22)"
+        else:
+            metodologia_b2 = "12% Spread Operacional F29 (penalizado por RLI no disponible o <= 0)"
+
         calc_steps = [
             (f"Ventas Netas Mensuales Promedio{rango_str}", round(v_prom / 1000.0) if v_prom else 0, "Promedio mensual de ventas de los 12 meses analizados"),
             ("(-) Paso A: Compras Op. Mensuales Promedio (C_base)", round(base_c / 1000.0) if base_c else 0, "Base mensual de compras operacionales 12M (o costo operativo proxy)"),
-            ("(-) IVA Determinado Mensual Promedio", round(iva_prom / 1000.0) if iva_prom else 0, "Promedio mensual Cód. 89 F29 últimos 12 meses"),
-            ("(=) Margen Tributario F29 Proxy [Ventas − Compras Op. − IVA Det.]", round(brecha / 1000.0) if brecha else 0, "Aproximación tributaria antes de sueldos, arriendos, gastos financieros y capital de trabajo (no equivale a flujo de caja libre)"),
-            ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (estándar bancario individual conservador)"),
-            ("Paso B2: Freno por Absorción Operacional (25% Margen Proxy)", round(freno_flujo / 1000.0) if freno_flujo else 0, "Máximo 25% del margen tributario proxy"),
+            ("(=) Spread Operacional Tributario F29", round(spread_f29 / 1000.0) if spread_f29 else 0, "Ventas Netas Mensuales Promedio − Compras Op. Mensuales Promedio"),
+            ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (parámetro prudencial de exposición por proveedor: 8% C_base)"),
+            ("Paso B2: Freno por Absorción Operacional", round(freno_flujo / 1000.0) if freno_flujo else 0, metodologia_b2),
             ("Paso C: Factor de Ajuste Conductual", f"{phi_pct}%", "Ajuste por mora F29, postergación IVA y estabilidad YoY"),
             (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", "12% CPT en línea limpia ($0 si CPT <= 0)"),
-            ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Flujo 25%) × Factor Conductual con Tope CPT (M$ 100)"),
-            ("(=) Línea Inicial Recomendada (Etapa 1 - 50% Apertura)", round(cupo_ini / 1000.0) if cupo_ini else 0, "50% de la Línea Máxima Técnica para apertura comercial controlada"),
+            ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) × Factor Conductual con Tope CPT (M$ 100)"),
+            (f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)", round(cupo_ini / 1000.0) if cupo_ini else 0, f"{pct_ap}% de la Línea Máxima Técnica según Puntaje SII"),
         ]
 
         for s, v, f in calc_steps:

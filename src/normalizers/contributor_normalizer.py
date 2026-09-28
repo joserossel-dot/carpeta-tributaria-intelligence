@@ -25,6 +25,9 @@ def normalize_contributor(contributor: Contributor) -> Contributor:
     if data.get("comuna"):
         data["comuna"] = normalize_text(data["comuna"]).upper()
 
+    if data.get("region"):
+        data["region"] = normalize_text(data["region"])
+
     if data.get("tipo_contribuyente"):
         data["tipo_contribuyente"] = normalize_text(data["tipo_contribuyente"])
 

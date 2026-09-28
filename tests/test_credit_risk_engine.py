@@ -322,7 +322,7 @@ class TestVersion23Audit:
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
         assert any("Condición Suspensiva Documental" in a or "Alerta de Rentabilidad Tributaria" in a for a in result.alertas)
         # Se condiciona a recomendación escalonada
-        assert "Recomendación Condicionada y Escalonada" in result.decision.evaluacion_referencial
+        assert "Línea Condicionada" in result.decision.evaluacion_referencial
         # Pilar 4 debe tener la penalización
         pilar4 = next(p for p in result.desglose_score if p.nombre == "Rentabilidad (RLI) y Respaldo Patrimonial F22")
         assert "Penalización -6 pts" in pilar4.detalle
@@ -420,7 +420,7 @@ class TestVersion23Audit:
         assert result.cupo_aprobado == 0
         assert result.linea_inicial_sugerida == 0
         assert result.linea_maxima_condicionada == 0
-        assert "RIESGO ALTO" in result.evaluacion_referencial
+        assert "RIESGO TRIBUTARIO ALTO" in result.evaluacion_referencial
         assert "Bloqueo comercial" in result.decision.resguardo_comercial_sugerido
 
     def test_sin_contradiccion_nomenclatura(self, benchmark_vacio) -> None:
@@ -451,11 +451,10 @@ class TestVersion23Audit:
         tf.monthly_analysis = MonthlyTaxService().analyze(monthly)
 
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
-        # Score debe ser alto pero clasificación debe ser MODERADO por la alerta documental
+        # Score debe ser alto (>= 75) y clasificación acoplada directamente al puntaje tributario
         assert result.score_compuesto is not None and result.score_compuesto >= 75
-        assert result.decision.clasificacion_riesgo == "RIESGO MODERADO"
-        assert result.decision.evaluacion_referencial == "RIESGO MODERADO — Recomendación Condicionada y Escalonada"
-        assert "BAJO" not in result.decision.evaluacion_referencial
+        assert result.decision.clasificacion_riesgo in ("RIESGO TRIBUTARIO MEDIO", "RIESGO TRIBUTARIO BAJO")
+        assert "Línea Condicionada" in result.decision.evaluacion_referencial
         assert result.decision.desempeno_tributario_texto == "Desempeño Tributario Alto"
 
     def test_filtro_elegibilidad_5_etapas(self, benchmark_vacio) -> None:
