@@ -32,8 +32,8 @@ class F22Parser:
 
     # Códigos para régimen 14A, ProPyme (14 D3, 14 D8) y formularios históricos
     # Jerarquía explícita v2.7:
-    # CPT Negativo: 646 (Anverso actual), 1697 (Recuadro 14), 845 (histórico), 1546
-    _CPT_NEGATIVO_CODES = ["646", "1697", "845", "1546"]
+    # CPT Negativo: 646 (Anverso actual), 1704 (Recuadro 14), 845 (histórico), 1546
+    _CPT_NEGATIVO_CODES = ["646", "1704", "845", "1546"]
     # CPT Positivo: 1696 (Recuadro 14), 645 (Anverso actual), 844 (histórico 2017-2019), 1545, 1703
     _CPT_POSITIVO_CODES = ["1696", "645", "844", "1545", "1703"]
     _INGRESOS_CODES = ["1657", "1400", "1410", "628"]
@@ -131,6 +131,7 @@ class F22Parser:
         - Códigos de 3 dígitos con cero inicial (ej. 0628)
         - Falta de espacio entre código y glosa (ej. 646Capital)
         - Columnas pegadas al inicio o al final del número
+        - Glosas que contienen números descriptivos (ej. al 31 de diciembre, recuadro N° 14)
         """
         patron = re.compile(
             rf"(?:^|[^\d]|/\d{{4}}|\b)0?{re.escape(codigo)}(?:\s*|\b)([^\d]*?)\s*(-?[\d.,]+)(.*)"
@@ -141,6 +142,17 @@ class F22Parser:
         glosa = match.group(1).strip()
         raw_num = match.group(2)
         resto = match.group(3)
+
+        # Si el número capturado forma parte de una fecha o texto de la glosa (ej. "31 de diciembre", "N° 14"),
+        # continuar buscando la cifra tributaria real en el resto de la línea.
+        while re.match(r"^\s*(?:de\s+[a-záéíóú]+|art\b|inciso\b|n[°º]\s*\d+)", resto, re.IGNORECASE):
+            m2 = re.search(r"(-?[\d.,]+)(.*)", resto)
+            if m2:
+                glosa = (glosa + " " + raw_num + " " + resto[: m2.start()]).strip()
+                raw_num = m2.group(1)
+                resto = m2.group(2)
+            else:
+                break
 
         # Si raw_num tiene pegado el código de la siguiente columna (ej: 1167358587647 Activo Inmovilizado)
         m_glue = re.match(r"^\s*([A-Za-zÁ-Úá-ú]{2,})", resto)
@@ -207,12 +219,25 @@ class F22Parser:
         # 4. Renta Líquida Imponible y Base Imponible
         rli_val = None
         rli_source = None
-        for code in self._RLI_CODES:
-            val, _ = self._extract_raw_code(text, code)
-            if val is not None and val != 0:
-                rli_val = val
-                rli_source = code
-                break
+        val_1694, _ = self._extract_raw_code(text, "1694")
+        val_1695, _ = self._extract_raw_code(text, "1695")
+        if val_1694 is not None and val_1694 > 0:
+            rli_val = val_1694
+            rli_source = "1694"
+        elif val_1695 is not None and val_1695 > 0:
+            # Regla crítica del parser F22: si existe Cód. 1695 > 0 y Cód. 1694 está vacío/cero,
+            # la RLI del ejercicio es NEGATIVA (-abs(1695)), nunca tomar Cód. 1690 como positivo.
+            rli_val = -abs(val_1695)
+            rli_source = "1695"
+        else:
+            for code in self._RLI_CODES:
+                if code in ("1694", "1695"):
+                    continue
+                val, _ = self._extract_raw_code(text, code)
+                if val is not None and val != 0:
+                    rli_val = val
+                    rli_source = code
+                    break
 
         if rli_val is not None:
             valores["renta_liquida_imponible"] = rli_val
@@ -222,6 +247,11 @@ class F22Parser:
         elif perdidas_val is not None:
             valores["renta_liquida_imponible"] = -abs(perdidas_val)
             valores["rli_source_code"] = perdidas_source
+
+        # Resultado Financiero (Cód. 1672)
+        val_1672, _ = self._extract_raw_code(text, "1672")
+        if val_1672 is not None:
+            valores["resultado_tributario"] = val_1672
 
         for code in self._BASE_IMPONIBLE_CODES:
             val, _ = self._extract_raw_code(text, code)

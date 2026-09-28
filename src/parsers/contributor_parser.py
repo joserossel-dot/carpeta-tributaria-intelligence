@@ -132,6 +132,16 @@ class ContributorParser:
                 bloque.append(linea)
 
         domicilio = " ".join(bloque).strip() or None
+        if domicilio:
+            domicilio = re.sub(r"\s*null\s*,", ", ", domicilio, flags=re.IGNORECASE)
+            domicilio = re.sub(r"\s+null\b", "", domicilio, flags=re.IGNORECASE)
+            domicilio = re.sub(r"\b([a-z])\s+,", r"\1,", domicilio)
+            domicilio = re.sub(r"\s{2,}", " ", domicilio).strip()
+        if primera_linea:
+            primera_linea = re.sub(r"\s*null\s*,", ", ", primera_linea, flags=re.IGNORECASE)
+            primera_linea = re.sub(r"\s+null\b", "", primera_linea, flags=re.IGNORECASE)
+            primera_linea = re.sub(r"\b([a-z])\s+,", r"\1,", primera_linea)
+            primera_linea = re.sub(r"\s{2,}", " ", primera_linea).strip()
         return (primera_linea or None), domicilio
 
     def _get_text(self, extract_result, section_result) -> str:

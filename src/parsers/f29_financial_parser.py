@@ -27,6 +27,10 @@ class F29FinancialParser:
         "562": "compras_no_credito_562",
         "584": "compras_exentas_584",
         "504": "remanente_504",
+        "077": "remanente_077",
+        "532": "credito_nd_532",
+        "535": "credito_importaciones_535",
+        "111": "debito_boletas_111",
         "048": "retencion_sueldos_048",
         "151": "retencion_honorarios_151",
     }

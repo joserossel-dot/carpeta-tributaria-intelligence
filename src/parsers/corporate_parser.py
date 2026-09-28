@@ -19,7 +19,7 @@ class CorporateParser:
     )
     # RUT con o sin puntos de miles: "5603821-3" o "5.603.821-3".
     _RE_RUT = re.compile(r"(\d{1,2}(?:\.?\d{3}){2}[-−][\dkK])")
-    _RE_FECHA = re.compile(r"(\d{2}[-−]\d{2}[-−]\d{4})")
+    _RE_FECHA = re.compile(r"(\d{2}[/\-−]\d{2}[/\-−]\d{4})")
     _RE_PCT = re.compile(r"(\d{1,3}(?:[.,]\d{1,2})?)\s*%")
 
     # Encabezados que marcan donde termina un bloque de nombres (para no
@@ -34,7 +34,7 @@ class CorporateParser:
     )
 
     _RE_FORMA_ACTUACION = re.compile(
-        r"(en\s+conjunto|indistinta(?:mente)?|individual(?:mente)?|de\s+acuerdo\s+a\s+estatutos)",
+        r"(en\s+conjunto|cualquiera|indistinta(?:mente)?|individual(?:mente)?|de\s+acuerdo\s+a\s+estatutos)",
         re.IGNORECASE,
     )
 
@@ -85,11 +85,17 @@ class CorporateParser:
                 in_rep_block = False
                 for row in table:
                     row_str = " ".join(str(c or "") for c in row)
-                    if re.search(r"REPRESENTANTE(?:\(?S\)?)?\s+LEGAL(?:\(?ES\)?)?", row_str, re.IGNORECASE):
-                        in_rep_block = True
-                    elif re.search(r"^\s*\(1\)|DECLARACION|ACTIVIDAD|FORMULARIO", row_str, re.IGNORECASE):
-                        in_rep_block = False
-                        break
+                    if not in_rep_block:
+                        if re.search(r"REPRESENTANTE(?:\(?S\)?)?\s+LEGAL(?:\(?ES\)?)?", row_str, re.IGNORECASE):
+                            in_rep_block = True
+                    else:
+                        if re.search(
+                            r"CONFORMACI[OÓ]N(?:\s+DE\s+LA\s+SOCIEDAD)?|PARTICIPACI[OÓ]N|DECLARACI[OÓ]N|ACTIVIDAD|FORMULARIO|^\s*\(1\)|%\s+de\s+participaci[oó]n",
+                            row_str,
+                            re.IGNORECASE,
+                        ):
+                            in_rep_block = False
+                            break
 
                     if in_rep_block:
                         rut_match = None
@@ -124,9 +130,13 @@ class CorporateParser:
                                         fecha_inc = m_f.group(1)
                                     m_forma = self._RE_FORMA_ACTUACION.search(c_str)
                                     if m_forma and not forma_act:
-                                        # Usar el texto exacto capitalizado como en SII (ej. "En conjunto")
                                         raw_forma = m_forma.group(1).strip()
-                                        forma_act = "En conjunto" if "conjunto" in raw_forma.lower() else raw_forma.capitalize()
+                                        if "conjunto" in raw_forma.lower():
+                                            forma_act = "En conjunto"
+                                        elif "cualquiera" in raw_forma.lower():
+                                            forma_act = "Cualquiera"
+                                        else:
+                                            forma_act = raw_forma.capitalize()
                                         if not forma_global:
                                             forma_global = forma_act
 
@@ -245,7 +255,11 @@ class CorporateParser:
                 )
             else:
                 forma_match = self._RE_FORMA_ACTUACION.search(resto)
-                forma = forma_match.group(1).capitalize() if forma_match else None
+                if forma_match:
+                    raw_f = forma_match.group(1).strip()
+                    forma = "En conjunto" if "conjunto" in raw_f.lower() else ("Cualquiera" if "cualquiera" in raw_f.lower() else raw_f.capitalize())
+                else:
+                    forma = None
                 personas.append(model_cls(rut=rut, nombre=nombre, cargo=None, forma_actuacion=forma))
 
             i += 1
