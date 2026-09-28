@@ -109,7 +109,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.4)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.5)",
                 subtitle_style,
             )
         )
@@ -208,6 +208,15 @@ class PDFReport:
         linea_ini_txt = format_mclp(linea_ini)
         linea_max_txt = format_mclp(linea_max)
 
+        resguardo_style = ParagraphStyle(
+            "ResguardoStyle",
+            parent=table_cell,
+            fontName="Helvetica",
+            fontSize=5.2,
+            leading=6.6,
+            textColor=colors.HexColor("#1E293B"),
+        )
+
         panel_data = [
             [
                 Paragraph("<b>CLASIFICACIÓN Y RECOMENDACIÓN</b>", table_cell_header),
@@ -219,10 +228,10 @@ class PDFReport:
                 evaluacion_cell,
                 Paragraph(f"<b>{score_val:.0f} / 100 pts</b><br/>{desempeno_texto}<br/><font size=5.5 color='#64748B'>No reemplaza informe comercial</font>", table_cell_bold),
                 Paragraph(f"<b>Inicial: {linea_ini_txt}</b><br/><font size=6.5>Máxima: {linea_max_txt}</font>", table_cell_bold),
-                Paragraph(f"<b>Plazo Inicial: {plazo_ini}</b><br/><font size=5.5>{resguardo}</font>", table_cell),
+                Paragraph(f"<font size=6.5><b>Plazo Inicial: {plazo_ini}</b></font><br/>{resguardo}", resguardo_style),
             ],
         ]
-        panel_table = Table(panel_data, colWidths=[54 * mm, 38 * mm, 38 * mm, 55 * mm])
+        panel_table = Table(panel_data, colWidths=[52 * mm, 37 * mm, 37 * mm, 59 * mm])
         panel_table.setStyle(
             TableStyle([
                 ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0F172A")),
@@ -232,8 +241,8 @@ class PDFReport:
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E1")),
                 ("ALIGN", (0, 0), (-1, -1), "CENTER"),
                 ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("TOPPADDING", (0, 0), (-1, -1), 2.5),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5),
+                ("TOPPADDING", (0, 0), (-1, -1), 2.0),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 2.0),
             ])
         )
         story.append(panel_table)
@@ -333,10 +342,12 @@ class PDFReport:
         rango_str = f" ({p_ini} a {p_fin})" if p_ini and p_fin else ""
         cpt_str = format_mclp(cpt_val) if cpt_val is not None else "Sin F22"
 
+        spread_15 = int(round(spread_f29 * 0.15))
         if rli_mens and rli_mens > 0:
-            metodologia_b2 = "min(15% Spread Operacional F29, 25% RLI Mensualizada F22)"
+            rli_25 = int(round(rli_mens * 0.25))
+            metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}])"
         else:
-            metodologia_b2 = "12% Spread Operacional F29 (penalizado por RLI no disponible o <= 0)"
+            metodologia_b2 = f"12% Spread F29 [{format_mclp(int(round(spread_f29 * 0.12)))}] (penalizado por RLI no disponible o <= 0)"
 
         mem_rows = [
             [
@@ -356,7 +367,7 @@ class PDFReport:
             ],
             [
                 Paragraph("(=) Spread Operacional Tributario F29", table_cell_bold),
-                Paragraph("Ventas Netas Mensuales Promedio − Compras Op. Mensuales Promedio", table_cell),
+                Paragraph("Ventas Netas Mensuales Promedio - Compras Op. Mensuales Promedio", table_cell),
                 Paragraph(format_mclp(spread_f29), table_cell_bold),
             ],
             [
@@ -381,7 +392,7 @@ class PDFReport:
             ],
             [
                 Paragraph("(=) Línea Máxima Condicionada (Techo Técnico)", table_cell_bold),
-                Paragraph("min(Techo 8%, Freno Absorción) × Factor Conductual con Tope CPT (M$ 100)", table_cell),
+                Paragraph("min(Techo 8%, Freno Absorción) × Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)", table_cell),
                 Paragraph(format_mclp(cupo_max), table_cell_bold),
             ],
             [
@@ -583,7 +594,7 @@ class PDFReport:
                 ])
             )
             story.append(KeepTogether([
-                Paragraph("Resumen de Declaraciones Anuales F22 (Patrimonio e Impuesto a la Renta en M$)", h2_style),
+                Paragraph("Resumen de Declaraciones Anuales F22 (Ingresos, RLI y Capital Propio en M$)", h2_style),
                 f22_table,
             ]))
 

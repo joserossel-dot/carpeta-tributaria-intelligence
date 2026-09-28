@@ -36,7 +36,7 @@ _round_m100 = _floor_m100
 
 
 class CreditRiskEngine:
-    """Motor de decisión crediticia B2B v2.4.
+    """Motor de decisión crediticia B2B v2.5.
 
     Evolución cuantitativa y comercial:
     1. Separación estricta entre Puntaje Tributario SII (comportamiento fiscal) y Riesgo Crediticio Comercial.
@@ -453,12 +453,12 @@ class CreditRiskEngine:
                 else:
                     estado = "DESVIACIÓN RELEVANTE (> 15% dif.)"
 
-                v_m = int(ventas_f29 // 1000)
-                i_m = int(ingresos_f22 // 1000)
+                v_str = format_mclp(ventas_f29)
+                i_str = format_mclp(ingresos_f22)
                 detalle = (
-                    f"Ventas F29 año comercial {ac} (M$ {v_m:,}) vs Ingresos F22 AT {at} (M$ {i_m:,}) "
+                    f"Ventas F29 año comercial {ac} ({v_str}) vs Ingresos F22 AT {at} ({i_str}) "
                     f"— Diferencia: {dif_pct}% ({estado})."
-                ).replace(",", ".")
+                )
 
                 return {
                     "anio_tributario": str(at),

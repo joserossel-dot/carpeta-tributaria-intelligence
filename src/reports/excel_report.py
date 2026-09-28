@@ -87,7 +87,7 @@ class ExcelReport:
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.4)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.5)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -212,20 +212,22 @@ class ExcelReport:
         rango_str = f" ({p_ini} a {p_fin})" if p_ini and p_fin else ""
         cpt_str = f"M$ {int(cpt_val // 1000):,}".replace(",", ".") if cpt_val is not None else "Sin F22"
 
+        spread_15 = int(round(spread_f29 * 0.15))
         if rli_mens and rli_mens > 0:
-            metodologia_b2 = "min(15% Spread Operacional F29, 25% RLI Mensualizada F22)"
+            rli_25 = int(round(rli_mens * 0.25))
+            metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}])"
         else:
-            metodologia_b2 = "12% Spread Operacional F29 (penalizado por RLI no disponible o <= 0)"
+            metodologia_b2 = f"12% Spread F29 [{format_mclp(int(round(spread_f29 * 0.12)))}] (penalizado por RLI no disponible o <= 0)"
 
         calc_steps = [
             (f"Ventas Netas Mensuales Promedio{rango_str}", round(v_prom / 1000.0) if v_prom else 0, "Promedio mensual de ventas de los 12 meses analizados"),
             ("(-) Paso A: Compras Op. Mensuales Promedio (C_base)", round(base_c / 1000.0) if base_c else 0, "Base mensual de compras operacionales 12M (o costo operativo proxy)"),
-            ("(=) Spread Operacional Tributario F29", round(spread_f29 / 1000.0) if spread_f29 else 0, "Ventas Netas Mensuales Promedio − Compras Op. Mensuales Promedio"),
+            ("(=) Spread Operacional Tributario F29", round(spread_f29 / 1000.0) if spread_f29 else 0, "Ventas Netas Mensuales Promedio - Compras Op. Mensuales Promedio"),
             ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (parámetro prudencial de exposición por proveedor: 8% C_base)"),
             ("Paso B2: Freno por Absorción Operacional", round(freno_flujo / 1000.0) if freno_flujo else 0, metodologia_b2),
             ("Paso C: Factor de Ajuste Conductual", f"{phi_pct}%", "Ajuste por mora F29, postergación IVA y estabilidad YoY"),
             (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", "12% CPT en línea limpia ($0 si CPT <= 0)"),
-            ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) × Factor Conductual con Tope CPT (M$ 100)"),
+            ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) × Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)"),
             (f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)", round(cupo_ini / 1000.0) if cupo_ini else 0, f"{pct_ap}% de la Línea Máxima Técnica según Puntaje SII"),
         ]
 
