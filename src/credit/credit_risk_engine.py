@@ -458,19 +458,20 @@ class CreditRiskEngine:
                 ingresos_f22 = f22_item.ingresos
                 dif_monto = abs(int(ventas_f29) - ingresos_f22)
                 dif_pct = round(dif_monto / float(ingresos_f22) * 100.0, 1) if ingresos_f22 else 0.0
+                dif_pct_f29 = round(dif_monto / float(ventas_f29) * 100.0, 1) if (ventas_f29 and float(ventas_f29) > 0) else 0.0
 
                 if dif_pct <= 10.0:
-                    estado = "CONCILIADO (< 10% dif.)"
+                    estado = "CONCILIADO (<10% dif.)"
                 elif dif_pct <= 15.0:
                     estado = "TOLERANCIA ACEPTABLE (10-15% dif.)"
                 else:
-                    estado = "DESVIACIÓN RELEVANTE (> 15% dif.)"
+                    estado = "DESVIACIÓN RELEVANTE (>15% dif.)"
 
                 v_str = format_mclp(ventas_f29)
                 i_str = format_mclp(ingresos_f22)
                 detalle = (
                     f"Ventas F29 año comercial {ac} ({v_str}) vs Ingresos F22 AT {at} ({i_str}) "
-                    f"— Diferencia: {dif_pct}% ({estado})."
+                    f"— Diferencia: {dif_pct}% s/base F22 ({dif_pct_f29}% s/base F29) — {estado}."
                 )
 
                 return {
@@ -481,6 +482,7 @@ class CreditRiskEngine:
                     "ingresos_f22": int(ingresos_f22),
                     "diferencia_monto": int(dif_monto),
                     "diferencia_pct": dif_pct,
+                    "diferencia_pct_f29": dif_pct_f29,
                     "estado": estado,
                     "detalle": detalle,
                 }
@@ -968,20 +970,24 @@ class CreditRiskEngine:
         # 1. Continuidad y Antigüedad Operacional (15 pts)
         n_meses = len(tax_folder.monthly_taxes) or len(tax_folder.f29)
         lagunas = len(calidad.meses_f29_faltantes)
+        sorted_mt = sorted(tax_folder.monthly_taxes, key=lambda m: m.periodo or "")
+        p_ini_f29 = sorted_mt[0].periodo if sorted_mt else ""
+        p_fin_f29 = sorted_mt[-1].periodo if sorted_mt else ""
+        rango_f29 = f" ({p_ini_f29} a {p_fin_f29})" if p_ini_f29 and p_fin_f29 else ""
         if n_meses >= 24 and lagunas == 0:
             p1 = 15
-            det1 = f"{n_meses} meses continuos declarados sin lagunas tributarias (Historial extendido)"
+            det1 = f"{n_meses} meses continuos declarados{rango_f29} sin lagunas tributarias (Historial extendido)"
         elif n_meses >= 12 and lagunas == 0:
             p1 = 13
-            det1 = f"{n_meses} meses continuos declarados sin lagunas tributarias (Historial anual estándar)"
+            det1 = f"{n_meses} meses continuos declarados{rango_f29} sin lagunas tributarias"
         elif n_meses >= 6 and lagunas == 0:
             p1 = 10
-            det1 = f"{n_meses} meses de operación formal evaluada"
+            det1 = f"{n_meses} meses de operación formal evaluada{rango_f29}"
         else:
             base_m = min(10, n_meses * 2)
             penal = lagunas * 6
             p1 = max(0, base_m - penal)
-            det1 = f"{n_meses} meses evaluados con {lagunas} mes(es) de omisión/laguna"
+            det1 = f"{n_meses} meses evaluados{rango_f29} con {lagunas} mes(es) de omisión/laguna"
         pilares.append(PilarScore(
             nombre="Continuidad y Antigüedad Operacional",
             puntaje_obtenido=p1,
@@ -1018,7 +1024,7 @@ class CreditRiskEngine:
             detalle=det2,
         ))
 
-        # 3. Margen Tributario F29 Proxy (20 pts)
+        # 3. Holgura Débito/Crédito IVA (F29) (20 pts)
         ratio = indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else None
         if ratio is not None:
             if ratio >= 1.40:
@@ -1040,7 +1046,7 @@ class CreditRiskEngine:
             p3 = 14
             det3 = "Margen operativo referencial estándar del giro"
         pilares.append(PilarScore(
-            nombre="Margen Tributario F29 Proxy",
+            nombre="Holgura Débito/Crédito IVA (F29)",
             puntaje_obtenido=p3,
             puntaje_maximo=20,
             detalle=det3,
@@ -1048,28 +1054,49 @@ class CreditRiskEngine:
 
         # 4. Rentabilidad (RLI) y Respaldo Patrimonial F22 (15 pts)
         cpt = memoria.get("capital_propio_tributario")
+        ultimo_f22 = None
+        if tax_folder.f22:
+            sorted_f22_pilar = sorted(tax_folder.f22, key=lambda f: f.anio_tributario or "", reverse=True)
+            if sorted_f22_pilar:
+                ultimo_f22 = sorted_f22_pilar[0]
+
+        rli_val_pilar = ultimo_f22.renta_liquida_imponible if ultimo_f22 else None
+        ing_val_pilar = ultimo_f22.ingresos if ultimo_f22 else None
+        at_pilar = str(ultimo_f22.anio_tributario or "").replace(":", "").strip() if ultimo_f22 else ""
+
+        if rli_val_pilar is not None:
+            rli_fmt = format_mclp(rli_val_pilar)
+            if ing_val_pilar and ing_val_pilar > 0:
+                pct_ing = round(float(rli_val_pilar) / float(ing_val_pilar) * 100.0, 1)
+                rli_txt = f"RLI AT {at_pilar}: {rli_fmt} ({pct_ing}% s/ingresos)"
+            else:
+                rli_txt = f"RLI AT {at_pilar}: {rli_fmt}"
+        else:
+            rli_txt = "Sin RLI informada"
+
+        cpt_fmt = format_mclp(cpt) if cpt is not None else "Sin CPT informado"
+
         if cpt is not None:
             if cpt <= 0:
                 p4 = 0
-                det4 = f"Quiebra patrimonial técnica / CPT Negativo (${cpt:,.0f} CLP)"
+                det4 = f"{rli_txt} | CPT: {cpt_fmt} (Quiebra patrimonial técnica / CPT Negativo)"
             else:
                 cupo_ref = memoria.get("cupo_maximo_sugerido") or 5_000_000
                 veces = cpt / cupo_ref if cupo_ref else 1.0
-                cpt_m = round(cpt / 1000.0)
-                cpt_fmt = f"{cpt_m:,}".replace(",", ".")
-                ref_txt = f"Referencia Patrimonial Tributaria (CPT: M$ {cpt_fmt} — Respaldo contable no líquido)"
+                cobertura = "cobertura holgada" if veces >= 2.0 else ("cobertura suficiente" if veces >= 1.0 else "cobertura acotada")
+                ref_txt = f"{rli_txt} | CPT: {cpt_fmt} (Respaldo contable no líquido: {cobertura})"
                 if veces >= 2.0:
                     p4 = 15
-                    det4 = f"{ref_txt}: Cobertura holgada"
+                    det4 = ref_txt
                 elif veces >= 1.0:
                     p4 = 12
-                    det4 = f"{ref_txt}: Cobertura suficiente"
+                    det4 = ref_txt
                 else:
                     p4 = 8
-                    det4 = f"{ref_txt}: Cobertura acotada"
+                    det4 = ref_txt
         else:
             p4 = 8
-            det4 = "Sin declaración F22 con CPT informado"
+            det4 = f"{rli_txt} | Sin declaración F22 con CPT informado"
 
         if rli_comprimida:
             p4 = max(0, p4 - 6)
@@ -1087,19 +1114,19 @@ class CreditRiskEngine:
         posterg = hechos.postergaciones_iva.meses_con_postergacion if hechos and hechos.postergaciones_iva else 0
         if mora == 0 and posterg <= 1:
             p5 = 15
-            det5 = "Impecable cumplimiento fiscal: 0 períodos con recargos por mora fiscal en F29 (Cód. 94) y sin postergaciones recurrentes"
+            det5 = f"0 de {n_meses} períodos F29 con recargos por mora fiscal (Cód. 94) y {posterg} postergaciones de IVA (Cód. 779)"
         elif mora == 0 and posterg >= 2:
             p5 = 11
-            det5 = f"Sin mora en F29, pero registra {posterg} meses de postergación de IVA"
+            det5 = f"0 de {n_meses} períodos F29 con recargos por mora fiscal, pero registra {posterg} postergaciones de IVA (Cód. 779)"
         elif mora == 1:
             p5 = 8
-            det5 = "Registra 1 mes con recargo/interés por mora en F29"
+            det5 = f"1 de {n_meses} períodos F29 con recargo por mora fiscal (Cód. 94)"
         elif mora == 2:
             p5 = 4
-            det5 = "Registra 2 meses con recargo por mora en F29"
+            det5 = f"2 de {n_meses} períodos F29 con recargo por mora fiscal (Cód. 94)"
         else:
             p5 = 0
-            det5 = f"Mora fiscal recurrente ({mora} meses con recargo Cód. 94)"
+            det5 = f"Mora fiscal recurrente ({mora} de {n_meses} períodos F29 con recargo Cód. 94)"
         pilares.append(PilarScore(
             nombre="Cumplimiento Fiscal (Mora y Postergación IVA)",
             puntaje_obtenido=p5,

@@ -92,6 +92,21 @@ class TestGoldenNutrisa:
         assert "MARIA GLORIA RIOS LARRAIN" in resguardo
         assert "JOSE LUIS RODRIGUEZ CASANUEVA" in resguardo
 
+        # Verificación de Pilares 1, 3, 4 y 5
+        desglose = cr.desglose_score
+        p1 = next(p for p in desglose if "Continuidad" in p.nombre)
+        assert "23 meses continuos declarados (2024-06 a 2026-04) sin lagunas tributarias" in p1.detalle
+
+        p3 = next(p for p in desglose if "Holgura Débito/Crédito IVA (F29)" in p.nombre)
+        assert p3 is not None
+
+        p4 = next(p for p in desglose if "Rentabilidad" in p.nombre)
+        assert "RLI AT 2026: M$ 692.056 (9.1% s/ingresos)" in p4.detalle
+        assert "CPT: M$ 3.625.110 (Respaldo contable no líquido: cobertura holgada)" in p4.detalle
+
+        p5 = next(p for p in desglose if "Cumplimiento Fiscal" in p.nombre)
+        assert "0 de 23 períodos F29 con recargos por mora fiscal (Cód. 94) y 0 postergaciones de IVA (Cód. 779)" in p5.detalle
+
     def test_generacion_pdf_nutrisa_layout(self, nutrisa_folder):
         """Genera el PDF y valida los textos clave de la versión v2.6."""
         pdf_bytes = PDFReport().generate(nutrisa_folder)
@@ -105,6 +120,10 @@ class TestGoldenNutrisa:
             assert "Máxima: M$ 14.400" in text_p1
             assert "Actuación SII: En conjunto" in text_p1
             assert "Tope patrimonial no restrictivo en este RUT" in text_p1
+            # Normalización de domicilio
+            assert "01565 Bodeg" in text_p1
+            # Aclaración de glosa Paso B2
+            assert "(Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)" in text_p1
 
             if len(pdf.pages) > 1:
                 text_p2 = pdf.pages[1].extract_text()
@@ -112,3 +131,6 @@ class TestGoldenNutrisa:
                 assert "Cód. 1109/1690" in text_p2 or "RLI" in text_p2
                 assert "Cód. 645" in text_p2 or "Capital Propio" in text_p2
                 assert "Motor Determinista Cavilaria v2.6" in text_p2
+                # Doble base de conciliación
+                assert "3.2% s/base" in text_p2 and "3.1% s/base F29" in text_p2
+                assert "CONCILIADO (<10% dif.)" in text_p2

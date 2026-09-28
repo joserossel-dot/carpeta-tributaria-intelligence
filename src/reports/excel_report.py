@@ -1,4 +1,5 @@
 import io
+import re
 from decimal import Decimal
 from typing import Any
 
@@ -216,10 +217,10 @@ class ExcelReport:
         rli_fallback = mem.get("rli_fallback_8pct", False)
         if not rli_fallback and rli_mens and rli_mens > 0:
             rli_25 = int(round(rli_mens * 0.25))
-            metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}])"
+            metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}]) (Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)"
         else:
             spread_8 = int(round(spread_f29 * 0.08))
-            metodologia_b2 = f"8% Spread F29 [{format_mclp(spread_8)}] (penalizado por RLI <= 0 o sin F22)"
+            metodologia_b2 = f"8% Spread F29 [{format_mclp(spread_8)}] (penalizado por RLI <= 0 o sin F22) (Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)"
 
         min_b1_b2 = min(techo_op, freno_flujo)
         if tope_cpt is not None:
@@ -442,10 +443,16 @@ class ExcelReport:
 
         # Datos Generales
         self._apply_headers(ws, 4, ["Campo", "Valor"])
+        domicilio_val = getattr(c, "domicilio", None)
+        if domicilio_val:
+            domicilio_val = re.sub(r"(\d)([a-zA-ZáéíóúñÁÉÍÓÚÑ])", r"\1 \2", domicilio_val)
+        else:
+            domicilio_val = "No informado"
+
         datos = [
             ("RUT Contribuyente", getattr(c, "rut", None) or "No informado"),
             ("Razón Social", getattr(c, "razon_social", None) or "No informada"),
-            ("Domicilio Legal", getattr(c, "domicilio", None) or "No informado"),
+            ("Domicilio Legal", domicilio_val),
             ("Comuna", getattr(c, "comuna", None) or "No informada"),
             ("Región", getattr(c, "region", None) or "No informada"),
             ("Fecha Inicio Actividades", fmt_date(getattr(c, "fecha_inicio_actividades", None))),

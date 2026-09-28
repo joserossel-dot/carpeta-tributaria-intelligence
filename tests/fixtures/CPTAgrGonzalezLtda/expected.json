@@ -5935,7 +5935,7 @@
           "nombre": "Continuidad y Antigüedad Operacional",
           "puntaje_obtenido": 15,
           "puntaje_maximo": 15,
-          "detalle": "35 meses continuos declarados sin lagunas tributarias (Historial extendido)"
+          "detalle": "35 meses continuos declarados (2017-02 a 2019-12) sin lagunas tributarias (Historial extendido)"
         },
         {
           "nombre": "Nivel y Estabilidad de Ventas F29",
@@ -5944,7 +5944,7 @@
           "detalle": "Contracción severa de ventas reciente (-48.9%)"
         },
         {
-          "nombre": "Margen Tributario F29 Proxy",
+          "nombre": "Holgura Débito/Crédito IVA (F29)",
           "puntaje_obtenido": 20,
           "puntaje_maximo": 20,
           "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 2.45x)"
@@ -5953,13 +5953,13 @@
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
           "puntaje_obtenido": 15,
           "puntaje_maximo": 15,
-          "detalle": "Referencia Patrimonial Tributaria (CPT: M$ 6.559.200 — Respaldo contable no líquido): Cobertura holgada"
+          "detalle": "Sin RLI informada | CPT: M$ 6.559.200 (Respaldo contable no líquido: cobertura holgada)"
         },
         {
           "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",
           "puntaje_obtenido": 11,
           "puntaje_maximo": 15,
-          "detalle": "Sin mora en F29, pero registra 9 meses de postergación de IVA"
+          "detalle": "0 de 35 períodos F29 con recargos por mora fiscal, pero registra 9 postergaciones de IVA (Cód. 779)"
         },
         {
           "nombre": "Coherencia F29/F22 y Vigencia de Información",
@@ -6090,7 +6090,7 @@
         "nombre": "Continuidad y Antigüedad Operacional",
         "puntaje_obtenido": 15,
         "puntaje_maximo": 15,
-        "detalle": "35 meses continuos declarados sin lagunas tributarias (Historial extendido)"
+        "detalle": "35 meses continuos declarados (2017-02 a 2019-12) sin lagunas tributarias (Historial extendido)"
       },
       {
         "nombre": "Nivel y Estabilidad de Ventas F29",
@@ -6099,7 +6099,7 @@
         "detalle": "Contracción severa de ventas reciente (-48.9%)"
       },
       {
-        "nombre": "Margen Tributario F29 Proxy",
+        "nombre": "Holgura Débito/Crédito IVA (F29)",
         "puntaje_obtenido": 20,
         "puntaje_maximo": 20,
         "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: 2.45x)"
@@ -6108,13 +6108,13 @@
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
         "puntaje_obtenido": 15,
         "puntaje_maximo": 15,
-        "detalle": "Referencia Patrimonial Tributaria (CPT: M$ 6.559.200 — Respaldo contable no líquido): Cobertura holgada"
+        "detalle": "Sin RLI informada | CPT: M$ 6.559.200 (Respaldo contable no líquido: cobertura holgada)"
       },
       {
         "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",
         "puntaje_obtenido": 11,
         "puntaje_maximo": 15,
-        "detalle": "Sin mora en F29, pero registra 9 meses de postergación de IVA"
+        "detalle": "0 de 35 períodos F29 con recargos por mora fiscal, pero registra 9 postergaciones de IVA (Cód. 779)"
       },
       {
         "nombre": "Coherencia F29/F22 y Vigencia de Información",

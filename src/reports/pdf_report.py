@@ -1,4 +1,5 @@
 import io
+import re
 from decimal import Decimal
 from typing import Any
 
@@ -122,7 +123,12 @@ class PDFReport:
 
         rut = getattr(c, "rut", None) or "No informado"
         razon_social = getattr(c, "razon_social", None) or "No informada"
-        domicilio = getattr(c, "domicilio", None) or "No informado"
+        domicilio_raw = getattr(c, "domicilio", None) or "No informado"
+        domicilio = (
+            re.sub(r"(\d)([a-zA-ZáéíóúñÁÉÍÓÚÑ])", r"\1 \2", domicilio_raw)
+            if domicilio_raw != "No informado"
+            else domicilio_raw
+        )
         comuna_region = f"{getattr(c, 'comuna', None) or '—'}, {getattr(c, 'region', None) or '—'}"
         ini_act = fmt_date(getattr(c, "fecha_inicio_actividades", None)) or "No informado"
         regimen = getattr(c, "regimen_tributario", None) or "No informado"
@@ -368,10 +374,10 @@ class PDFReport:
         rli_fallback = mem.get("rli_fallback_8pct", False)
         if not rli_fallback and rli_mens and rli_mens > 0:
             rli_25 = int(round(rli_mens * 0.25))
-            metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}])"
+            metodologia_b2 = f"min(15% Spread F29 [{format_mclp(spread_15)}], 25% RLI Mensual F22 [{format_mclp(rli_25)}]) (Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)"
         else:
             spread_8 = int(round(spread_f29 * 0.08))
-            metodologia_b2 = f"8% Spread F29 [{format_mclp(spread_8)}] (penalizado por RLI <= 0 o sin F22)"
+            metodologia_b2 = f"8% Spread F29 [{format_mclp(spread_8)}] (penalizado por RLI <= 0 o sin F22) (Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)"
 
         min_b1_b2 = min(techo_op, freno_flujo)
         if tope_cpt is not None:
