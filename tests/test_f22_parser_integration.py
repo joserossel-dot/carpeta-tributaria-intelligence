@@ -98,8 +98,8 @@ class TestF22ParserIntegration:
         assert forms is not None
         at26 = next((f for f in forms if f.anio_tributario == "2026"), None)
         assert at26 is not None
-        # Known: 844 = 102644484
-        assert at26.capital_propio_tributario == 102644484
+        # In v2.7, 645 = 2353699152 is CPT final (844 is capital aportado)
+        assert at26.capital_propio_tributario == 2353699152
 
     def test_proterm_ppm_specific(self) -> None:
         forms = self._get_f22("Carpeta_Tributaria_Regular (4).pdf")

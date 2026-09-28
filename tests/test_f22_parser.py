@@ -88,8 +88,8 @@ class TestF22Parser:
         ])
         result = self._parse([text])
         r = result[0]
-        # 844 takes priority
-        assert r.capital_propio_tributario == 50000000
+        # In v2.7, code 645 takes priority over 844
+        assert r.capital_propio_tributario == 60000000
 
     def test_anio_tributario_spanish_n(self) -> None:
         text = self._make_f22_page("2025", [("1657", "Ingresos", "100000")])

@@ -25,25 +25,36 @@ from src.utils.formatting import format_mclp
 MESES_MINIMOS_PARA_SCORING = 6
 
 
-def _floor_m100(val: float | int | Decimal | None) -> int:
-    """Truncamiento/redondeo conservador hacia abajo al centenar de M$ ($100.000 CLP)."""
-    if val is None or float(val) <= 0:
+def _floor_tiered(val: float | int | Decimal | None) -> int:
+    """Truncamiento escalonado conservador (v2.7):
+    - >= 1.000.000: múltiplos de 100.000 CLP.
+    - 100.000 a 999.999: múltiplos de 10.000 CLP (ej. $345.000 -> $340.000).
+    - < 100.000: 0 CLP.
+    """
+    if val is None:
         return 0
-    return int(math.floor(float(val) / 100_000.0) * 100_000)
+    fval = float(val)
+    if fval < 100_000.0:
+        return 0
+    if fval >= 1_000_000.0:
+        return int(math.floor(fval / 100_000.0) * 100_000)
+    return int(math.floor(fval / 10_000.0) * 10_000)
 
 
-_round_m100 = _floor_m100
+_floor_m100 = _floor_tiered
+_round_m100 = _floor_tiered
 
 
 class CreditRiskEngine:
-    """Motor de decisión crediticia B2B v2.5.
+    """Motor de decisión crediticia B2B v2.7.
 
     Evolución cuantitativa y comercial:
-    1. Separación estricta entre Puntaje Tributario SII (comportamiento fiscal) y Riesgo Crediticio Comercial.
-    2. Estructuración escalonada de línea: Línea Inicial Recomendada (Etapa 1 - 50%) vs. Línea Máxima Condicionada (Etapa 2).
-    3. Modelo de Puntaje Tributario SII en 6 Pilares Objetivos (100 pts) y Filtro de Elegibilidad Tributaria.
-    4. Integración de variables comerciales externas (Boletín Comercial Dicom/Equifax e Historial de Pago con Proveedor).
-    5. Precisión conceptual en Memoria de Cálculo con Margen Tributario F29 Proxy y condición suspensiva por RLI.
+    1. Jerarquía explícita de códigos F22 (RLI 1694/1690 vs 1109 y CPT multigeneración 1696/645).
+    2. Separación estricta entre Pérdida Declarada en F22 (RLI <= 0 -> M$ 0) y Ausencia de F22 (fallback 8% Spread con condición suspensiva).
+    3. Ajuste de RLI por deterioro reciente en F29 (puente temporal F22 -> F29 ante contracción > 10%).
+    4. Acoplamiento del Puntaje Tributario SII tanto al Paso C como a la Apertura Inicial (tramos >=85, 75-84, 65-74, <65).
+    5. Truncamiento escalonado (Tiered Floor) y Protección a Exportadores / Ventas Exentas en Pilar 3.
+    6. Precisión en redacción de resguardo notarial y forma de actuación SII de apoderados.
     """
 
     def __init__(self, benchmark: SectorBenchmark | None = None):
@@ -178,6 +189,8 @@ class CreditRiskEngine:
                 "historial_pago": historial,
             },
         )
+
+    evaluate = calculate
 
     # ------------------------------------------------------------------
     # Calidad de datos y detección de lagunas
@@ -601,44 +614,82 @@ class CreditRiskEngine:
         spread_operacional_f29 = max(0.0, prom_ventas_12m - c_base)
 
         # Paso B2: Freno por Absorción Operacional
-        ultimo_f22 = None
-        if tax_folder.f22:
-            sorted_f22 = sorted(tax_folder.f22, key=lambda f: f.anio_tributario or "", reverse=True)
-            if sorted_f22:
-                ultimo_f22 = sorted_f22[0]
-
-        rli_val = ultimo_f22.renta_liquida_imponible if ultimo_f22 else None
-        ingresos_f22 = ultimo_f22.ingresos if ultimo_f22 else None
-
-        # Sanity check anti-artefactos F22: RLI > Ingresos o RLI/Ingresos > 0.50
+        # Bloque 2: Separación estricta entre Pérdida Declarada (RLI <= 0) vs Ausencia de F22
+        rli_declarada_le_zero = False
+        ausencia_f22 = False
+        rli_val = None
+        ingresos_f22 = None
+        perdidas_f22 = None
+        rli_valida = False
+        rli_mensualizada = None
+        rli_fallback_8pct = False
         rli_artefacto = False
         alerta_sanity_rli = None
-        if rli_val is not None and ingresos_f22 is not None and ingresos_f22 > 0:
-            if rli_val > ingresos_f22 or (rli_val / float(ingresos_f22) > 0.50):
-                rli_artefacto = True
-                alerta_sanity_rli = "Magnitud RLI/Ingresos > 50% en F22: se aplica techo conservador F29"
-                castigos.append(alerta_sanity_rli)
 
-        rli_valida = (rli_val is not None and rli_val > 0 and not rli_artefacto)
-        rli_mensualizada = (float(rli_val) / 12.0) if rli_valida else None
-        rli_fallback_8pct = False
-
-        if rli_valida and rli_mensualizada is not None and rli_mensualizada > 0:
-            freno_flujo = min(0.15 * spread_operacional_f29, 0.25 * rli_mensualizada)
-            glosa_b2 = f"min(15% Spread F29: ${0.15 * spread_operacional_f29:,.0f}, 25% RLI Mensualizada: ${0.25 * rli_mensualizada:,.0f})"
-        else:
-            # Regla explícita para RLI <= 0 (pérdida tributaria), sin F22 o RLI artefacto:
-            # Se aplica factor castigado de 8% del Spread Operacional F29 (en vez de 15%)
+        if not tax_folder.f22 or len(tax_folder.f22) == 0:
+            ausencia_f22 = True
             rli_fallback_8pct = True
-            freno_flujo = 0.08 * spread_operacional_f29
-            glosa_b2 = f"8% Spread F29 preventivo (${freno_flujo:,.0f})"
+            # Caso B: Ausencia de F22 en carpeta -> min(8% Spread F29, M$ 5.000)
+            freno_flujo = min(0.08 * spread_operacional_f29, 5_000_000.0)
+            glosa_b2 = f"8% Spread F29 preventivo (Tope M$ 5.000 por ausencia de F22)"
             castigos.append(
-                "F22 declara RLI <= 0 (o sin F22 vigente): línea acotada preventivamente al 8% del Spread F29 y sujeta a revisión de Balance de 8 Columnas"
+                "Ausencia de declaración F22 en carpeta: línea acotada preventivamente al 8% del Spread F29 "
+                "(Tope M$ 5.000 CLP) con condición suspensiva obligatoria de presentar F22 vigente"
             )
+        else:
+            sorted_f22 = sorted(tax_folder.f22, key=lambda f: f.anio_tributario or "", reverse=True)
+            ultimo_f22 = sorted_f22[0] if sorted_f22 else None
+            if ultimo_f22:
+                rli_val = ultimo_f22.renta_liquida_imponible
+                ingresos_f22 = ultimo_f22.ingresos
+                perdidas_f22 = ultimo_f22.perdidas
+
+            if (rli_val is not None and rli_val <= 0) or (perdidas_f22 is not None and perdidas_f22 > 0):
+                # Caso A: Pérdida tributaria declarada (RLI <= 0 o Cód. 1690/1143/etc.)
+                rli_declarada_le_zero = True
+                freno_flujo = 0.0
+                glosa_b2 = "M$ 0 (Pérdida Tributaria Declarada en F22)"
+                castigos.append(
+                    "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)"
+                )
+            elif rli_val is not None and rli_val > 0:
+                # Sanity check anti-artefactos F22
+                if ingresos_f22 is not None and ingresos_f22 > 0 and (rli_val > ingresos_f22 or (rli_val / float(ingresos_f22) > 0.50)):
+                    rli_artefacto = True
+                    rli_fallback_8pct = True
+                    alerta_sanity_rli = "Magnitud RLI/Ingresos > 50% en F22: se aplica techo conservador F29"
+                    castigos.append(alerta_sanity_rli)
+                    freno_flujo = 0.08 * spread_operacional_f29
+                    glosa_b2 = f"8% Spread F29 preventivo (Artefacto RLI/Ingresos > 50%: ${freno_flujo:,.0f})"
+                else:
+                    rli_valida = True
+                    rli_mensual_base = float(rli_val) / 12.0
+                    # Bloque 3: Ajuste de RLI por deterioro reciente en F29 (Puente temporal F22 -> F29)
+                    var_ventas_3m = float(ma.variacion_ventas_3m_pct) if (ma and ma.variacion_ventas_3m_pct is not None) else 0.0
+                    if var_ventas_3m < -10.0:
+                        factor_deterioro = max(0.0, 1.0 + (var_ventas_3m / 100.0))
+                        rli_mensualizada = rli_mensual_base * factor_deterioro
+                        castigos.append(
+                            f"Contracción reciente de ventas F29 ({var_ventas_3m:.1f}%): "
+                            f"RLI mensualizada ajustada preventivamente en {factor_deterioro:.2f}x"
+                        )
+                    else:
+                        rli_mensualizada = rli_mensual_base
+
+                    freno_flujo = min(0.15 * spread_operacional_f29, 0.25 * rli_mensualizada)
+                    glosa_b2 = f"min(15% Spread F29: ${0.15 * spread_operacional_f29:,.0f}, 25% RLI Mensualizada: ${0.25 * rli_mensualizada:,.0f})"
+            else:
+                # F22 presente pero sin RLI explícita informada -> fallback preventivo
+                rli_fallback_8pct = True
+                freno_flujo = min(0.08 * spread_operacional_f29, 5_000_000.0)
+                glosa_b2 = f"8% Spread F29 preventivo (${freno_flujo:,.0f})"
+                castigos.append(
+                    "F22 sin RLI positiva informada: línea acotada preventivamente al 8% del Spread F29"
+                )
 
         # El cupo base no puede superar el freno de absorción operacional
         techo_con_flujo = min(techo_operativo, freno_flujo)
-        if freno_flujo < techo_operativo:
+        if freno_flujo < techo_operativo and not rli_declarada_le_zero:
             castigos.append(
                 f"Freno por Absorción Operacional ({glosa_b2}): "
                 f"reduce techo de compras de ${techo_operativo:,.0f} a ${freno_flujo:,.0f}"
@@ -768,6 +819,8 @@ class CreditRiskEngine:
             "tope_patrimonial_12pct_cpt": int(round(tope_cpt)) if tope_cpt is not None else None,
             "tope_patrimonial_35pct_cpt": int(round(tope_cpt)) if tope_cpt is not None else None,
             "tope_patrimonial_cpt": int(round(tope_cpt)) if tope_cpt is not None else None,
+            "rli_declarada_le_zero": rli_declarada_le_zero,
+            "ausencia_f22": ausencia_f22,
             "cupo_maximo_sugerido": cupo_maximo_sugerido,
             "cupo_excepcional_garantizado": cupo_excepcional,
             "castigos_aplicados": castigos,
@@ -1024,27 +1077,65 @@ class CreditRiskEngine:
             detalle=det2,
         ))
 
-        # 3. Holgura Débito/Crédito IVA (F29) (20 pts)
-        ratio = indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else None
-        if ratio is not None:
-            if ratio >= 1.40:
+        # 3. Holgura Débito/Crédito IVA (F29) y Protección al Exportador (20 pts)
+        v_netas_prom = float(memoria.get("ventas_netas_mensuales_prom") or 0.0)
+        c_base_val = float(memoria.get("base_compras_c_base") or 0.0)
+        total_ventas_12m = v_netas_prom * 12.0
+
+        ventas_exp = 0.0
+        ventas_exe = 0.0
+        if tax_folder.monthly_taxes:
+            ventas_exp = sum(float(m.ventas_exportacion or 0) for m in tax_folder.monthly_taxes[-12:])
+            ventas_exe = sum(float(m.ventas_exentas or 0) for m in tax_folder.monthly_taxes[-12:])
+        if ventas_exp == 0 and ventas_exe == 0 and tax_folder.f29:
+            sorted_f29_pilar = sorted(tax_folder.f29, key=lambda f: f.periodo or "")
+            last_12_f29 = sorted_f29_pilar[-12:] if len(sorted_f29_pilar) >= 12 else sorted_f29_pilar
+            for f in last_12_f29:
+                for d in f.detalles:
+                    if d.codigo == "020":
+                        ventas_exp += _parse_monto(d.valor)
+                    elif d.codigo in ("562", "142"):
+                        ventas_exe += _parse_monto(d.valor)
+
+        pct_exp = (ventas_exp / total_ventas_12m) if total_ventas_12m > 0 else 0.0
+        pct_exe = (ventas_exe / total_ventas_12m) if total_ventas_12m > 0 else 0.0
+        es_exportador_o_exento = (pct_exp > 0.20 or pct_exe > 0.20)
+
+        if es_exportador_o_exento:
+            ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
+            if ratio_op >= 1.25:
                 p3 = 20
-                det3 = f"Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: {ratio:.2f}x)"
-            elif ratio >= 1.20:
+                det3 = f"Operación exportadora/exenta con holgura operacional sólida (Ratio Ventas/Compras: {ratio_op:.2f}x)"
+            elif ratio_op >= 1.10:
                 p3 = 17
-                det3 = f"Margen operacional suficiente (Ratio Débito/Crédito: {ratio:.2f}x)"
-            elif ratio >= 1.05:
-                p3 = 14
-                det3 = f"Margen operacional ajustado (Ratio Débito/Crédito: {ratio:.2f}x)"
-            elif ratio >= 0.95:
-                p3 = 10
-                det3 = f"Equilibrio fiscal neutro (Ratio Débito/Crédito: {ratio:.2f}x)"
+                det3 = f"Operación exportadora/exenta con margen suficiente (Ratio Ventas/Compras: {ratio_op:.2f}x)"
+            elif ratio_op >= 1.00:
+                p3 = 12
+                det3 = f"Operación exportadora/exenta con margen ajustado (Ratio Ventas/Compras: {ratio_op:.2f}x)"
             else:
                 p3 = 5
-                det3 = f"Crédito fiscal persistente sobre ventas (Ratio: {ratio:.2f}x)"
+                det3 = f"Operación exportadora/exenta con compras superiores a ventas (Ratio Ventas/Compras: {ratio_op:.2f}x)"
         else:
-            p3 = 14
-            det3 = "Margen operativo referencial estándar del giro"
+            ratio = indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else None
+            if ratio is not None:
+                if ratio >= 1.40:
+                    p3 = 20
+                    det3 = f"Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: {ratio:.2f}x)"
+                elif ratio >= 1.20:
+                    p3 = 17
+                    det3 = f"Margen operacional suficiente (Ratio Débito/Crédito: {ratio:.2f}x)"
+                elif ratio >= 1.05:
+                    p3 = 14
+                    det3 = f"Margen operacional ajustado (Ratio Débito/Crédito: {ratio:.2f}x)"
+                elif ratio >= 0.95:
+                    p3 = 10
+                    det3 = f"Equilibrio fiscal neutro (Ratio Débito/Crédito: {ratio:.2f}x)"
+                else:
+                    p3 = 5
+                    det3 = f"Crédito fiscal persistente sobre ventas (Ratio: {ratio:.2f}x)"
+            else:
+                p3 = 14
+                det3 = "Margen operativo referencial estándar del giro"
         pilares.append(PilarScore(
             nombre="Holgura Débito/Crédito IVA (F29)",
             puntaje_obtenido=p3,
@@ -1224,10 +1315,12 @@ class CreditRiskEngine:
             forma_act = getattr(tax_folder.corporate, "forma_actuacion_representantes", None)
 
         reps_registrados = " / ".join(rep_names) if rep_names else "No informados"
-        actuacion_txt = f"Forma de actuación registrada en SII: {forma_act} — " if forma_act else ""
+        n_reps = len(rep_names)
+        forma_act_str = forma_act or "No informada"
         clausula_pagare = (
-            f"Pagaré a la vista suscrito ante notario por apoderado(s) con facultades suficientes según "
-            f"Certificado de Vigencia y Poderes ({actuacion_txt}Representantes SII: {reps_registrados})"
+            f"Pagaré a la vista suscrito ante notario por apoderado(s) con facultades cambiarias suficientes acreditadas "
+            f"mediante Certificado de Vigencia y Escritura de Poderes "
+            f"(Nota informativa SII: ante el SII figuran {n_reps} representantes con actuación tributaria '{forma_act_str}': {reps_registrados})"
         )
 
         cpt_val = memoria.get("capital_propio_tributario")
@@ -1257,6 +1350,9 @@ class CreditRiskEngine:
         tiene_atrasos_previos = "atrasos previos" in historial_pago.lower()
         dicom_pendiente = "pendiente" in boletin_comercial.lower()
 
+        rli_declarada_le_zero = memoria.get("rli_declarada_le_zero", False)
+        ausencia_f22 = memoria.get("ausencia_f22", False)
+
         condicion_escalamiento = (
             "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, "
             "sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo "
@@ -1275,6 +1371,22 @@ class CreditRiskEngine:
             plazo_inicial = "Contado (0 días)"
             resguardo = "Carpeta sin información suficiente para evaluar línea de crédito."
             protocolo = "Completar información tributaria faltante (mínimo 6 meses F29 y F22)."
+
+        elif rli_declarada_le_zero:
+            resultado_base = "RECHAZADO"
+            evaluacion_referencial = "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Requiere Evaluación Manual con EE.FF.)"
+            clasificacion_riesgo = "PERFIL TRIBUTARIO DÉBIL"
+            cupo_aprobado = 0
+            linea_inicial = 0
+            linea_maxima = 0
+            pct_apertura = 0.0
+            plazo_dias = 0
+            plazo_inicial = "Contado (0 días)"
+            resguardo = (
+                "Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. "
+                "Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas."
+            )
+            protocolo = "No despachar a crédito. Operación recomendada exclusivamente al contado o pago anticipado."
 
         elif tiene_morosidad_comercial or cpt_negativo or cupo_maximo == 0 or score_compuesto < 65 or mora_12m >= 2:
             resultado_base = "RECHAZADO"
@@ -1316,9 +1428,10 @@ class CreditRiskEngine:
             evaluacion_referencial = "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)"
             clasificacion_riesgo = "PERFIL TRIBUTARIO SÓLIDO"
             pct_apertura = 0.50
+            factor_score_paso_c = 1.00
             linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            linea_maxima = _floor_m100(linea_maxima)
-            linea_inicial = _floor_m100(linea_maxima * pct_apertura)
+            linea_maxima = _floor_tiered(linea_maxima * factor_score_paso_c)
+            linea_inicial = _floor_tiered(linea_maxima * pct_apertura)
             cupo_aprobado = linea_inicial
             plazo_dias = 30
             plazo_inicial = "15 días (o 30 días con 50% de anticipo)" if (dicom_pendiente or es_cliente_nuevo) else "30 días"
@@ -1337,10 +1450,11 @@ class CreditRiskEngine:
             resultado_base = "APROBADO_CON_CONDICIONES"
             evaluacion_referencial = "PERFIL TRIBUTARIO MODERADO (Línea Condicionada)"
             clasificacion_riesgo = "PERFIL TRIBUTARIO MODERADO"
-            pct_apertura = 0.35
+            pct_apertura = 0.40
+            factor_score_paso_c = 0.80
             linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            linea_maxima = _floor_m100(linea_maxima)
-            linea_inicial = _floor_m100(linea_maxima * pct_apertura)
+            linea_maxima = _floor_tiered(linea_maxima * factor_score_paso_c)
+            linea_inicial = _floor_tiered(linea_maxima * pct_apertura)
             cupo_aprobado = linea_inicial
             plazo_dias = 30
             plazo_inicial = "15 días (o 30 días con 50% de anticipo)"
@@ -1360,10 +1474,11 @@ class CreditRiskEngine:
             resultado_base = "APROBADO_CON_CONDICIONES"
             evaluacion_referencial = "PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva)"
             clasificacion_riesgo = "PERFIL TRIBUTARIO ACOTADO"
-            pct_apertura = 0.25
+            pct_apertura = 0.30
+            factor_score_paso_c = 0.60
             linea_maxima = min(cupo_solicitado, cupo_maximo) if cupo_solicitado and cupo_solicitado > 0 else cupo_maximo
-            linea_maxima = _floor_m100(linea_maxima)
-            linea_inicial = _floor_m100(linea_maxima * pct_apertura)
+            linea_maxima = _floor_tiered(linea_maxima * factor_score_paso_c)
+            linea_inicial = _floor_tiered(linea_maxima * pct_apertura)
             cupo_aprobado = linea_inicial
             plazo_dias = 30
             plazo_inicial = "15 días (o 30 días con 50% de anticipo)"
@@ -1377,11 +1492,33 @@ class CreditRiskEngine:
                 "o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho."
                 + (" Solicitar Balance de 8 Columnas reciente por condición suspensiva de compresión de RLI." if rli_comprimida else "")
             )
-            protocolo = (
-                "Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) "
-                "o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho."
-                + (" Solicitar Balance de 8 Columnas reciente por condición suspensiva de compresión de RLI." if rli_comprimida else "")
+
+        if ausencia_f22 and linea_inicial > 0:
+            condicion_f22 = "Condición suspensiva: Acreditar última declaración F22 con RLI > 0 para liberar línea superior a M$ 5.000."
+            protocolo += f" {condicion_f22}"
+            resguardo += f" [{condicion_f22}]"
+            condicion_escalamiento = f"{condicion_f22} {condicion_escalamiento}"
+
+        tramo_str = (
+            ">=85"
+            if (score_compuesto and score_compuesto >= 85)
+            else (
+                "75-84"
+                if (score_compuesto and score_compuesto >= 75)
+                else (
+                    "65-74"
+                    if (score_compuesto and score_compuesto >= 65)
+                    else "<65"
+                )
             )
+        )
+        pct_ap_int = int(round(pct_apertura * 100))
+        glosa_apertura = f"{pct_ap_int}% de Apertura para Score {tramo_str} (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)"
+        memoria["pct_apertura"] = pct_ap_int
+        memoria["tramo_score"] = tramo_str
+        memoria["glosa_apertura"] = glosa_apertura
+        memoria["linea_maxima_tecnica"] = linea_maxima
+        memoria["linea_inicial_recomendada"] = linea_inicial
 
         caminos: list[CaminoMitigacion] = []
         alto_facturado = (hechos.composicion_ventas.pct_facturado or 0) > 0.6

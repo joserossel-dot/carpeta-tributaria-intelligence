@@ -110,7 +110,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.6)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.7)",
                 subtitle_style,
             )
         )
@@ -120,6 +120,7 @@ class PDFReport:
         c = getattr(tax_folder, "contributor", None)
         kpis = getattr(tax_folder, "kpis", None)
         cr = getattr(tax_folder, "credit_risk", None)
+        forma_act = getattr(tax_folder.corporate, "forma_actuacion_representantes", None) if getattr(tax_folder, "corporate", None) else None
 
         rut = getattr(c, "rut", None) or "No informado"
         razon_social = getattr(c, "razon_social", None) or "No informada"
@@ -168,7 +169,7 @@ class PDFReport:
             ],
             [
                 Paragraph(f"<b>Boletín Comercial (Dicom):</b> {boletin_com}", body_style),
-                Paragraph(f"<b>Historial con Proveedor:</b> {hist_pago}", body_style),
+                Paragraph(f"<b>Historial con Proveedor:</b> {hist_pago} | <b>Actuación SII:</b> {forma_act or 'No informada'}", body_style),
             ],
         ]
         contrib_table = Table(contrib_data, colWidths=[92.5 * mm, 92.5 * mm])
@@ -231,16 +232,11 @@ class PDFReport:
         act_txt = f"Actuación SII: {forma_act} — " if forma_act else ""
 
         if linea_ini > 0:
-            if n_reps > 1:
-                pod_str = f"Pagaré notarial suscrito según poderes vigentes ({act_txt}{n_reps} representantes en detalle inferior)"
-            elif n_reps == 1:
-                pod_str = f"Pagaré notarial suscrito según poderes vigentes ({act_txt}{reps_list[0].nombre})"
-            else:
-                pod_str = "Pagaré notarial suscrito según poderes vigentes"
-
             resguardo_box_txt = (
-                f"<b>Plazo Inicial:</b> {plazo_ini}. <b>Condición previa:</b> Dicom/Equifax sin morosidad vigente, "
-                f"{pod_str} o Seguro de Crédito; o esquema mixto (50% anticipo + 50% a 30 días)."
+                f"<b>Plazo Inicial:</b> {plazo_ini}. Línea no liberable sin: "
+                "(1) Dicom/Equifax sin morosidad vigente, y "
+                "(2) Pagaré notarial suscrito por apoderado(s) según estudio de poderes societarios vigentes o Seguro de Crédito; "
+                "o esquema mixto (50% anticipo + 50% a 30 días)."
             )
         else:
             resguardo_box_txt = f"<b>Plazo Inicial:</b> {plazo_ini}.<br/>{resguardo}"
@@ -438,7 +434,11 @@ class PDFReport:
             ],
             [
                 Paragraph(f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)", table_cell_bold),
-                Paragraph(f"{pct_ap}% de la Línea Máxima Técnica según Puntaje SII", table_cell),
+                Paragraph(
+                    mem.get("glosa_apertura")
+                    or f"{pct_ap}% de Apertura para Score {'>=85' if score_val >= 85 else ('75-84' if score_val >= 75 else ('65-74' if score_val >= 65 else '<65'))} (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+                    table_cell,
+                ),
                 Paragraph(format_mclp(cupo_ini), table_cell_bold),
             ],
         ]
@@ -613,8 +613,8 @@ class PDFReport:
             f22_header = [
                 Paragraph("<b>Año Tributario</b>", table_cell_header),
                 Paragraph("<b>Ingresos Giro Cód. 1657/628 (M$)</b>", table_cell_header),
-                Paragraph("<b>RLI Cód. 1109/1690 (M$)</b>", table_cell_header),
-                Paragraph("<b>Capital Propio CPT Cód. 645 (M$)</b>", table_cell_header),
+                Paragraph("<b>RLI Cód. 1694/1690 (M$)</b>", table_cell_header),
+                Paragraph("<b>Capital Propio CPT Cód. 1696/645 (M$)</b>", table_cell_header),
             ]
             f22_rows = [f22_header]
             for f in sorted_f22[:3]:
@@ -660,7 +660,7 @@ class PDFReport:
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
             "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor. "
-            "[Motor Determinista Cavilaria v2.6 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; fallback 8% Spread), D=12% CPT, Apertura=50%/35%/25%]</i>"
+            "[Motor Determinista Cavilaria v2.7 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=12% CPT, Apertura=50%/40%/30%/0%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 

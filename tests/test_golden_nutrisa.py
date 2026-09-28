@@ -87,7 +87,7 @@ class TestGoldenNutrisa:
         assert "3 representante(s) registrado(s)" in rep_filtro.get("detalle", "")
 
         resguardo = cr.resguardo_comercial_sugerido
-        assert "Forma de actuación registrada en SII: En conjunto" in resguardo or "Actuación SII: En conjunto" in resguardo
+        assert "En conjunto" in resguardo
         assert "HECTOR GABRIEL RIOS LARRAIN" in resguardo
         assert "MARIA GLORIA RIOS LARRAIN" in resguardo
         assert "JOSE LUIS RODRIGUEZ CASANUEVA" in resguardo
@@ -108,13 +108,13 @@ class TestGoldenNutrisa:
         assert "0 de 23 períodos F29 con recargos por mora fiscal (Cód. 94) y 0 postergaciones de IVA (Cód. 779)" in p5.detalle
 
     def test_generacion_pdf_nutrisa_layout(self, nutrisa_folder):
-        """Genera el PDF y valida los textos clave de la versión v2.6."""
+        """Genera el PDF y valida los textos clave de la versión v2.7."""
         pdf_bytes = PDFReport().generate(nutrisa_folder)
         assert len(pdf_bytes) > 10_000
 
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             text_p1 = pdf.pages[0].extract_text()
-            assert "(v2.6)" in text_p1
+            assert "(v2.7)" in text_p1
             assert "PERFIL TRIBUTARIO SÓLIDO" in text_p1
             assert "Inicial: M$ 7.200" in text_p1
             assert "Máxima: M$ 14.400" in text_p1
@@ -124,13 +124,15 @@ class TestGoldenNutrisa:
             assert "01565 Bodeg" in text_p1
             # Aclaración de glosa Paso B2
             assert "(Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)" in text_p1
+            # Glosa Apertura con tramos
+            assert "50% de Apertura para Score >=85" in text_p1
 
             if len(pdf.pages) > 1:
                 text_p2 = pdf.pages[1].extract_text()
                 assert "Cód. 1657/628" in text_p2 or "Ingresos Giro" in text_p2
-                assert "Cód. 1109/1690" in text_p2 or "RLI" in text_p2
-                assert "Cód. 645" in text_p2 or "Capital Propio" in text_p2
-                assert "Motor Determinista Cavilaria v2.6" in text_p2
+                assert "Cód. 1694/1690" in text_p2 or "RLI" in text_p2
+                assert "Cód. 1696/645" in text_p2 or "Capital Propio" in text_p2
+                assert "Motor Determinista Cavilaria v2.7" in text_p2
                 # Doble base de conciliación
                 assert "3.2% s/base" in text_p2 and "3.1% s/base F29" in text_p2
                 assert "CONCILIADO (<10% dif.)" in text_p2

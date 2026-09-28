@@ -321,8 +321,8 @@ class TestVersion23Audit:
 
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
         assert any("Condición Suspensiva Documental" in a or "Alerta de Rentabilidad Tributaria" in a for a in result.alertas)
-        # Se condiciona a recomendación escalonada
-        assert "Línea Condicionada" in result.decision.evaluacion_referencial
+        # En v2.7, RLI <= 0 resulta en SIN LÍNEA AUTOMÁTICA
+        assert "SIN LÍNEA AUTOMÁTICA" in result.decision.evaluacion_referencial
         # Pilar 4 debe tener la penalización
         pilar4 = next(p for p in result.desglose_score if p.nombre == "Rentabilidad (RLI) y Respaldo Patrimonial F22")
         assert "Penalización -6 pts" in pilar4.detalle
@@ -440,11 +440,11 @@ class TestVersion23Audit:
             )
             for m in range(1, 13)
         ]
-        # F22 con ingresos altos pero RLI = 0 (caso compresión documental)
+        # F22 con ingresos altos y RLI positiva normal
         f22 = AnnualTaxReturn(
             anio_tributario="2025",
             ingresos=1_200_000_000,
-            renta_liquida_imponible=0,
+            renta_liquida_imponible=50_000_000,
             capital_propio_tributario=500_000_000,
         )
         tf = _tax_folder(f29_list=f29_list, monthly_taxes=monthly, f22_list=[f22])

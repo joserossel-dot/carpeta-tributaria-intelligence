@@ -88,7 +88,7 @@ class ExcelReport:
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.6)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.7)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -242,7 +242,12 @@ class ExcelReport:
             ("Paso C: Factor de Ajuste Conductual", f"{phi_pct}%", "Ajuste por mora F29, postergación IVA y estabilidad YoY"),
             (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", glosa_d),
             ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) x Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)"),
-            (f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)", round(cupo_ini / 1000.0) if cupo_ini else 0, f"{pct_ap}% de la Línea Máxima Técnica según Puntaje SII"),
+            (
+                f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)",
+                round(cupo_ini / 1000.0) if cupo_ini else 0,
+                mem.get("glosa_apertura")
+                or f"{pct_ap}% de Apertura para Score {'>=85' if score_val >= 85 else ('75-84' if score_val >= 75 else ('65-74' if score_val >= 65 else '<65'))} (Tramos: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+            ),
         ]
 
         for s, v, f in calc_steps:

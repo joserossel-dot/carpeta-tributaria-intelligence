@@ -30,10 +30,14 @@ class F22Parser:
     """
 
     # Códigos para régimen 14A, ProPyme (14 D3, 14 D8) y formularios históricos
-    _CPT_NEGATIVO_CODES = ["1546", "646"]
-    _CPT_POSITIVO_CODES = ["844", "645", "1545", "1703"]
+    # Jerarquía explícita v2.7:
+    # CPT Negativo: 646 (Anverso actual), 1697 (Recuadro 14), 845 (histórico), 1546
+    _CPT_NEGATIVO_CODES = ["646", "1697", "845", "1546"]
+    # CPT Positivo: 1696 (Recuadro 14), 645 (Anverso actual), 844 (histórico 2017-2019), 1545, 1703
+    _CPT_POSITIVO_CODES = ["1696", "645", "844", "1545", "1703"]
     _INGRESOS_CODES = ["1657", "1400", "1410", "628"]
-    _RLI_CODES = ["1694", "1109", "1440", "1414", "1438", "643", "225"]
+    # RLI: 1694/1690 (Recuadro 12 RLI 14A), 1440/1580 (ProPyme 14D3/14D8), 1414, 1438, 643, 225, fallback 1109
+    _RLI_CODES = ["1694", "1690", "1440", "1580", "1414", "1438", "643", "225", "1109"]
     _PERDIDAS_CODES = ["1695", "1450", "1706", "1143", "229"]
     _BASE_IMPONIBLE_CODES = ["1109", "1440", "1414", "1438"]
     _PPM_CODES = ["36", "849", "1904"]
