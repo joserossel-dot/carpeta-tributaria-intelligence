@@ -77,11 +77,15 @@ if not st.session_state.get("authenticated", False):
             st.session_state["access_tier"] = "ADMIN"
             st.session_state["access_code"] = ADMIN_CODE
             st.session_state["free_credits_remaining"] = 999999
+            st.session_state["evaluated_fps"] = set()
+            st.session_state["evaluated_fingerprints"] = []
         elif param_code == CLIENT_CODE:
             st.session_state["authenticated"] = True
             st.session_state["access_tier"] = "CLIENT"
             st.session_state["access_code"] = CLIENT_CODE
             st.session_state["free_credits_remaining"] = 999999
+            st.session_state["evaluated_fps"] = set()
+            st.session_state["evaluated_fingerprints"] = []
         elif param_code.startswith("FREE-") or param_code.startswith("FREE_"):
             lead_id_or_hash = param_code.split("-", 1)[-1] if "-" in param_code else param_code.split("_", 1)[-1]
             lm = LeadManager()
@@ -93,6 +97,7 @@ if not st.session_state.get("authenticated", False):
                 st.session_state["access_tier"] = "FREE_TRIAL"
                 st.session_state["access_code"] = param_code
                 st.session_state["free_credits_remaining"] = credits_left
+                st.session_state["evaluated_fps"] = set()
                 st.session_state["evaluated_fingerprints"] = []
                 st.session_state["user_info"] = {
                     "nombre": lead_found.get("nombre", ""),
@@ -104,6 +109,7 @@ if not st.session_state.get("authenticated", False):
                 st.session_state["access_tier"] = "FREE_TRIAL"
                 st.session_state["access_code"] = param_code
                 st.session_state["free_credits_remaining"] = 2
+                st.session_state["evaluated_fps"] = set()
                 st.session_state["evaluated_fingerprints"] = []
 
 if not st.session_state.get("authenticated", False):
@@ -181,6 +187,7 @@ if not st.session_state.get("authenticated", False):
                     st.session_state["access_tier"] = "FREE_TRIAL"
                     st.session_state["access_code"] = free_token
                     st.session_state["free_credits_remaining"] = 2
+                    st.session_state["evaluated_fps"] = set()
                     st.session_state["evaluated_fingerprints"] = []
                     st.session_state["user_info"] = {
                         "nombre": nombre.strip(),
@@ -211,6 +218,8 @@ if not st.session_state.get("authenticated", False):
                     st.session_state["access_tier"] = "ADMIN"
                     st.session_state["access_code"] = ADMIN_CODE
                     st.session_state["free_credits_remaining"] = 999999
+                    st.session_state["evaluated_fps"] = set()
+                    st.session_state["evaluated_fingerprints"] = []
                     st.query_params["access_code"] = ADMIN_CODE
                     st.rerun()
                 elif clean_code == CLIENT_CODE:
@@ -218,6 +227,8 @@ if not st.session_state.get("authenticated", False):
                     st.session_state["access_tier"] = "CLIENT"
                     st.session_state["access_code"] = CLIENT_CODE
                     st.session_state["free_credits_remaining"] = 999999
+                    st.session_state["evaluated_fps"] = set()
+                    st.session_state["evaluated_fingerprints"] = []
                     st.query_params["access_code"] = CLIENT_CODE
                     st.rerun()
                 else:
@@ -351,7 +362,13 @@ with col_btn2:
     if st.button("🗑️ Limpiar sesión actual"):
         tier = st.session_state.get("access_tier")
         credits = st.session_state.get("free_credits_remaining")
-        fps = st.session_state.get("evaluated_fingerprints")
+        raw_fps = st.session_state.get("evaluated_fps")
+        if raw_fps is None:
+            raw_fps = st.session_state.get("evaluated_fingerprints")
+        if not isinstance(raw_fps, (set, list, tuple)):
+            fps_set = set()
+        else:
+            fps_set = set(str(x) for x in raw_fps if x is not None)
         uinfo = st.session_state.get("user_info")
         code = st.session_state.get("access_code")
 
@@ -360,7 +377,8 @@ with col_btn2:
         st.session_state["authenticated"] = True
         st.session_state["access_tier"] = tier
         st.session_state["free_credits_remaining"] = credits
-        st.session_state["evaluated_fingerprints"] = fps
+        st.session_state["evaluated_fps"] = fps_set
+        st.session_state["evaluated_fingerprints"] = list(fps_set)
         st.session_state["user_info"] = uinfo
         if code:
             st.session_state["access_code"] = code
@@ -373,7 +391,16 @@ if uploaded_file is not None and analizar:
     file_bytes = uploaded_file.getvalue()
     # Huella criptográfica rápida del archivo para no descontar créditos si solo cambia el cupo solicitado
     file_fp = hashlib.sha256(file_bytes[:4096] + str(len(file_bytes)).encode()).hexdigest()[:16]
-    evaluated_fps = st.session_state.get("evaluated_fingerprints", [])
+    raw_fps = st.session_state.get("evaluated_fps")
+    if raw_fps is None:
+        raw_fps = st.session_state.get("evaluated_fingerprints")
+    if not isinstance(raw_fps, (set, list, tuple)):
+        evaluated_fps = set()
+    else:
+        evaluated_fps = set(str(x) for x in raw_fps if x is not None)
+    st.session_state["evaluated_fps"] = evaluated_fps
+    st.session_state["evaluated_fingerprints"] = list(evaluated_fps)
+    file_fp = str(file_fp) if file_fp is not None else ""
     is_distinct_file = file_fp not in evaluated_fps
 
     if access_tier == "FREE_TRIAL" and is_distinct_file and free_credits <= 0:
@@ -399,7 +426,9 @@ if uploaded_file is not None and analizar:
 
             # Descontar crédito únicamente si es una carpeta distinta
             if access_tier == "FREE_TRIAL" and is_distinct_file:
-                st.session_state.setdefault("evaluated_fingerprints", []).append(file_fp)
+                evaluated_fps.add(file_fp)
+                st.session_state["evaluated_fps"] = evaluated_fps
+                st.session_state["evaluated_fingerprints"] = list(evaluated_fps)
                 st.session_state["free_credits_remaining"] = max(0, free_credits - 1)
 
                 acc_code = st.session_state.get("access_code", "")
