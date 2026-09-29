@@ -55,6 +55,9 @@ class TestHyperbaric14DIntegration:
         assert mem["rli_declarada_le_zero"] is True
         assert "Cód. 1450" in mem["glosa_b2"]
         assert mem["capital_propio_tributario"] == -4_628_691
+        assert mem["tope_patrimonial_3pct_cpt"] == 0
+        assert "Bloqueo por CPTS Negativo en F22 (Cód. 1546: -M$ 4.629 -> Tope Patrimonial M$ 0)" in mem["glosa_paso_d"]
+        assert mem["techo_operativo_8pct"] == 585_831
 
     def test_pdf_layout_14d(self, hyperbaric_folder):
         """Verifica que el PDF imprima encabezados y códigos dinámicos del régimen 14D."""
@@ -63,14 +66,27 @@ class TestHyperbaric14DIntegration:
 
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             p1 = pdf.pages[0].extract_text()
-            assert "REGIMEN PRO PYME GENERAL (14D)" in p1
-            assert "SIN LÍNEA AUTOMÁTICA" in p1
-            assert "Cód. 1450" in p1
+            p1_clean = " ".join(p1.split())
+            assert "REGIMEN PRO PYME GENERAL (14D)" in p1_clean
+            assert "SIN LÍNEA AUTOMÁTICA" in p1_clean
+            assert "Cód. 1450" in p1_clean
+            assert "CV: 35.0%" in p1_clean
+            assert "Empresa de servicios exentos" in p1_clean
+            assert "Ratio Ventas Netas /" in p1_clean
+            assert "Compras Op. 12M: 24.34x" in p1_clean
+            assert "Paso B1: Techo por Volumen de Compras (8% C_base)" in p1_clean
+            assert "M$ 586" in p1_clean
+            assert "Bloqueo por CPTS Negativo en F22 (Cód. 1546: -M$ 4.629" in p1_clean
+            assert "Patrimonial M$ 0)" in p1_clean
+            assert "s/base F22" in p1_clean
 
             p2 = pdf.pages[1].extract_text()
-            assert "Ingresos Giro Cód. 1400 (M$)" in p2
-            assert "Base Imponible / Pérdida Cód. 1440/1450 (M$)" in p2
-            assert "Capital Propio CPTS Cód. 645/1545" in p2
-            assert "M$ 40.492" in p2
-            assert "-M$ 4.629 (Cód. 1450)" in p2
-            assert "-M$ 4.629 (Cód. 1546)" in p2
+            p2_clean = " ".join(p2.split())
+            assert "Ingresos Giro Cód. 1400 (M$)" in p2_clean
+            assert "Base Imponible / Pérdida Cód. 1440/1450 (M$)" in p2_clean
+            assert "Capital Propio CPTS Cód. 1545/1546" in p2_clean
+            assert "M$ 40.492" in p2_clean
+            assert "-M$ 4.629 (Cód. 1450)" in p2_clean
+            assert "-M$ 4.629 (Cód. 1546)" in p2_clean
+            assert "Diferencia: 53.7% s/base F22 — DESVIACIÓN RELEVANTE (>15% dif.)" in p2_clean
+            assert "D=3% CPT (CPT<=0 -> M$ 0)" in p2_clean

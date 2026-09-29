@@ -227,12 +227,17 @@ class ExcelReport:
             metodologia_b2 = f"8% Spread F29 [{format_mclp(spread_8)}] (penalizado por RLI <= 0 o sin F22) (Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)"
 
         min_b1_b2 = min(techo_op, freno_flujo)
-        if tope_cpt is not None:
-            glosa_d = "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0"
-        elif cpt_val is not None and cpt_val <= 0:
-            glosa_d = "CPT <= 0 ($0 en línea limpia por quiebra técnica)"
+        if cpt_val is not None and cpt_val <= 0:
+            cpt_code_d = mem.get("cpt_source_code") or "645"
+            cpt_tipo_d = "CPTS" if cpt_code_d in ("1545", "1546", "1584", "1585") else "CPT"
+            glosa_d = mem.get("glosa_paso_d") or f"Bloqueo por {cpt_tipo_d} Negativo en F22 (Cód. {cpt_code_d}: {format_mclp(cpt_val)} -> Tope Patrimonial M$ 0)"
+            monto_d_excel = 0
+        elif tope_cpt is not None:
+            glosa_d = mem.get("glosa_paso_d") or "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0"
+            monto_d_excel = round(tope_cpt / 1000.0)
         else:
             glosa_d = "Sin F22 vigente"
+            monto_d_excel = "Sin tope"
 
         phi_val_excel = f"{mem.get('factor_ajuste_conductual_pct', phi_pct)}%"
         glosa_c_excel = mem.get("glosa_paso_c") or "Ajuste por mora F29, postergación IVA y estabilidad YoY"
@@ -244,7 +249,7 @@ class ExcelReport:
             ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (parámetro prudencial de exposición por proveedor: 8% C_base)"),
             ("Paso B2: Freno por Absorción Operacional", round(freno_flujo / 1000.0) if freno_flujo else 0, metodologia_b2),
             ("Paso C: Factor de Ajuste Conductual", phi_val_excel, glosa_c_excel),
-            (f"Paso D: Referencia Patrimonial (3% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", glosa_d),
+            (f"Paso D: Referencia Patrimonial (3% CPT = {cpt_str})", monto_d_excel, glosa_d),
             ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) x Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)"),
             (
                 f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)",

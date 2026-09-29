@@ -873,21 +873,28 @@ class CreditRiskEngine:
         phi = max(0.0, phi)
         cupo_preliminar = techo_con_flujo * phi
 
-        # Paso D: Freno Patrimonial por CPT (3% de concentración por proveedor, $0 si CPT <= 0)
         cpt = None
+        cpt_code = None
         f22_validos = [f for f in tax_folder.f22 if f.capital_propio_tributario is not None]
         if f22_validos:
             cpt = f22_validos[0].capital_propio_tributario
+            cpt_code = getattr(f22_validos[0], "cpt_source_code", None)
+        if not cpt_code and tax_folder.f22:
+            cpt_code = getattr(tax_folder.f22[0], "cpt_source_code", None)
+        if not cpt_code:
+            cpt_code = "645"
 
         tope_cpt = None
         aval_obligatorio = False
         cupo_excepcional = None
+        cpt_tipo = "CPTS" if cpt_code in ("1545", "1546", "1584", "1585") else "CPT"
 
         if cpt is not None:
             if cpt > 0:
                 pct_cpt = 0.03
                 tope_cpt = float(cpt) * pct_cpt
                 cupo_ajustado = min(cupo_preliminar, tope_cpt)
+                glosa_paso_d = "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0"
                 if cupo_preliminar > tope_cpt:
                     castigos.append(
                         f"Tope Patrimonial CPT ({int(pct_cpt * 100)}% de CPT: ${tope_cpt:,.0f}): "
@@ -895,8 +902,10 @@ class CreditRiskEngine:
                     )
             else:
                 # CPT Negativo / Quiebra Técnica: Cupo directo en línea limpia es $0
+                tope_cpt = 0.0
                 cupo_ajustado = 0.0
                 aval_obligatorio = True
+                glosa_paso_d = f"Bloqueo por {cpt_tipo} Negativo en F22 (Cód. {cpt_code}: {format_mclp(cpt)} -> Tope Patrimonial M$ 0)"
                 cupo_excepcional = int(round(min(c_base * 0.03, 5_000_000) / 100_000.0) * 100_000)
                 castigos.append(
                     f"Capital Propio Tributario Negativo (${cpt:,.0f} CLP) — Quiebra Técnica: "
@@ -905,6 +914,7 @@ class CreditRiskEngine:
                     f"contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad"
                 )
         else:
+            glosa_paso_d = "Sin F22 vigente"
             cupo_ajustado = cupo_preliminar
 
         # Redondeo conservador hacia abajo al centenar de M$ ($100.000 CLP)
@@ -928,6 +938,8 @@ class CreditRiskEngine:
             "freno_flujo_operacional_25pct": int(round(freno_flujo)),
             "freno_absorcion_operacional": int(round(freno_flujo)),
             "glosa_b2": glosa_b2,
+            "glosa_paso_d": glosa_paso_d,
+            "cpt_source_code": cpt_code,
             "margen_operacional_depurado_mensual": int(round(spread_operacional_f29)),
             "factor_riesgo_phi": round(phi, 2),
             "factor_ajuste_conductual_pct": int(round(phi * 100)),
@@ -1272,24 +1284,38 @@ class CreditRiskEngine:
         pct_exe = (ventas_exe / total_ventas_12m) if total_ventas_12m > 0 else 0.0
         es_exportador_o_exento = (pct_exp_exe > 0.20 or pct_exp > 0.20 or pct_exe > 0.20)
 
+        # Totales acumulados 12M de la tabla F29 para reproducibilidad exacta con calculadora:
+        tot_deb_12m = sum(float(m.debito_fiscal or 0) for m in last_12_mt)
+        tot_cred_12m = sum(float(m.credito_fiscal or 0) for m in last_12_mt)
+        tot_v_12m = sum(float(m.total_ventas or 0) for m in last_12_mt)
+        tot_cop_12m = sum(float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) for m in last_12_mt)
+
         if es_exportador_o_exento:
-            ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
-            if ratio_op >= 1.15:
+            # Para empresas exportadoras o de servicios exentos:
+            # Si registra compras operacionales en la tabla F29, el ratio se calcula
+            # dividiendo los acumulados 12M de la tabla F29 (Ventas Netas 12M / Compras Op. 12M):
+            if tot_cop_12m > 0:
+                ratio_op = tot_v_12m / tot_cop_12m
+            else:
+                ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
+
+            es_exp = pct_exp > 0.20
+            tipo_empresa = "Empresa exportadora" if es_exp else "Empresa de servicios exentos"
+            recup_iva = " y recuperación legítima de IVA" if es_exp else ""
+
+            if ratio_op >= 1.40:
                 p3 = 20
-                det3 = f"Empresa exportadora: margen operacional holgado (Ratio Débito / Crédito Giro 12M: {ratio_op:.2f}x) y recuperación legítima de IVA"
+                det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
+            elif ratio_op >= 1.15:
+                p3 = 17
+                det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
             elif ratio_op >= 1.00:
-                p3 = 15
-                det3 = f"Operación exportadora/exenta con margen suficiente (Ratio Débito / Crédito Giro 12M: {ratio_op:.2f}x)"
+                p3 = 14
+                det3 = f"{tipo_empresa} con margen suficiente (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
             else:
                 p3 = 8
-                det3 = f"Operación exportadora/exenta con compras superiores a ventas (Ratio Débito / Crédito Giro 12M: {ratio_op:.2f}x)"
+                det3 = f"{tipo_empresa} con compras superiores a ventas (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
         else:
-            # Reproducibilidad exacta con calculadora sobre acumulados 12M de la tabla F29:
-            tot_deb_12m = sum(float(m.debito_fiscal or 0) for m in last_12_mt)
-            tot_cred_12m = sum(float(m.credito_fiscal or 0) for m in last_12_mt)
-            tot_v_12m = sum(float(m.total_ventas or 0) for m in last_12_mt)
-            tot_cop_12m = sum(float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) for m in last_12_mt)
-
             tiene_remanente = (
                 (indicadores.mora_efectiva and indicadores.mora_efectiva.meses_con_remanente_credito > 0)
                 or any(getattr(m, "remanente_anterior", None) and getattr(m, "remanente_anterior", 0) > 0 for m in tax_folder.monthly_taxes)
@@ -1473,13 +1499,13 @@ class CreditRiskEngine:
             dif_pct = conciliacion.get("diferencia_pct", 0.0)
             if dif_pct <= 10.0:
                 p_conc = 8
-                det_conc = f"conciliación F29/F22 consistente ({dif_pct}% dif.)"
+                det_conc = f"conciliación F29/F22 consistente ({dif_pct}% s/base F22)"
             elif dif_pct <= 15.0:
                 p_conc = 5
-                det_conc = f"conciliación F29/F22 con tolerancia ({dif_pct}% dif.)"
+                det_conc = f"conciliación F29/F22 con tolerancia ({dif_pct}% s/base F22)"
             else:
                 p_conc = 2
-                det_conc = f"desviación F29 vs F22 ({dif_pct}% dif.)"
+                det_conc = f"desviación F29 vs F22 ({dif_pct}% s/base F22)"
         else:
             p_conc = 5
             det_conc = "sin cruce anual F29/F22"

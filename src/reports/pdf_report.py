@@ -390,12 +390,17 @@ class PDFReport:
             metodologia_b2 = f"8% Spread F29 [{format_mclp(spread_8)}] (penalizado por RLI <= 0 o sin F22) (Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)"
 
         min_b1_b2 = min(techo_op, freno_flujo)
-        if tope_cpt is not None:
-            glosa_d = "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0"
-        elif cpt_val is not None and cpt_val <= 0:
-            glosa_d = "CPT <= 0 ($0 en línea limpia por quiebra técnica)"
+        if cpt_val is not None and cpt_val <= 0:
+            cpt_code_d = mem.get("cpt_source_code") or (tax_folder.f22[0].cpt_source_code if tax_folder.f22 and getattr(tax_folder.f22[0], "cpt_source_code", None) else "645")
+            cpt_tipo_d = "CPTS" if cpt_code_d in ("1545", "1546", "1584", "1585") else "CPT"
+            glosa_d = mem.get("glosa_paso_d") or f"Bloqueo por {cpt_tipo_d} Negativo en F22 (Cód. {cpt_code_d}: {format_mclp(cpt_val)} -> Tope Patrimonial M$ 0)"
+            monto_d = "M$ 0"
+        elif tope_cpt is not None:
+            glosa_d = mem.get("glosa_paso_d") or "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0"
+            monto_d = format_mclp(tope_cpt)
         else:
             glosa_d = "Sin F22 vigente"
+            monto_d = "Sin tope"
 
         mem_rows = [
             [
@@ -440,7 +445,7 @@ class PDFReport:
             [
                 Paragraph(f"Paso D: Referencia Patrimonial (3% CPT = {cpt_str})", table_cell_bold),
                 Paragraph(glosa_d, table_cell),
-                Paragraph(format_mclp(tope_cpt) if tope_cpt is not None else "Sin tope", table_cell_bold),
+                Paragraph(monto_d, table_cell_bold),
             ],
             [
                 Paragraph("(=) Línea Máxima Condicionada (Techo Técnico)", table_cell_bold),
@@ -669,7 +674,7 @@ class PDFReport:
             elif is_14d3:
                 col2_head = "Ingresos Giro Cód. 1400 (M$)"
                 col3_head = "Base Imponible / Pérdida Cód. 1440/1450 (M$)"
-                col4_head = "Capital Propio CPTS Cód. 645/1545 (M$)"
+                col4_head = "Capital Propio CPTS Cód. 1545/1546 (M$)"
             else:
                 col2_head = "Ingresos Giro Cód. 1657 (M$)"
                 col3_head = "RLI / Pérdida Cód. 1694/1695 (M$)"
@@ -760,7 +765,7 @@ class PDFReport:
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
             "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor. "
-            "[Motor Determinista Cavilaria v2.9.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT, Apertura=50%/40%/30%/0%]</i>"
+            "[Motor Determinista Cavilaria v2.9.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT (CPT<=0 -> M$ 0), Apertura=50%/40%/30%/0%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 
