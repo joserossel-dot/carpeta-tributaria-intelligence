@@ -415,7 +415,7 @@ class PDFReport:
             ],
             [
                 Paragraph("(-) Paso A: Compras Op. Mensuales Promedio (C_base)", table_cell_bold),
-                Paragraph("Base mensual de compras operacionales 12M (o costo proxy)", table_cell),
+                Paragraph(mem.get("glosa_paso_a") or "Base mensual de compras operacionales 12M (o costo proxy)", table_cell),
                 Paragraph(format_mclp(base_c), table_cell_bold),
             ],
             [
@@ -612,7 +612,7 @@ class PDFReport:
 
             n_12 = Decimal(str(len(last_12_mt))) if last_12_mt else Decimal("1")
             prom_v_row = tot_v / n_12
-            prom_cop_row = base_c  # Coincide matemáticamente con Paso A C_base
+            prom_cop_row = tot_cop / n_12  # Siempre Total Acumulado (12M) / 12
             prom_deb_row = tot_deb / n_12
             prom_cred_row = tot_cred / n_12
             prom_iva_row = tot_iva / n_12

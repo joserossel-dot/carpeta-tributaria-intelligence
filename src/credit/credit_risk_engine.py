@@ -137,6 +137,10 @@ class CreditRiskEngine:
         if alerta_rli:
             alertas.insert(0, alerta_rli)
             banderas_rojas.insert(0, alerta_rli)
+        if conciliacion and conciliacion.get("no_conciliable"):
+            alerta_f22_faltante = "Declaraciones Anuales F22 AT 2025 y AT 2026 no incluidas en carpeta tributaria (último F22 disponible: AT 2024)"
+            alertas.append(alerta_f22_faltante)
+            banderas_rojas.append(alerta_f22_faltante)
         if vigencia.get("alerta"):
             alertas.append(vigencia["alerta"])
 
@@ -353,11 +357,13 @@ class CreditRiskEngine:
                 return True, msg
 
             extra_res_fin = f" (Nota: F22 AT {ultimo.anio_tributario} registra Utilidad Contable s/Balance (Cód. 1672) positiva por {format_mclp(res_fin)})." if (res_fin and res_fin > 0) else ""
+            margen_rli_pct = round((float(rli) / float(ingresos)) * 100.0, 1) if (ingresos and ingresos > 0 and rli is not None) else 0.0
+            causa_rli_txt = "aclarar la causa de la pérdida tributaria" if (rli is not None and rli < 0) else "aclarar la causa de la RLI nula"
             msg = (
                 f"Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: "
                 f"Compresión severa de RLI en último F22 (AT {ultimo.anio_tributario}). "
-                f"Ingresos: {ing_m} vs RLI: {rli_m} (Margen RLI 0%). "
-                "Se exige Balance de 8 Columnas reciente para aclarar la causa de la RLI nula "
+                f"Ingresos: {ing_m} vs RLI: {rli_m} (Margen RLI {margen_rli_pct:.1f}%). "
+                f"Se exige Balance de 8 Columnas reciente para {causa_rli_txt} "
                 "(depreciación, pérdidas de arrastre, corrección monetaria o bajo margen) "
                 f"antes de autorizar línea en evaluación manual{extra_res_fin}"
             )
@@ -440,7 +446,7 @@ class CreditRiskEngine:
             },
             {
                 "parametro": "Coherencia F29 vs F22",
-                "estado": "CUMPLE" if (not conciliacion or conciliacion.get("diferencia_pct", 0) <= 15.0) else "OBSERVADO",
+                "estado": "CUMPLE" if (conciliacion and not conciliacion.get("no_conciliable") and conciliacion.get("diferencia_pct", 0) <= 15.0) else "OBSERVADO",
                 "detalle": conciliacion.get("estado", "Sin declaraciones F22 concurrentes") if conciliacion else "Sin declaraciones F22 concurrentes",
             },
         ]
@@ -515,6 +521,12 @@ class CreditRiskEngine:
         if not f22_con_ingresos:
             return None
 
+        # Años F29 y F22 disponibles
+        anios_f29 = [int(mt.periodo[:4]) for mt in tax_folder.monthly_taxes if mt.periodo and len(mt.periodo) >= 4 and mt.periodo[:4].isdigit()]
+        max_f29_year = max(anios_f29) if anios_f29 else None
+        anios_f22 = [int(f.anio_tributario) for f in tax_folder.f22 if f.anio_tributario and str(f.anio_tributario).isdigit()]
+        max_f22_year = max(anios_f22) if anios_f22 else None
+
         for f22_item in f22_con_ingresos:
             try:
                 at = int(f22_item.anio_tributario)
@@ -533,6 +545,29 @@ class CreditRiskEngine:
                 dif_monto = abs(int(ventas_f29) - ingresos_f22)
                 dif_pct = round(dif_monto / float(ingresos_f22) * 100.0, 1) if ingresos_f22 else 0.0
                 dif_pct_f29 = round(dif_monto / float(ventas_f29) * 100.0, 1) if (ventas_f29 and float(ventas_f29) > 0) else 0.0
+
+                # Si faltan los F22 recientes (AT 2025 / AT 2026) o el año comercial tiene < 12 meses de F29
+                faltan_f22_recientes = bool(max_f29_year and max_f29_year >= 2026 and max_f22_year and max_f22_year < 2025)
+                f29_parcial = len(meses_ac) < 12
+
+                if f29_parcial or faltan_f22_recientes:
+                    detalle = (
+                        f"NO CONCILIABLE — Carpeta sin F22 AT 2025 ni AT 2026 "
+                        f"(último F22 disponible: AT {at}; año {ac} con solo {len(meses_ac)} meses F29 en carpeta)"
+                    )
+                    return {
+                        "anio_tributario": str(at),
+                        "anio_comercial": str(ac),
+                        "meses_f29_contabilizados": len(meses_ac),
+                        "ventas_f29_anual": int(ventas_f29),
+                        "ingresos_f22": int(ingresos_f22),
+                        "diferencia_monto": int(dif_monto),
+                        "diferencia_pct": dif_pct,
+                        "diferencia_pct_f29": dif_pct_f29,
+                        "estado": "NO CONCILIABLE",
+                        "no_conciliable": True,
+                        "detalle": detalle,
+                    }
 
                 if dif_pct <= 10.0:
                     estado = "CONCILIADO (<10% dif.)"
@@ -558,6 +593,7 @@ class CreditRiskEngine:
                     "diferencia_pct": dif_pct,
                     "diferencia_pct_f29": dif_pct_f29,
                     "estado": estado,
+                    "no_conciliable": False,
                     "detalle": detalle,
                 }
         return None
@@ -680,11 +716,15 @@ class CreditRiskEngine:
                 c_base = float(ma.promedio_costo_operativo_proxy_12m)
             else:
                 c_base = max(0.30 * prom_ventas_12m, prom_compras_op_12m)
+            prom_cop_f29_m = format_mclp(prom_compras_op_12m)
+            glosa_paso_a = f"Costo proxy 30% s/ventas exentas (Compras afectas F29: {prom_cop_f29_m}/mes)"
             castigos.append(f"Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy (${c_base:,.0f} CLP/mes)")
         elif prom_compras_op_12m > 0:
             c_base = prom_compras_op_12m
+            glosa_paso_a = "Base mensual de compras operacionales 12M (o costo proxy)"
         else:
             c_base = 0.30 * prom_ventas_12m if prom_ventas_12m > 0 else 0.0
+            glosa_paso_a = "Base mensual de compras operacionales 12M (o costo proxy)"
 
         # Paso B: Techo Operativo (8% de compras mensuales para crédito proveedor v2.2/v2.3)
         techo_operativo = c_base * 0.08
@@ -925,6 +965,7 @@ class CreditRiskEngine:
             "periodo_fin": periodo_fin,
             "ventas_netas_mensuales_prom": int(round(prom_ventas_12m)),
             "base_compras_c_base": int(round(c_base)),
+            "glosa_paso_a": glosa_paso_a,
             "spread_operacional_f29": int(round(spread_operacional_f29)),
             "brecha_operacional_proxy": int(round(spread_operacional_f29)),
             "rli_ultimo_f22": int(round(rli_val)) if rli_val is not None else None,
@@ -1291,30 +1332,36 @@ class CreditRiskEngine:
         tot_cop_12m = sum(float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) for m in last_12_mt)
 
         if es_exportador_o_exento:
-            # Para empresas exportadoras o de servicios exentos:
-            # Si registra compras operacionales en la tabla F29, el ratio se calcula
-            # dividiendo los acumulados 12M de la tabla F29 (Ventas Netas 12M / Compras Op. 12M):
-            if tot_cop_12m > 0:
-                ratio_op = tot_v_12m / tot_cop_12m
+            if tot_deb_12m == 0 and pct_exp <= 0.20:
+                p3 = 10
+                pct_compras_v = round((tot_cop_12m / tot_v_12m) * 100.0, 1) if tot_v_12m > 0 else 0.0
+                det3 = (
+                    f"Giro exento de IVA (Débito 12M: M$ 0): F29 no captura costos ni remuneraciones exentas "
+                    f"(Compras afectas F29: {pct_compras_v:.1f}% de ventas; requiere EERR/Balance)"
+                )
             else:
-                ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
+                # Para empresas exportadoras o con débito fiscal:
+                if tot_cop_12m > 0:
+                    ratio_op = tot_v_12m / tot_cop_12m
+                else:
+                    ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
 
-            es_exp = pct_exp > 0.20
-            tipo_empresa = "Empresa exportadora" if es_exp else "Empresa de servicios exentos"
-            recup_iva = " y recuperación legítima de IVA" if es_exp else ""
+                es_exp = pct_exp > 0.20
+                tipo_empresa = "Empresa exportadora" if es_exp else "Empresa de servicios exentos"
+                recup_iva = " y recuperación legítima de IVA" if es_exp else ""
 
-            if ratio_op >= 1.40:
-                p3 = 20
-                det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
-            elif ratio_op >= 1.15:
-                p3 = 17
-                det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
-            elif ratio_op >= 1.00:
-                p3 = 14
-                det3 = f"{tipo_empresa} con margen suficiente (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
-            else:
-                p3 = 8
-                det3 = f"{tipo_empresa} con compras superiores a ventas (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
+                if ratio_op >= 1.40:
+                    p3 = 20
+                    det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
+                elif ratio_op >= 1.15:
+                    p3 = 17
+                    det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
+                elif ratio_op >= 1.00:
+                    p3 = 14
+                    det3 = f"{tipo_empresa} con margen suficiente (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
+                else:
+                    p3 = 8
+                    det3 = f"{tipo_empresa} con compras superiores a ventas (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
         else:
             tiene_remanente = (
                 (indicadores.mora_efectiva and indicadores.mora_efectiva.meses_con_remanente_credito > 0)
@@ -1496,16 +1543,20 @@ class CreditRiskEngine:
             det_vig = f"desfase prolongado de {meses_desfase}m"
 
         if conciliacion:
-            dif_pct = conciliacion.get("diferencia_pct", 0.0)
-            if dif_pct <= 10.0:
-                p_conc = 8
-                det_conc = f"conciliación F29/F22 consistente ({dif_pct}% s/base F22)"
-            elif dif_pct <= 15.0:
-                p_conc = 5
-                det_conc = f"conciliación F29/F22 con tolerancia ({dif_pct}% s/base F22)"
-            else:
+            if conciliacion.get("no_conciliable") or conciliacion.get("estado") == "NO CONCILIABLE":
                 p_conc = 2
-                det_conc = f"desviación F29 vs F22 ({dif_pct}% s/base F22)"
+                det_conc = conciliacion.get("detalle", "sin conciliación F29/F22")
+            else:
+                dif_pct = conciliacion.get("diferencia_pct", 0.0)
+                if dif_pct <= 10.0:
+                    p_conc = 8
+                    det_conc = f"conciliación F29/F22 consistente ({dif_pct}% s/base F22)"
+                elif dif_pct <= 15.0:
+                    p_conc = 5
+                    det_conc = f"conciliación F29/F22 con tolerancia ({dif_pct}% s/base F22)"
+                else:
+                    p_conc = 2
+                    det_conc = f"desviación F29 vs F22 ({dif_pct}% s/base F22)"
         else:
             p_conc = 5
             det_conc = "sin cruce anual F29/F22"
