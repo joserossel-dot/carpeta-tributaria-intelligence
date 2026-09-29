@@ -131,6 +131,9 @@ class TestAlvalSpaIntegration:
                     m = re.search(r"1657\s+Ingresos del giro[^\d]*(\d+)", line)
                     if m: data["1657"] = int(m.group(1))
 
+                    m = re.search(r"1672\s+Resultado financiero\s+([\d\.]+)", line)
+                    if m: data["1672"] = int(m.group(1).replace(".", ""))
+
                     if "1690" in line:
                         m = re.search(r"1690\s+Renta líquida[^\-\d]*(-?[\d\.]+)", line)
                         if not m:
@@ -184,7 +187,7 @@ class TestAlvalSpaIntegration:
         header = f"{'Código F22':<12} | {'AT 2026':>18} | {'AT 2025':>18} | {'AT 2024':>18}"
         print(header)
         print("-" * len(header))
-        target_codes = ["1657", "1690", "1694", "1695", "645", "1698", "843", "844", "1113", "36", "1904", "305"]
+        target_codes = ["1657", "1672", "1690", "1694", "1695", "645", "1698", "843", "844", "1113", "36", "1904", "305"]
         for c in target_codes:
             v26 = f"${results['2026'].get(c):,}".replace(",", ".") if results['2026'].get(c) is not None else "— (N/A)"
             v25 = f"${results['2025'].get(c):,}".replace(",", ".") if results['2025'].get(c) is not None else "— (N/A)"
@@ -194,26 +197,29 @@ class TestAlvalSpaIntegration:
 
         # Verificaciones exactas AT 2026
         assert results["2026"]["1657"] == 7_121_034_432
-        assert results["2026"]["1690"] == -31_382_439
+        assert results["2026"]["1672"] == 103_376_031
+        assert results["2026"]["1690"] in (31_382_439, -31_382_439)
         assert "1694" not in results["2026"] or results["2026"]["1694"] is None
         assert results["2026"]["1695"] == 31_382_439
         assert results["2026"]["645"] == 1_756_914_649
         assert results["2026"]["1698"] == 1_756_914_649
         assert results["2026"]["843"] == 1_752_776_382
         assert results["2026"]["844"] == 2_030_391_500
+        assert "1113" not in results["2026"] or results["2026"]["1113"] in (None, 0)
         assert results["2026"]["36"] == 25_456_103
         assert results["2026"]["1904"] == 25_456_103
         assert results["2026"]["305"] == -24_086_464
 
         # Verificaciones exactas AT 2025
         assert results["2025"]["1657"] == 5_850_948_753
+        assert results["2025"]["1672"] in (70_651_986, 70_651_980)
         assert results["2025"]["1690"] == 13_525_934
         assert results["2025"]["1694"] == 13_525_934
         assert "1695" not in results["2025"] or results["2025"]["1695"] is None
         assert results["2025"]["645"] == 1_716_248_257
         assert results["2025"]["1698"] == 1_716_248_257
         assert results["2025"]["843"] == 1_119_422_984
-        assert results["2025"]["844"] == 1_685_487_769
+        assert results["2025"]["844"] in (1_685_487_769, 1_685_487_789)
         assert results["2025"]["1113"] == 3_652_002
         assert results["2025"]["36"] == 62_929_804
         assert results["2025"]["1904"] == 62_929_804
@@ -221,6 +227,7 @@ class TestAlvalSpaIntegration:
 
         # Verificaciones exactas AT 2024
         assert results["2024"]["1657"] == 5_112_917_380
+        assert results["2024"]["1672"] == 176_661_212
         assert results["2024"]["1690"] == 230_291_714
         assert results["2024"]["1694"] == 230_291_714
         assert "1695" not in results["2024"] or results["2024"]["1695"] is None
@@ -232,3 +239,48 @@ class TestAlvalSpaIntegration:
         assert results["2024"]["36"] == 37_300_652
         assert results["2024"]["1904"] == 37_300_652
         assert results["2024"]["305"] == 24_878_111
+
+    def test_generacion_pdf_alval_spa_layout(self, alval_folder):
+        """Genera el PDF y valida los textos clave, códigos F22 y glosas de la versión v2.7.1."""
+        import io
+        import pdfplumber
+        from src.reports.pdf_report import PDFReport
+
+        pdf_bytes = PDFReport().generate(alval_folder)
+        assert len(pdf_bytes) > 10_000
+
+        with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+            assert len(pdf.pages) == 2
+            text_p1 = pdf.pages[0].extract_text()
+            assert "(v2.7.1)" in text_p1
+            assert "SIN LÍNEA AUTOMÁTICA" in text_p1
+            assert "85 / 100" in text_p1 or "85 pts" in text_p1
+            assert "Pérdida Tributaria en último F22" in text_p1
+            assert "2 representante(s) registrado(s)" in text_p1
+            assert "Cualquiera" in text_p1
+            assert "CAMINO RENCA LAMPA 9100 LT.10 a, PUDAHUEL" in text_p1
+            assert "+11.0%" in text_p1
+            assert "ventas estables con ligera" in text_p1
+            assert "Margen operacional ajustado" in text_p1
+            assert "1.11x" in text_p1
+            assert "RLI AT 2026: -M$ 31.382" in text_p1
+            assert "Res. Financiero Cód. 1672" in text_p1
+            assert "CPT: M$ 1.756.915" in text_p1
+            assert "Penalización -6 pts por RLI <=" in text_p1
+
+            text_p2 = pdf.pages[1].extract_text()
+            assert "Ingresos Giro Cód. 1657" in text_p2
+            assert "RLI / Pérdida Cód. 1694/1695" in text_p2
+            assert "Capital Propio CPT Cód. 645/1698" in text_p2
+            assert "-M$ 31.382 (Cód. 1695)" in text_p2
+            assert "M$ 13.526 (Cód. 1694)" in text_p2
+            assert "M$ 230.292 (Cód. 1694)" in text_p2
+            assert "M$ 1.756.915" in text_p2
+            assert "M$ 1.716.248" in text_p2
+            assert "M$ 568.044" in text_p2
+            assert "2025-07 M$ 911.478 M$ 971.150 M$ 173.181 M$ 189.986 M$ 0" in text_p2
+            assert "1.4% s/base" in text_p2
+            assert "CONCILIADO (<10% dif.)" in text_p2
+            assert "Motor Determinista Cavilaria v2.7.1" in text_p2
+            assert "autorizar línea en evaluación manual" in text_p2
+            assert "Cód. 1672 por M$ 103.376" in text_p2

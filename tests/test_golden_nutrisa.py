@@ -129,10 +129,82 @@ class TestGoldenNutrisa:
 
             if len(pdf.pages) > 1:
                 text_p2 = pdf.pages[1].extract_text()
-                assert "Cód. 1657" in text_p2 or "Ingresos Giro" in text_p2
-                assert "Cód. 1694" in text_p2 or "RLI" in text_p2
-                assert "645/1698" in text_p2 or "Capital Propio" in text_p2
+                assert "Ingresos Giro Cód. 1657" in text_p2
+                assert "RLI / Pérdida Cód. 1694/1695" in text_p2
+                assert "Capital Propio CPT Cód. 645/1698" in text_p2
+                assert "M$ 692.056 (Cód. 1694)" in text_p2
+                assert "M$ 3.625.110" in text_p2
                 assert "Motor Determinista Cavilaria v2.7.1" in text_p2
                 # Doble base de conciliación
                 assert "3.2% s/base" in text_p2 and "3.1% s/base F29" in text_p2
                 assert "CONCILIADO (<10% dif.)" in text_p2
+
+    def test_volcado_verificacion_nativa_nutrisa_pdfplumber(self):
+        """Extrae directamente con pdfplumber y verifica con asserts exactos los códigos F22 de NUTRISA."""
+        import re
+        results = {}
+        with pdfplumber.open(NUTRISA_PDF) as pdf:
+            # En NUTRISA F22 está en las últimas páginas (ej. pág 25-26)
+            lines = []
+            for p in pdf.pages[24:]:
+                txt = p.extract_text() or ""
+                lines.extend(txt.split("\n"))
+
+            data = {}
+            for line in lines:
+                m = re.search(r"1657\s+Ingresos del giro[^\d]*(\d+)", line)
+                if m: data["1657"] = int(m.group(1))
+
+                m = re.search(r"1672\s+Resultado financiero\s+([\d\.]+)", line)
+                if m: data["1672"] = int(m.group(1).replace(".", ""))
+
+                if "1690" in line:
+                    m = re.search(r"1690\s+Renta líquida[^\-\d]*(-?[\d\.]+)", line)
+                    if not m:
+                        m = re.search(r"1690.*?\s(-?[\d\.]+)\s*$", line)
+                    if m: data["1690"] = int(m.group(1).replace(".", ""))
+
+                m = re.search(r"1694\s+Renta líquida[^\d]*([\d\.]+)", line)
+                if m: data["1694"] = int(m.group(1).replace(".", ""))
+
+                m = re.search(r"645\s+CPT positivo final\s+([\d\.]+)", line)
+                if m: data["645"] = int(m.group(1).replace(".", ""))
+
+                m = re.search(r"1698\s+CPT positivo final[^\d]*14\)\s+([\d\.]+)", line)
+                if not m: m = re.search(r"1698\s+CPT positivo final[^\d]*\)\s+([\d\.]+)", line)
+                if m: data["1698"] = int(m.group(1).replace(".", ""))
+
+                m = re.search(r"843\s+Patrimonio financiero\s+([\d\.]+)", line)
+                if m: data["843"] = int(m.group(1).replace(".", ""))
+
+                m = re.search(r"36\s+PPM y remanente[^\d]*([\d\.]+)", line)
+                if m: data["36"] = int(m.group(1).replace(".", ""))
+
+                m = re.search(r"305\s+RESULTADO LIQUIDACIÓN[^\-\d]*(-?[\d\.]+)", line)
+                if not m: m = re.search(r"305.*?NTA[^\-\d]*(-?[\d\.]+)", line)
+                if m: data["305"] = int(m.group(1).replace(".", ""))
+
+            results["2026"] = data
+
+        print("\n" + "=" * 80)
+        print("VOLCADO DE VERIFICACIÓN NATIVA (pdfplumber) — NUTRISA (RUT 95.214.000-0)")
+        print("=" * 80)
+        header = f"{'Código F22':<12} | {'AT 2026':>18}"
+        print(header)
+        print("-" * len(header))
+        target_codes = ["1657", "1672", "1690", "1694", "1695", "645", "1698", "843", "844", "1113", "36", "1904", "305"]
+        for c in target_codes:
+            v26 = f"${results['2026'].get(c):,}".replace(",", ".") if results['2026'].get(c) is not None else "— (N/A)"
+            print(f"Cód. {c:<7} | {v26:>18}")
+        print("=" * 80)
+
+        assert results["2026"]["1657"] == 7_609_347_772
+        assert results["2026"]["1672"] == 656_064_546
+        assert results["2026"]["1690"] == 692_055_540
+        assert results["2026"]["1694"] == 692_055_540
+        assert "1695" not in results["2026"] or results["2026"]["1695"] is None
+        assert results["2026"]["645"] == 3_625_109_624
+        assert results["2026"]["1698"] == 3_625_109_624
+        assert results["2026"]["843"] == 1_916_468_561
+        assert results["2026"]["36"] == 83_017_357
+        assert results["2026"]["305"] == 103_837_639

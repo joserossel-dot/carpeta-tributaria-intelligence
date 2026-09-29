@@ -130,13 +130,32 @@ class F22Parser:
         """Extrae el valor numérico de un código SII específico, tolerando:
         - Códigos de 3 dígitos con cero inicial (ej. 0628)
         - Falta de espacio entre código y glosa (ej. 646Capital)
-        - Columnas pegadas al inicio o al final del número
-        - Glosas que contienen números descriptivos (ej. al 31 de diciembre, recuadro N° 14)
+        - Distribución en 2 columnas intercaladas por pdfplumber (ej. 843 y 844 en la misma fila)
+        - Continuación de glosa/monto en la línea siguiente
+        - Glosas que contienen números descriptivos (ej. al 31 de diciembre, recuadro N° 14, art. 14)
         """
+        lines = text.split("\n")
+        adjusted_lines = []
+        for line in lines:
+            # Si en la misma línea aparecen dos códigos SII contiguos (ej. '843 Patrimonio financiero 1.752.776.382 844 C di a s...')
+            # separamos la columna izquierda y derecha en líneas independientes para aislar estrictamente sus montos
+            m_two_cols = re.search(r"^(.*?)(?:\s+)(\d{3,4})\s+([A-Za-zÁ-Úá-ú].*)$", line)
+            if m_two_cols:
+                col1 = m_two_cols.group(1).strip()
+                code2 = m_two_cols.group(2)
+                rest2 = m_two_cols.group(3).strip()
+                if re.match(r"^\s*\d{3,4}\b", col1):
+                    adjusted_lines.append(col1)
+                    adjusted_lines.append(f"{code2} {rest2}")
+                    continue
+            adjusted_lines.append(line)
+
+        clean_text = "\n".join(adjusted_lines)
+
         patron = re.compile(
             rf"(?:^|[^\d]|/\d{{4}}|\b)0?{re.escape(codigo)}(?:\s*|\b)([^\d]*?)\s*(-?[\d.,]+)(.*)"
         )
-        match = patron.search(text)
+        match = patron.search(clean_text)
         if not match:
             return None, ""
         glosa = match.group(1).strip()
