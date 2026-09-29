@@ -627,11 +627,28 @@ class PDFReport:
             n_at = len(sorted_f22[:3])
             at_plural = "s" if n_at > 1 else ""
             f22_titulo = f"Resumen de Declaraciones Anuales F22 ({n_at} AT contenido{at_plural} en carpeta SII — Ingresos, RLI y CPT en M$)"
+            regimen = getattr(getattr(tax_folder, "contributor", None), "regimen_tributario", "") or ""
+            is_14d8 = any(getattr(f, "ingresos_source_code", None) == "1600" or getattr(f, "rli_source_code", None) in ("1626", "1627") or getattr(f, "cpt_source_code", None) in ("1584", "1585") for f in sorted_f22) or any(k in regimen.upper() for k in ("14 D N° 8", "14D8", "14 D) Nº 8", "14D N°8", "TRANSPARENTE"))
+            is_14d3 = not is_14d8 and (any(getattr(f, "ingresos_source_code", None) in ("1400", "1410") or getattr(f, "rli_source_code", None) in ("1440", "1450") or getattr(f, "cpt_source_code", None) in ("1545", "1546") for f in sorted_f22) or any(k in regimen.upper() for k in ("14 D N° 3", "14D3", "14 D) Nº 3", "14D N°3", "PRO PYME GENERAL", "PRO PYME")))
+
+            if is_14d8:
+                col2_head = "Ingresos Giro Cód. 1600 (M$)"
+                col3_head = "Base Imponible / Pérdida Cód. 1626/1627 (M$)"
+                col4_head = "Capital Propio CPTS Cód. 1584/1585 (M$)"
+            elif is_14d3:
+                col2_head = "Ingresos Giro Cód. 1400 (M$)"
+                col3_head = "Base Imponible / Pérdida Cód. 1440/1450 (M$)"
+                col4_head = "Capital Propio CPTS Cód. 645/1545 (M$)"
+            else:
+                col2_head = "Ingresos Giro Cód. 1657 (M$)"
+                col3_head = "RLI / Pérdida Cód. 1694/1695 (M$)"
+                col4_head = "Capital Propio CPT Cód. 645/1698 (M$)"
+
             f22_header = [
                 Paragraph("<b>Año Tributario</b>", table_cell_header),
-                Paragraph("<b>Ingresos Giro Cód. 1657 (M$)</b>", table_cell_header),
-                Paragraph("<b>RLI / Pérdida Cód. 1694/1695 (M$)</b>", table_cell_header),
-                Paragraph("<b>Capital Propio CPT Cód. 645/1698 (M$)</b>", table_cell_header),
+                Paragraph(f"<b>{col2_head}</b>", table_cell_header),
+                Paragraph(f"<b>{col3_head}</b>", table_cell_header),
+                Paragraph(f"<b>{col4_head}</b>", table_cell_header),
             ]
             f22_rows = [f22_header]
             for f in sorted_f22[:3]:
@@ -642,8 +659,15 @@ class PDFReport:
 
                 ing_code = getattr(f, "ingresos_source_code", None)
                 ing_fmt = format_mclp(ing).replace(":", "").strip()
-                if ing_code and ing_code != "1657" and ing_fmt != "—":
-                    ing_cell_txt = f"{ing_fmt} (Cód. {ing_code})"
+                if ing_code and ing_fmt != "—":
+                    if is_14d3 and ing_code != "1400":
+                        ing_cell_txt = f"{ing_fmt} (Cód. {ing_code})"
+                    elif is_14d8 and ing_code != "1600":
+                        ing_cell_txt = f"{ing_fmt} (Cód. {ing_code})"
+                    elif not is_14d3 and not is_14d8 and ing_code != "1657":
+                        ing_cell_txt = f"{ing_fmt} (Cód. {ing_code})"
+                    else:
+                        ing_cell_txt = ing_fmt
                 else:
                     ing_cell_txt = ing_fmt
 
@@ -655,8 +679,15 @@ class PDFReport:
 
                 cpt_code = getattr(f, "cpt_source_code", None)
                 cpt_fmt = format_mclp(cpt_f).replace(":", "").strip()
-                if cpt_code and cpt_code in ("1545", "1546", "1584", "1585") and cpt_fmt != "—":
-                    cpt_cell_txt = f"{cpt_fmt} (Cód. {cpt_code})"
+                if cpt_code and cpt_fmt != "—":
+                    if is_14d3 and cpt_code in ("1545", "1546", "645", "646"):
+                        cpt_cell_txt = f"{cpt_fmt} (Cód. {cpt_code})"
+                    elif is_14d8 and cpt_code in ("1584", "1585", "645", "646"):
+                        cpt_cell_txt = f"{cpt_fmt} (Cód. {cpt_code})"
+                    elif cpt_code in ("1545", "1546", "1584", "1585"):
+                        cpt_cell_txt = f"{cpt_fmt} (Cód. {cpt_code})"
+                    else:
+                        cpt_cell_txt = cpt_fmt
                 else:
                     cpt_cell_txt = cpt_fmt
 

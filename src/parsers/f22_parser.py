@@ -47,7 +47,7 @@ class F22Parser:
     _SALDO_LIQUIDACION_CODES = ["305", "90"]
 
     _RE_ANIO = re.compile(r"A(?:ÑO|NO|NIO)\s+TRIBUTARIO\s*(\d{4})", re.IGNORECASE)
-    _RE_SIN_DECLARACION = re.compile(r"No se registra declaraci[oó]n", re.IGNORECASE)
+    _RE_SIN_DECLARACION = re.compile(r"No se registra declaraci[oó]n|No existen declaraciones", re.IGNORECASE)
 
     # Encabezados de otras secciones: si aparecen en una pagina sin su
     # propio marcador de año, esa pagina NO se trata como continuacion del
