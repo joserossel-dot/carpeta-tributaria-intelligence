@@ -165,8 +165,10 @@ class F22Parser:
         # Si el número capturado forma parte de una fecha o texto de la glosa (ej. "31 de diciembre", "N° 14"),
         # continuar buscando la cifra tributaria real en el resto de la línea.
         while (
-            re.search(r"(?:recuadro|n[°º]|art|art[ií]culo|inciso)\s*$", glosa, re.IGNORECASE)
+            (codigo in ("1113", "1904") and not any(c.isdigit() for c in raw_num))
+            or re.search(r"(?:recuadro|n[°º]|art|art[ií]culo|inciso)\s*$", glosa, re.IGNORECASE)
             or re.match(r"^\s*(?:\)|de\s+[a-záéíóú]+|art\b|inciso\b|n[°º]\s*\d+)", resto, re.IGNORECASE)
+            or (codigo in ("1113", "1904") and re.search(r"(-?\d{1,3}(?:\.\d{3})+|\b\d{4,}\b)", resto))
         ):
             m2 = re.search(r"(-?[\d.,]+)(.*)", resto)
             if m2:
