@@ -130,7 +130,16 @@ class PDFReport:
             if domicilio_raw != "No informado"
             else domicilio_raw
         )
-        comuna_region = f"{getattr(c, 'comuna', None) or '—'}, {getattr(c, 'region', None) or '—'}"
+        comuna_str = (getattr(c, "comuna", None) or "").strip()
+        region_str = (getattr(c, "region", None) or "").strip()
+        if comuna_str and region_str and region_str not in ("—", "-", "None"):
+            comuna_region = f"{comuna_str}, {region_str}"
+        elif comuna_str:
+            comuna_region = comuna_str
+        elif region_str and region_str not in ("—", "-", "None"):
+            comuna_region = region_str
+        else:
+            comuna_region = "—"
         ini_act = fmt_date(getattr(c, "fecha_inicio_actividades", None)) or "No informado"
         regimen = getattr(c, "regimen_tributario", None) or "No informado"
         giro_prin = getattr(kpis, "principal_activity", None) or "No informada"

@@ -248,6 +248,7 @@ class F22Parser:
         if val_1694 is not None and val_1694 > 0:
             rli_val = val_1694
             rli_source = "1694"
+            valores.pop("perdidas", None)
         elif val_1695 is not None and val_1695 > 0:
             # Regla crítica del parser F22: si existe Cód. 1695 > 0 y Cód. 1694 está vacío/cero,
             # la RLI del ejercicio es NEGATIVA (-abs(1695)), nunca tomar Cód. 1690 como positivo.

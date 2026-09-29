@@ -672,11 +672,29 @@ class CreditRiskEngine:
                 ingresos_f22 = ultimo_f22.ingresos
                 perdidas_f22 = ultimo_f22.perdidas
 
-            if (rli_val is not None and rli_val <= 0) or (perdidas_f22 is not None and perdidas_f22 > 0):
-                # Caso A: Pérdida tributaria declarada (RLI <= 0 o Cód. 1690/1143/etc.)
+            rli_code_b2 = getattr(ultimo_f22, "rli_source_code", None) or ("1695" if (rli_val is not None and rli_val <= 0) else "1694")
+
+            # Unificación estricta de la fuente de verdad (v2.7.2):
+            # La condición de pérdida tributaria (rli_ultimo_f22 <= 0) debe regirse por la RLI del último F22:
+            # - Si rli_code_b2 == "1694" y rli_val > 0: declara utilidad tributaria y NUNCA se bloquea por pérdida.
+            # - Si rli_val <= 0 o rli_code_b2 == "1695": se declara pérdida tributaria (Línea M$ 0).
+            # - Si rli_val es None y se detectó un código de pérdida explícito: se declara pérdida.
+            # - En formularios históricos sin Cód. 1694/1440/1580 si perdidas_f22 > 0: se declara pérdida.
+            if rli_code_b2 == "1694" and rli_val is not None and rli_val > 0:
+                es_perdida = False
+            elif (rli_val is not None and rli_val <= 0) or rli_code_b2 == "1695":
+                es_perdida = True
+            elif rli_val is None and perdidas_f22 is not None and perdidas_f22 > 0:
+                es_perdida = True
+            elif perdidas_f22 is not None and perdidas_f22 > 0 and rli_code_b2 not in ("1694", "1440", "1580"):
+                es_perdida = True
+            else:
+                es_perdida = False
+
+            if es_perdida:
+                # Caso A: Pérdida tributaria declarada (RLI <= 0 o Cód. 1695/etc.)
                 rli_declarada_le_zero = True
                 freno_flujo = 0.0
-                rli_code_b2 = getattr(ultimo_f22, "rli_source_code", None) or "1695"
                 rli_m_b2 = format_mclp(rli_val) if rli_val is not None else "-M$ 0"
                 glosa_b2 = f"N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. {rli_code_b2}: {rli_m_b2})"
                 castigos.append(
