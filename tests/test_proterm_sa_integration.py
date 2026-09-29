@@ -49,14 +49,14 @@ class TestProtermSaIntegration:
         cr = proterm_folder.credit_risk
         assert cr is not None
         assert cr.score_compuesto == 94
-        assert cr.clasificacion_riesgo == "PERFIL TRIBUTARIO SÓLIDO"
-        assert cr.evaluacion_referencial == "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)"
+        assert cr.clasificacion_riesgo == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA)"
+        assert cr.evaluacion_referencial == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA) (Línea Sujeta a Dicom)"
 
         mem = cr.decision.memoria_calculo
         assert mem["rli_declarada_le_zero"] is False
         assert mem["techo_operativo_8pct"] == 13327592
         assert mem["freno_absorcion_operacional"] == 17448605
-        assert mem["tope_patrimonial_12pct_cpt"] == 282443898
+        assert mem["tope_patrimonial_3pct_cpt"] == 70610975
         assert mem["linea_maxima_condicionada"] == 13300000
         assert mem["linea_inicial_sugerida"] == 6600000
 
@@ -73,7 +73,7 @@ class TestProtermSaIntegration:
             p1 = pdf.pages[0].extract_text()
             assert "Comuna / Región: CONCEPCION, REGIÓN DEL BIOBÍO" in p1
             assert "Comuna / Región: CONCEPCION, —" not in p1
-            assert "PERFIL TRIBUTARIO SÓLIDO" in p1
+            assert "ELEGIBLE PARA LÍNEA COMERCIAL" in p1
             assert "Inicial: M$ 6.600" in p1
             assert "Máxima: M$ 13.300" in p1
             assert "M$ 13.328" in p1

@@ -65,7 +65,7 @@ class TestValidateDataset:
         table_markers = [
             "| Campo",
             "|-------",
-            "Región",
+            "Régimen Tributario",
             "Propiedades",
             "Vehículos",
         ]

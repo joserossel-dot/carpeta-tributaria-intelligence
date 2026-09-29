@@ -3964,9 +3964,10 @@
         "factor_ajuste_conductual_pct": 0,
         "cupo_preliminar": 0,
         "capital_propio_tributario": 5515454480647,
-        "tope_patrimonial_12pct_cpt": 661854537678,
-        "tope_patrimonial_35pct_cpt": 661854537678,
-        "tope_patrimonial_cpt": 661854537678,
+        "tope_patrimonial_3pct_cpt": 165463634419,
+        "tope_patrimonial_12pct_cpt": 165463634419,
+        "tope_patrimonial_35pct_cpt": 165463634419,
+        "tope_patrimonial_cpt": 165463634419,
         "rli_declarada_le_zero": true,
         "ausencia_f22": false,
         "contraccion_severa": false,
@@ -4032,7 +4033,7 @@
           "nombre": "Holgura Débito/Crédito IVA (F29)",
           "puntaje_obtenido": 20,
           "puntaje_maximo": 20,
-          "detalle": "Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: 21.39x | Débito/Crédito total c/remanente: 3.28x)"
+          "detalle": "Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: 21.39x) (11 de 12 meses con compras > ventas y arrastre de remanente Cód. 504)"
         },
         {
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -4144,9 +4145,10 @@
       "factor_ajuste_conductual_pct": 0,
       "cupo_preliminar": 0,
       "capital_propio_tributario": 5515454480647,
-      "tope_patrimonial_12pct_cpt": 661854537678,
-      "tope_patrimonial_35pct_cpt": 661854537678,
-      "tope_patrimonial_cpt": 661854537678,
+      "tope_patrimonial_3pct_cpt": 165463634419,
+      "tope_patrimonial_12pct_cpt": 165463634419,
+      "tope_patrimonial_35pct_cpt": 165463634419,
+      "tope_patrimonial_cpt": 165463634419,
       "rli_declarada_le_zero": true,
       "ausencia_f22": false,
       "contraccion_severa": false,
@@ -4196,7 +4198,7 @@
         "nombre": "Holgura Débito/Crédito IVA (F29)",
         "puntaje_obtenido": 20,
         "puntaje_maximo": 20,
-        "detalle": "Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: 21.39x | Débito/Crédito total c/remanente: 3.28x)"
+        "detalle": "Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: 21.39x) (11 de 12 meses con compras > ventas y arrastre de remanente Cód. 504)"
       },
       {
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",

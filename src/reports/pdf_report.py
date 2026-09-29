@@ -1,3 +1,4 @@
+import datetime
 import io
 import re
 from decimal import Decimal
@@ -110,7 +111,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.8.0)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.9.0)",
                 subtitle_style,
             )
         )
@@ -173,7 +174,7 @@ class PDFReport:
                 Paragraph(f"<b>Bienes Raíces:</b> {bienes_raices}", body_style),
             ],
             [
-                Paragraph(f"<b>Emisión Carpeta:</b> {fecha_emision} | <b>Último F29:</b> {ult_periodo}", body_style),
+                Paragraph(f"<b>Emisión Carpeta SII:</b> {fecha_emision} | <b>Último F29:</b> {ult_periodo} | <b>Desfase al Emitir:</b> {desfase_m}m", body_style),
                 Paragraph(f"<b>Antigüedad del Dato:</b> {desfase_m} meses (Confianza: <b>{confianza_vig}</b>)", body_style),
             ],
             [
@@ -203,7 +204,7 @@ class PDFReport:
         ) if cr else "OBSERVADO"
         score_val = getattr(cr, "score_crediticio", 0.0) if cr else 0.0
         clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
-        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Desempeño Tributario Alto" if score_val >= 80 else "Desempeño Tributario Medio")
+        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Capacidad Operativa Tributaria Alta" if score_val >= 80 else "Desempeño Tributario Medio")
         linea_ini = getattr(cr, "linea_inicial_sugerida", 0) if cr else 0
         linea_max = getattr(cr, "linea_maxima_condicionada", 0) or getattr(cr, "cupo_maximo_sugerido", 0) if cr else 0
         plazo_dias = getattr(cr, "plazo_sugerido_dias", 0) if cr else 0
@@ -211,7 +212,7 @@ class PDFReport:
         resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
 
         # Color de la evaluación referencial
-        if "SÓLIDO" in evaluacion or "SOLIDO" in evaluacion or "BAJO" in evaluacion:
+        if "ELEGIBLE" in evaluacion or "SÓLIDO" in evaluacion or "SOLIDO" in evaluacion or "BAJO" in evaluacion:
             badge_bg = colors.HexColor("#16A34A")
         elif "MODERADO" in evaluacion or "MEDIO" in evaluacion:
             badge_bg = colors.HexColor("#D97706")
@@ -367,7 +368,7 @@ class PDFReport:
         rli_mens = mem.get("rli_mensualizada_f22")
         phi_pct = mem.get("factor_ajuste_conductual_pct", int(round(mem.get("factor_riesgo_phi", 1.0) * 100)))
         cpt_val = mem.get("capital_propio_tributario")
-        tope_cpt = mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
+        tope_cpt = mem.get("tope_patrimonial_3pct_cpt") or mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
         cupo_max = mem.get("linea_maxima_condicionada") or mem.get("cupo_maximo_sugerido", 0)
         cupo_ini = mem.get("linea_inicial_sugerida") or linea_ini
         pct_ap = mem.get("pct_apertura_inicial", 50)
@@ -390,10 +391,7 @@ class PDFReport:
 
         min_b1_b2 = min(techo_op, freno_flujo)
         if tope_cpt is not None:
-            if tope_cpt > min_b1_b2:
-                glosa_d = "12% CPT en línea limpia (Tope patrimonial no restrictivo en este RUT)"
-            else:
-                glosa_d = "12% CPT (Freno patrimonial ACTIVO por bajo CPT)"
+            glosa_d = "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0"
         elif cpt_val is not None and cpt_val <= 0:
             glosa_d = "CPT <= 0 ($0 en línea limpia por quiebra técnica)"
         else:
@@ -440,7 +438,7 @@ class PDFReport:
                 Paragraph(f"{phi_pct}%", table_cell_bold),
             ],
             [
-                Paragraph(f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", table_cell_bold),
+                Paragraph(f"Paso D: Referencia Patrimonial (3% CPT = {cpt_str})", table_cell_bold),
                 Paragraph(glosa_d, table_cell),
                 Paragraph(format_mclp(tope_cpt) if tope_cpt is not None else "Sin tope", table_cell_bold),
             ],
@@ -490,6 +488,30 @@ class PDFReport:
             "vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros."
         )
 
+        # Verificación de antigüedad de emisión de carpeta
+        dias_emision = None
+        if fecha_emision and fecha_emision != "No informada":
+            try:
+                date_part = str(fecha_emision).strip().split()[0]
+                d, m, y = 0, 0, 0
+                if "/" in date_part:
+                    p = date_part.split("/")
+                    if len(p) == 3:
+                        d, m, y = int(p[0]), int(p[1]), int(p[2])
+                elif "-" in date_part:
+                    p = date_part.split("-")
+                    if len(p) == 3:
+                        if len(p[0]) == 4:
+                            y, m, d = int(p[0]), int(p[1]), int(p[2])
+                        else:
+                            d, m, y = int(p[0]), int(p[1]), int(p[2])
+                if y > 0 and m > 0 and d > 0:
+                    fecha_dt = datetime.date(y, m, d)
+                    hoy = datetime.date.today()
+                    dias_emision = (hoy - fecha_dt).days
+            except Exception:
+                pass
+
         alertas_p = [
             Paragraph("<b>Condiciones Suspensivas y Alertas Críticas:</b>", table_cell_bold),
         ]
@@ -498,6 +520,15 @@ class PDFReport:
                 alertas_p.append(Paragraph(f"• <b>Alerta:</b> {b}", body_style))
         else:
             alertas_p.append(Paragraph("• 🟢 <i>Sin alertas críticas detectadas en declaraciones tributarias.</i>", body_style))
+
+        if dias_emision is not None and dias_emision > 45:
+            alertas_p.append(
+                Paragraph(
+                    f"• <b>Condición Suspensiva de Vigencia:</b> Carpeta emitida hace {dias_emision} días (> 45 días). "
+                    "Se exige actualización de carpeta tributaria antes del desembolso si supera 60 días.",
+                    body_style,
+                )
+            )
 
         alertas_p.append(Spacer(1, 1 * mm))
         alertas_p.append(Paragraph(f"• <b>Boletín Comercial Dicom/Equifax:</b> {boletin_com}", body_style))
@@ -541,7 +572,7 @@ class PDFReport:
                 Paragraph("<b>Ventas Netas (M$)</b>", table_cell_header),
                 Paragraph("<b>Compras Op. (M$)</b>", table_cell_header),
                 Paragraph("<b>Débito Fiscal (M$)</b>", table_cell_header),
-                Paragraph("<b>Crédito Fiscal (M$)</b>", table_cell_header),
+                Paragraph("<b>Crédito Giro Mes (M$)</b>", table_cell_header),
                 Paragraph("<b>IVA Det. SII (M$)</b>", table_cell_header),
             ]
             f29_rows = [f29_header]
@@ -556,7 +587,7 @@ class PDFReport:
                 v = mt.total_ventas or Decimal("0")
                 cop = mt.compras_operacionales if mt.compras_operacionales is not None else (mt.compras or Decimal("0"))
                 deb = mt.debito_fiscal or Decimal("0")
-                cred = mt.credito_fiscal or Decimal("0")
+                cred = mt.credito_operacional if mt.credito_operacional is not None else (mt.credito_fiscal or Decimal("0"))
                 iva = mt.iva_determinado or Decimal("0")
 
                 tot_v += v
@@ -729,7 +760,7 @@ class PDFReport:
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
             "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor. "
-            "[Motor Determinista Cavilaria v2.8.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=12% CPT, Apertura=50%/40%/30%/0%]</i>"
+            "[Motor Determinista Cavilaria v2.9.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT, Apertura=50%/40%/30%/0%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 

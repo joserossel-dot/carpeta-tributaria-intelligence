@@ -43,14 +43,14 @@ class TestGoldenNutrisa:
             assert r.vigente is True
 
     def test_evaluacion_crediticia_v26_perfil_solido(self, nutrisa_folder):
-        """Verifica la clasificación v2.6, puntaje y líneas escalonadas para NUTRISA."""
+        """Verifica la clasificación v2.9, puntaje y líneas escalonadas para NUTRISA."""
         cr = nutrisa_folder.credit_risk
         assert cr is not None
         assert cr.score_crediticio is not None
-        assert cr.score_crediticio >= 85
-        assert cr.evaluacion_referencial == "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)"
-        assert cr.clasificacion_riesgo == "PERFIL TRIBUTARIO SÓLIDO"
-        assert cr.desempeno_tributario_texto == "Desempeño Tributario Alto"
+        assert cr.score_crediticio == 92
+        assert cr.evaluacion_referencial == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA) (Línea Sujeta a Dicom)"
+        assert cr.clasificacion_riesgo == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA)"
+        assert cr.desempeno_tributario_texto == "Capacidad Operativa Tributaria Alta"
 
         # Líneas escalonadas: Máxima M$ 14.400, Inicial M$ 7.200 (50% apertura)
         assert cr.linea_maxima_condicionada == 14_400_000
@@ -75,8 +75,8 @@ class TestGoldenNutrisa:
         assert mem["linea_maxima_condicionada"] == 14_400_000
         assert mem["linea_inicial_sugerida"] == 7_200_000
 
-        # CPT holgado (Tope patrimonial no restrictivo)
-        assert mem["tope_patrimonial_12pct_cpt"] == 435_013_155
+        # CPT holgado (Tope patrimonial 3% CPT no restrictivo)
+        assert mem["tope_patrimonial_3pct_cpt"] == 108_753_289
 
     def test_filtro_elegibilidad_y_resguardo_nutrisa(self, nutrisa_folder):
         """Verifica que el filtro de elegibilidad y resguardo incluyan la actuación conjunta y representantes."""
@@ -96,31 +96,35 @@ class TestGoldenNutrisa:
         # Verificación de Pilares 1, 3, 4 y 5
         desglose = cr.desglose_score
         p1 = next(p for p in desglose if "Continuidad" in p.nombre)
+        assert p1.puntaje_obtenido == 15
         assert "23 meses continuos declarados (2024-06 a 2026-04) sin lagunas tributarias" in p1.detalle
 
         p3 = next(p for p in desglose if "Holgura Débito/Crédito IVA (F29)" in p.nombre)
         assert p3 is not None
+        assert p3.puntaje_obtenido == 20
+        assert "Ratio Débito / Crédito Giro 12M: 1.45x" in p3.detalle
 
         p4 = next(p for p in desglose if "Rentabilidad" in p.nombre)
-        assert "RLI AT 2026: M$ 692.056 (9.1% s/ingresos" in p4.detalle
-        assert "CPT: M$ 3.625.110 (Respaldo contable no líquido: cobertura holgada)" in p4.detalle
+        assert p4.puntaje_obtenido == 13
+        assert "RLI AT 2026: M$ 692.056 (9.1% s/ingresos; Utilidad Contable Cód. 1672: +M$ 656.065) | CPT: M$ 3.625.110 [Tope 13/15 pts: carpeta contiene solo 1 AT de F22, sin serie multianual verificable]" in p4.detalle
 
         p5 = next(p for p in desglose if "Cumplimiento Fiscal" in p.nombre)
+        assert p5.puntaje_obtenido == 15
         assert "0 de 23 períodos F29 con recargos por mora fiscal (Cód. 94) y 0 postergaciones de IVA (Cód. 779)" in p5.detalle
 
     def test_generacion_pdf_nutrisa_layout(self, nutrisa_folder):
-        """Genera el PDF y valida los textos clave de la versión v2.7.1."""
+        """Genera el PDF y valida los textos clave de la versión v2.9.0."""
         pdf_bytes = PDFReport().generate(nutrisa_folder)
         assert len(pdf_bytes) > 10_000
 
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             text_p1 = pdf.pages[0].extract_text()
-            assert "(v2.8.0)" in text_p1
-            assert "PERFIL TRIBUTARIO SÓLIDO" in text_p1
+            assert "(v2.9.0)" in text_p1
+            assert "ELEGIBLE PARA LÍNEA COMERCIAL" in text_p1
             assert "Inicial: M$ 7.200" in text_p1
             assert "Máxima: M$ 14.400" in text_p1
             assert "En conjunto" in text_p1
-            assert "Tope patrimonial no restrictivo en este RUT" in text_p1
+            assert "Tope de concentración por proveedor: 3% CPT" in text_p1
             # Normalización de domicilio
             assert "01565 Bodeg" in text_p1
             # Aclaración de glosa Paso B2
@@ -135,10 +139,11 @@ class TestGoldenNutrisa:
                 assert "Capital Propio CPT Cód. 645/1698" in text_p2
                 assert "M$ 692.056 (Cód. 1694)" in text_p2
                 assert "M$ 3.625.110" in text_p2
-                assert "Motor Determinista Cavilaria v2.8.0" in text_p2
-                # Doble base de conciliación
-                assert "3.2% s/base" in text_p2 and "3.1% s/base F29" in text_p2
-                assert "CONCILIADO (<10% dif.)" in text_p2
+                assert "Motor Determinista Cavilaria v2.9.0" in text_p2
+                # Base única de conciliación F22
+                assert "3.2% s/base" in text_p2
+                assert "F22 — CONCILIADO (<10% dif.)" in text_p2
+                assert "s/base F29" not in text_p2
 
     def test_volcado_verificacion_nativa_nutrisa_pdfplumber(self):
         """Extrae directamente con pdfplumber y verifica con asserts exactos los códigos F22 de NUTRISA."""

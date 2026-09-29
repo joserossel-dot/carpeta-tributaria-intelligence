@@ -453,9 +453,9 @@ class TestVersion23Audit:
         result = CreditRiskEngine(benchmark_vacio).calculate(tf)
         # Score debe ser alto (>= 75) y clasificación acoplada directamente al puntaje tributario
         assert result.score_compuesto is not None and result.score_compuesto >= 75
-        assert result.decision.clasificacion_riesgo in ("PERFIL TRIBUTARIO SÓLIDO", "PERFIL TRIBUTARIO MODERADO")
+        assert result.decision.clasificacion_riesgo in ("ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA)", "PERFIL TRIBUTARIO MODERADO")
         assert "Línea" in result.decision.evaluacion_referencial
-        assert result.decision.desempeno_tributario_texto == "Desempeño Tributario Alto"
+        assert result.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Alta"
 
     def test_filtro_elegibilidad_5_etapas(self, benchmark_vacio) -> None:
         """Verifica que el Filtro de Elegibilidad Tributaria contenga las 5 dimensiones requeridas."""

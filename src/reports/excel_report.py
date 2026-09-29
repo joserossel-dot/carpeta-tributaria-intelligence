@@ -88,7 +88,7 @@ class ExcelReport:
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.8.0)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.9.0)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -107,7 +107,7 @@ class ExcelReport:
         ).replace("_", " ") if cr else "OBSERVADO"
         score_val = getattr(cr, "score_crediticio", 0.0) if cr else 0.0
         clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
-        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Desempeño Tributario Alto" if score_val >= 80 else "Desempeño Tributario Medio")
+        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Capacidad Operativa Tributaria Alta" if score_val >= 80 else "Desempeño Tributario Medio")
         linea_ini = getattr(cr, "linea_inicial_sugerida", 0) if cr else 0
         linea_max = getattr(cr, "linea_maxima_condicionada", 0) or getattr(cr, "cupo_maximo_sugerido", 0) if cr else 0
         plazo_dias = getattr(cr, "plazo_sugerido_dias", 0) if cr else 0
@@ -205,7 +205,7 @@ class ExcelReport:
         rli_mens = mem.get("rli_mensualizada_f22")
         phi_pct = mem.get("factor_ajuste_conductual_pct", int(round(mem.get("factor_riesgo_phi", 1.0) * 100)))
         cpt_val = mem.get("capital_propio_tributario")
-        tope_cpt = mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
+        tope_cpt = mem.get("tope_patrimonial_3pct_cpt") or mem.get("tope_patrimonial_12pct_cpt") or mem.get("tope_patrimonial_cpt")
         cupo_max = mem.get("linea_maxima_condicionada") or mem.get("cupo_maximo_sugerido", 0)
         cupo_ini = mem.get("linea_inicial_sugerida") or linea_ini
         pct_ap = mem.get("pct_apertura_inicial", 50)
@@ -228,10 +228,7 @@ class ExcelReport:
 
         min_b1_b2 = min(techo_op, freno_flujo)
         if tope_cpt is not None:
-            if tope_cpt > min_b1_b2:
-                glosa_d = "12% CPT en línea limpia (Tope patrimonial no restrictivo en este RUT)"
-            else:
-                glosa_d = "12% CPT (Freno patrimonial ACTIVO por bajo CPT)"
+            glosa_d = "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0"
         elif cpt_val is not None and cpt_val <= 0:
             glosa_d = "CPT <= 0 ($0 en línea limpia por quiebra técnica)"
         else:
@@ -247,7 +244,7 @@ class ExcelReport:
             ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (parámetro prudencial de exposición por proveedor: 8% C_base)"),
             ("Paso B2: Freno por Absorción Operacional", round(freno_flujo / 1000.0) if freno_flujo else 0, metodologia_b2),
             ("Paso C: Factor de Ajuste Conductual", phi_val_excel, glosa_c_excel),
-            (f"Paso D: Referencia Patrimonial (12% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", glosa_d),
+            (f"Paso D: Referencia Patrimonial (3% CPT = {cpt_str})", round(tope_cpt / 1000.0) if tope_cpt is not None else "Sin tope", glosa_d),
             ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) x Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)"),
             (
                 f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)",

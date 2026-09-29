@@ -6075,9 +6075,10 @@
         "factor_ajuste_conductual_pct": 0,
         "cupo_preliminar": 0,
         "capital_propio_tributario": 1761144462647,
-        "tope_patrimonial_12pct_cpt": 352228892529,
-        "tope_patrimonial_35pct_cpt": 352228892529,
-        "tope_patrimonial_cpt": 352228892529,
+        "tope_patrimonial_3pct_cpt": 52834333879,
+        "tope_patrimonial_12pct_cpt": 52834333879,
+        "tope_patrimonial_35pct_cpt": 52834333879,
+        "tope_patrimonial_cpt": 52834333879,
         "rli_declarada_le_zero": false,
         "ausencia_f22": false,
         "contraccion_severa": true,
@@ -6145,7 +6146,7 @@
           "nombre": "Holgura Débito/Crédito IVA (F29)",
           "puntaje_obtenido": 20,
           "puntaje_maximo": 20,
-          "detalle": "Empresa exportadora: margen operacional holgado (Ventas/Compras = 2.15x) y recuperación legítima de IVA"
+          "detalle": "Empresa exportadora: margen operacional holgado (Ratio Débito / Crédito Giro 12M: 2.15x) y recuperación legítima de IVA"
         },
         {
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -6260,9 +6261,10 @@
       "factor_ajuste_conductual_pct": 0,
       "cupo_preliminar": 0,
       "capital_propio_tributario": 1761144462647,
-      "tope_patrimonial_12pct_cpt": 352228892529,
-      "tope_patrimonial_35pct_cpt": 352228892529,
-      "tope_patrimonial_cpt": 352228892529,
+      "tope_patrimonial_3pct_cpt": 52834333879,
+      "tope_patrimonial_12pct_cpt": 52834333879,
+      "tope_patrimonial_35pct_cpt": 52834333879,
+      "tope_patrimonial_cpt": 52834333879,
       "rli_declarada_le_zero": false,
       "ausencia_f22": false,
       "contraccion_severa": true,
@@ -6314,7 +6316,7 @@
         "nombre": "Holgura Débito/Crédito IVA (F29)",
         "puntaje_obtenido": 20,
         "puntaje_maximo": 20,
-        "detalle": "Empresa exportadora: margen operacional holgado (Ventas/Compras = 2.15x) y recuperación legítima de IVA"
+        "detalle": "Empresa exportadora: margen operacional holgado (Ratio Débito / Crédito Giro 12M: 2.15x) y recuperación legítima de IVA"
       },
       {
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",

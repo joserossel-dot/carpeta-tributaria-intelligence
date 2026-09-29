@@ -76,8 +76,8 @@ class TestV27ValidityArchetypes:
         assert cr.linea_inicial_sugerida == 7_200_000
         assert cr.cupo_aprobado == 7_200_000
         assert cr.score_crediticio == 92
-        assert cr.desempeno_tributario_texto == "Desempeño Tributario Alto"
-        assert cr.evaluacion_referencial == "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)"
+        assert cr.desempeno_tributario_texto == "Capacidad Operativa Tributaria Alta"
+        assert cr.evaluacion_referencial == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA) (Línea Sujeta a Dicom)"
 
         mem = cr.memoria_calculo
         assert mem["capital_propio_tributario"] == 3_625_109_624

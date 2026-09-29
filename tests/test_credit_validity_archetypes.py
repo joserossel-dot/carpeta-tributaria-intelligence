@@ -64,7 +64,7 @@ class TestCreditValidityArchetypes:
 
         assert cr is not None
         assert cr.score_crediticio == 92
-        assert cr.evaluacion_referencial == "PERFIL TRIBUTARIO SÓLIDO (Línea Sujeta a Dicom)"
+        assert cr.evaluacion_referencial == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA) (Línea Sujeta a Dicom)"
         assert cr.linea_maxima_condicionada == 14_400_000
         assert cr.linea_inicial_sugerida == 7_200_000
         assert cr.memoria_calculo["freno_absorcion_operacional"] == 14_417_824

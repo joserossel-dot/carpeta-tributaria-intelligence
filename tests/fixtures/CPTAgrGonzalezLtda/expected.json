@@ -5901,6 +5901,7 @@
         "factor_ajuste_conductual_pct": 60,
         "cupo_preliminar": 2500000,
         "capital_propio_tributario": null,
+        "tope_patrimonial_3pct_cpt": null,
         "tope_patrimonial_12pct_cpt": null,
         "tope_patrimonial_35pct_cpt": null,
         "tope_patrimonial_cpt": null,
@@ -5971,7 +5972,7 @@
           "nombre": "Holgura Débito/Crédito IVA (F29)",
           "puntaje_obtenido": 20,
           "puntaje_maximo": 20,
-          "detalle": "Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: 2.31x | Débito/Crédito total c/remanente: 1.37x)"
+          "detalle": "Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: 2.31x) (5 de 12 meses con compras > ventas y arrastre de remanente Cód. 504)"
         },
         {
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -6083,6 +6084,7 @@
       "factor_ajuste_conductual_pct": 60,
       "cupo_preliminar": 2500000,
       "capital_propio_tributario": null,
+      "tope_patrimonial_3pct_cpt": null,
       "tope_patrimonial_12pct_cpt": null,
       "tope_patrimonial_35pct_cpt": null,
       "tope_patrimonial_cpt": null,
@@ -6137,7 +6139,7 @@
         "nombre": "Holgura Débito/Crédito IVA (F29)",
         "puntaje_obtenido": 20,
         "puntaje_maximo": 20,
-        "detalle": "Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: 2.31x | Débito/Crédito total c/remanente: 1.37x)"
+        "detalle": "Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: 2.31x) (5 de 12 meses con compras > ventas y arrastre de remanente Cód. 504)"
       },
       {
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
