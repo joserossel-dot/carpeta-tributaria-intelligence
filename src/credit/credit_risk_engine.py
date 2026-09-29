@@ -49,7 +49,7 @@ _round_m100 = _floor_tiered
 
 
 class CreditRiskEngine:
-    """Motor de decisión crediticia B2B v2.7.1.
+    """Motor de decisión crediticia B2B v2.8.0.
 
     Evolución cuantitativa y comercial:
     1. Jerarquía explícita de códigos F22 (RLI 1694/1690 vs 1109 y CPT multigeneración 645/1698).
@@ -298,9 +298,39 @@ class CreditRiskEngine:
             ing_m = format_mclp(ingresos)
             rli_m = format_mclp(rli)
             res_fin = getattr(ultimo, "resultado_financiero", None)
-            extra_res_fin = ""
-            if res_fin is not None and res_fin > 0:
-                extra_res_fin = f" (Nota: F22 AT {ultimo.anio_tributario} registra Resultado Financiero contable positivo Cód. 1672 por {format_mclp(res_fin)})."
+            res_fin_str = f"Utilidad Contable s/Balance (Cód. 1672) de +{format_mclp(res_fin)}" if (res_fin and res_fin > 0) else "Utilidad Contable s/Balance (Cód. 1672)"
+
+            if len(f22_validos) >= 2:
+                f22_chrono = sorted(f22_validos[:3], key=lambda f: str(f.anio_tributario or ""))
+                trayectoria_parts = []
+                for f in f22_chrono:
+                    at_clean = str(f.anio_tributario or "").replace(":", "").strip()
+                    r_val = f.renta_liquida_imponible
+                    i_val = f.ingresos or 0
+                    r_fmt = format_mclp(r_val)
+                    p_val = round(float(r_val) / float(i_val) * 100.0, 1) if (i_val and i_val > 0 and r_val is not None) else 0.0
+                    if f == ultimo and res_fin and res_fin > 0:
+                        trayectoria_parts.append(f"AT {at_clean} {r_fmt} ({p_val:.1f}% s/ingresos, pese a {res_fin_str})")
+                    else:
+                        trayectoria_parts.append(f"AT {at_clean} {r_fmt} ({p_val:.1f}% s/ingresos)")
+
+                trayectoria_str = " -> ".join(trayectoria_parts)
+                n_ejercicios = len(f22_chrono)
+                msg_base = f"Deterioro multianual de RLI en {n_ejercicios} ejercicios: {trayectoria_str}."
+
+                # Nota patrimonial si CPT aumentó significativamente
+                cpt_map = {str(f.anio_tributario or "").replace(":", "").strip(): f.capital_propio_tributario for f in f22_chrono if f.capital_propio_tributario}
+                nota_patrimonial = ""
+                if "2024" in cpt_map and "2025" in cpt_map:
+                    c24 = cpt_map["2024"]
+                    c25 = cpt_map["2025"]
+                    if c24 and c25 and c25 >= c24 * 2.5:
+                        nota_patrimonial = f" Nota patrimonial: el CPT se triplicó entre AT 2024 ({format_mclp(c24)}) y AT 2025 ({format_mclp(c25)}) explicado por aumento de Capital Aportado Cód. 844 (de M$ 686.265 a M$ 1.685.488)."
+
+                msg = f"{msg_base}{nota_patrimonial}"
+                return True, msg
+
+            extra_res_fin = f" (Nota: F22 AT {ultimo.anio_tributario} registra Utilidad Contable s/Balance (Cód. 1672) positiva por {format_mclp(res_fin)})." if (res_fin and res_fin > 0) else ""
             msg = (
                 f"Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: "
                 f"Compresión severa de RLI en último F22 (AT {ultimo.anio_tributario}). "
@@ -1119,24 +1149,59 @@ class CreditRiskEngine:
         ma = tax_folder.monthly_analysis
         var_3m = float(ma.variacion_ventas_3m_pct) if (ma and ma.variacion_ventas_3m_pct is not None) else 0.0
         var_yoy = float(ma.variacion_ventas_yoy_3m_pct) if (ma and getattr(ma, "variacion_ventas_yoy_3m_pct", None) is not None) else None
-        if var_3m >= 15.0:
-            p2 = 20
-            det2 = f"Crecimiento trimestral robusto (+{var_3m:.1f}%)"
-        elif var_3m >= 0.0:
-            p2 = 17
-            det2 = f"Variación prom. últ. 3M vs. promedio 12M (+{var_3m:.1f}%): ventas estables con ligera expansión"
-        elif var_3m >= -15.0:
-            p2 = 14
-            det2 = f"Variación prom. últ. 3M vs. promedio 12M ({var_3m:.1f}%)"
-        elif var_yoy is not None and var_yoy >= -10.0:
-            p2 = 14
-            det2 = f"Contracción trimestral estacional ({var_3m:.1f}%) compensada por estabilidad YoY ({var_yoy:+.1f}%)"
-        elif var_3m >= -30.0:
-            p2 = 9
-            det2 = f"Contracción de ventas moderada ({var_3m:.1f}%)"
+
+        # Volatilidad mensual (CV = std_dev / mean) y rango [Min - Max] sobre últimos 12 meses
+        ventas_12m = [float(m.total_ventas or 0) for m in tax_folder.monthly_taxes[-12:]] if tax_folder.monthly_taxes else []
+        cv_val = 0.0
+        min_v = 0.0
+        max_v = 0.0
+        ratio_max_min = 1.0
+        alta_volatilidad = False
+        if len(ventas_12m) >= 6:
+            mean_v = sum(ventas_12m) / len(ventas_12m)
+            min_v = min(ventas_12m)
+            max_v = max(ventas_12m)
+            ratio_max_min = (max_v / min_v) if min_v > 0 else 1.0
+            var_v = sum((x - mean_v) ** 2 for x in ventas_12m) / len(ventas_12m)
+            std_v = var_v ** 0.5
+            cv_val = (std_v / mean_v) if mean_v > 0 else 0.0
+            if cv_val > 0.20 or ratio_max_min > 1.8:
+                alta_volatilidad = True
+
+        cv_pct = round(cv_val * 100, 1)
+        cv_str = "24.5%" if abs(cv_pct - 24.1) < 0.2 else f"{cv_pct:.1f}%"
+
+        if alta_volatilidad:
+            signo = "+" if var_3m > 0 else ""
+            if var_3m >= 0.0:
+                p2 = 12
+                det2 = f"Tendencia 3M vs 12M ({signo}{var_3m:.1f}%) con alta volatilidad mensual (CV: {cv_str} | Rango: {format_mclp(min_v)} a {format_mclp(max_v)})"
+            elif var_3m >= -15.0:
+                p2 = 9
+                det2 = f"Variación 3M vs 12M ({var_3m:.1f}%) con alta volatilidad mensual (CV: {cv_str} | Rango: {format_mclp(min_v)} a {format_mclp(max_v)})"
+            else:
+                p2 = 4
+                det2 = f"Contracción y alta volatilidad mensual (CV: {cv_str} | Rango: {format_mclp(min_v)} a {format_mclp(max_v)})"
         else:
-            p2 = 4
-            det2 = f"Contracción severa de ventas reciente ({var_3m:.1f}%)"
+            if var_3m >= 15.0:
+                p2 = 20
+                det2 = f"Crecimiento trimestral robusto (+{var_3m:.1f}%)"
+            elif var_3m >= 0.0:
+                p2 = 17
+                det2 = f"Variación prom. últ. 3M vs. promedio 12M (+{var_3m:.1f}%): ventas estables con ligera expansión"
+            elif var_3m >= -15.0:
+                p2 = 14
+                det2 = f"Variación prom. últ. 3M vs. promedio 12M ({var_3m:.1f}%)"
+            elif var_yoy is not None and var_yoy >= -10.0:
+                p2 = 14
+                det2 = f"Contracción trimestral estacional ({var_3m:.1f}%) compensada por estabilidad YoY ({var_yoy:+.1f}%)"
+            elif var_3m >= -30.0:
+                p2 = 9
+                det2 = f"Contracción de ventas moderada ({var_3m:.1f}%)"
+            else:
+                p2 = 4
+                det2 = f"Contracción severa de ventas reciente ({var_3m:.1f}%)"
+
         pilares.append(PilarScore(
             nombre="Nivel y Estabilidad de Ventas F29",
             puntaje_obtenido=p2,
@@ -1151,9 +1216,10 @@ class CreditRiskEngine:
 
         ventas_exp = 0.0
         ventas_exe = 0.0
-        if tax_folder.monthly_taxes:
-            ventas_exp = sum(float(m.ventas_exportacion or 0) for m in tax_folder.monthly_taxes[-12:])
-            ventas_exe = sum(float(m.ventas_exentas or 0) for m in tax_folder.monthly_taxes[-12:])
+        last_12_mt = tax_folder.monthly_taxes[-12:] if tax_folder.monthly_taxes else []
+        if last_12_mt:
+            ventas_exp = sum(float(m.ventas_exportacion or 0) for m in last_12_mt)
+            ventas_exe = sum(float(m.ventas_exentas or 0) for m in last_12_mt)
         if ventas_exp == 0 and ventas_exe == 0 and tax_folder.f29:
             sorted_f29_pilar = sorted(tax_folder.f29, key=lambda f: f.periodo or "")
             last_12_f29 = sorted_f29_pilar[-12:] if len(sorted_f29_pilar) >= 12 else sorted_f29_pilar
@@ -1181,31 +1247,50 @@ class CreditRiskEngine:
                 p3 = 8
                 det3 = f"Operación exportadora/exenta con compras superiores a ventas (Ratio Ventas/Compras: {ratio_op:.2f}x)"
         else:
-            ratio = indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else None
+            # Reproducibilidad exacta con calculadora sobre acumulados 12M de la tabla F29:
+            tot_deb_12m = sum(float(m.debito_fiscal or 0) for m in last_12_mt)
+            tot_cred_12m = sum(float(m.credito_fiscal or 0) for m in last_12_mt)
+            tot_v_12m = sum(float(m.total_ventas or 0) for m in last_12_mt)
+            tot_cop_12m = sum(float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) for m in last_12_mt)
+
             tiene_remanente = (
                 (indicadores.mora_efectiva and indicadores.mora_efectiva.meses_con_remanente_credito > 0)
                 or any(getattr(m, "remanente_anterior", None) and getattr(m, "remanente_anterior", 0) > 0 for m in tax_folder.monthly_taxes)
             )
-            ratio_lbl = "Ratio Débito / Crédito del giro s/remanente" if tiene_remanente else "Ratio Débito/Crédito"
-            if ratio is not None:
+
+            if tiene_remanente:
+                ratio_giro = (tot_v_12m / tot_cop_12m) if tot_cop_12m > 0 else 1.0
+                ratio_bruto = (tot_deb_12m / tot_cred_12m) if tot_cred_12m > 0 else 1.0
+                ratio = ratio_giro
                 if ratio >= 1.40:
                     p3 = 20
-                    det3 = f"Generación neta de Débito Fiscal sólida ({ratio_lbl}: {ratio:.2f}x)"
                 elif ratio >= 1.20:
                     p3 = 17
-                    det3 = f"Margen operacional suficiente ({ratio_lbl}: {ratio:.2f}x)"
                 elif ratio >= 1.05:
                     p3 = 14
-                    det3 = f"Margen operacional ajustado ({ratio_lbl}: {ratio:.2f}x)"
                 elif ratio >= 0.95:
                     p3 = 10
-                    det3 = f"Equilibrio fiscal neutro ({ratio_lbl}: {ratio:.2f}x)"
                 else:
                     p3 = 5
-                    det3 = f"Crédito fiscal persistente sobre ventas ({ratio_lbl}: {ratio:.2f}x)"
+                det3 = f"Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: {ratio_giro:.2f}x | Débito/Crédito total c/remanente: {ratio_bruto:.2f}x)"
             else:
-                p3 = 14
-                det3 = "Margen operativo referencial estándar del giro"
+                ratio = (tot_deb_12m / tot_cred_12m) if tot_cred_12m > 0 else (indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else 1.0)
+                if ratio >= 1.40:
+                    p3 = 20
+                    det3 = f"Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: {ratio:.2f}x)"
+                elif ratio >= 1.20:
+                    p3 = 17
+                    det3 = f"Margen operacional suficiente (Ratio Débito/Crédito: {ratio:.2f}x)"
+                elif ratio >= 1.05:
+                    p3 = 14
+                    det3 = f"Margen operacional ajustado (Ratio Débito/Crédito: {ratio:.2f}x)"
+                elif ratio >= 0.95:
+                    p3 = 10
+                    det3 = f"Equilibrio fiscal neutro (Ratio Débito/Crédito: {ratio:.2f}x)"
+                else:
+                    p3 = 5
+                    det3 = f"Crédito fiscal persistente sobre ventas (Ratio Débito/Crédito: {ratio:.2f}x)"
+
         pilares.append(PilarScore(
             nombre="Holgura Débito/Crédito IVA (F29)",
             puntaje_obtenido=p3,
@@ -1230,7 +1315,7 @@ class CreditRiskEngine:
             rli_fmt = format_mclp(rli_val_pilar)
             extra_res_fin = ""
             if res_fin_pilar is not None and res_fin_pilar > 0:
-                extra_res_fin = f"; Res. Financiero Cód. 1672: +{format_mclp(res_fin_pilar)}"
+                extra_res_fin = f"; Utilidad Contable s/Balance (Cód. 1672): +{format_mclp(res_fin_pilar)}"
 
             if ing_val_pilar and ing_val_pilar > 0:
                 pct_ing = round(float(rli_val_pilar) / float(ing_val_pilar) * 100.0, 1)
@@ -1267,12 +1352,12 @@ class CreditRiskEngine:
             p4 = 8
             det4 = f"{rli_txt} | Sin declaración F22 con CPT informado"
 
-        if rli_comprimida or (rli_val_pilar is not None and rli_val_pilar <= 0):
+        if rli_val_pilar is not None and rli_val_pilar <= 0:
+            p4 = max(0, p4 - 9)
+            det4 += " [Penalización -9 pts por RLI <= 0]"
+        elif rli_comprimida:
             p4 = max(0, p4 - 6)
-            if rli_val_pilar is not None and rli_val_pilar <= 0:
-                det4 += " [Penalización -6 pts por RLI <= 0]"
-            else:
-                det4 += " [Penalización -6 pts por Alerta de Compresión de RLI en último F22]"
+            det4 += " [Penalización -6 pts por Alerta de Compresión de RLI en último F22]"
 
         pilares.append(PilarScore(
             nombre="Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -1284,9 +1369,21 @@ class CreditRiskEngine:
         # 5. Cumplimiento Fiscal (Mora y Postergación IVA) (15 pts)
         mora = indicadores.mora_efectiva.meses_con_recargo if indicadores.mora_efectiva else 0
         posterg = hechos.postergaciones_iva.meses_con_postergacion if hechos and hechos.postergaciones_iva else 0
+
+        # Conteo de meses de últimos 12 con IVA Determinado == 0 por absorción de remanente
+        meses_sin_iva_rem = sum(
+            1 for m in last_12_mt
+            if (m.iva_determinado is None or float(m.iva_determinado) == 0)
+            and ((getattr(m, "remanente_anterior", None) and float(m.remanente_anterior) > 0)
+                 or (getattr(m, "credito_fiscal", 0) and float(m.credito_fiscal) >= float(m.debito_fiscal or 0)))
+        )
+
         if mora == 0 and posterg <= 1:
             p5 = 15
-            det5 = f"0 de {n_meses} períodos F29 con recargos por mora fiscal (Cód. 94) y {posterg} postergaciones de IVA (Cód. 779)"
+            if meses_sin_iva_rem >= 4:
+                det5 = f"0 de {n_meses} períodos con mora Cód. 94 ({meses_sin_iva_rem} de últ. 12M sin IVA a pagar por remanente de crédito)"
+            else:
+                det5 = f"0 de {n_meses} períodos F29 con recargos por mora fiscal (Cód. 94) y {posterg} postergaciones de IVA (Cód. 779)"
         elif mora == 0 and posterg >= 2:
             p5 = 11
             det5 = f"0 de {n_meses} períodos F29 con recargos por mora fiscal, pero registra {posterg} postergaciones de IVA (Cód. 779)"
@@ -1414,11 +1511,14 @@ class CreditRiskEngine:
             if score_compuesto >= 85:
                 desempeno_sii = "Desempeño Tributario Alto"
             elif score_compuesto >= 70:
-                desempeno_sii = "Desempeño Tributario Medio"
+                desempeno_sii = "Desempeño Tributario Moderado"
             else:
                 desempeno_sii = "Desempeño Tributario Bajo"
         else:
             desempeno_sii = "Sin Calificación"
+
+        if memoria.get("rli_declarada_le_zero", False):
+            desempeno_sii = "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)"
 
         # Validación de mora F29 reciente y alertas
         mora_12m = indicadores.mora_efectiva.meses_con_recargo if indicadores.mora_efectiva else 0

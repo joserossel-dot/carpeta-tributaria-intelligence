@@ -6,7 +6,11 @@ import pytest
 from src.core.tax_folder_engine import TaxFolderEngine
 from src.reports.pdf_report import PDFReport
 
-PROTERM_PDF = Path("examples/Carpeta_Tributaria_Regular (4).pdf")
+_PROTERM_CANDIDATES = [
+    Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (4).pdf"),
+    Path("examples/Carpeta_Tributaria_Regular (4).pdf"),
+]
+PROTERM_PDF = next((p for p in _PROTERM_CANDIDATES if p.exists()), Path("examples/Carpeta_Tributaria_Regular (4).pdf"))
 
 
 @pytest.mark.skipif(not PROTERM_PDF.exists(), reason="PDF de prueba PROTERM S.A. no disponible")

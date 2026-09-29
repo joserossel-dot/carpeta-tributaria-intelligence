@@ -95,7 +95,8 @@ class TestAlvalSpaIntegration:
         """Verifica la regla estricta de comité: pérdida tributaria genera Línea = 0 y veredicto explicativo."""
         cr = alval_folder.credit_risk
         assert cr is not None
-        assert cr.score_compuesto == 85
+        assert cr.score_compuesto == 77
+        assert cr.decision.desempeno_tributario_texto == "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)"
         assert cr.linea_maxima_sugerida == 0
         assert cr.linea_inicial_sugerida == 0
         assert cr.veredicto == "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)"
@@ -252,23 +253,39 @@ class TestAlvalSpaIntegration:
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             assert len(pdf.pages) == 2
             text_p1 = pdf.pages[0].extract_text()
-            assert "(v2.7.1)" in text_p1
+            assert "(v2.8.0)" in text_p1
             assert "SIN LÍNEA AUTOMÁTICA" in text_p1
-            assert "85 / 100" in text_p1 or "85 pts" in text_p1
+            assert "77 / 100" in text_p1 or "77 pts" in text_p1
+            assert "No constituye rating de solvencia" in text_p1
+            assert "sujeto a Dicom y Balance" in text_p1
             assert "Pérdida Tributaria en último F22" in text_p1
             assert "2 representante(s) registrado(s)" in text_p1
             assert "Cualquiera" in text_p1
             assert "CAMINO RENCA LAMPA 9100 LT.10 a, PUDAHUEL" in text_p1
             assert "+11.0%" in text_p1
-            assert "ventas estables con ligera" in text_p1
+            assert "alta volatilidad mensual" in text_p1
+            assert "CV: 24.5%" in text_p1
+            assert "Rango:" in text_p1
+            assert "M$ 402.100 a M$ 911.478" in text_p1
             assert "Margen operacional ajustado" in text_p1
-            assert "1.11x" in text_p1
+            assert "1.07x" in text_p1
+            assert "0.98x" in text_p1
             assert "RLI AT 2026: -M$ 31.382" in text_p1
-            assert "Res. Financiero Cód. 1672" in text_p1
+            assert "Utilidad Contable s/Balance" in text_p1
+            assert "1672" in text_p1
             assert "CPT: M$ 1.756.915" in text_p1
-            assert "Penalización -6 pts por RLI <=" in text_p1
+            assert "Penalización -9" in text_p1
+            assert "RLI <= 0" in text_p1
+            assert "0 de 36 períodos con mora Cód. 94" in text_p1
+            assert "5 de últ. 12M sin IVA a pagar" in text_p1
+            assert "remanente de" in text_p1
+            assert "crédito" in text_p1
 
             text_p2 = pdf.pages[1].extract_text()
+            full_text = text_p1 + "\n" + text_p2
+            assert "Utilidad Contable s/Balance (Cód. 1672)" in full_text
+            assert "Deterioro multianual de RLI en 3 ejercicios" in full_text
+            assert "el CPT se triplicó entre AT 2024" in full_text
             assert "Ingresos Giro Cód. 1657" in text_p2
             assert "RLI / Pérdida Cód. 1694/1695" in text_p2
             assert "Capital Propio CPT Cód. 645/1698" in text_p2
@@ -281,6 +298,4 @@ class TestAlvalSpaIntegration:
             assert "2025-07 M$ 911.478 M$ 971.150 M$ 173.181 M$ 189.986 M$ 0" in text_p2
             assert "1.4% s/base" in text_p2
             assert "CONCILIADO (<10% dif.)" in text_p2
-            assert "Motor Determinista Cavilaria v2.7.1" in text_p2
-            assert "autorizar línea en evaluación manual" in text_p2
-            assert "Cód. 1672 por M$ 103.376" in text_p2
+            assert "Motor Determinista Cavilaria v2.8.0" in text_p2

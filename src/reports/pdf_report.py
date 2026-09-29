@@ -110,7 +110,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.7.1)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.8.0)",
                 subtitle_style,
             )
         )
@@ -222,7 +222,7 @@ class PDFReport:
         else:
             badge_bg = colors.HexColor("#475569")
 
-        evaluacion_cell = Paragraph(f"<b>{evaluacion}</b>", badge_style)
+        evaluacion_cell = Paragraph(f"<b>{evaluacion}</b><br/><font size=5.0 color='#FFFFFF'>No constituye rating de solvencia ni mide endeudamiento financiero; sujeto a Dicom y Balance</font>", badge_style)
         linea_ini_txt = format_mclp(linea_ini)
         linea_max_txt = format_mclp(linea_max)
 
@@ -639,16 +639,32 @@ class PDFReport:
                 rli = getattr(f, "renta_liquida_imponible", None)
                 cpt_f = getattr(f, "capital_propio_tributario", None)
                 anio_clean = str(getattr(f, "anio_tributario", "")).replace(":", "").strip()
+
+                ing_code = getattr(f, "ingresos_source_code", None)
+                ing_fmt = format_mclp(ing).replace(":", "").strip()
+                if ing_code and ing_code != "1657" and ing_fmt != "—":
+                    ing_cell_txt = f"{ing_fmt} (Cód. {ing_code})"
+                else:
+                    ing_cell_txt = ing_fmt
+
                 rli_code = getattr(f, "rli_source_code", None)
                 if not rli_code:
                     rli_code = "1695" if (rli is not None and rli < 0) else "1694"
                 rli_fmt = format_mclp(rli).replace(":", "").strip()
                 rli_cell_txt = f"{rli_fmt} (Cód. {rli_code})" if (rli is not None and rli_fmt != "—") else rli_fmt
+
+                cpt_code = getattr(f, "cpt_source_code", None)
+                cpt_fmt = format_mclp(cpt_f).replace(":", "").strip()
+                if cpt_code and cpt_code in ("1545", "1546", "1584", "1585") and cpt_fmt != "—":
+                    cpt_cell_txt = f"{cpt_fmt} (Cód. {cpt_code})"
+                else:
+                    cpt_cell_txt = cpt_fmt
+
                 f22_rows.append([
                     Paragraph(anio_clean, table_cell),
-                    Paragraph(format_mclp(ing).replace(":", "").strip(), table_cell),
+                    Paragraph(ing_cell_txt, table_cell),
                     Paragraph(rli_cell_txt, table_cell),
-                    Paragraph(format_mclp(cpt_f).replace(":", "").strip(), table_cell),
+                    Paragraph(cpt_cell_txt, table_cell),
                 ])
             f22_table = Table(f22_rows, colWidths=[28 * mm, 50 * mm, 58 * mm, 49 * mm])
             f22_table.setStyle(
@@ -682,7 +698,7 @@ class PDFReport:
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
             "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor. "
-            "[Motor Determinista Cavilaria v2.7.1 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=12% CPT, Apertura=50%/40%/30%/0%]</i>"
+            "[Motor Determinista Cavilaria v2.8.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=12% CPT, Apertura=50%/40%/30%/0%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 

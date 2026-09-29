@@ -61,9 +61,53 @@ class PDFExtractor:
                         tables = page.extract_tables() or []
                     else:
                         tables = []
-                    pages.append(PageResult(page=i, text=text, tables=tables))
+
+                    column_text = None
+                    text_upper = text.upper()
+                    if "FORMULARIO 22" in text_upper or "AÑO TRIBUTARIO" in text_upper or "FORM. 22" in text_upper:
+                        try:
+                            column_text = self._reconstruct_two_columns(page)
+                        except Exception:
+                            column_text = None
+
+                    pages.append(PageResult(page=i, text=text, tables=tables, column_text=column_text))
                     page.flush_cache()
             gc.collect()
 
         return ExtractResult(pages=pages)
+
+    @staticmethod
+    def _reconstruct_two_columns(page) -> str:
+        """Separa geométricamente las páginas de F22 en 2 columnas verticales (x0 < 400 y x0 >= 400)
+        para evitar el intercalado horizontal de líneas de códigos paralelos.
+        """
+        words = page.extract_words()
+        if not words:
+            return ""
+        split_x = 400.0 if page.width and page.width <= 650 else (page.width * 0.50 if page.width else 400.0)
+        left_words = [w for w in words if w["x0"] < split_x]
+        right_words = [w for w in words if w["x0"] >= split_x]
+
+        def words_to_lines(wlist):
+            if not wlist:
+                return ""
+            wlist = sorted(wlist, key=lambda w: (round(w["top"], 1), w["x0"]))
+            lines = []
+            cur_line = []
+            cur_top = None
+            for w in wlist:
+                if cur_top is None or abs(w["top"] - cur_top) > 3.0:
+                    if cur_line:
+                        lines.append(" ".join(cur_line))
+                    cur_line = [w["text"]]
+                    cur_top = w["top"]
+                else:
+                    cur_line.append(w["text"])
+            if cur_line:
+                lines.append(" ".join(cur_line))
+            return "\n".join(lines)
+
+        left_text = words_to_lines(left_words)
+        right_text = words_to_lines(right_words)
+        return left_text + "\n" + right_text
 

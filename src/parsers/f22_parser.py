@@ -31,15 +31,15 @@ class F22Parser:
     """
 
     # Códigos para régimen 14A, ProPyme (14 D3, 14 D8) y formularios históricos
-    # Jerarquía explícita v2.7:
-    # CPT Negativo: 646 (Anverso actual), 1704 (Recuadro 14), 845 (histórico), 1546
-    _CPT_NEGATIVO_CODES = ["646", "1704", "845", "1546"]
-    # CPT Positivo: 1698 (Recuadro 14), 645 (Anverso actual), 844 (histórico 2017-2019), 1545, 1703, 1696
-    _CPT_POSITIVO_CODES = ["1698", "645", "844", "1545", "1703", "1696"]
-    _INGRESOS_CODES = ["1657", "1400", "1410", "628"]
-    # RLI: 1694/1690 (Recuadro 12 RLI 14A), 1440/1580 (ProPyme 14D3/14D8), 1414, 1438, 643, 225, fallback 1109
-    _RLI_CODES = ["1694", "1690", "1440", "1580", "1414", "1438", "643", "225", "1109"]
-    _PERDIDAS_CODES = ["1695", "1450", "1706", "1143", "229"]
+    # Jerarquía explícita v2.8 (14A, 14D3, 14D8 y formularios históricos):
+    # CPT Negativo: 646 (Anverso actual), 1704 (Recuadro 14), 1546 (14D3), 1585 (14D8), 845 (histórico)
+    _CPT_NEGATIVO_CODES = ["646", "1704", "1546", "1585", "845"]
+    # CPT Positivo: 1698 (Recuadro 14), 645 (Anverso actual), 1545 (14D3), 1584 (14D8), 844 (histórico 2017-2019), 1703, 1696
+    _CPT_POSITIVO_CODES = ["1698", "645", "1545", "1584", "844", "1703", "1696"]
+    _INGRESOS_CODES = ["1657", "1400", "1600", "1410", "628"]
+    # RLI: 1694/1690 (Recuadro 12 RLI 14A), 1440 (14D3), 1626 (14D8), 1580, 1414, 1438, 643, 225, fallback 1109
+    _RLI_CODES = ["1694", "1690", "1440", "1626", "1580", "1414", "1438", "643", "225", "1109"]
+    _PERDIDAS_CODES = ["1695", "1450", "1627", "1706", "1143", "229"]
     _BASE_IMPONIBLE_CODES = ["1109", "1440", "1414", "1438"]
     _PPM_CODES = ["36", "849", "1904"]
     _CREDITOS_CODES = ["82", "626"]
@@ -97,7 +97,7 @@ class F22Parser:
         activo = False
 
         for page in pages:
-            texto = page.text or ""
+            texto = getattr(page, "column_text", None) or page.text or ""
             tiene_marcador = bool(self._RE_ANIO.search(texto))
             listada = page.page in paginas_listadas
             otra_seccion = self._RE_OTRA_SECCION.search(texto) is not None
@@ -245,6 +245,11 @@ class F22Parser:
         rli_source = None
         val_1694, _ = self._extract_raw_code(text, "1694")
         val_1695, _ = self._extract_raw_code(text, "1695")
+        val_1440, _ = self._extract_raw_code(text, "1440")
+        val_1450, _ = self._extract_raw_code(text, "1450")
+        val_1626, _ = self._extract_raw_code(text, "1626")
+        val_1627, _ = self._extract_raw_code(text, "1627")
+
         if val_1694 is not None and val_1694 > 0:
             rli_val = val_1694
             rli_source = "1694"
@@ -254,9 +259,23 @@ class F22Parser:
             # la RLI del ejercicio es NEGATIVA (-abs(1695)), nunca tomar Cód. 1690 como positivo.
             rli_val = -abs(val_1695)
             rli_source = "1695"
+        elif val_1440 is not None and val_1440 > 0:
+            rli_val = val_1440
+            rli_source = "1440"
+            valores.pop("perdidas", None)
+        elif val_1450 is not None and val_1450 > 0:
+            rli_val = -abs(val_1450)
+            rli_source = "1450"
+        elif val_1626 is not None and val_1626 > 0:
+            rli_val = val_1626
+            rli_source = "1626"
+            valores.pop("perdidas", None)
+        elif val_1627 is not None and val_1627 > 0:
+            rli_val = -abs(val_1627)
+            rli_source = "1627"
         else:
             for code in self._RLI_CODES:
-                if code in ("1694", "1695"):
+                if code in ("1694", "1695", "1440", "1450", "1626", "1627"):
                     continue
                 val, _ = self._extract_raw_code(text, code)
                 if val is not None and val != 0:
