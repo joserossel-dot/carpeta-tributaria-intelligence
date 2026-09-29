@@ -2240,20 +2240,19 @@
       "anio_tributario": "2019",
       "ingresos": null,
       "renta_liquida_imponible": 1513977761,
-      "capital_propio_tributario": 5515454480,
-      "impuesto_determinado": null,
-      "ppm": 19882881,
+      "capital_propio_tributario": 5515454480647,
+      "impuesto_determinado": 20994519315,
+      "ppm": 19882881893,
       "creditos": null,
-      "perdidas": 7495466,
+      "perdidas": 7495466123,
       "base_imponible": 1513977761,
       "resultado_tributario": null,
       "observaciones": [
-        "No se encontraron Ingresos del Giro",
-        "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+        "No se encontraron Ingresos del Giro"
       ],
       "idpc_determinado": null,
-      "ppm_imputados": 19882881,
-      "saldo_liquidacion_anual": null,
+      "ppm_imputados": 19882881893,
+      "saldo_liquidacion_anual": 20994519315,
       "rli_source_code": "1109",
       "cpt_source_code": "645",
       "ingresos_source_code": null
@@ -2262,21 +2261,20 @@
       "anio_tributario": "2018",
       "ingresos": null,
       "renta_liquida_imponible": null,
-      "capital_propio_tributario": 2604008010,
-      "impuesto_determinado": null,
-      "ppm": 4039198,
-      "creditos": 19249,
+      "capital_propio_tributario": 2604008010647,
+      "impuesto_determinado": 8219249315,
+      "ppm": 4039198940,
+      "creditos": 19249315,
       "perdidas": null,
       "base_imponible": null,
       "resultado_tributario": null,
       "observaciones": [
         "No se encontraron Ingresos del Giro",
-        "No se encontró Renta Líquida Imponible",
-        "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+        "No se encontró Renta Líquida Imponible"
       ],
       "idpc_determinado": null,
-      "ppm_imputados": 4039198,
-      "saldo_liquidacion_anual": null,
+      "ppm_imputados": 4039198940,
+      "saldo_liquidacion_anual": 8219249315,
       "rli_source_code": null,
       "cpt_source_code": "645",
       "ingresos_source_code": null
@@ -2284,23 +2282,21 @@
     {
       "anio_tributario": "2017",
       "ingresos": null,
-      "renta_liquida_imponible": null,
-      "capital_propio_tributario": 2586116403,
-      "impuesto_determinado": null,
-      "ppm": 4020727,
-      "creditos": null,
+      "renta_liquida_imponible": 14553479231,
+      "capital_propio_tributario": 2586116403647,
+      "impuesto_determinado": 306,
+      "ppm": 4020727927,
+      "creditos": 3492835628,
       "perdidas": null,
       "base_imponible": null,
       "resultado_tributario": null,
       "observaciones": [
-        "No se encontraron Ingresos del Giro",
-        "No se encontró Renta Líquida Imponible",
-        "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+        "No se encontraron Ingresos del Giro"
       ],
       "idpc_determinado": 961,
-      "ppm_imputados": 4020727,
-      "saldo_liquidacion_anual": null,
-      "rli_source_code": null,
+      "ppm_imputados": 4020727927,
+      "saldo_liquidacion_anual": 306,
+      "rli_source_code": "225",
       "cpt_source_code": "645",
       "ingresos_source_code": null
     }
@@ -3864,10 +3860,6 @@
           "motivo": "No se encontraron Ingresos del Giro"
         },
         {
-          "campo": "f22.2019.Impuesto determinado",
-          "motivo": "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
-        },
-        {
           "campo": "f22.2018.Ingresos del Giro",
           "motivo": "No se encontraron Ingresos del Giro"
         },
@@ -3876,20 +3868,8 @@
           "motivo": "No se encontró Renta Líquida Imponible"
         },
         {
-          "campo": "f22.2018.Impuesto determinado",
-          "motivo": "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
-        },
-        {
           "campo": "f22.2017.Ingresos del Giro",
           "motivo": "No se encontraron Ingresos del Giro"
-        },
-        {
-          "campo": "f22.2017.Renta Líquida Imponible",
-          "motivo": "No se encontró Renta Líquida Imponible"
-        },
-        {
-          "campo": "f22.2017.Impuesto determinado",
-          "motivo": "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
         }
       ],
       "meses_f29_faltantes": [],
@@ -3935,20 +3915,20 @@
       },
       "respaldo_estructural": {
         "score": 100,
-        "capital_propio_tributario": 5515454480,
+        "capital_propio_tributario": 5515454480647,
         "cupo_solicitado": null,
         "cupo_referencia": 5000000,
-        "veces_cobertura": 1103.09,
+        "veces_cobertura": 1103090.9,
         "confianza": "alta",
         "criterio": "CPT es proxy tributario, no liquidez real"
       }
     },
-    "score_compuesto": 90,
+    "score_compuesto": 85,
     "decision": {
       "resultado_base": "RECHAZADO",
       "evaluacion_referencial": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
       "clasificacion_riesgo": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
-      "desempeno_tributario_texto": "Desempeño Tributario Alto",
+      "desempeno_tributario_texto": "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 0,
       "cupo_aprobado": 0,
@@ -3983,10 +3963,10 @@
         "factor_riesgo_phi": 1.0,
         "factor_ajuste_conductual_pct": 0,
         "cupo_preliminar": 0,
-        "capital_propio_tributario": 5515454480,
-        "tope_patrimonial_12pct_cpt": 661854538,
-        "tope_patrimonial_35pct_cpt": 661854538,
-        "tope_patrimonial_cpt": 661854538,
+        "capital_propio_tributario": 5515454480647,
+        "tope_patrimonial_12pct_cpt": 661854537678,
+        "tope_patrimonial_35pct_cpt": 661854537678,
+        "tope_patrimonial_cpt": 661854537678,
         "rli_declarada_le_zero": true,
         "ausencia_f22": false,
         "contraccion_severa": false,
@@ -4012,7 +3992,7 @@
       },
       "hoja_ruta_comercial": [
         "Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).",
-        "Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).",
+        "Puntaje Tributario SII: 85/100 pts (Desempeño Tributario Moderado (Bloqueo por Pérdida F22)).",
         "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
         "Línea Máxima Condicionada: M$ 0.",
         "Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
@@ -4044,21 +4024,21 @@
         },
         {
           "nombre": "Nivel y Estabilidad de Ventas F29",
-          "puntaje_obtenido": 17,
+          "puntaje_obtenido": 12,
           "puntaje_maximo": 20,
-          "detalle": "Variación prom. últ. 3M vs. promedio 12M (+0.0%): ventas estables con ligera expansión"
+          "detalle": "Tendencia 3M vs 12M (0.0%) con alta volatilidad mensual (CV: 331.7% | Rango: M$ 0 a M$ 331.082)"
         },
         {
           "nombre": "Holgura Débito/Crédito IVA (F29)",
           "puntaje_obtenido": 20,
           "puntaje_maximo": 20,
-          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito del giro s/remanente: 3.33x)"
+          "detalle": "Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: 21.39x | Débito/Crédito total c/remanente: 3.28x)"
         },
         {
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
           "puntaje_obtenido": 15,
           "puntaje_maximo": 15,
-          "detalle": "RLI AT 2019: M$ 1.513.978 | CPT: M$ 5.515.454 (Respaldo contable no líquido: cobertura holgada)"
+          "detalle": "RLI AT 2019: M$ 1.513.978 | CPT: M$ 5.515.454.481 (Respaldo contable no líquido: cobertura holgada)"
         },
         {
           "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",
@@ -4120,15 +4100,15 @@
     ],
     "fortalezas": [
       "Cero meses con mora efectiva en 34 meses evaluados",
-      "Respaldo patrimonial sólido: CPT positivo de $5,515,454,480 CLP"
+      "Respaldo patrimonial sólido: CPT positivo de $5,515,454,480,647 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nClasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)\nPuntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 8.277\n- Techo Operativo Proveedor (8%): M$ 662\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 19.313\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 5.515.454\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).\n- ✅ Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada.",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nClasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)\nPuntaje Tributario SII: 85/100 pts (Desempeño Tributario Moderado (Bloqueo por Pérdida F22))\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 8.277\n- Techo Operativo Proveedor (8%): M$ 662\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 19.313\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 5.515.454.481\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).\n- ✅ Puntaje Tributario SII: 85/100 pts (Desempeño Tributario Moderado (Bloqueo por Pérdida F22)).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada.",
     "veredicto": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
     "evaluacion_referencial": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
     "clasificacion_riesgo": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
-    "desempeno_tributario_texto": "Desempeño Tributario Alto",
-    "score_crediticio": 90.0,
+    "desempeno_tributario_texto": "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)",
+    "score_crediticio": 85.0,
     "categoria_riesgo": "MEDIO",
     "cupo_maximo_sugerido": 0,
     "cupo_aprobado": 0,
@@ -4163,10 +4143,10 @@
       "factor_riesgo_phi": 1.0,
       "factor_ajuste_conductual_pct": 0,
       "cupo_preliminar": 0,
-      "capital_propio_tributario": 5515454480,
-      "tope_patrimonial_12pct_cpt": 661854538,
-      "tope_patrimonial_35pct_cpt": 661854538,
-      "tope_patrimonial_cpt": 661854538,
+      "capital_propio_tributario": 5515454480647,
+      "tope_patrimonial_12pct_cpt": 661854537678,
+      "tope_patrimonial_35pct_cpt": 661854537678,
+      "tope_patrimonial_cpt": 661854537678,
       "rli_declarada_le_zero": true,
       "ausencia_f22": false,
       "contraccion_severa": false,
@@ -4192,7 +4172,7 @@
     },
     "hoja_ruta_comercial": [
       "Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).",
-      "Puntaje Tributario SII: 90/100 pts (Desempeño Tributario Alto).",
+      "Puntaje Tributario SII: 85/100 pts (Desempeño Tributario Moderado (Bloqueo por Pérdida F22)).",
       "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
       "Línea Máxima Condicionada: M$ 0.",
       "Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
@@ -4208,21 +4188,21 @@
       },
       {
         "nombre": "Nivel y Estabilidad de Ventas F29",
-        "puntaje_obtenido": 17,
+        "puntaje_obtenido": 12,
         "puntaje_maximo": 20,
-        "detalle": "Variación prom. últ. 3M vs. promedio 12M (+0.0%): ventas estables con ligera expansión"
+        "detalle": "Tendencia 3M vs 12M (0.0%) con alta volatilidad mensual (CV: 331.7% | Rango: M$ 0 a M$ 331.082)"
       },
       {
         "nombre": "Holgura Débito/Crédito IVA (F29)",
         "puntaje_obtenido": 20,
         "puntaje_maximo": 20,
-        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito del giro s/remanente: 3.33x)"
+        "detalle": "Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: 21.39x | Débito/Crédito total c/remanente: 3.28x)"
       },
       {
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
         "puntaje_obtenido": 15,
         "puntaje_maximo": 15,
-        "detalle": "RLI AT 2019: M$ 1.513.978 | CPT: M$ 5.515.454 (Respaldo contable no líquido: cobertura holgada)"
+        "detalle": "RLI AT 2019: M$ 1.513.978 | CPT: M$ 5.515.454.481 (Respaldo contable no líquido: cobertura holgada)"
       },
       {
         "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",

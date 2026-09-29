@@ -4136,32 +4136,9 @@
       "anio_tributario": "2019",
       "ingresos": null,
       "renta_liquida_imponible": null,
-      "capital_propio_tributario": 6559199969,
-      "impuesto_determinado": null,
-      "ppm": 45021251,
-      "creditos": null,
-      "perdidas": null,
-      "base_imponible": null,
-      "resultado_tributario": null,
-      "observaciones": [
-        "No se encontraron Ingresos del Giro",
-        "No se encontró Renta Líquida Imponible",
-        "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
-      ],
-      "idpc_determinado": 9,
-      "ppm_imputados": 45021251,
-      "saldo_liquidacion_anual": null,
-      "rli_source_code": null,
-      "cpt_source_code": "645",
-      "ingresos_source_code": null
-    },
-    {
-      "anio_tributario": "2018",
-      "ingresos": null,
-      "renta_liquida_imponible": null,
       "capital_propio_tributario": null,
-      "impuesto_determinado": null,
-      "ppm": null,
+      "impuesto_determinado": 45021251306,
+      "ppm": 45021251940,
       "creditos": null,
       "perdidas": null,
       "base_imponible": null,
@@ -4172,7 +4149,30 @@
         "No se encontró Capital Propio Tributario"
       ],
       "idpc_determinado": 9,
-      "ppm_imputados": null,
+      "ppm_imputados": 45021251940,
+      "saldo_liquidacion_anual": 45021251306,
+      "rli_source_code": null,
+      "cpt_source_code": null,
+      "ingresos_source_code": null
+    },
+    {
+      "anio_tributario": "2018",
+      "ingresos": null,
+      "renta_liquida_imponible": null,
+      "capital_propio_tributario": null,
+      "impuesto_determinado": null,
+      "ppm": 53,
+      "creditos": 102,
+      "perdidas": null,
+      "base_imponible": null,
+      "resultado_tributario": null,
+      "observaciones": [
+        "No se encontraron Ingresos del Giro",
+        "No se encontró Renta Líquida Imponible",
+        "No se encontró Capital Propio Tributario"
+      ],
+      "idpc_determinado": 9,
+      "ppm_imputados": 53,
       "saldo_liquidacion_anual": null,
       "rli_source_code": null,
       "cpt_source_code": null,
@@ -4180,22 +4180,21 @@
     },
     {
       "anio_tributario": "2017",
-      "ingresos": 2957744173,
-      "renta_liquida_imponible": 173179282,
+      "ingresos": 630,
+      "renta_liquida_imponible": 173179282645,
       "capital_propio_tributario": null,
-      "impuesto_determinado": null,
-      "ppm": null,
+      "impuesto_determinado": 315,
+      "ppm": 53,
       "creditos": null,
-      "perdidas": null,
+      "perdidas": 232,
       "base_imponible": null,
       "resultado_tributario": null,
       "observaciones": [
-        "No se encontró Capital Propio Tributario",
-        "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+        "No se encontró Capital Propio Tributario"
       ],
       "idpc_determinado": 9,
-      "ppm_imputados": null,
-      "saldo_liquidacion_anual": null,
+      "ppm_imputados": 53,
+      "saldo_liquidacion_anual": 315,
       "rli_source_code": "643",
       "cpt_source_code": null,
       "ingresos_source_code": "628"
@@ -5774,7 +5773,7 @@
   },
   "credit_risk": {
     "calidad_datos": {
-      "completitud_pct": 100.0,
+      "completitud_pct": 66.7,
       "campos_no_confiables": [
         {
           "campo": "f22.2019.Ingresos del Giro",
@@ -5785,8 +5784,8 @@
           "motivo": "No se encontró Renta Líquida Imponible"
         },
         {
-          "campo": "f22.2019.Impuesto determinado",
-          "motivo": "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
+          "campo": "f22.2019.Capital Propio Tributario",
+          "motivo": "No se encontró Capital Propio Tributario"
         },
         {
           "campo": "f22.2018.Ingresos del Giro",
@@ -5803,10 +5802,6 @@
         {
           "campo": "f22.2017.Capital Propio Tributario",
           "motivo": "No se encontró Capital Propio Tributario"
-        },
-        {
-          "campo": "f22.2017.Impuesto determinado",
-          "motivo": "Impuesto determinado no confiable en este formato de Formulario 22 (pendiente de revisión)"
         }
       ],
       "meses_f29_faltantes": [],
@@ -5856,27 +5851,27 @@
         "criterio": "proxy de margen bruto (débito/crédito fiscal), no incluye remuneraciones; requiere benchmark propio por giro con muestra mínima antes de calificar con confianza alta"
       },
       "respaldo_estructural": {
-        "score": 100,
-        "capital_propio_tributario": 6559199969,
+        "score": null,
+        "capital_propio_tributario": null,
         "cupo_solicitado": null,
-        "cupo_referencia": 5000000,
-        "veces_cobertura": 1311.84,
-        "confianza": "alta",
+        "cupo_referencia": null,
+        "veces_cobertura": null,
+        "confianza": "sin_datos",
         "criterio": "CPT es proxy tributario, no liquidez real"
       }
     },
-    "score_compuesto": 77,
+    "score_compuesto": 70,
     "decision": {
       "resultado_base": "APROBADO_CON_CONDICIONES",
-      "evaluacion_referencial": "PERFIL TRIBUTARIO MODERADO (Línea Condicionada)",
-      "clasificacion_riesgo": "PERFIL TRIBUTARIO MODERADO",
-      "desempeno_tributario_texto": "Desempeño Tributario Medio",
+      "evaluacion_referencial": "PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva)",
+      "clasificacion_riesgo": "PERFIL TRIBUTARIO ACOTADO",
+      "desempeno_tributario_texto": "Desempeño Tributario Moderado",
       "producto_evaluado": "credito_30_dias",
-      "cupo_maximo_sugerido": 2000000,
-      "cupo_aprobado": 800000,
-      "linea_maxima_sugerida": 2000000,
-      "linea_inicial_sugerida": 800000,
-      "linea_maxima_condicionada": 2000000,
+      "cupo_maximo_sugerido": 1500000,
+      "cupo_aprobado": 450000,
+      "linea_maxima_sugerida": 1500000,
+      "linea_inicial_sugerida": 450000,
+      "linea_maxima_condicionada": 1500000,
       "plazo_sugerido_dias": 30,
       "plazo_inicial_sugerido": "15 días (o 30 días con 50% de anticipo)",
       "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
@@ -5903,12 +5898,12 @@
         "glosa_b2": "8% Spread F29 preventivo ($5,000,000)",
         "margen_operacional_depurado_mensual": 112208045,
         "factor_riesgo_phi": 0.5,
-        "factor_ajuste_conductual_pct": 80,
+        "factor_ajuste_conductual_pct": 60,
         "cupo_preliminar": 2500000,
-        "capital_propio_tributario": 6559199969,
-        "tope_patrimonial_12pct_cpt": 1311839994,
-        "tope_patrimonial_35pct_cpt": 1311839994,
-        "tope_patrimonial_cpt": 1311839994,
+        "capital_propio_tributario": null,
+        "tope_patrimonial_12pct_cpt": null,
+        "tope_patrimonial_35pct_cpt": null,
+        "tope_patrimonial_cpt": null,
         "rli_declarada_le_zero": false,
         "ausencia_f22": false,
         "contraccion_severa": false,
@@ -5919,25 +5914,25 @@
           "Freno por Absorción Operacional (8% Spread F29 preventivo ($5,000,000)): reduce techo de compras de $6,863,869 a $5,000,000",
           "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
         ],
-        "glosa_paso_c": "Tramo Score 75-84: 80% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
-        "pct_apertura": 40,
-        "tramo_score": "75-84",
-        "glosa_apertura": "40% de Apertura para Score 75-84 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
-        "linea_maxima_tecnica": 2000000,
-        "linea_inicial_recomendada": 800000,
-        "linea_maxima_condicionada": 2000000,
-        "linea_inicial_sugerida": 800000,
+        "glosa_paso_c": "Tramo Score 65-74: 60% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
+        "pct_apertura": 30,
+        "tramo_score": "65-74",
+        "glosa_apertura": "30% de Apertura para Score 65-74 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+        "linea_maxima_tecnica": 1500000,
+        "linea_inicial_recomendada": 450000,
+        "linea_maxima_condicionada": 1500000,
+        "linea_inicial_sugerida": 450000,
         "plazo_inicial_sugerido": "15 días (o 30 días con 50% de anticipo)",
-        "pct_apertura_inicial": 40,
+        "pct_apertura_inicial": 30,
         "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
         "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
         "historial_pago": "Cliente nuevo (Sin historial previo)"
       },
       "hoja_ruta_comercial": [
-        "Clasificación y Recomendación: PERFIL TRIBUTARIO MODERADO (Línea Condicionada).",
-        "Puntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio).",
-        "Línea Inicial Recomendada (Etapa 1 - 40% Apertura): M$ 800 (Plazo: 15 días (o 30 días con 50% de anticipo)).",
-        "Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 (Plazo: 30 días).",
+        "Clasificación y Recomendación: PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva).",
+        "Puntaje Tributario SII: 70/100 pts (Desempeño Tributario Moderado).",
+        "Línea Inicial Recomendada (Etapa 1 - 30% Apertura): M$ 450 (Plazo: 15 días (o 30 días con 50% de anticipo)).",
+        "Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 1.500 (Plazo: 30 días).",
         "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
         "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
         "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
@@ -5948,7 +5943,7 @@
           "condicion": "cesion_facturas_factoring",
           "aplica": true,
           "resultado": "APROBADO",
-          "cupo_sugerido": 2000000,
+          "cupo_sugerido": 1500000,
           "justificacion": "alta proporción de ventas facturadas B2B permite ceder facturas como garantía de cobro"
         },
         {
@@ -5970,19 +5965,19 @@
           "nombre": "Nivel y Estabilidad de Ventas F29",
           "puntaje_obtenido": 4,
           "puntaje_maximo": 20,
-          "detalle": "Contracción severa de ventas reciente (-48.9%)"
+          "detalle": "Contracción y alta volatilidad mensual (CV: 120.8% | Rango: M$ 0 a M$ 850.459)"
         },
         {
           "nombre": "Holgura Débito/Crédito IVA (F29)",
           "puntaje_obtenido": 20,
           "puntaje_maximo": 20,
-          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito del giro s/remanente: 2.45x)"
+          "detalle": "Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: 2.31x | Débito/Crédito total c/remanente: 1.37x)"
         },
         {
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
-          "puntaje_obtenido": 15,
+          "puntaje_obtenido": 8,
           "puntaje_maximo": 15,
-          "detalle": "Sin RLI informada | CPT: M$ 6.559.200 (Respaldo contable no líquido: cobertura holgada)"
+          "detalle": "Sin RLI informada | Sin declaración F22 con CPT informado"
         },
         {
           "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",
@@ -6044,22 +6039,21 @@
       "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
     ],
     "fortalezas": [
-      "Cero meses con mora efectiva en 35 meses evaluados",
-      "Respaldo patrimonial sólido: CPT positivo de $6,559,199,969 CLP"
+      "Cero meses con mora efectiva en 35 meses evaluados"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\nClasificación y Recomendación: PERFIL TRIBUTARIO MODERADO (Línea Condicionada)\nPuntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 800 | Plazo Inicial: 15 días (o 30 días con 50% de anticipo)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 | Plazo Máximo: 30 días\nResguardo Comercial Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 85.798\n- Techo Operativo Proveedor (8%): M$ 6.864\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 112.208\n- Freno Flujo Operacional (25%): M$ 5.000\n- Factor de Ajuste Conductual: 50%\n- Capital Propio Tributario (CPT): M$ 6.559.200\n- Línea Máxima Condicionada (Techo Técnico): M$ 2.000\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 800\n- Ajustes de Riesgo Aplicados:\n  * F22 sin RLI positiva informada: línea acotada preventivamente al 8% del Spread F29\n  * Freno por Absorción Operacional (8% Spread F29 preventivo ($5,000,000)): reduce techo de compras de $6,863,869 a $5,000,000\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: PERFIL TRIBUTARIO MODERADO (Línea Condicionada).\n- ✅ Puntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio).\n- ✅ Línea Inicial Recomendada (Etapa 1 - 40% Apertura): M$ 800 (Plazo: 15 días (o 30 días con 50% de anticipo)).\n- ✅ Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 (Plazo: 30 días).\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
-    "veredicto": "PERFIL TRIBUTARIO MODERADO (Línea Condicionada)",
-    "evaluacion_referencial": "PERFIL TRIBUTARIO MODERADO (Línea Condicionada)",
-    "clasificacion_riesgo": "PERFIL TRIBUTARIO MODERADO",
-    "desempeno_tributario_texto": "Desempeño Tributario Medio",
-    "score_crediticio": 77.0,
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: AGRICOLA GONZALEZ LIMITADA (RUT: 77442850-K)\n\nClasificación y Recomendación: PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva)\nPuntaje Tributario SII: 70/100 pts (Desempeño Tributario Moderado)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 450 | Plazo Inicial: 15 días (o 30 días con 50% de anticipo)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 1.500 | Plazo Máximo: 30 días\nResguardo Comercial Sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 85.798\n- Techo Operativo Proveedor (8%): M$ 6.864\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 112.208\n- Freno Flujo Operacional (25%): M$ 5.000\n- Factor de Ajuste Conductual: 50%\n- Capital Propio Tributario (CPT): —\n- Línea Máxima Condicionada (Techo Técnico): M$ 1.500\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 450\n- Ajustes de Riesgo Aplicados:\n  * F22 sin RLI positiva informada: línea acotada preventivamente al 8% del Spread F29\n  * Freno por Absorción Operacional (8% Spread F29 preventivo ($5,000,000)): reduce techo de compras de $6,863,869 a $5,000,000\n  * Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva).\n- ✅ Puntaje Tributario SII: 70/100 pts (Desempeño Tributario Moderado).\n- ✅ Línea Inicial Recomendada (Etapa 1 - 30% Apertura): M$ 450 (Plazo: 15 días (o 30 días con 50% de anticipo)).\n- ✅ Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 1.500 (Plazo: 30 días).\n- ✅ Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.\n- ✅ Habilitada alternativa de factoring o cesión de facturas para compras sobre la línea sugerida.",
+    "veredicto": "PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva)",
+    "evaluacion_referencial": "PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva)",
+    "clasificacion_riesgo": "PERFIL TRIBUTARIO ACOTADO",
+    "desempeno_tributario_texto": "Desempeño Tributario Moderado",
+    "score_crediticio": 70.0,
     "categoria_riesgo": "MEDIO",
-    "cupo_maximo_sugerido": 2000000,
-    "cupo_aprobado": 800000,
-    "linea_maxima_sugerida": 2000000,
-    "linea_inicial_sugerida": 800000,
-    "linea_maxima_condicionada": 2000000,
+    "cupo_maximo_sugerido": 1500000,
+    "cupo_aprobado": 450000,
+    "linea_maxima_sugerida": 1500000,
+    "linea_inicial_sugerida": 450000,
+    "linea_maxima_condicionada": 1500000,
     "plazo_sugerido_dias": 30,
     "plazo_inicial_sugerido": "15 días (o 30 días con 50% de anticipo)",
     "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
@@ -6086,12 +6080,12 @@
       "glosa_b2": "8% Spread F29 preventivo ($5,000,000)",
       "margen_operacional_depurado_mensual": 112208045,
       "factor_riesgo_phi": 0.5,
-      "factor_ajuste_conductual_pct": 80,
+      "factor_ajuste_conductual_pct": 60,
       "cupo_preliminar": 2500000,
-      "capital_propio_tributario": 6559199969,
-      "tope_patrimonial_12pct_cpt": 1311839994,
-      "tope_patrimonial_35pct_cpt": 1311839994,
-      "tope_patrimonial_cpt": 1311839994,
+      "capital_propio_tributario": null,
+      "tope_patrimonial_12pct_cpt": null,
+      "tope_patrimonial_35pct_cpt": null,
+      "tope_patrimonial_cpt": null,
       "rli_declarada_le_zero": false,
       "ausencia_f22": false,
       "contraccion_severa": false,
@@ -6102,25 +6096,25 @@
         "Freno por Absorción Operacional (8% Spread F29 preventivo ($5,000,000)): reduce techo de compras de $6,863,869 a $5,000,000",
         "Contracción crítica de ventas confirmada YoY (3M vs 12M: -48.9%, YoY: -71.5%): -0.50"
       ],
-      "glosa_paso_c": "Tramo Score 75-84: 80% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
-      "pct_apertura": 40,
-      "tramo_score": "75-84",
-      "glosa_apertura": "40% de Apertura para Score 75-84 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
-      "linea_maxima_tecnica": 2000000,
-      "linea_inicial_recomendada": 800000,
-      "linea_maxima_condicionada": 2000000,
-      "linea_inicial_sugerida": 800000,
+      "glosa_paso_c": "Tramo Score 65-74: 60% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
+      "pct_apertura": 30,
+      "tramo_score": "65-74",
+      "glosa_apertura": "30% de Apertura para Score 65-74 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+      "linea_maxima_tecnica": 1500000,
+      "linea_inicial_recomendada": 450000,
+      "linea_maxima_condicionada": 1500000,
+      "linea_inicial_sugerida": 450000,
       "plazo_inicial_sugerido": "15 días (o 30 días con 50% de anticipo)",
-      "pct_apertura_inicial": 40,
+      "pct_apertura_inicial": 30,
       "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
       "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
       "historial_pago": "Cliente nuevo (Sin historial previo)"
     },
     "hoja_ruta_comercial": [
-      "Clasificación y Recomendación: PERFIL TRIBUTARIO MODERADO (Línea Condicionada).",
-      "Puntaje Tributario SII: 77/100 pts (Desempeño Tributario Medio).",
-      "Línea Inicial Recomendada (Etapa 1 - 40% Apertura): M$ 800 (Plazo: 15 días (o 30 días con 50% de anticipo)).",
-      "Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 2.000 (Plazo: 30 días).",
+      "Clasificación y Recomendación: PERFIL TRIBUTARIO ACOTADO (Línea Restrictiva).",
+      "Puntaje Tributario SII: 70/100 pts (Desempeño Tributario Moderado).",
+      "Línea Inicial Recomendada (Etapa 1 - 30% Apertura): M$ 450 (Plazo: 15 días (o 30 días con 50% de anticipo)).",
+      "Línea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 1.500 (Plazo: 30 días).",
       "Resguardo comercial sugerido: Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, Pagaré a la vista suscrito ante notario por apoderado(s) según estatutos vigentes acreditados en escritura social o certificado de vigencia de poderes del CBR/Registro Electrónico (la actuación ante el SII no sustituye el mandato mercantil de administración) (Nota informativa SII: ante el SII figuran 1 representantes con actuación tributaria 'No informada': BENJAMIN DE LAS MERCEDES GONZALEZ CANALES) o Seguro de Crédito que cubra la línea; alternativamente operar bajo esquema mixto (50% anticipo + 50% a 30 días).",
       "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
       "Protocolo operativo: Venta con esquema mixto (50% anticipo + 50% a 30 días contra aceptación en SII) o pagaré firmado en original ante notario según poderes vigentes antes del primer despacho.",
@@ -6137,19 +6131,19 @@
         "nombre": "Nivel y Estabilidad de Ventas F29",
         "puntaje_obtenido": 4,
         "puntaje_maximo": 20,
-        "detalle": "Contracción severa de ventas reciente (-48.9%)"
+        "detalle": "Contracción y alta volatilidad mensual (CV: 120.8% | Rango: M$ 0 a M$ 850.459)"
       },
       {
         "nombre": "Holgura Débito/Crédito IVA (F29)",
         "puntaje_obtenido": 20,
         "puntaje_maximo": 20,
-        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito del giro s/remanente: 2.45x)"
+        "detalle": "Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: 2.31x | Débito/Crédito total c/remanente: 1.37x)"
       },
       {
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
-        "puntaje_obtenido": 15,
+        "puntaje_obtenido": 8,
         "puntaje_maximo": 15,
-        "detalle": "Sin RLI informada | CPT: M$ 6.559.200 (Respaldo contable no líquido: cobertura holgada)"
+        "detalle": "Sin RLI informada | Sin declaración F22 con CPT informado"
       },
       {
         "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",

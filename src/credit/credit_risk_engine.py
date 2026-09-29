@@ -1274,7 +1274,12 @@ class CreditRiskEngine:
                     p3 = 5
                 det3 = f"Margen operacional ajustado (Ratio Ventas/Compras Giro 12M: {ratio_giro:.2f}x | Débito/Crédito total c/remanente: {ratio_bruto:.2f}x)"
             else:
-                ratio = (tot_deb_12m / tot_cred_12m) if tot_cred_12m > 0 else (indicadores.margen_vs_giro.ratio_debito_credito_12m if indicadores.margen_vs_giro else 1.0)
+                if tot_cred_12m > 0:
+                    ratio = tot_deb_12m / tot_cred_12m
+                elif indicadores.margen_vs_giro and indicadores.margen_vs_giro.ratio_debito_credito_12m is not None:
+                    ratio = float(indicadores.margen_vs_giro.ratio_debito_credito_12m)
+                else:
+                    ratio = 1.0
                 if ratio >= 1.40:
                     p3 = 20
                     det3 = f"Generación neta de Débito Fiscal sólida (Ratio Débito/Crédito: {ratio:.2f}x)"
