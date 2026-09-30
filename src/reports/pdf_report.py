@@ -111,7 +111,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.9.0)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.9.1)",
                 subtitle_style,
             )
         )
@@ -178,7 +178,7 @@ class PDFReport:
             ],
             [
                 Paragraph(f"<b>Emisión Carpeta SII:</b> {fecha_emision} | <b>Último F29:</b> {ult_periodo} (Desfase al emitir: {desfase_m}m)", body_style),
-                Paragraph(f"<b>Fecha Evaluación:</b> {fecha_eval_str} | <b>Antigüedad Carpeta:</b> {dias_antiguedad} días ({estado_antiguedad})", body_style),
+                Paragraph(f"<b>Fecha Emisión Informe:</b> {fecha_eval_str} | <b>Antigüedad Carpeta:</b> {dias_antiguedad} días ({estado_antiguedad})", body_style),
             ],
             [
                 Paragraph(f"<b>Boletín Comercial (Dicom):</b> {boletin_com}", body_style),
@@ -210,7 +210,6 @@ class PDFReport:
         desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or (
             "Capacidad Operativa Tributaria Alta" if score_val >= 85
             else ("Desempeño Tributario Moderado" if score_val >= 65
-                  else "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)" if (getattr(cr, "bloqueo_por_perdida_tributaria", False))
                   else "Capacidad Operativa Tributaria Baja")
         )
         linea_ini = getattr(cr, "linea_inicial_sugerida", 0) if cr else 0
@@ -220,7 +219,9 @@ class PDFReport:
         resguardo = getattr(cr, "resguardo_comercial_sugerido", None) or getattr(cr, "garantia_exigida", "Venta al contado") if cr else "Venta al contado"
 
         # Color de la evaluación referencial
-        if "ELEGIBLE" in evaluacion or "SÓLIDO" in evaluacion or "SOLIDO" in evaluacion or "BAJO" in evaluacion:
+        if "NO EVALUABLE" in evaluacion:
+            badge_bg = colors.HexColor("#64748B")
+        elif "ELEGIBLE" in evaluacion or "SÓLIDO" in evaluacion or "SOLIDO" in evaluacion or "BAJO" in evaluacion:
             badge_bg = colors.HexColor("#16A34A")
         elif "MODERADO" in evaluacion or "MEDIO" in evaluacion:
             badge_bg = colors.HexColor("#D97706")
@@ -451,7 +452,7 @@ class PDFReport:
                 Paragraph(f"{phi_pct}%", table_cell_bold),
             ],
             [
-                Paragraph(f"Paso D: Referencia Patrimonial (3% CPT = {cpt_str})", table_cell_bold),
+                Paragraph(f"Paso D: Referencia Patrimonial (3% × CPT de {cpt_str})", table_cell_bold),
                 Paragraph(glosa_d, table_cell),
                 Paragraph(monto_d, table_cell_bold),
             ],
@@ -773,7 +774,7 @@ class PDFReport:
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
             "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor. "
-            "[Motor Determinista Cavilaria v2.9.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT (CPT<=0 -> M$ 0), Apertura=50%/40%/30%/0%]</i>"
+            "[Motor Determinista Cavilaria v2.9.1 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT (CPT<=0 -> M$ 0), Apertura=50%/40%/30%/0%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 

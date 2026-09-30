@@ -49,7 +49,7 @@ _round_m100 = _floor_tiered
 
 
 class CreditRiskEngine:
-    """Motor de decisión crediticia B2B v2.9.0.
+    """Motor de decisión crediticia B2B v2.9.1.
 
     Evolución cuantitativa y comercial:
     1. Jerarquía explícita de códigos F22 (RLI 1694/1690 vs 1109 y CPT multigeneración 645/1698).
@@ -534,6 +534,10 @@ class CreditRiskEngine:
                 f"Se sugiere solicitar carpeta tributaria actualizada."
             )
 
+        # Regla v2.9.1: Eliminar Confianza ALTA cuando la edad de la carpeta supera 45 días
+        if dias_antiguedad > 45 and nivel == "ALTA":
+            nivel = "MEDIA"
+
         return {
             "fecha_emision": fecha_emision_raw or "No informada",
             "ultimo_periodo": ultimo_periodo,
@@ -975,14 +979,14 @@ class CreditRiskEngine:
                         f"cupo preliminar ajustado a ${cupo_ajustado:,.0f}"
                     )
             else:
-                # CPT Negativo / Quiebra Técnica: Cupo directo en línea limpia es $0
+                # CPT Negativo o igual a cero: Cupo directo en línea limpia es $0
                 tope_cpt = 0.0
                 cupo_ajustado = 0.0
                 aval_obligatorio = True
-                glosa_paso_d = f"Bloqueo por {cpt_tipo} Negativo en F22 (Cód. {cpt_code}: {format_mclp(cpt)} -> Tope Patrimonial M$ 0)"
+                glosa_paso_d = f"Bloqueo por {cpt_tipo} Negativo o igual a cero (Cód. {cpt_code}: {format_mclp(cpt)} -> Tope Patrimonial M$ 0)"
                 cupo_excepcional = int(round(min(c_base * 0.03, 5_000_000) / 100_000.0) * 100_000)
                 castigos.append(
-                    f"Capital Propio Tributario Negativo (${cpt:,.0f} CLP) — Quiebra Técnica: "
+                    f"{cpt_tipo} Negativo o igual a cero (Cód. {cpt_code}: {format_mclp(cpt)}): "
                     f"Cupo directo en línea limpia rechazado ($0). "
                     f"Solo evaluable cupo excepcional garantizado de hasta ${cupo_excepcional:,.0f} CLP "
                     f"contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad"
@@ -1429,7 +1433,7 @@ class CreditRiskEngine:
                     if float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) > float(m.total_ventas or 0)
                 )
                 extra_rem = f"; {meses_compras_gt_ventas} de 12 meses con compras > ventas" if meses_compras_gt_ventas > 0 else ""
-                det3 = f"Margen operacional ajustado (Ratio Débito/Crédito Giro 12M: {ratio_dc:.2f}x | Ventas/Compras Giro 12M: {ratio_vc:.2f}x{extra_rem})"
+                det3 = f"Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: {ratio_dc:.2f}x | Ventas / Compras Giro: {ratio_vc:.2f}x{extra_rem})"
             else:
                 if tot_cred_m > 0:
                     ratio = round(tot_deb_m / tot_cred_m, 2)
@@ -1496,7 +1500,9 @@ class CreditRiskEngine:
         if cpt is not None:
             if cpt <= 0:
                 p4 = 0
-                det4 = f"{rli_txt} | CPT: {cpt_fmt} (Quiebra patrimonial técnica / CPT Negativo)"
+                cpt_code_pilar = memoria.get("cpt_source_code") or "645"
+                cpt_tipo_pilar = "CPTS" if cpt_code_pilar in ("1545", "1546", "1584", "1585") else "CPT"
+                det4 = f"{rli_txt} | {cpt_tipo_pilar} Negativo o igual a cero (Cód. {cpt_code_pilar}: {cpt_fmt})"
             else:
                 cupo_ref = memoria.get("cupo_maximo_sugerido") or 5_000_000
                 veces = cpt / cupo_ref if cupo_ref else 1.0
@@ -1691,9 +1697,16 @@ class CreditRiskEngine:
 
         if memoria.get("rli_declarada_le_zero", False):
             if score_compuesto is not None and score_compuesto < 65:
-                desempeno_sii = "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)"
+                desempeno_sii = "Capacidad Operativa Tributaria Baja"
             else:
                 desempeno_sii = "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)"
+
+        # Detección de falta de información reciente en F22
+        anios_f22 = [int(f.anio_tributario) for f in tax_folder.f22 if f.anio_tributario and str(f.anio_tributario).isdigit()]
+        max_f22_year = max(anios_f22) if anios_f22 else None
+        anios_f29 = [int(mt.periodo[:4]) for mt in tax_folder.monthly_taxes if mt.periodo and len(mt.periodo) >= 4 and mt.periodo[:4].isdigit()]
+        max_f29_year = max(anios_f29) if anios_f29 else None
+        falta_f22_reciente = bool(max_f29_year and max_f29_year >= 2026 and max_f22_year and max_f22_year < 2025)
 
         # Validación de mora F29 reciente y alertas
         mora_12m = indicadores.mora_efectiva.meses_con_recargo if indicadores.mora_efectiva else 0
@@ -1728,6 +1741,26 @@ class CreditRiskEngine:
             plazo_inicial = "Contado (0 días)"
             resguardo = "Carpeta sin información suficiente para evaluar línea de crédito."
             protocolo = "Completar información tributaria faltante (mínimo 6 meses F29 y F22)."
+
+        elif falta_f22_reciente:
+            resultado_base = "NO_EVALUABLE"
+            evaluacion_referencial = "NO EVALUABLE (Falta Información Reciente)"
+            clasificacion_riesgo = "NO EVALUABLE (Falta Información Reciente)"
+            cupo_aprobado = 0
+            linea_inicial = 0
+            linea_maxima = 0
+            pct_apertura = 0.0
+            factor_score_paso_c = 0.0
+            plazo_dias = 0
+            plazo_inicial = "Contado (0 días)"
+            resguardo = (
+                "Operación en suspenso. Se requiere actualización de carpeta tributaria al mes en curso "
+                "y estados financieros para emitir calificación de riesgo."
+            )
+            protocolo = (
+                "Operación en suspenso. Se requiere actualización de carpeta tributaria al mes en curso "
+                "y estados financieros para emitir calificación de riesgo."
+            )
 
         elif rli_declarada_le_zero:
             resultado_base = "RECHAZADO"
@@ -2024,7 +2057,9 @@ class CreditRiskEngine:
         cpt = memoria.get("capital_propio_tributario")
         if cpt is not None:
             if cpt < 0:
-                msg = f"Capital Propio Tributario NEGATIVO (${cpt:,.0f} CLP) — Quiebra o pérdida patrimonial técnica"
+                cpt_code_alerta = memoria.get("cpt_source_code") or "645"
+                cpt_tipo_alerta = "CPTS" if cpt_code_alerta in ("1545", "1546", "1584", "1585") else "CPT"
+                msg = f"{cpt_tipo_alerta} Negativo o igual a cero (Cód. {cpt_code_alerta}: {format_mclp(cpt)})"
                 alertas.append(msg)
                 banderas_rojas.append(msg)
             elif memoria.get("tope_patrimonial_35pct_cpt"):

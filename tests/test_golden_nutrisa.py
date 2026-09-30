@@ -119,7 +119,7 @@ class TestGoldenNutrisa:
 
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             text_p1 = pdf.pages[0].extract_text()
-            assert "(v2.9.0)" in text_p1
+            assert "(v2.9.1)" in text_p1
             assert "ELEGIBLE PARA LÍNEA COMERCIAL" in text_p1
             assert "Inicial: M$ 7.200" in text_p1
             assert "Máxima: M$ 14.400" in text_p1
@@ -139,7 +139,7 @@ class TestGoldenNutrisa:
                 assert "Capital Propio CPT Cód. 645/1698" in text_p2
                 assert "M$ 692.056 (Cód. 1694)" in text_p2
                 assert "M$ 3.625.110" in text_p2
-                assert "Motor Determinista Cavilaria v2.9.0" in text_p2
+                assert "Motor Determinista Cavilaria v2.9.1" in text_p2
                 # Base única de conciliación F22
                 assert "3.2% s/base" in text_p2
                 assert "F22 — CONCILIADO (<10% dif.)" in text_p2

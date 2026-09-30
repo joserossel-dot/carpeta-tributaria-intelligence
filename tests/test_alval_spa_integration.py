@@ -253,36 +253,37 @@ class TestAlvalSpaIntegration:
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             assert len(pdf.pages) == 2
             text_p1 = pdf.pages[0].extract_text()
-            assert "(v2.9.0)" in text_p1
-            assert "SIN LÍNEA AUTOMÁTICA" in text_p1
-            assert "77 / 100" in text_p1 or "77 pts" in text_p1
-            assert "No constituye rating de solvencia" in text_p1
-            assert "sujeto a Dicom y Balance" in text_p1
-            assert "Pérdida Tributaria en último F22" in text_p1
-            assert "2 representante(s) registrado(s)" in text_p1
-            assert "Cualquiera" in text_p1
-            assert "CAMINO RENCA LAMPA 9100 LT.10 a, PUDAHUEL" in text_p1
-            assert "+11.0%" in text_p1
-            assert "alta volatilidad mensual" in text_p1
-            assert "CV: 24.1%" in text_p1
-            assert "Rango:" in text_p1
-            assert "M$ 402.100 a M$ 911.478" in text_p1
-            assert "Margen operacional ajustado" in text_p1
-            assert "Ratio Débito/Crédito Giro 12M: 1.11x" in text_p1
-            assert "Ventas/Compras Giro 12M: 1.07x" in text_p1
-            assert "RLI AT 2026: -M$ 31.382" in text_p1
-            assert "Utilidad Contable s/Balance Cód. 1672" in text_p1
-            assert "+M$ 103.376" in text_p1
-            assert "CPT: M$ 1.756.915" in text_p1
-            assert "incrementado por aporte Cód. 844" in text_p1
-            assert "utilidades retenidas" in text_p1
-            assert "Penalización -9" in text_p1
-            assert "RLI <= 0" in text_p1
-            assert "0 de 36 períodos con mora Cód. 94" in text_p1
-            assert "5 de últ. 12M sin IVA a pagar" in text_p1
+            text_p1_clean = " ".join(text_p1.split())
+            assert "(v2.9.1)" in text_p1_clean
+            assert "SIN LÍNEA AUTOMÁTICA" in text_p1_clean
+            assert "77 / 100" in text_p1_clean or "77 pts" in text_p1_clean
+            assert "No constituye rating de solvencia" in text_p1_clean
+            assert "sujeto a Dicom y Balance" in text_p1_clean
+            assert "Pérdida Tributaria en último F22" in text_p1_clean
+            assert "2 representante(s) registrado(s)" in text_p1_clean
+            assert "Cualquiera" in text_p1_clean
+            assert "CAMINO RENCA LAMPA 9100 LT.10 a, PUDAHUEL" in text_p1_clean
+            assert "+11.0%" in text_p1_clean
+            assert "alta volatilidad mensual" in text_p1_clean
+            assert "CV: 24.1%" in text_p1_clean
+            assert "Rango:" in text_p1_clean
+            assert "M$ 402.100 a M$ 911.478" in text_p1_clean
+            assert "Margen operacional ajustado" in text_p1_clean
+            assert "Ratio Débito / Crédito Giro 12M: 1.11x" in text_p1_clean
+            assert "Compras Giro: 1.07x" in text_p1_clean
+            assert "RLI AT 2026: -M$ 31.382" in text_p1_clean
+            assert "Utilidad Contable s/Balance Cód. 1672" in text_p1_clean
+            assert "+M$ 103.376" in text_p1_clean
+            assert "CPT: M$ 1.756.915" in text_p1_clean
+            assert "incrementado por aporte Cód. 844" in text_p1_clean
+            assert "utilidades retenidas" in text_p1_clean
+            assert "Penalización -9" in text_p1_clean
+            assert "RLI <= 0" in text_p1_clean
+            assert "0 de 36 períodos con mora Cód. 94" in text_p1_clean
+            assert "5 de últ. 12M sin IVA a pagar" in text_p1_clean
 
             text_p2 = pdf.pages[1].extract_text()
-            full_text = text_p1 + "\n" + text_p2
+            full_text = " ".join(text_p1.split()) + " " + " ".join(text_p2.split())
             assert "Alerta de Overtrading y Deterioro Multianual de Margen" in full_text
             assert "compras superan a las ventas en 6" in full_text
             assert "últimos 12 meses (incluidos mayo y junio 2026)" in full_text
@@ -301,4 +302,4 @@ class TestAlvalSpaIntegration:
             assert "F22 — CONCILIADO (<10% dif.)" in text_p2
             assert "s/base F29" not in text_p2
             assert "CONCILIADO (<10% dif.)" in text_p2
-            assert "Motor Determinista Cavilaria v2.9.0" in text_p2
+            assert "Motor Determinista Cavilaria v2.9.1" in text_p2

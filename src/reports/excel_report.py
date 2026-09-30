@@ -88,7 +88,7 @@ class ExcelReport:
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.9.0)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.9.1)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -254,7 +254,7 @@ class ExcelReport:
             ("Paso B1: Techo por Volumen de Compras (8% C_base)", round(techo_op / 1000.0) if techo_op else 0, "8% sobre C_base (parámetro prudencial de exposición por proveedor: 8% C_base)"),
             ("Paso B2: Freno por Absorción Operacional", round(freno_flujo / 1000.0) if freno_flujo else 0, metodologia_b2),
             ("Paso C: Factor de Ajuste Conductual", phi_val_excel, glosa_c_excel),
-            (f"Paso D: Referencia Patrimonial (3% CPT = {cpt_str})", monto_d_excel, glosa_d),
+            (f"Paso D: Referencia Patrimonial (3% × CPT de {cpt_str})", monto_d_excel, glosa_d),
             ("(=) Línea Máxima Condicionada (Techo Técnico)", round(cupo_max / 1000.0) if cupo_max else 0, "min(Techo 8%, Freno Absorción) x Factor Conductual con Tope CPT (truncado a múltiplos de M$ 100)"),
             (
                 f"(=) Línea Inicial Recomendada (Etapa 1 - {pct_ap}% Apertura)",

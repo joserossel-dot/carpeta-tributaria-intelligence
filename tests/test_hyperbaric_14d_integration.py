@@ -43,12 +43,12 @@ class TestHyperbaric14DIntegration:
         assert f24.cpt_source_code == "1546"
 
     def test_credit_evaluation_14d(self, hyperbaric_folder):
-        """Verifica que la empresa con pérdida y CPT negativo active bloqueo por pérdida tributaria."""
+        """Verifica que la empresa con pérdida y CPT negativo active bloqueo por falta de información reciente."""
         cr = hyperbaric_folder.credit_risk
         assert cr is not None
         assert cr.score_compuesto == 58
-        assert cr.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)"
-        assert "SIN LÍNEA AUTOMÁTICA" in cr.clasificacion_riesgo
+        assert cr.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Baja"
+        assert cr.clasificacion_riesgo == "NO EVALUABLE (Falta Información Reciente)"
         assert cr.linea_inicial_sugerida == 0
         assert cr.linea_maxima_sugerida == 0
 
@@ -57,7 +57,7 @@ class TestHyperbaric14DIntegration:
         assert "Cód. 1450" in mem["glosa_b2"]
         assert mem["capital_propio_tributario"] == -4_628_691
         assert mem["tope_patrimonial_3pct_cpt"] == 0
-        assert "Bloqueo por CPTS Negativo en F22 (Cód. 1546: -M$ 4.629 -> Tope Patrimonial M$ 0)" in mem["glosa_paso_d"]
+        assert "Bloqueo por CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629 -> Tope Patrimonial M$ 0)" in mem["glosa_paso_d"]
         assert mem["techo_operativo_8pct"] == 585_831
         assert "Costo proxy 30% s/ventas exentas (Compras afectas F29: M$ 1.003/mes)" in mem["glosa_paso_a"]
 
@@ -70,8 +70,9 @@ class TestHyperbaric14DIntegration:
             p1 = pdf.pages[0].extract_text()
             p1_clean = " ".join(p1.split())
             assert "REGIMEN PRO PYME GENERAL (14D)" in p1_clean
-            assert "SIN LÍNEA AUTOMÁTICA" in p1_clean
-            assert "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)" in p1_clean
+            assert "NO EVALUABLE (Falta Información Reciente)" in p1_clean
+            assert "Capacidad Operativa Tributaria Baja" in p1_clean
+            assert "Fecha Emisión Informe:" in p1_clean
             assert "Cód. 1450" in p1_clean
             assert "CV: 35.0%" in p1_clean
             assert "Giro exento de IVA (Débito 12M: M$ 0)" in p1_clean
@@ -79,9 +80,12 @@ class TestHyperbaric14DIntegration:
             assert "Paso B1: Techo por Volumen de Compras (8% C_base)" in p1_clean
             assert "Costo proxy 30% s/ventas exentas (Compras afectas F29: M$ 1.003/mes)" in p1_clean
             assert "M$ 586" in p1_clean
-            assert "Bloqueo por CPTS Negativo en F22 (Cód. 1546: -M$ 4.629" in p1_clean
+            assert "Paso D: Referencia Patrimonial (3% × CPT de" in p1_clean
+            assert "Bloqueo por CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629" in p1_clean
             assert "NO CONCILIABLE" in p1_clean
             assert "Carpeta sin F22 AT 2025 ni AT 2026" in p1_clean
+            assert "Operación en suspenso" in p1_clean
+            assert "Quiebra" not in p1_clean
 
             p2 = pdf.pages[1].extract_text()
             p2_clean = " ".join(p2.split())
@@ -99,3 +103,4 @@ class TestHyperbaric14DIntegration:
             assert "-M$ 4.629 (Cód. 1546)" in p2_clean
             assert "NO CONCILIABLE — Carpeta sin F22 AT 2025 ni AT 2026 (último F22 disponible: AT 2024; año 2023 con solo 7 meses F29 en carpeta)" in p2_clean
             assert "D=3% CPT (CPT<=0 -> M$ 0)" in p2_clean
+            assert "Quiebra" not in p2_clean
