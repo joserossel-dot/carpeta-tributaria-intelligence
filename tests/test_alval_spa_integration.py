@@ -268,8 +268,8 @@ class TestAlvalSpaIntegration:
             assert "Rango:" in text_p1
             assert "M$ 402.100 a M$ 911.478" in text_p1
             assert "Margen operacional ajustado" in text_p1
-            assert "1.07x" in text_p1
-            assert "Ratio Débito / Crédito Giro 12M: 1.07x" in text_p1
+            assert "Ratio Débito/Crédito Giro 12M: 1.11x" in text_p1
+            assert "Ventas/Compras Giro 12M: 1.07x" in text_p1
             assert "RLI AT 2026: -M$ 31.382" in text_p1
             assert "Utilidad Contable s/Balance Cód. 1672" in text_p1
             assert "+M$ 103.376" in text_p1

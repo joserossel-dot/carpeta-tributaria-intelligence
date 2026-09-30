@@ -47,6 +47,7 @@ class TestHyperbaric14DIntegration:
         cr = hyperbaric_folder.credit_risk
         assert cr is not None
         assert cr.score_compuesto == 58
+        assert cr.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)"
         assert "SIN LÍNEA AUTOMÁTICA" in cr.clasificacion_riesgo
         assert cr.linea_inicial_sugerida == 0
         assert cr.linea_maxima_sugerida == 0
@@ -70,6 +71,7 @@ class TestHyperbaric14DIntegration:
             p1_clean = " ".join(p1.split())
             assert "REGIMEN PRO PYME GENERAL (14D)" in p1_clean
             assert "SIN LÍNEA AUTOMÁTICA" in p1_clean
+            assert "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)" in p1_clean
             assert "Cód. 1450" in p1_clean
             assert "CV: 35.0%" in p1_clean
             assert "Giro exento de IVA (Débito 12M: M$ 0)" in p1_clean

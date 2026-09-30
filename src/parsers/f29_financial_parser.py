@@ -84,7 +84,8 @@ class F29FinancialParser:
                         row[extra_campo] += valor
 
         result: list[MonthlyTax] = []
-        for periodo in sorted(monthly.keys()):
+        sorted_periodos = sorted(monthly.keys())
+        for idx, periodo in enumerate(sorted_periodos):
             row = monthly[periodo]
             obs = observaciones[periodo]
             ventas_afectas = row["ventas_afectas"]
@@ -92,27 +93,47 @@ class F29FinancialParser:
             ventas_exportacion = row["ventas_exportacion"]
             total_ventas = self._sumar(ventas_afectas, ventas_exentas, ventas_exportacion)
 
-            # Crédito operacional del mes = max(0, Cód. 537 - Cód. 504 - Cód. 525)
+            # Crédito operacional del mes
             credito_total = row["credito_fiscal"]
             remanente_504 = row["remanente_504"]
             activo_fijo_cred = row["credito_activo_fijo_525"]
             nc_cred = row["credito_nc_528"]
 
+            # Regla remanente: Solo resta Cód. 504 cuando en el período previo existió remanente generado por Crédito > Débito
+            remanente_efectivo = Decimal("0")
+            if remanente_504 and idx > 0:
+                prev_row = monthly[sorted_periodos[idx - 1]]
+                prev_deb = prev_row.get("debito_fiscal") or Decimal("0")
+                prev_cred = prev_row.get("credito_fiscal") or Decimal("0")
+                prev_iva_det = prev_row.get("iva_determinado") or Decimal("0")
+                if prev_cred > prev_deb or prev_iva_det == Decimal("0"):
+                    remanente_efectivo = remanente_504
+
+            # Crédito operacional del mes (Crédito Giro Mes en tabla F29): Cód. 537 - Remanente Efectivo Cód. 504
             if credito_total is not None:
-                credito_operacional = max(
-                    Decimal("0"),
-                    credito_total
-                    - (remanente_504 or Decimal("0"))
-                    - (activo_fijo_cred or Decimal("0")),
-                )
+                credito_operacional = max(Decimal("0"), credito_total - remanente_efectivo)
             elif row["credito_520"] is not None or row["credito_511"] is not None:
                 c_base = row["credito_520"] or row["credito_511"] or Decimal("0")
                 credito_operacional = max(Decimal("0"), c_base - (nc_cred or Decimal("0")))
             else:
                 credito_operacional = None
 
-            # Compras operacionales del giro
-            if credito_operacional is not None:
+            # Compras operacionales del giro (excluye activo fijo Cód. 525)
+            if credito_total is not None:
+                credito_giro_compras = max(
+                    Decimal("0"),
+                    credito_total - remanente_efectivo - (activo_fijo_cred or Decimal("0")),
+                )
+                compras_afectas = (
+                    (credito_giro_compras / self.IVA_RATE).quantize(Decimal("0"))
+                    if credito_giro_compras > 0
+                    else Decimal("0")
+                )
+                compras_exentas = (row["compras_no_credito_562"] or Decimal("0")) + (
+                    row["compras_exentas_584"] or Decimal("0")
+                )
+                compras_operacionales = compras_afectas + compras_exentas
+            elif credito_operacional is not None:
                 compras_afectas = (
                     (credito_operacional / self.IVA_RATE).quantize(Decimal("0"))
                     if credito_operacional > 0

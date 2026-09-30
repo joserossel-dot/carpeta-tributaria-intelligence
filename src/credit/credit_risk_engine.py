@@ -490,6 +490,37 @@ class CreditRiskEngine:
             except (ValueError, IndexError):
                 pass
 
+        dias_antiguedad = 0
+        from datetime import date
+        today = date.today()
+        if fecha_emision_raw:
+            try:
+                date_part = str(fecha_emision_raw).strip().split()[0]
+                em_d, em_m, em_y = None, None, None
+                if "/" in date_part:
+                    p = date_part.split("/")
+                    if len(p) == 3:
+                        em_d, em_m, em_y = int(p[0]), int(p[1]), int(p[2])
+                elif "-" in date_part:
+                    p = date_part.split("-")
+                    if len(p) == 3:
+                        if len(p[0]) == 4:
+                            em_y, em_m, em_d = int(p[0]), int(p[1]), int(p[2])
+                        else:
+                            em_d, em_m, em_y = int(p[0]), int(p[1]), int(p[2])
+                if em_y and em_m and em_d:
+                    f_em = date(em_y, em_m, em_d)
+                    dias_antiguedad = max(0, (today - f_em).days)
+            except Exception:
+                pass
+
+        if dias_antiguedad <= 45:
+            estado_antiguedad = "Vigente <= 45d"
+        elif dias_antiguedad <= 60:
+            estado_antiguedad = "Observación 46-60d"
+        else:
+            estado_antiguedad = "Exige actualizar > 60d"
+
         if meses_desfase <= 2:
             nivel = "ALTA"
             alerta = None
@@ -507,6 +538,9 @@ class CreditRiskEngine:
             "fecha_emision": fecha_emision_raw or "No informada",
             "ultimo_periodo": ultimo_periodo,
             "meses_desfase": meses_desfase,
+            "dias_antiguedad": dias_antiguedad,
+            "estado_antiguedad": estado_antiguedad,
+            "fecha_evaluacion": today.strftime("%d/%m/%Y"),
             "nivel_confianza": nivel,
             "alerta": alerta,
         }
@@ -1327,9 +1361,14 @@ class CreditRiskEngine:
 
         # Totales acumulados 12M de la tabla F29 para reproducibilidad exacta con calculadora:
         tot_deb_12m = sum(float(m.debito_fiscal or 0) for m in last_12_mt)
-        tot_cred_12m = sum(float(m.credito_fiscal or 0) for m in last_12_mt)
+        tot_cred_12m = sum(float(m.credito_operacional if m.credito_operacional is not None else (m.credito_fiscal or 0)) for m in last_12_mt)
         tot_v_12m = sum(float(m.total_ventas or 0) for m in last_12_mt)
         tot_cop_12m = sum(float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) for m in last_12_mt)
+
+        tot_deb_m = round(tot_deb_12m / 1000.0)
+        tot_cred_m = round(tot_cred_12m / 1000.0)
+        tot_v_m = round(tot_v_12m / 1000.0)
+        tot_cop_m = round(tot_cop_12m / 1000.0)
 
         if es_exportador_o_exento:
             if tot_deb_12m == 0 and pct_exp <= 0.20:
@@ -1341,8 +1380,10 @@ class CreditRiskEngine:
                 )
             else:
                 # Para empresas exportadoras o con débito fiscal:
-                if tot_cop_12m > 0:
-                    ratio_op = tot_v_12m / tot_cop_12m
+                if tot_cop_m > 0:
+                    ratio_op = round(tot_v_m / tot_cop_m, 2)
+                elif tot_cop_12m > 0:
+                    ratio_op = round(tot_v_12m / tot_cop_12m, 2)
                 else:
                     ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
 
@@ -1369,8 +1410,9 @@ class CreditRiskEngine:
             )
 
             if tiene_remanente:
-                ratio_giro = (tot_v_12m / tot_cop_12m) if tot_cop_12m > 0 else 1.0
-                ratio = ratio_giro
+                ratio_dc = round(tot_deb_m / tot_cred_m, 2) if tot_cred_m > 0 else (round(tot_deb_12m / tot_cred_12m, 2) if tot_cred_12m > 0 else 1.0)
+                ratio_vc = round(tot_v_m / tot_cop_m, 2) if tot_cop_m > 0 else (round(tot_v_12m / tot_cop_12m, 2) if tot_cop_12m > 0 else 1.0)
+                ratio = ratio_vc
                 if ratio >= 1.40:
                     p3 = 20
                 elif ratio >= 1.20:
@@ -1386,13 +1428,15 @@ class CreditRiskEngine:
                     1 for m in last_12_mt
                     if float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) > float(m.total_ventas or 0)
                 )
-                extra_rem = f" ({meses_compras_gt_ventas} de 12 meses con compras > ventas y arrastre de remanente Cód. 504)" if meses_compras_gt_ventas > 0 else " (con arrastre de remanente Cód. 504)"
-                det3 = f"Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: {ratio:.2f}x){extra_rem}"
+                extra_rem = f"; {meses_compras_gt_ventas} de 12 meses con compras > ventas" if meses_compras_gt_ventas > 0 else ""
+                det3 = f"Margen operacional ajustado (Ratio Débito/Crédito Giro 12M: {ratio_dc:.2f}x | Ventas/Compras Giro 12M: {ratio_vc:.2f}x{extra_rem})"
             else:
-                if tot_cred_12m > 0:
-                    ratio = tot_deb_12m / tot_cred_12m
+                if tot_cred_m > 0:
+                    ratio = round(tot_deb_m / tot_cred_m, 2)
+                elif tot_cred_12m > 0:
+                    ratio = round(tot_deb_12m / tot_cred_12m, 2)
                 elif indicadores.margen_vs_giro and indicadores.margen_vs_giro.ratio_debito_credito_12m is not None:
-                    ratio = float(indicadores.margen_vs_giro.ratio_debito_credito_12m)
+                    ratio = round(float(indicadores.margen_vs_giro.ratio_debito_credito_12m), 2)
                 else:
                     ratio = 1.0
                 if ratio >= 1.40:
@@ -1531,16 +1575,14 @@ class CreditRiskEngine:
 
         # 6. Coherencia F29/F22 y Vigencia de Información (15 pts)
         meses_desfase = vigencia.get("meses_desfase", 0) if vigencia else 0
-        confianza_vig = vigencia.get("nivel_confianza", "MEDIA") if vigencia else "MEDIA"
+        dias_antiguedad = vigencia.get("dias_antiguedad", 0) if vigencia else 0
         if meses_desfase <= 2:
             p_vig = 7
-            det_vig = f"desfase {meses_desfase}m (confianza {confianza_vig})"
         elif meses_desfase <= 4:
             p_vig = 5
-            det_vig = f"desfase {meses_desfase}m (confianza {confianza_vig})"
         else:
             p_vig = 2
-            det_vig = f"desfase prolongado de {meses_desfase}m"
+        det_vig = f"Desfase al emitir carpeta: {meses_desfase}m (Edad actual carpeta: {dias_antiguedad}d)"
 
         if conciliacion:
             if conciliacion.get("no_conciliable") or conciliacion.get("estado") == "NO CONCILIABLE":
@@ -1562,7 +1604,7 @@ class CreditRiskEngine:
             det_conc = "sin cruce anual F29/F22"
 
         p6 = min(15, p_vig + p_conc)
-        det6 = f"Vigencia: {det_vig}. Coherencia: {det_conc}"
+        det6 = f"{det_vig} | Coherencia: {det_conc}"
         pilares.append(PilarScore(
             nombre="Coherencia F29/F22 y Vigencia de Información",
             puntaje_obtenido=p6,
@@ -1640,15 +1682,18 @@ class CreditRiskEngine:
         if score_compuesto is not None:
             if score_compuesto >= 85:
                 desempeno_sii = "Capacidad Operativa Tributaria Alta"
-            elif score_compuesto >= 70:
+            elif score_compuesto >= 65:
                 desempeno_sii = "Desempeño Tributario Moderado"
             else:
-                desempeno_sii = "Desempeño Tributario Bajo"
+                desempeno_sii = "Capacidad Operativa Tributaria Baja"
         else:
             desempeno_sii = "Sin Calificación"
 
         if memoria.get("rli_declarada_le_zero", False):
-            desempeno_sii = "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)"
+            if score_compuesto is not None and score_compuesto < 65:
+                desempeno_sii = "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)"
+            else:
+                desempeno_sii = "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)"
 
         # Validación de mora F29 reciente y alertas
         mora_12m = indicadores.mora_efectiva.meses_con_recargo if indicadores.mora_efectiva else 0

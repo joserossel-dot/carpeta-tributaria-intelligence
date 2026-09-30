@@ -150,6 +150,9 @@ class PDFReport:
         fecha_emision = vigencia.get("fecha_emision", "No informada")
         ult_periodo = vigencia.get("ultimo_periodo", "No informado")
         desfase_m = vigencia.get("meses_desfase", 0)
+        dias_antiguedad = vigencia.get("dias_antiguedad", 0)
+        fecha_eval_str = vigencia.get("fecha_evaluacion") or datetime.now().strftime("%d/%m/%Y")
+        estado_antiguedad = vigencia.get("estado_antiguedad") or ("Vigente <= 45d" if dias_antiguedad <= 45 else ("Observación 46-60d" if dias_antiguedad <= 60 else "Exige actualizar > 60d"))
         confianza_vig = vigencia.get("nivel_confianza", "MEDIA")
 
         vars_com = getattr(cr, "variables_comerciales", {}) or {}
@@ -174,8 +177,8 @@ class PDFReport:
                 Paragraph(f"<b>Bienes Raíces:</b> {bienes_raices}", body_style),
             ],
             [
-                Paragraph(f"<b>Emisión Carpeta SII:</b> {fecha_emision} | <b>Último F29:</b> {ult_periodo} | <b>Desfase al Emitir:</b> {desfase_m}m", body_style),
-                Paragraph(f"<b>Antigüedad del Dato:</b> {desfase_m} meses (Confianza: <b>{confianza_vig}</b>)", body_style),
+                Paragraph(f"<b>Emisión Carpeta SII:</b> {fecha_emision} | <b>Último F29:</b> {ult_periodo} (Desfase al emitir: {desfase_m}m)", body_style),
+                Paragraph(f"<b>Fecha Evaluación:</b> {fecha_eval_str} | <b>Antigüedad Carpeta:</b> {dias_antiguedad} días ({estado_antiguedad})", body_style),
             ],
             [
                 Paragraph(f"<b>Boletín Comercial (Dicom):</b> {boletin_com}", body_style),
@@ -204,7 +207,12 @@ class PDFReport:
         ) if cr else "OBSERVADO"
         score_val = getattr(cr, "score_crediticio", 0.0) if cr else 0.0
         clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
-        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Capacidad Operativa Tributaria Alta" if score_val >= 80 else "Desempeño Tributario Medio")
+        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or (
+            "Capacidad Operativa Tributaria Alta" if score_val >= 85
+            else ("Desempeño Tributario Moderado" if score_val >= 65
+                  else "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)" if (getattr(cr, "bloqueo_por_perdida_tributaria", False))
+                  else "Capacidad Operativa Tributaria Baja")
+        )
         linea_ini = getattr(cr, "linea_inicial_sugerida", 0) if cr else 0
         linea_max = getattr(cr, "linea_maxima_condicionada", 0) or getattr(cr, "cupo_maximo_sugerido", 0) if cr else 0
         plazo_dias = getattr(cr, "plazo_sugerido_dias", 0) if cr else 0

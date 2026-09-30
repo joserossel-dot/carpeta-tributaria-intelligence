@@ -107,7 +107,12 @@ class ExcelReport:
         ).replace("_", " ") if cr else "OBSERVADO"
         score_val = getattr(cr, "score_crediticio", 0.0) if cr else 0.0
         clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
-        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Capacidad Operativa Tributaria Alta" if score_val >= 80 else "Desempeño Tributario Medio")
+        desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or (
+            "Capacidad Operativa Tributaria Alta" if score_val >= 85
+            else ("Desempeño Tributario Moderado" if score_val >= 65
+                  else "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)" if (getattr(cr, "bloqueo_por_perdida_tributaria", False))
+                  else "Capacidad Operativa Tributaria Baja")
+        )
         linea_ini = getattr(cr, "linea_inicial_sugerida", 0) if cr else 0
         linea_max = getattr(cr, "linea_maxima_condicionada", 0) or getattr(cr, "cupo_maximo_sugerido", 0) if cr else 0
         plazo_dias = getattr(cr, "plazo_sugerido_dias", 0) if cr else 0
