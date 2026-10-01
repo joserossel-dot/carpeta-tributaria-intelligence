@@ -232,7 +232,7 @@ class TestCalibracionConservadoraV22:
         mem = result.decision.memoria_calculo
         assert mem["techo_operativo_8pct"] == 800_000
         assert result.decision.plazo_sugerido_dias <= 30
-        assert result.decision.cupo_maximo_sugerido == 800_000
+        assert result.decision.cupo_maximo_sugerido == 640_000
 
     def test_cpt_negativo_da_cupo_cero_y_aval_obligatorio(self, benchmark_vacio) -> None:
         f29_list = [_f29(f"2025-{m:02d}", **{"502": "50000000"}) for m in range(1, 13)]
@@ -325,7 +325,8 @@ class TestVersion23Audit:
         assert "SIN LÍNEA AUTOMÁTICA" in result.decision.evaluacion_referencial
         # Pilar 4 debe tener la penalización
         pilar4 = next(p for p in result.desglose_score if p.nombre == "Rentabilidad (RLI) y Respaldo Patrimonial F22")
-        assert "Penalización -9 pts" in pilar4.detalle or "Penalización -6 pts" in pilar4.detalle
+        assert "Respaldo patrimonial mitigado por pérdida operativa" in pilar4.detalle or "Penalización -9 pts" in pilar4.detalle or "Penalización -6 pts" in pilar4.detalle
+        assert pilar4.puntaje_obtenido == 6
 
     def test_desglose_6_pilares_suma_score(self, benchmark_vacio) -> None:
         """Verifica que el desglose de 6 pilares sume 100 puntos máximos y coincida con el score."""
@@ -455,7 +456,7 @@ class TestVersion23Audit:
         assert result.score_compuesto is not None and result.score_compuesto >= 75
         assert result.decision.clasificacion_riesgo in ("ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA)", "PERFIL TRIBUTARIO MODERADO")
         assert "Línea" in result.decision.evaluacion_referencial
-        assert result.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Alta"
+        assert result.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Moderada"
 
     def test_filtro_elegibilidad_5_etapas(self, benchmark_vacio) -> None:
         """Verifica que el Filtro de Elegibilidad Tributaria contenga las 5 dimensiones requeridas."""

@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from pathlib import Path
 
@@ -28,8 +29,15 @@ class TestSnapshot:
     def _check_fixture(self, fixture: Path) -> str | None:
         pdf_path = str(fixture / "input.pdf")
         expected = _load_json(fixture / "expected.json")
+        fem = expected.get("credit_risk", {}).get("vigencia_datos", {}).get("fecha_emision")
+        eval_date = None
+        if fem:
+            try:
+                eval_date = datetime.strptime(fem.split()[0], "%d/%m/%Y").date()
+            except Exception:
+                pass
         engine = TaxFolderEngine(pdf_path)
-        result = engine.parse()
+        result = engine.parse(evaluation_date=eval_date)
         actual = result.model_dump(mode="json")
 
         actual["metadata"]["processing_time"] = 0.0

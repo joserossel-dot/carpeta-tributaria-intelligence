@@ -40,6 +40,7 @@ class TaxFolderEngine:
         cupo_solicitado: int | None = None,
         boletin_comercial: str | None = None,
         historial_pago: str | None = None,
+        evaluation_date: Any = None,
     ) -> TaxFolder:
         t0 = time.perf_counter()
         if isinstance(self.pdf_input, (str, Path)):
@@ -105,6 +106,7 @@ class TaxFolderEngine:
                 cupo_solicitado=cupo_solicitado,
                 boletin_comercial=boletin_comercial,
                 historial_pago=historial_pago,
+                evaluation_date=evaluation_date,
             )
         except Exception:
             # El motor de riesgo crediticio es una capa adicional sobre

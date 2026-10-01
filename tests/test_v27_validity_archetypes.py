@@ -1,3 +1,4 @@
+from datetime import date
 from decimal import Decimal
 from pathlib import Path
 import pytest
@@ -66,10 +67,18 @@ class TestV27ValidityArchetypes:
     """Suite de validación v2.7 de 8 arquetipos metodológicos."""
 
     # 1. Caso Dorado NUTRISA (95214000-0)
-    @pytest.mark.skipif(not NUTRISA_PDF.exists(), reason="PDF NUTRISA no disponible localmente")
+    @pytest.mark.skipif(
+        not NUTRISA_PDF.exists() and not Path("tests/fixtures/cases/nutrisa.json").exists(),
+        reason="PDF NUTRISA no disponible localmente",
+    )
     def test_1_golden_nutrisa(self):
-        engine = TaxFolderEngine(str(NUTRISA_PDF))
-        folder = engine.parse()
+        fixture_json = Path("tests/fixtures/cases/nutrisa.json")
+        if fixture_json.exists():
+            folder = TaxFolder.model_validate_json(fixture_json.read_text(encoding="utf-8"))
+            folder.credit_risk = CreditRiskEngine().calculate(folder, evaluation_date=date(2026, 6, 15))
+        else:
+            engine = TaxFolderEngine(str(NUTRISA_PDF))
+            folder = engine.parse(evaluation_date=date(2026, 6, 15))
         cr = folder.credit_risk
         assert cr is not None
         assert cr.linea_maxima_condicionada == 14_400_000

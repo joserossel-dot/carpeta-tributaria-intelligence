@@ -1,3 +1,4 @@
+from datetime import date
 from decimal import Decimal
 from pathlib import Path
 import pytest
@@ -52,14 +53,22 @@ def _build_tax_folder(
 class TestCreditValidityArchetypes:
     """Suite de validación de los 6 arquetipos de riesgo crediticio determinista v2.7."""
 
-    @pytest.mark.skipif(not NUTRISA_PDF.exists(), reason="PDF de prueba NUTRISA no disponible en entorno local")
+    @pytest.mark.skipif(
+        not NUTRISA_PDF.exists() and not Path("tests/fixtures/cases/nutrisa.json").exists(),
+        reason="NUTRISA no disponible en entorno local",
+    )
     def test_archetype_1_manufactura_14a_sana_nutrisa(self):
         """Arquetipo 1: Manufactura 14A sana (NUTRISA Golden Fixture).
 
         Línea Máxima M$ 14.400, Inicial M$ 7.200, Score 92.
         """
-        engine = TaxFolderEngine(str(NUTRISA_PDF))
-        tf = engine.parse()
+        fixture_json = Path("tests/fixtures/cases/nutrisa.json")
+        if fixture_json.exists():
+            tf = TaxFolder.model_validate_json(fixture_json.read_text(encoding="utf-8"))
+            tf.credit_risk = CreditRiskEngine().calculate(tf, evaluation_date=date(2026, 6, 15))
+        else:
+            engine = TaxFolderEngine(str(NUTRISA_PDF))
+            tf = engine.parse(evaluation_date=date(2026, 6, 15))
         cr = tf.credit_risk
 
         assert cr is not None

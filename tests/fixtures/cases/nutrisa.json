@@ -1,0 +1,5214 @@
+{
+  "contributor": {
+    "rut": "95214000-0",
+    "razon_social": "NUTRICION Y ALIMENTOS SOCIEDAD ANONIMA",
+    "fecha_generacion": "15/06/2026 11:44",
+    "fecha_inicio_actividades": "01/01/1993",
+    "domicilio": "AVDA LO ESPEJO 01565Bodeg DEPTO G14 1437-1444, LO ESPEJO, SANTIAGO",
+    "comuna": "LO ESPEJO",
+    "region": "METROPOLITANA DE SANTIAGO",
+    "tipo_contribuyente": "Primera Categoría",
+    "regimen_tributario": "REGIMEN GENERAL SEMI INTEGRADO (14A)"
+  },
+  "representatives": [
+    {
+      "rut": "4506112-4",
+      "nombre": "HECTOR GABRIEL RIOS LARRAIN",
+      "cargo": null,
+      "fecha_incorporacion": "07/09/1983",
+      "forma_actuacion": "En conjunto",
+      "vigente": true
+    },
+    {
+      "rut": "4509405-7",
+      "nombre": "MARIA GLORIA RIOS LARRAIN",
+      "cargo": null,
+      "fecha_incorporacion": "07/09/1983",
+      "forma_actuacion": "En conjunto",
+      "vigente": true
+    },
+    {
+      "rut": "10958716-8",
+      "nombre": "JOSE LUIS RODRIGUEZ CASANUEVA",
+      "cargo": null,
+      "fecha_incorporacion": "21/06/1994",
+      "forma_actuacion": "En conjunto",
+      "vigente": true
+    }
+  ],
+  "activities": [
+    {
+      "codigo": "107909",
+      "descripcion": "ELABORACION DE OTROS PRODUCTOS ALIMENTICIOS N.C.P.",
+      "principal": true,
+      "categoria": "Primera Categoría",
+      "fecha_inicio": "01/01/1993"
+    }
+  ],
+  "f29": [
+    {
+      "periodo": "2026-04",
+      "folio": "9036344306",
+      "fecha_presentacion": "20/05/2026",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "5"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "23206401"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "238"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "130289755"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "222"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "10642773"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "970028"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "62716473"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "120617010"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "10"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "30832678"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "306"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "71429636"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "22"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "8714472"
+        },
+        {
+          "codigo": "531",
+          "glosa": "CANT. NOTAS DE DÉBITO RECIBIDAS",
+          "valor": "1"
+        },
+        {
+          "codigo": "532",
+          "glosa": "NOTAS DE DÉBITO CRÉD, RECUP. Y REINT.",
+          "valor": "1309"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "3"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "16132128"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "5644990"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3383346"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "658033303"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "78848601"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "41768409"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6580333"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "57377078"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "57377078"
+        }
+      ]
+    },
+    {
+      "periodo": "2026-03",
+      "folio": "8965716526",
+      "fecha_presentacion": "20/04/2026",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "2"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "11771467"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "259"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "131940685"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "160"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "9499541"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "6"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "1517714"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "53196667"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "123958858"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "17"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "66776921"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "276"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "53196667"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "13"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "1164659"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "3"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "26848450"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "1433291"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3324624"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "664187461"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "78880458"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "10"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "45078400"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6641875"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "56478190"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "56478190"
+        }
+      ]
+    },
+    {
+      "periodo": "2026-02",
+      "folio": "8888244316",
+      "fecha_presentacion": "20/03/2026",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "3"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "17373012"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "190"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "103054646"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "148"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "5905180"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "807761"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "81381171"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "97957227"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "12"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "54703589"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "328"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "83103545"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "8"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "1722374"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "2"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "13664861"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "1231338"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "4060613"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "532937365"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "95046032"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "2911195"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "5329374"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "13532520"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "13532520"
+        }
+      ]
+    },
+    {
+      "periodo": "2026-01",
+      "folio": "8814886486",
+      "fecha_presentacion": "19/02/2026",
+      "detalles": [
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "237"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "125739576"
+        },
+        {
+          "codigo": "512",
+          "glosa": "CANT. DE DCTOS. NOTAS DE DÉBITO EMIT.",
+          "valor": "25"
+        },
+        {
+          "codigo": "513",
+          "glosa": "NOTAS DE DÉBITOS EMITIDAS",
+          "valor": "116597"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "118"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "5152086"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "777853"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "64708384"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "121481940"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "11"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "7113342"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "275"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "64708384"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "11"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "1586042"
+        },
+        {
+          "codigo": "531",
+          "glosa": "CANT. NOTAS DE DÉBITO RECIBIDAS",
+          "valor": "1"
+        },
+        {
+          "codigo": "532",
+          "glosa": "NOTAS DE DÉBITO CRÉD, RECUP. Y REINT.",
+          "valor": "828"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "2"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "5812574"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "1283829"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "4214567"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "639379344"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "68935744"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "10"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "52546196"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6393793"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "64438385"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "64438385"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-12",
+      "folio": "8749360086",
+      "fecha_presentacion": "20/01/2026",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "5"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "34782619"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "211"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "117203933"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "180"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "4057544"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "1104293"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "51036723"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "114250682"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "13"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "116715746"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "281"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "51036723"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "11"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "1549181"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "7"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "35234353"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "572343"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "149312"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "4043001"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "84721895"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "636102408"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "29528787"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6361024"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "40654467"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "40654467"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-11",
+      "folio": "8683293416",
+      "fecha_presentacion": "22/12/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "3"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "15014037"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "245"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "122835422"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "145"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "6885011"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "1101937"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "68872400"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "117052348"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "20"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "120675756"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "312"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "68872400"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "9"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "2930058"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "2"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "24489791"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "512686"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "187944"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3912862"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "90432133"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "631079757"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "26620215"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6310798"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "37544505"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "37544505"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-10",
+      "folio": "8616163286",
+      "fecha_presentacion": "20/11/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "4"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "28672718"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "232"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "134331204"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "270"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "5413723"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "1270269"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "65212699"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "130187750"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "13"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "73779797"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "337"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "65212699"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "11"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "2206563"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "4"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "21125881"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "1806677"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "224356"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3771893"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "84132017"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "713872095"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "46055733"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "7138721"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "58997380"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "58997380"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-09",
+      "folio": "8529016766",
+      "fecha_presentacion": "17/10/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "3"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "10847095"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "221"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "126662019"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "74"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "9736055"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "789236"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "70267095"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "117715200"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "12"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "91851746"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "294"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "70267095"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "9"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "2701485"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "3"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "12570874"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "1221163"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "188973"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3656919"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "80136484"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "630401267"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "37578716"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6304013"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "48949784"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "48949784"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-08",
+      "folio": "8470323786",
+      "fecha_presentacion": "21/09/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "24006223"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "218"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "118296796"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "204"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "3796557"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "904485"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "63224273"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "115404724"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "18"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "210839857"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "284"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "63224273"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "12"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "5830861"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "4"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "7076972"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "594153"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "200760"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3829603"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "64470384"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "631400005"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "50934340"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6314000"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "61872856"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "61872856"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-07",
+      "folio": "8405703966",
+      "fecha_presentacion": "20/08/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "15315763"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "252"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "137794514"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "79"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "7790158"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "738841"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "61787113"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "130743197"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "23"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "61787113"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "295"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "61787113"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "8"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "791980"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "6"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "59673299"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "1595462"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "255209"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3885872"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "120668432"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "744439405"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "10074765"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "7444394"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "23255702"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "23255702"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-06",
+      "folio": "8335760576",
+      "fecha_presentacion": "20/07/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "3830630"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "173"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "125357409"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "97"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "12363933"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "6"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "392854"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "56656885"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "113386330"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "25"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "113373536"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "305"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "56656885"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "11"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "4110354"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "5"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "13513037"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "602549"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "218916"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3870315"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "66059568"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "600624562"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "47326762"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6006246"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "58024788"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "58024788"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-05",
+      "folio": "8277450306",
+      "fecha_presentacion": "23/06/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "2075877"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "195"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "120960902"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "113"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "1802139"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "518700"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "57423881"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "119677463"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "24"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "164364210"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "257"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "57423881"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "13"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "1041160"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "2"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "14308192"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "575135"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "196070"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "4102088"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "70690913"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "631957818"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "48986550"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "6319578"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "60179421"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "60179421"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-04",
+      "folio": "8210756086",
+      "fecha_presentacion": "20/05/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "9603635"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "228"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "134638442"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "113"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "3120080"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "668197"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "74974922"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "132186559"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "24"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "151723454"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "280"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "74974922"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "3"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "10919"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "3"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "8090999"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "2157078"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "336007"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "3911862"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "83055002"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "705323167"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "49131557"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "7053232"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "62589736"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "62589736"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-03",
+      "folio": "8142679006",
+      "fecha_presentacion": "16/04/2025",
+      "detalles": [
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "203"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "121580212"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "175"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "10049625"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "6"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "933340"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "51958240"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "112463927"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "17"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "96425413"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "277"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "51958240"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "17"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "3435802"
+        },
+        {
+          "codigo": "531",
+          "glosa": "CANT. NOTAS DE DÉBITO RECIBIDAS",
+          "valor": "1"
+        },
+        {
+          "codigo": "532",
+          "glosa": "NOTAS DE DÉBITO CRÉD, RECUP. Y REINT.",
+          "valor": "209942"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "4"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "17890605"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "553232"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "191420"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "4554851"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "66622985"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "567419110"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "45840942"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "5674191"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "56814636"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "56814636"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-02",
+      "folio": "8124980356",
+      "fecha_presentacion": "20/03/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "5"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "54105070"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "169"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "109232298"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "153"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "3034362"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "538680"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "57406999"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "106736616"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "16"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "27244529"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "227"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "57406999"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "6"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "559851"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "2"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "23110752"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "570969"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "190157"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "2986375"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "79957900"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "615877382"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "26778716"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "15"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "9238161"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "39764378"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "39764378"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-01",
+      "folio": "8105088716",
+      "fecha_presentacion": "20/02/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "16663446"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "217"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "114823379"
+        },
+        {
+          "codigo": "512",
+          "glosa": "CANT. DE DCTOS. NOTAS DE DÉBITO EMIT.",
+          "valor": "1"
+        },
+        {
+          "codigo": "513",
+          "glosa": "NOTAS DE DÉBITOS EMITIDAS",
+          "valor": "81491"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "191"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "18129553"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "530125"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "57406999"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "97305442"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "19"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "126205272"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "268"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "57406999"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "7"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "2062480"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "2"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "19896642"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "2022820"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "266501"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "4940062"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "75241161"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "528798213"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "22064281"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "15"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "7931973"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "37225637"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "37225637"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-12",
+      "folio": "8078446246",
+      "fecha_presentacion": "17/01/2025",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "380560"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "206"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "121068314"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "215"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "6938924"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "6"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "265761"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "60082296"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "114395151"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "21"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "25837661"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "265"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "60082296"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "3298664"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "4"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "21149592"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "583322"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "393507"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "6183197"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "77933224"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "602460893"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "36461927"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "3"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "18073827"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "61695780"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "61695780"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-11",
+      "folio": "8053778526",
+      "fecha_presentacion": "13/12/2024",
+      "detalles": [
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "213"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "122602423"
+        },
+        {
+          "codigo": "512",
+          "glosa": "CANT. DE DCTOS. NOTAS DE DÉBITO EMIT.",
+          "valor": "2"
+        },
+        {
+          "codigo": "513",
+          "glosa": "NOTAS DE DÉBITOS EMITIDAS",
+          "valor": "6743"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "123"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "5375747"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "470106"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "74347103"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "117703525"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "15"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "60300236"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "284"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "74347103"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "9"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "4364081"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "4"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "29878939"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "2385888"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "456051"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "155",
+          "glosa": "Ret. 3% Rta 42 N°2 reint. prest. Tasa 0%",
+          "valor": "2574"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "99861961"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "6433641"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "17841564"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "619492801"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "18584784"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "3"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "45704502"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "45704502"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-10",
+      "folio": "8035554236",
+      "fecha_presentacion": "18/11/2024",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "9664719"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "240"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "141826403"
+        },
+        {
+          "codigo": "512",
+          "glosa": "CANT. DE DCTOS. NOTAS DE DÉBITO EMIT.",
+          "valor": "1"
+        },
+        {
+          "codigo": "513",
+          "glosa": "NOTAS DE DÉBITOS EMITIDAS",
+          "valor": "185626"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "199"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "13730201"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "434823"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "60200108"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "128716651"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "26"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "68894425"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "302"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "60200108"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "16"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "2216247"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "3"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "5706237"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "631945"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "460604"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "155",
+          "glosa": "Ret. 3% Rta 42 N°2 reint. prest. Tasa 0%",
+          "valor": "4557"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "63690098"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "5758888"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "65026553"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "687121371"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "20613641"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "3"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "92496188"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "92496188"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-09",
+      "folio": "8020546056",
+      "fecha_presentacion": "21/10/2024",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "20958127"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "182"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "115532780"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "96"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "7696304"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "242498"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "66567874"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "108078974"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "16"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "47303073"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "318"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "66567874"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "8"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "2014180"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "3"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "13756721"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "707964"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "458069"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "155",
+          "glosa": "Ret. 3% Rta 42 N°2 reint. prest. Tasa 0%",
+          "valor": "3791"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "78310415"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "5855156"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "29768559"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "589795389"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "11795908"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "2"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "48589447"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "48589447"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-08",
+      "folio": "7999635796",
+      "fecha_presentacion": "23/09/2024",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "1"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "5743548"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "217"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "136009247"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "271"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "14319243"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "122062"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "69853815"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "121812066"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "23"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "196873094"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "310"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "69482931"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "4"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "1085158"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "4"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "17253732"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "1290149"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "445075"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "155",
+          "glosa": "Ret. 3% Rta 42 N°2 reint. prest. Tasa 0%",
+          "valor": "4070"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "85651505"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "6515214"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "36160561"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "646860254"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "9702904"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "15"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "54117973"
+        },
+        {
+          "codigo": "573",
+          "glosa": "REMANENTE ANT. CAMBIO SUJ. PER. SGTE.",
+          "valor": "0"
+        },
+        {
+          "codigo": "556",
+          "glosa": "IVA ANT. DEL PERÍODO",
+          "valor": "5922"
+        },
+        {
+          "codigo": "543",
+          "glosa": "TOTAL DE ANTICIPO, CONTRIB. RETENIDOS",
+          "valor": "5922"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "54112051"
+        },
+        {
+          "codigo": "598",
+          "glosa": "ANTICIPO A IMPUTAR / CAMBIO DE SUJ.",
+          "valor": "5922"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-07",
+      "folio": "7977824716",
+      "fecha_presentacion": "20/08/2024",
+      "detalles": [
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "236"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "152572443"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "97"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "31787951"
+        },
+        {
+          "codigo": "500",
+          "glosa": "CANTIDAD FACTURAS",
+          "valor": "5"
+        },
+        {
+          "codigo": "501",
+          "glosa": "LIQUIDACION DE FACTURAS",
+          "valor": "92136"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "61443759"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "120876628"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "14"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "5140356"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "282"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "61443759"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "7"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "1970556"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "2"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "8926580"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "819071"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "449618"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "155",
+          "glosa": "Ret. 3% Rta 42 N°2 reint. prest. Tasa 0%",
+          "valor": "6157"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "68399783"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "8010336"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "52476845"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "635707853"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "9535618"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "15"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "71297645"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "71297645"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-06",
+      "folio": "7954157266",
+      "fecha_presentacion": "19/07/2024",
+      "detalles": [
+        {
+          "codigo": "585",
+          "glosa": "CANT. DE DCTOS. EXPORTACIONES",
+          "valor": "3"
+        },
+        {
+          "codigo": "020",
+          "glosa": "EXPORTACIONES DEL MES",
+          "valor": "14618294"
+        },
+        {
+          "codigo": "503",
+          "glosa": "CANTIDAD FACTURAS EMITIDAS",
+          "valor": "191"
+        },
+        {
+          "codigo": "502",
+          "glosa": "DÉBITOS FACTURAS EMITIDAS",
+          "valor": "114761431"
+        },
+        {
+          "codigo": "509",
+          "glosa": "CANT. DCTOS. NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "203"
+        },
+        {
+          "codigo": "510",
+          "glosa": "DÉBITOS NOTAS DE CRÉDITOS EMITIDAS",
+          "valor": "5664004"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "55433240"
+        },
+        {
+          "codigo": "538",
+          "glosa": "TOTAL DÉBITOS",
+          "valor": "109097427"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "10"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "52913812"
+        },
+        {
+          "codigo": "519",
+          "glosa": "CANT. DE DCTOS. FACT. RECIB. DEL GIRO",
+          "valor": "268"
+        },
+        {
+          "codigo": "520",
+          "glosa": "CRÉDITO REC. Y REINT./FACT. DEL GIRO",
+          "valor": "55433240"
+        },
+        {
+          "codigo": "527",
+          "glosa": "CANT. NOTAS DE CRÉDITO RECIBIDAS",
+          "valor": "8"
+        },
+        {
+          "codigo": "528",
+          "glosa": "CRÉDITO RECUP. Y REINT NOTAS DE CRÉD",
+          "valor": "484526"
+        },
+        {
+          "codigo": "534",
+          "glosa": "CANT. FORM. PAGO IMP. DEL GIRO",
+          "valor": "4"
+        },
+        {
+          "codigo": "535",
+          "glosa": "CRÉD, RECUP. Y REINT. PAGO IMP. DEL GIRO",
+          "valor": "19363959"
+        },
+        {
+          "codigo": "048",
+          "glosa": "RET. IMP. ÚNICO TRAB. ART. 74 N 1 LIR",
+          "valor": "869470"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "049",
+          "glosa": "Ret. 3% Rta 42 N°1 reint. prest. Tasa 0%",
+          "valor": "441235"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "155",
+          "glosa": "Ret. 3% Rta 42 N°2 reint. prest. Tasa 0%",
+          "valor": "6191"
+        },
+        {
+          "codigo": "537",
+          "glosa": "TOTAL CRÉDITOS",
+          "valor": "74312673"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "4510495"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "34784754"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "588815278"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "8832229"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "15"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "49444374"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "49444374"
+        }
+      ]
+    }
+  ],
+  "f22": [
+    {
+      "anio_tributario": "2026",
+      "ingresos": 7609347772,
+      "renta_liquida_imponible": 692055540,
+      "capital_propio_tributario": 3625109624,
+      "impuesto_determinado": 103837639,
+      "ppm": 84066318,
+      "creditos": null,
+      "perdidas": null,
+      "base_imponible": 692055540,
+      "resultado_tributario": 656064546,
+      "observaciones": [],
+      "idpc_determinado": 186854996,
+      "ppm_imputados": 84066318,
+      "saldo_liquidacion_anual": 103837639,
+      "rli_source_code": "1694",
+      "cpt_source_code": "1698",
+      "ingresos_source_code": "1657"
+    }
+  ],
+  "properties": [],
+  "vehicles": [],
+  "validation": [],
+  "kpis": {
+    "company_age_years": 33.7,
+    "activity_count": 1,
+    "principal_activity": "ELABORACION DE OTROS PRODUCTOS ALIMENTICIOS N.C.P.",
+    "representative_count": 3,
+    "property_count": 0,
+    "vehicle_count": 0,
+    "f29_count": 23,
+    "first_f29_period": "2024-06",
+    "last_f29_period": "2026-04",
+    "declared_months": 23,
+    "processing_timestamp": "2026-10-01T19:43:02.843813"
+  },
+  "analysis": {
+    "alerts": [],
+    "warnings": [],
+    "statistics": {
+      "total_actividades": 1,
+      "total_f29": 23,
+      "total_representantes": 3,
+      "total_propiedades": 0,
+      "total_vehiculos": 0
+    },
+    "metrics": {}
+  },
+  "monthly_taxes": [
+    {
+      "periodo": "2024-06",
+      "ventas_afectas": "588815278",
+      "ventas_exentas": null,
+      "ventas_exportacion": "14618294",
+      "compras": "291753895",
+      "debito_fiscal": "109097427",
+      "credito_fiscal": "74312673",
+      "iva_determinado": "34784754",
+      "ppm": "8832229",
+      "total_ventas": "603433572",
+      "compras_operacionales": "444033154",
+      "credito_operacional": "74312673",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "484526",
+      "retencion_sueldos": "869470",
+      "retencion_honorarios": "4510495",
+      "retenciones_totales": "5379965",
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-07",
+      "ventas_afectas": "635707853",
+      "ventas_exentas": null,
+      "ventas_exportacion": null,
+      "compras": "323388205",
+      "debito_fiscal": "120876628",
+      "credito_fiscal": "68399783",
+      "iva_determinado": "52476845",
+      "ppm": "9535618",
+      "total_ventas": "635707853",
+      "compras_operacionales": "365139228",
+      "credito_operacional": "68399783",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "1970556",
+      "retencion_sueldos": "819071",
+      "retencion_honorarios": "8010336",
+      "retenciones_totales": "8829407",
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-08",
+      "ventas_afectas": "646860254",
+      "ventas_exentas": null,
+      "ventas_exportacion": "5743548",
+      "compras": "367651658",
+      "debito_fiscal": "121812066",
+      "credito_fiscal": "85651505",
+      "iva_determinado": "36160561",
+      "ppm": "9702904",
+      "total_ventas": "652603802",
+      "compras_operacionales": "647670512",
+      "credito_operacional": "85651505",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "1085158",
+      "retencion_sueldos": "1290149",
+      "retencion_honorarios": "6515214",
+      "retenciones_totales": "7805363",
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-09",
+      "ventas_afectas": "589795389",
+      "ventas_exentas": null,
+      "ventas_exportacion": "20958127",
+      "compras": "350357232",
+      "debito_fiscal": "108078974",
+      "credito_fiscal": "78310415",
+      "iva_determinado": "29768559",
+      "ppm": "11795908",
+      "total_ventas": "610753516",
+      "compras_operacionales": "459463168",
+      "credito_operacional": "78310415",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "2014180",
+      "retencion_sueldos": "707964",
+      "retencion_honorarios": "5855156",
+      "retenciones_totales": "6563120",
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-10",
+      "ventas_afectas": "687121371",
+      "ventas_exentas": null,
+      "ventas_exportacion": "9664719",
+      "compras": "316842674",
+      "debito_fiscal": "128716651",
+      "credito_fiscal": "63690098",
+      "iva_determinado": "65026553",
+      "ppm": "20613641",
+      "total_ventas": "696786090",
+      "compras_operacionales": "404105493",
+      "credito_operacional": "63690098",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "2216247",
+      "retencion_sueldos": "631945",
+      "retencion_honorarios": "5758888",
+      "retenciones_totales": "6390833",
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-11",
+      "ventas_afectas": "619492801",
+      "ventas_exentas": null,
+      "ventas_exportacion": null,
+      "compras": "391300542",
+      "debito_fiscal": "117703525",
+      "credito_fiscal": "99861961",
+      "iva_determinado": "17841564",
+      "ppm": "18584784",
+      "total_ventas": "619492801",
+      "compras_operacionales": "585889519",
+      "credito_operacional": "99861961",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "4364081",
+      "retencion_sueldos": "2385888",
+      "retencion_honorarios": "6433641",
+      "retenciones_totales": "8819529",
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-12",
+      "ventas_afectas": "602460893",
+      "ventas_exentas": null,
+      "ventas_exportacion": "380560",
+      "compras": "316222611",
+      "debito_fiscal": "114395151",
+      "credito_fiscal": "77933224",
+      "iva_determinado": "36461927",
+      "ppm": "18073827",
+      "total_ventas": "602841453",
+      "compras_operacionales": "436012545",
+      "credito_operacional": "77933224",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "3298664",
+      "retencion_sueldos": "583322",
+      "retencion_honorarios": "6183197",
+      "retenciones_totales": "6766519",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-01",
+      "ventas_afectas": "528798213",
+      "ventas_exentas": null,
+      "ventas_exportacion": "16663446",
+      "compras": "302142100",
+      "debito_fiscal": "97305442",
+      "credito_fiscal": "75241161",
+      "iva_determinado": "22064281",
+      "ppm": "7931973",
+      "total_ventas": "545461659",
+      "compras_operacionales": "522211402",
+      "credito_operacional": "75241161",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "2062480",
+      "retencion_sueldos": "2022820",
+      "retencion_honorarios": "4940062",
+      "retenciones_totales": "6962882",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-02",
+      "ventas_afectas": "615877382",
+      "ventas_exentas": null,
+      "ventas_exportacion": "54105070",
+      "compras": "302142100",
+      "debito_fiscal": "106736616",
+      "credito_fiscal": "79957900",
+      "iva_determinado": "26778716",
+      "ppm": "9238161",
+      "total_ventas": "669982452",
+      "compras_operacionales": "448075598",
+      "credito_operacional": "79957900",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "559851",
+      "retencion_sueldos": "570969",
+      "retencion_honorarios": "2986375",
+      "retenciones_totales": "3557344",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-03",
+      "ventas_afectas": "567419110",
+      "ventas_exentas": null,
+      "ventas_exportacion": null,
+      "compras": "273464421",
+      "debito_fiscal": "112463927",
+      "credito_fiscal": "66622985",
+      "iva_determinado": "45840942",
+      "ppm": "5674191",
+      "total_ventas": "567419110",
+      "compras_operacionales": "447072719",
+      "credito_operacional": "66622985",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "3435802",
+      "retencion_sueldos": "553232",
+      "retencion_honorarios": "4554851",
+      "retenciones_totales": "5108083",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-04",
+      "ventas_afectas": "705323167",
+      "ventas_exentas": null,
+      "ventas_exportacion": "9603635",
+      "compras": "394604853",
+      "debito_fiscal": "132186559",
+      "credito_fiscal": "83055002",
+      "iva_determinado": "49131557",
+      "ppm": "7053232",
+      "total_ventas": "714926802",
+      "compras_operacionales": "588855067",
+      "credito_operacional": "83055002",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "10919",
+      "retencion_sueldos": "2157078",
+      "retencion_honorarios": "3911862",
+      "retenciones_totales": "6068940",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-05",
+      "ventas_afectas": "631957818",
+      "ventas_exentas": null,
+      "ventas_exportacion": "2075877",
+      "compras": "302230953",
+      "debito_fiscal": "119677463",
+      "credito_fiscal": "70690913",
+      "iva_determinado": "48986550",
+      "ppm": "6319578",
+      "total_ventas": "634033695",
+      "compras_operacionales": "536421671",
+      "credito_operacional": "70690913",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "1041160",
+      "retencion_sueldos": "575135",
+      "retencion_honorarios": "4102088",
+      "retenciones_totales": "4677223",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-06",
+      "ventas_afectas": "600624562",
+      "ventas_exentas": null,
+      "ventas_exportacion": "3830630",
+      "compras": "298194132",
+      "debito_fiscal": "113386330",
+      "credito_fiscal": "66059568",
+      "iva_determinado": "47326762",
+      "ppm": "6006246",
+      "total_ventas": "604455192",
+      "compras_operacionales": "461055498",
+      "credito_operacional": "66059568",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "4110354",
+      "retencion_sueldos": "602549",
+      "retencion_honorarios": "3870315",
+      "retenciones_totales": "4472864",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-07",
+      "ventas_afectas": "744439405",
+      "ventas_exentas": null,
+      "ventas_exportacion": "15315763",
+      "compras": "325195332",
+      "debito_fiscal": "130743197",
+      "credito_fiscal": "120668432",
+      "iva_determinado": "10074765",
+      "ppm": "7444394",
+      "total_ventas": "759755168",
+      "compras_operacionales": "696884147",
+      "credito_operacional": "120668432",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "791980",
+      "retencion_sueldos": "1595462",
+      "retencion_honorarios": "3885872",
+      "retenciones_totales": "5481334",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-08",
+      "ventas_afectas": "631400005",
+      "ventas_exentas": null,
+      "ventas_exportacion": "24006223",
+      "compras": "332759332",
+      "debito_fiscal": "115404724",
+      "credito_fiscal": "64470384",
+      "iva_determinado": "50934340",
+      "ppm": "6314000",
+      "total_ventas": "655406228",
+      "compras_operacionales": "550157686",
+      "credito_operacional": "64470384",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "5830861",
+      "retencion_sueldos": "594153",
+      "retencion_honorarios": "3829603",
+      "retenciones_totales": "4423756",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-09",
+      "ventas_afectas": "630401267",
+      "ventas_exentas": null,
+      "ventas_exportacion": "10847095",
+      "compras": "369826816",
+      "debito_fiscal": "117715200",
+      "credito_fiscal": "80136484",
+      "iva_determinado": "37578716",
+      "ppm": "6304013",
+      "total_ventas": "641248362",
+      "compras_operacionales": "513622726",
+      "credito_operacional": "80136484",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "2701485",
+      "retencion_sueldos": "1221163",
+      "retencion_honorarios": "3656919",
+      "retenciones_totales": "4878082",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-10",
+      "ventas_afectas": "713872095",
+      "ventas_exentas": null,
+      "ventas_exportacion": "28672718",
+      "compras": "343224732",
+      "debito_fiscal": "130187750",
+      "credito_fiscal": "84132017",
+      "iva_determinado": "46055733",
+      "ppm": "7138721",
+      "total_ventas": "742544813",
+      "compras_operacionales": "516579899",
+      "credito_operacional": "84132017",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "2206563",
+      "retencion_sueldos": "1806677",
+      "retencion_honorarios": "3771893",
+      "retenciones_totales": "5578570",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-11",
+      "ventas_afectas": "631079757",
+      "ventas_exentas": null,
+      "ventas_exportacion": "15014037",
+      "compras": "362486316",
+      "debito_fiscal": "117052348",
+      "credito_fiscal": "90432133",
+      "iva_determinado": "26620215",
+      "ppm": "6310798",
+      "total_ventas": "646093794",
+      "compras_operacionales": "596634371",
+      "credito_operacional": "90432133",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "2930058",
+      "retencion_sueldos": "512686",
+      "retencion_honorarios": "3912862",
+      "retenciones_totales": "4425548",
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-12",
+      "ventas_afectas": "636102408",
+      "ventas_exentas": null,
+      "ventas_exportacion": "34782619",
+      "compras": "268614332",
+      "debito_fiscal": "114250682",
+      "credito_fiscal": "84721895",
+      "iva_determinado": "29528787",
+      "ppm": "6361024",
+      "total_ventas": "670885027",
+      "compras_operacionales": "562620470",
+      "credito_operacional": "84721895",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "1549181",
+      "retencion_sueldos": "572343",
+      "retencion_honorarios": "4043001",
+      "retenciones_totales": "4615344",
+      "observaciones": []
+    },
+    {
+      "periodo": "2026-01",
+      "ventas_afectas": "639379344",
+      "ventas_exentas": null,
+      "ventas_exportacion": null,
+      "compras": "340570442",
+      "debito_fiscal": "121481940",
+      "credito_fiscal": "68935744",
+      "iva_determinado": "52546196",
+      "ppm": "6393793",
+      "total_ventas": "639379344",
+      "compras_operacionales": "369933058",
+      "credito_operacional": "68935744",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "1586042",
+      "retencion_sueldos": "1283829",
+      "retencion_honorarios": "4214567",
+      "retenciones_totales": "5498396",
+      "observaciones": []
+    },
+    {
+      "periodo": "2026-02",
+      "ventas_afectas": "532937365",
+      "ventas_exentas": null,
+      "ventas_exportacion": "17373012",
+      "compras": "428321953",
+      "debito_fiscal": "97957227",
+      "credito_fiscal": "95046032",
+      "iva_determinado": "2911195",
+      "ppm": "5329374",
+      "total_ventas": "550310377",
+      "compras_operacionales": "554945875",
+      "credito_operacional": "95046032",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "1722374",
+      "retencion_sueldos": "1231338",
+      "retencion_honorarios": "4060613",
+      "retenciones_totales": "5291951",
+      "observaciones": []
+    },
+    {
+      "periodo": "2026-03",
+      "ventas_afectas": "664187461",
+      "ventas_exentas": null,
+      "ventas_exportacion": "11771467",
+      "compras": "279982458",
+      "debito_fiscal": "123958858",
+      "credito_fiscal": "78880458",
+      "iva_determinado": "45078400",
+      "ppm": "6641875",
+      "total_ventas": "675958928",
+      "compras_operacionales": "481937243",
+      "credito_operacional": "78880458",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "1164659",
+      "retencion_sueldos": "1433291",
+      "retencion_honorarios": "3324624",
+      "retenciones_totales": "4757915",
+      "observaciones": []
+    },
+    {
+      "periodo": "2026-04",
+      "ventas_afectas": "658033303",
+      "ventas_exentas": null,
+      "ventas_exportacion": "23206401",
+      "compras": "330086700",
+      "debito_fiscal": "120617010",
+      "credito_fiscal": "78848601",
+      "iva_determinado": "41768409",
+      "ppm": "6580333",
+      "total_ventas": "681239704",
+      "compras_operacionales": "445825325",
+      "credito_operacional": "78848601",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": "8714472",
+      "retencion_sueldos": "5644990",
+      "retencion_honorarios": "3383346",
+      "retenciones_totales": "9028336",
+      "observaciones": []
+    }
+  ],
+  "monthly_analysis": {
+    "monthly_taxes": [
+      {
+        "periodo": "2024-06",
+        "ventas_afectas": "588815278",
+        "ventas_exentas": null,
+        "ventas_exportacion": "14618294",
+        "compras": "291753895",
+        "debito_fiscal": "109097427",
+        "credito_fiscal": "74312673",
+        "iva_determinado": "34784754",
+        "ppm": "8832229",
+        "total_ventas": "603433572",
+        "compras_operacionales": "444033154",
+        "credito_operacional": "74312673",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "484526",
+        "retencion_sueldos": "869470",
+        "retencion_honorarios": "4510495",
+        "retenciones_totales": "5379965",
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-07",
+        "ventas_afectas": "635707853",
+        "ventas_exentas": null,
+        "ventas_exportacion": null,
+        "compras": "323388205",
+        "debito_fiscal": "120876628",
+        "credito_fiscal": "68399783",
+        "iva_determinado": "52476845",
+        "ppm": "9535618",
+        "total_ventas": "635707853",
+        "compras_operacionales": "365139228",
+        "credito_operacional": "68399783",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "1970556",
+        "retencion_sueldos": "819071",
+        "retencion_honorarios": "8010336",
+        "retenciones_totales": "8829407",
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-08",
+        "ventas_afectas": "646860254",
+        "ventas_exentas": null,
+        "ventas_exportacion": "5743548",
+        "compras": "367651658",
+        "debito_fiscal": "121812066",
+        "credito_fiscal": "85651505",
+        "iva_determinado": "36160561",
+        "ppm": "9702904",
+        "total_ventas": "652603802",
+        "compras_operacionales": "647670512",
+        "credito_operacional": "85651505",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "1085158",
+        "retencion_sueldos": "1290149",
+        "retencion_honorarios": "6515214",
+        "retenciones_totales": "7805363",
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-09",
+        "ventas_afectas": "589795389",
+        "ventas_exentas": null,
+        "ventas_exportacion": "20958127",
+        "compras": "350357232",
+        "debito_fiscal": "108078974",
+        "credito_fiscal": "78310415",
+        "iva_determinado": "29768559",
+        "ppm": "11795908",
+        "total_ventas": "610753516",
+        "compras_operacionales": "459463168",
+        "credito_operacional": "78310415",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "2014180",
+        "retencion_sueldos": "707964",
+        "retencion_honorarios": "5855156",
+        "retenciones_totales": "6563120",
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-10",
+        "ventas_afectas": "687121371",
+        "ventas_exentas": null,
+        "ventas_exportacion": "9664719",
+        "compras": "316842674",
+        "debito_fiscal": "128716651",
+        "credito_fiscal": "63690098",
+        "iva_determinado": "65026553",
+        "ppm": "20613641",
+        "total_ventas": "696786090",
+        "compras_operacionales": "404105493",
+        "credito_operacional": "63690098",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "2216247",
+        "retencion_sueldos": "631945",
+        "retencion_honorarios": "5758888",
+        "retenciones_totales": "6390833",
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-11",
+        "ventas_afectas": "619492801",
+        "ventas_exentas": null,
+        "ventas_exportacion": null,
+        "compras": "391300542",
+        "debito_fiscal": "117703525",
+        "credito_fiscal": "99861961",
+        "iva_determinado": "17841564",
+        "ppm": "18584784",
+        "total_ventas": "619492801",
+        "compras_operacionales": "585889519",
+        "credito_operacional": "99861961",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "4364081",
+        "retencion_sueldos": "2385888",
+        "retencion_honorarios": "6433641",
+        "retenciones_totales": "8819529",
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-12",
+        "ventas_afectas": "602460893",
+        "ventas_exentas": null,
+        "ventas_exportacion": "380560",
+        "compras": "316222611",
+        "debito_fiscal": "114395151",
+        "credito_fiscal": "77933224",
+        "iva_determinado": "36461927",
+        "ppm": "18073827",
+        "total_ventas": "602841453",
+        "compras_operacionales": "436012545",
+        "credito_operacional": "77933224",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "3298664",
+        "retencion_sueldos": "583322",
+        "retencion_honorarios": "6183197",
+        "retenciones_totales": "6766519",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-01",
+        "ventas_afectas": "528798213",
+        "ventas_exentas": null,
+        "ventas_exportacion": "16663446",
+        "compras": "302142100",
+        "debito_fiscal": "97305442",
+        "credito_fiscal": "75241161",
+        "iva_determinado": "22064281",
+        "ppm": "7931973",
+        "total_ventas": "545461659",
+        "compras_operacionales": "522211402",
+        "credito_operacional": "75241161",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "2062480",
+        "retencion_sueldos": "2022820",
+        "retencion_honorarios": "4940062",
+        "retenciones_totales": "6962882",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-02",
+        "ventas_afectas": "615877382",
+        "ventas_exentas": null,
+        "ventas_exportacion": "54105070",
+        "compras": "302142100",
+        "debito_fiscal": "106736616",
+        "credito_fiscal": "79957900",
+        "iva_determinado": "26778716",
+        "ppm": "9238161",
+        "total_ventas": "669982452",
+        "compras_operacionales": "448075598",
+        "credito_operacional": "79957900",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "559851",
+        "retencion_sueldos": "570969",
+        "retencion_honorarios": "2986375",
+        "retenciones_totales": "3557344",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-03",
+        "ventas_afectas": "567419110",
+        "ventas_exentas": null,
+        "ventas_exportacion": null,
+        "compras": "273464421",
+        "debito_fiscal": "112463927",
+        "credito_fiscal": "66622985",
+        "iva_determinado": "45840942",
+        "ppm": "5674191",
+        "total_ventas": "567419110",
+        "compras_operacionales": "447072719",
+        "credito_operacional": "66622985",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "3435802",
+        "retencion_sueldos": "553232",
+        "retencion_honorarios": "4554851",
+        "retenciones_totales": "5108083",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-04",
+        "ventas_afectas": "705323167",
+        "ventas_exentas": null,
+        "ventas_exportacion": "9603635",
+        "compras": "394604853",
+        "debito_fiscal": "132186559",
+        "credito_fiscal": "83055002",
+        "iva_determinado": "49131557",
+        "ppm": "7053232",
+        "total_ventas": "714926802",
+        "compras_operacionales": "588855067",
+        "credito_operacional": "83055002",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "10919",
+        "retencion_sueldos": "2157078",
+        "retencion_honorarios": "3911862",
+        "retenciones_totales": "6068940",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-05",
+        "ventas_afectas": "631957818",
+        "ventas_exentas": null,
+        "ventas_exportacion": "2075877",
+        "compras": "302230953",
+        "debito_fiscal": "119677463",
+        "credito_fiscal": "70690913",
+        "iva_determinado": "48986550",
+        "ppm": "6319578",
+        "total_ventas": "634033695",
+        "compras_operacionales": "536421671",
+        "credito_operacional": "70690913",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "1041160",
+        "retencion_sueldos": "575135",
+        "retencion_honorarios": "4102088",
+        "retenciones_totales": "4677223",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-06",
+        "ventas_afectas": "600624562",
+        "ventas_exentas": null,
+        "ventas_exportacion": "3830630",
+        "compras": "298194132",
+        "debito_fiscal": "113386330",
+        "credito_fiscal": "66059568",
+        "iva_determinado": "47326762",
+        "ppm": "6006246",
+        "total_ventas": "604455192",
+        "compras_operacionales": "461055498",
+        "credito_operacional": "66059568",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "4110354",
+        "retencion_sueldos": "602549",
+        "retencion_honorarios": "3870315",
+        "retenciones_totales": "4472864",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-07",
+        "ventas_afectas": "744439405",
+        "ventas_exentas": null,
+        "ventas_exportacion": "15315763",
+        "compras": "325195332",
+        "debito_fiscal": "130743197",
+        "credito_fiscal": "120668432",
+        "iva_determinado": "10074765",
+        "ppm": "7444394",
+        "total_ventas": "759755168",
+        "compras_operacionales": "696884147",
+        "credito_operacional": "120668432",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "791980",
+        "retencion_sueldos": "1595462",
+        "retencion_honorarios": "3885872",
+        "retenciones_totales": "5481334",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-08",
+        "ventas_afectas": "631400005",
+        "ventas_exentas": null,
+        "ventas_exportacion": "24006223",
+        "compras": "332759332",
+        "debito_fiscal": "115404724",
+        "credito_fiscal": "64470384",
+        "iva_determinado": "50934340",
+        "ppm": "6314000",
+        "total_ventas": "655406228",
+        "compras_operacionales": "550157686",
+        "credito_operacional": "64470384",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "5830861",
+        "retencion_sueldos": "594153",
+        "retencion_honorarios": "3829603",
+        "retenciones_totales": "4423756",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-09",
+        "ventas_afectas": "630401267",
+        "ventas_exentas": null,
+        "ventas_exportacion": "10847095",
+        "compras": "369826816",
+        "debito_fiscal": "117715200",
+        "credito_fiscal": "80136484",
+        "iva_determinado": "37578716",
+        "ppm": "6304013",
+        "total_ventas": "641248362",
+        "compras_operacionales": "513622726",
+        "credito_operacional": "80136484",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "2701485",
+        "retencion_sueldos": "1221163",
+        "retencion_honorarios": "3656919",
+        "retenciones_totales": "4878082",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-10",
+        "ventas_afectas": "713872095",
+        "ventas_exentas": null,
+        "ventas_exportacion": "28672718",
+        "compras": "343224732",
+        "debito_fiscal": "130187750",
+        "credito_fiscal": "84132017",
+        "iva_determinado": "46055733",
+        "ppm": "7138721",
+        "total_ventas": "742544813",
+        "compras_operacionales": "516579899",
+        "credito_operacional": "84132017",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "2206563",
+        "retencion_sueldos": "1806677",
+        "retencion_honorarios": "3771893",
+        "retenciones_totales": "5578570",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-11",
+        "ventas_afectas": "631079757",
+        "ventas_exentas": null,
+        "ventas_exportacion": "15014037",
+        "compras": "362486316",
+        "debito_fiscal": "117052348",
+        "credito_fiscal": "90432133",
+        "iva_determinado": "26620215",
+        "ppm": "6310798",
+        "total_ventas": "646093794",
+        "compras_operacionales": "596634371",
+        "credito_operacional": "90432133",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "2930058",
+        "retencion_sueldos": "512686",
+        "retencion_honorarios": "3912862",
+        "retenciones_totales": "4425548",
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-12",
+        "ventas_afectas": "636102408",
+        "ventas_exentas": null,
+        "ventas_exportacion": "34782619",
+        "compras": "268614332",
+        "debito_fiscal": "114250682",
+        "credito_fiscal": "84721895",
+        "iva_determinado": "29528787",
+        "ppm": "6361024",
+        "total_ventas": "670885027",
+        "compras_operacionales": "562620470",
+        "credito_operacional": "84721895",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "1549181",
+        "retencion_sueldos": "572343",
+        "retencion_honorarios": "4043001",
+        "retenciones_totales": "4615344",
+        "observaciones": []
+      },
+      {
+        "periodo": "2026-01",
+        "ventas_afectas": "639379344",
+        "ventas_exentas": null,
+        "ventas_exportacion": null,
+        "compras": "340570442",
+        "debito_fiscal": "121481940",
+        "credito_fiscal": "68935744",
+        "iva_determinado": "52546196",
+        "ppm": "6393793",
+        "total_ventas": "639379344",
+        "compras_operacionales": "369933058",
+        "credito_operacional": "68935744",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "1586042",
+        "retencion_sueldos": "1283829",
+        "retencion_honorarios": "4214567",
+        "retenciones_totales": "5498396",
+        "observaciones": []
+      },
+      {
+        "periodo": "2026-02",
+        "ventas_afectas": "532937365",
+        "ventas_exentas": null,
+        "ventas_exportacion": "17373012",
+        "compras": "428321953",
+        "debito_fiscal": "97957227",
+        "credito_fiscal": "95046032",
+        "iva_determinado": "2911195",
+        "ppm": "5329374",
+        "total_ventas": "550310377",
+        "compras_operacionales": "554945875",
+        "credito_operacional": "95046032",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "1722374",
+        "retencion_sueldos": "1231338",
+        "retencion_honorarios": "4060613",
+        "retenciones_totales": "5291951",
+        "observaciones": []
+      },
+      {
+        "periodo": "2026-03",
+        "ventas_afectas": "664187461",
+        "ventas_exentas": null,
+        "ventas_exportacion": "11771467",
+        "compras": "279982458",
+        "debito_fiscal": "123958858",
+        "credito_fiscal": "78880458",
+        "iva_determinado": "45078400",
+        "ppm": "6641875",
+        "total_ventas": "675958928",
+        "compras_operacionales": "481937243",
+        "credito_operacional": "78880458",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "1164659",
+        "retencion_sueldos": "1433291",
+        "retencion_honorarios": "3324624",
+        "retenciones_totales": "4757915",
+        "observaciones": []
+      },
+      {
+        "periodo": "2026-04",
+        "ventas_afectas": "658033303",
+        "ventas_exentas": null,
+        "ventas_exportacion": "23206401",
+        "compras": "330086700",
+        "debito_fiscal": "120617010",
+        "credito_fiscal": "78848601",
+        "iva_determinado": "41768409",
+        "ppm": "6580333",
+        "total_ventas": "681239704",
+        "compras_operacionales": "445825325",
+        "credito_operacional": "78848601",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": "8714472",
+        "retencion_sueldos": "5644990",
+        "retencion_honorarios": "3383346",
+        "retenciones_totales": "9028336",
+        "observaciones": []
+      }
+    ],
+    "total_months": 23,
+    "ventas_ultimos_12": "7901310632",
+    "compras_ultimos_12": "3981493498",
+    "promedio_ventas_mensual": "658442552.6666666666666666667",
+    "promedio_compras_mensual": "331791124.8333333333333333333",
+    "crecimiento_anual": "5.03",
+    "meses_sin_movimiento": 0,
+    "mejor_mes": "2025-07",
+    "peor_mes": "2025-01",
+    "promedio_ventas_ultimos_3m": "635836336.3333333333333333333",
+    "promedio_compras_ultimos_3m": "346130370.3333333333333333333",
+    "promedio_compras_operacionales_12m": "523884830.75",
+    "promedio_compras_operacionales_3m": "494236147.6666666666666666667",
+    "variacion_ventas_3m_pct": "-3.43",
+    "margen_implicito_12m": "1.447",
+    "margen_implicito_3m": "1.355",
+    "retenciones_totales_12m": "63129319",
+    "retenciones_totales_3m": "19078202",
+    "variacion_ventas_yoy_3m_pct": "-2.30",
+    "promedio_costo_operativo_proxy_12m": "573139398.0227272727272727273",
+    "costo_operativo_proxy_aplica": false,
+    "tasa_crecimiento_ventas_trimestral": -0.034332860538522365,
+    "tasa_crecimiento_compras_trimestral": 0.043217688559942485,
+    "margen_operacional_implicito_promedio": 0.20435757283868294
+  },
+  "corporate": {
+    "tipo_sociedad": null,
+    "fecha_constitucion": null,
+    "capital": null,
+    "socios": [],
+    "representantes": [
+      {
+        "rut": "4506112-4",
+        "nombre": "HECTOR GABRIEL RIOS LARRAIN",
+        "cargo": null,
+        "fecha_incorporacion": "07/09/1983",
+        "forma_actuacion": "En conjunto",
+        "vigente": true
+      },
+      {
+        "rut": "4509405-7",
+        "nombre": "MARIA GLORIA RIOS LARRAIN",
+        "cargo": null,
+        "fecha_incorporacion": "07/09/1983",
+        "forma_actuacion": "En conjunto",
+        "vigente": true
+      },
+      {
+        "rut": "10958716-8",
+        "nombre": "JOSE LUIS RODRIGUEZ CASANUEVA",
+        "cargo": null,
+        "fecha_incorporacion": "21/06/1994",
+        "forma_actuacion": "En conjunto",
+        "vigente": true
+      }
+    ],
+    "forma_actuacion_representantes": "En conjunto"
+  },
+  "credit_risk": {
+    "calidad_datos": {
+      "completitud_pct": 100.0,
+      "campos_no_confiables": [],
+      "meses_f29_faltantes": [],
+      "veredicto": "APTO_PARA_SCORING"
+    },
+    "hechos": {
+      "composicion_ventas": {
+        "pct_facturado": 1.0,
+        "pct_boletas": 0.0,
+        "monto_facturado_estimado": 2879114233,
+        "meses_evaluados": 23,
+        "nota": "sin código 111 (boletas) detectado -- giro predominantemente B2B facturado"
+      },
+      "postergaciones_iva": {
+        "meses_con_postergacion": 0,
+        "total_meses_evaluados": 23,
+        "periodos": []
+      }
+    },
+    "indicadores": {
+      "mora_efectiva": {
+        "score": 100,
+        "meses_con_recargo": 0,
+        "meses_con_remanente_credito": 0,
+        "meses_evaluados": 23,
+        "confianza": "alta",
+        "criterio": "distingue remanente de crédito fiscal (posición normal) de mora real (código 94 con recargo/interés)"
+      },
+      "margen_vs_giro": {
+        "score": 75,
+        "ratio_debito_credito_12m": 1.447,
+        "codigo_actividad": null,
+        "descripcion_actividad": null,
+        "ratio_promedio_sector": null,
+        "n_empresas_referencia": 0,
+        "confianza": "media",
+        "criterio": "proxy de margen bruto (débito/crédito fiscal), no incluye remuneraciones; requiere benchmark propio por giro con muestra mínima antes de calificar con confianza alta"
+      },
+      "respaldo_estructural": {
+        "score": 100,
+        "capital_propio_tributario": 3625109624,
+        "cupo_solicitado": null,
+        "cupo_referencia": 14400000,
+        "veces_cobertura": 251.74,
+        "confianza": "alta",
+        "criterio": "CPT es proxy tributario, no liquidez real"
+      }
+    },
+    "score_compuesto": 77,
+    "decision": {
+      "resultado_base": "NO_EVALUABLE",
+      "evaluacion_referencial": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+      "clasificacion_riesgo": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+      "desempeno_tributario_texto": "Capacidad Operativa Tributaria Moderada",
+      "producto_evaluado": "credito_30_dias",
+      "cupo_maximo_sugerido": 0,
+      "cupo_aprobado": 0,
+      "linea_maxima_sugerida": 0,
+      "linea_inicial_sugerida": 0,
+      "linea_maxima_condicionada": 0,
+      "plazo_sugerido_dias": 0,
+      "plazo_inicial_sugerido": "Contado (0 días)",
+      "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+      "garantia_exigida": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "resguardo_comercial_sugerido": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "protocolo_operativo": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "memoria_calculo": {
+        "periodo_inicio": "2025-05",
+        "periodo_fin": "2026-04",
+        "ventas_netas_mensuales_prom": 658442553,
+        "base_compras_c_base": 523884831,
+        "glosa_paso_a": "Base mensual de compras operacionales 12M (o costo proxy)",
+        "spread_operacional_f29": 134557722,
+        "brecha_operacional_proxy": 134557722,
+        "rli_ultimo_f22": 692055540,
+        "rli_mensualizada_f22": 57671295,
+        "rli_valida": true,
+        "rli_fallback_8pct": false,
+        "alerta_sanity_rli": null,
+        "techo_operativo_8pct": 41910786,
+        "techo_operativo_20pct": 41910786,
+        "techo_operativo": 41910786,
+        "freno_flujo_operacional_25pct": 14417824,
+        "freno_absorcion_operacional": 14417824,
+        "glosa_b2": "min(15% Spread F29: $20,183,658, 25% RLI Mensualizada: $14,417,824)",
+        "glosa_paso_d": "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0",
+        "cpt_source_code": "1698",
+        "margen_operacional_depurado_mensual": 134557722,
+        "factor_riesgo_phi": 1.0,
+        "factor_ajuste_conductual_pct": 0,
+        "cupo_preliminar": 14417824,
+        "capital_propio_tributario": 3625109624,
+        "tope_patrimonial_3pct_cpt": 108753289,
+        "tope_patrimonial_12pct_cpt": 108753289,
+        "tope_patrimonial_35pct_cpt": 108753289,
+        "tope_patrimonial_cpt": 108753289,
+        "rli_declarada_le_zero": false,
+        "ausencia_f22": false,
+        "contraccion_severa": false,
+        "cupo_maximo_sugerido": 14400000,
+        "cupo_excepcional_garantizado": null,
+        "castigos_aplicados": [
+          "Freno por Absorción Operacional (min(15% Spread F29: $20,183,658, 25% RLI Mensualizada: $14,417,824)): reduce techo de compras de $41,910,786 a $14,417,824"
+        ],
+        "glosa_paso_c": "Tramo Score 75-84: 0% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
+        "pct_apertura": 0,
+        "tramo_score": "75-84",
+        "glosa_apertura": "0% de Apertura para Score 75-84 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+        "linea_maxima_tecnica": 0,
+        "linea_inicial_recomendada": 0,
+        "linea_maxima_condicionada": 0,
+        "linea_inicial_sugerida": 0,
+        "plazo_inicial_sugerido": "Contado (0 días)",
+        "pct_apertura_inicial": 0,
+        "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+        "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
+        "historial_pago": "Cliente nuevo (Sin historial previo)"
+      },
+      "hoja_ruta_comercial": [
+        "Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).",
+        "Puntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada).",
+        "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
+        "Línea Máxima Condicionada: M$ 0.",
+        "Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+        "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+        "Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso."
+      ],
+      "caminos_mitigacion": [
+        {
+          "condicion": "cesion_facturas_factoring",
+          "aplica": true,
+          "resultado": "APROBADO",
+          "cupo_sugerido": 0,
+          "justificacion": "alta proporción de ventas facturadas B2B permite ceder facturas como garantía de cobro"
+        },
+        {
+          "condicion": "pago_contado_con_descuento",
+          "aplica": true,
+          "resultado": "APROBADO",
+          "cupo_sugerido": null,
+          "justificacion": "historial sin recargos por mora en declaraciones tributarias"
+        }
+      ],
+      "desglose_score": [
+        {
+          "nombre": "Continuidad y Antigüedad Operacional",
+          "puntaje_obtenido": 15,
+          "puntaje_maximo": 15,
+          "detalle": "23 meses continuos declarados (2024-06 a 2026-04) sin lagunas tributarias"
+        },
+        {
+          "nombre": "Nivel y Estabilidad de Ventas F29",
+          "puntaje_obtenido": 14,
+          "puntaje_maximo": 20,
+          "detalle": "Variación prom. últ. 3M vs. promedio 12M (-3.4%)"
+        },
+        {
+          "nombre": "Holgura Débito/Crédito IVA (F29)",
+          "puntaje_obtenido": 20,
+          "puntaje_maximo": 20,
+          "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito Giro 12M: 1.45x)"
+        },
+        {
+          "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
+          "puntaje_obtenido": 13,
+          "puntaje_maximo": 15,
+          "detalle": "RLI AT 2026: M$ 692.056 (9.1% s/ingresos; Utilidad Contable Cód. 1672: +M$ 656.065) | CPT: M$ 3.625.110 [Tope 13/15 pts: carpeta contiene solo 1 AT de F22, sin serie multianual verificable]"
+        },
+        {
+          "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",
+          "puntaje_obtenido": 15,
+          "puntaje_maximo": 15,
+          "detalle": "0 de 23 períodos F29 con recargos por mora fiscal (Cód. 94) y 0 postergaciones de IVA (Cód. 779)"
+        },
+        {
+          "nombre": "Coherencia F29/F22 y Vigencia de Información",
+          "puntaje_obtenido": 0,
+          "puntaje_maximo": 15,
+          "detalle": "Carpeta tributaria vencida (108d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+        }
+      ],
+      "vigencia_datos": {
+        "fecha_emision": "15/06/2026 11:44",
+        "ultimo_periodo": "2026-04",
+        "meses_desfase": 2,
+        "dias_antiguedad": 108,
+        "estado_antiguedad": "Exige actualizar > 60d",
+        "fecha_evaluacion": "01/10/2026",
+        "nivel_confianza": "MEDIA",
+        "alerta": null
+      },
+      "conciliacion_f29_f22": {
+        "anio_tributario": "2026",
+        "anio_comercial": "2025",
+        "meses_f29_contabilizados": 12,
+        "ventas_f29_anual": 7852212302,
+        "ingresos_f22": 7609347772,
+        "diferencia_monto": 242864530,
+        "diferencia_pct": 3.2,
+        "diferencia_pct_f29": 3.1,
+        "estado": "CONCILIADO (<10% dif.)",
+        "no_conciliable": false,
+        "detalle": "Ventas F29 año comercial 2025 (M$ 7.852.212) vs Ingresos F22 AT 2026 (M$ 7.609.348) — Diferencia: 3.2% s/base F22 — CONCILIADO (<10% dif.)."
+      },
+      "bienes_raices_resumen": "No registra bienes raíces en carpeta",
+      "filtro_elegibilidad": [
+        {
+          "parametro": "RUT e Inicio de Actividades Vigente",
+          "estado": "CUMPLE",
+          "detalle": "RUT 95214000-0 con inicio registrado (01/01/1993)"
+        },
+        {
+          "parametro": "Representantes Legales Identificados",
+          "estado": "CUMPLE",
+          "detalle": "3 representante(s) registrado(s) (Nota SII: actuación tributaria 'En conjunto' — no acredita poderes cambiarios)"
+        },
+        {
+          "parametro": "Continuidad F29 Reciente",
+          "estado": "CUMPLE",
+          "detalle": "23 meses sin lagunas tributarias"
+        },
+        {
+          "parametro": "Mora Fiscal Crítica (Cód. 94)",
+          "estado": "CUMPLE",
+          "detalle": "Cumplimiento oportuno de IVA"
+        },
+        {
+          "parametro": "Coherencia F29 vs F22",
+          "estado": "CUMPLE",
+          "detalle": "CONCILIADO (<10% dif.)"
+        }
+      ],
+      "variables_comerciales": {
+        "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
+        "historial_pago": "Cliente nuevo (Sin historial previo)"
+      }
+    },
+    "alertas": [
+      "Freno por Absorción Operacional (min(15% Spread F29: $20,183,658, 25% RLI Mensualizada: $14,417,824)): reduce techo de compras de $41,910,786 a $14,417,824"
+    ],
+    "fortalezas": [
+      "Cero meses con mora efectiva en 23 meses evaluados",
+      "Respaldo patrimonial sólido: CPT positivo de $3,625,109,624 CLP"
+    ],
+    "banderas_rojas": [],
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: NUTRICION Y ALIMENTOS SOCIEDAD ANONIMA (RUT: 95214000-0)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 523.885\n- Techo Operativo Proveedor (8%): M$ 41.911\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 134.558\n- Freno Flujo Operacional (25%): M$ 14.418\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 3.625.110\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Freno por Absorción Operacional (min(15% Spread F29: $20,183,658, 25% RLI Mensualizada: $14,417,824)): reduce techo de compras de $41,910,786 a $14,417,824\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "veredicto": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+    "evaluacion_referencial": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+    "clasificacion_riesgo": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+    "desempeno_tributario_texto": "Capacidad Operativa Tributaria Moderada",
+    "score_crediticio": 77.0,
+    "categoria_riesgo": "MEDIO",
+    "cupo_maximo_sugerido": 0,
+    "cupo_aprobado": 0,
+    "linea_maxima_sugerida": 0,
+    "linea_inicial_sugerida": 0,
+    "linea_maxima_condicionada": 0,
+    "plazo_sugerido_dias": 0,
+    "plazo_inicial_sugerido": "Contado (0 días)",
+    "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+    "garantia_exigida": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "resguardo_comercial_sugerido": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "protocolo_operativo": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "memoria_calculo": {
+      "periodo_inicio": "2025-05",
+      "periodo_fin": "2026-04",
+      "ventas_netas_mensuales_prom": 658442553,
+      "base_compras_c_base": 523884831,
+      "glosa_paso_a": "Base mensual de compras operacionales 12M (o costo proxy)",
+      "spread_operacional_f29": 134557722,
+      "brecha_operacional_proxy": 134557722,
+      "rli_ultimo_f22": 692055540,
+      "rli_mensualizada_f22": 57671295,
+      "rli_valida": true,
+      "rli_fallback_8pct": false,
+      "alerta_sanity_rli": null,
+      "techo_operativo_8pct": 41910786,
+      "techo_operativo_20pct": 41910786,
+      "techo_operativo": 41910786,
+      "freno_flujo_operacional_25pct": 14417824,
+      "freno_absorcion_operacional": 14417824,
+      "glosa_b2": "min(15% Spread F29: $20,183,658, 25% RLI Mensualizada: $14,417,824)",
+      "glosa_paso_d": "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0",
+      "cpt_source_code": "1698",
+      "margen_operacional_depurado_mensual": 134557722,
+      "factor_riesgo_phi": 1.0,
+      "factor_ajuste_conductual_pct": 0,
+      "cupo_preliminar": 14417824,
+      "capital_propio_tributario": 3625109624,
+      "tope_patrimonial_3pct_cpt": 108753289,
+      "tope_patrimonial_12pct_cpt": 108753289,
+      "tope_patrimonial_35pct_cpt": 108753289,
+      "tope_patrimonial_cpt": 108753289,
+      "rli_declarada_le_zero": false,
+      "ausencia_f22": false,
+      "contraccion_severa": false,
+      "cupo_maximo_sugerido": 14400000,
+      "cupo_excepcional_garantizado": null,
+      "castigos_aplicados": [
+        "Freno por Absorción Operacional (min(15% Spread F29: $20,183,658, 25% RLI Mensualizada: $14,417,824)): reduce techo de compras de $41,910,786 a $14,417,824"
+      ],
+      "glosa_paso_c": "Tramo Score 75-84: 0% (Escala: >=85: 100% | 75-84: 80% | 65-74: 60% | <65: 0%)",
+      "pct_apertura": 0,
+      "tramo_score": "75-84",
+      "glosa_apertura": "0% de Apertura para Score 75-84 (Escala: >=85: 50% | 75-84: 40% | 65-74: 30% | <65: 0%)",
+      "linea_maxima_tecnica": 0,
+      "linea_inicial_recomendada": 0,
+      "linea_maxima_condicionada": 0,
+      "linea_inicial_sugerida": 0,
+      "plazo_inicial_sugerido": "Contado (0 días)",
+      "pct_apertura_inicial": 0,
+      "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+      "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
+      "historial_pago": "Cliente nuevo (Sin historial previo)"
+    },
+    "hoja_ruta_comercial": [
+      "Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).",
+      "Puntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada).",
+      "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
+      "Línea Máxima Condicionada: M$ 0.",
+      "Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+      "Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso."
+    ],
+    "desglose_score": [
+      {
+        "nombre": "Continuidad y Antigüedad Operacional",
+        "puntaje_obtenido": 15,
+        "puntaje_maximo": 15,
+        "detalle": "23 meses continuos declarados (2024-06 a 2026-04) sin lagunas tributarias"
+      },
+      {
+        "nombre": "Nivel y Estabilidad de Ventas F29",
+        "puntaje_obtenido": 14,
+        "puntaje_maximo": 20,
+        "detalle": "Variación prom. últ. 3M vs. promedio 12M (-3.4%)"
+      },
+      {
+        "nombre": "Holgura Débito/Crédito IVA (F29)",
+        "puntaje_obtenido": 20,
+        "puntaje_maximo": 20,
+        "detalle": "Generación neta de Débito Fiscal sólida (Ratio Débito / Crédito Giro 12M: 1.45x)"
+      },
+      {
+        "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
+        "puntaje_obtenido": 13,
+        "puntaje_maximo": 15,
+        "detalle": "RLI AT 2026: M$ 692.056 (9.1% s/ingresos; Utilidad Contable Cód. 1672: +M$ 656.065) | CPT: M$ 3.625.110 [Tope 13/15 pts: carpeta contiene solo 1 AT de F22, sin serie multianual verificable]"
+      },
+      {
+        "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",
+        "puntaje_obtenido": 15,
+        "puntaje_maximo": 15,
+        "detalle": "0 de 23 períodos F29 con recargos por mora fiscal (Cód. 94) y 0 postergaciones de IVA (Cód. 779)"
+      },
+      {
+        "nombre": "Coherencia F29/F22 y Vigencia de Información",
+        "puntaje_obtenido": 0,
+        "puntaje_maximo": 15,
+        "detalle": "Carpeta tributaria vencida (108d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+      }
+    ],
+    "vigencia_datos": {
+      "fecha_emision": "15/06/2026 11:44",
+      "ultimo_periodo": "2026-04",
+      "meses_desfase": 2,
+      "dias_antiguedad": 108,
+      "estado_antiguedad": "Exige actualizar > 60d",
+      "fecha_evaluacion": "01/10/2026",
+      "nivel_confianza": "MEDIA",
+      "alerta": null
+    },
+    "conciliacion_f29_f22": {
+      "anio_tributario": "2026",
+      "anio_comercial": "2025",
+      "meses_f29_contabilizados": 12,
+      "ventas_f29_anual": 7852212302,
+      "ingresos_f22": 7609347772,
+      "diferencia_monto": 242864530,
+      "diferencia_pct": 3.2,
+      "diferencia_pct_f29": 3.1,
+      "estado": "CONCILIADO (<10% dif.)",
+      "no_conciliable": false,
+      "detalle": "Ventas F29 año comercial 2025 (M$ 7.852.212) vs Ingresos F22 AT 2026 (M$ 7.609.348) — Diferencia: 3.2% s/base F22 — CONCILIADO (<10% dif.)."
+    },
+    "bienes_raices_resumen": "No registra bienes raíces en carpeta",
+    "filtro_elegibilidad": [
+      {
+        "parametro": "RUT e Inicio de Actividades Vigente",
+        "estado": "CUMPLE",
+        "detalle": "RUT 95214000-0 con inicio registrado (01/01/1993)"
+      },
+      {
+        "parametro": "Representantes Legales Identificados",
+        "estado": "CUMPLE",
+        "detalle": "3 representante(s) registrado(s) (Nota SII: actuación tributaria 'En conjunto' — no acredita poderes cambiarios)"
+      },
+      {
+        "parametro": "Continuidad F29 Reciente",
+        "estado": "CUMPLE",
+        "detalle": "23 meses sin lagunas tributarias"
+      },
+      {
+        "parametro": "Mora Fiscal Crítica (Cód. 94)",
+        "estado": "CUMPLE",
+        "detalle": "Cumplimiento oportuno de IVA"
+      },
+      {
+        "parametro": "Coherencia F29 vs F22",
+        "estado": "CUMPLE",
+        "detalle": "CONCILIADO (<10% dif.)"
+      }
+    ],
+    "variables_comerciales": {
+      "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
+      "historial_pago": "Cliente nuevo (Sin historial previo)"
+    }
+  },
+  "metadata": {
+    "source_file": "/Users/josealfonsorossel/Downloads/Carpeta Tributaria Personalizada NUTRISA.pdf",
+    "pages": 27,
+    "processing_time": 15.425
+  }
+}

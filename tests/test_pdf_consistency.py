@@ -1,4 +1,4 @@
-"""Test de regresión de consistencia interna v2.9.1 para los 4 casos benchmark."""
+"""Test de regresión de consistencia interna v3.1.0 para los 4 casos benchmark."""
 from decimal import Decimal
 import io
 from pathlib import Path
@@ -6,29 +6,37 @@ import pdfplumber
 import pytest
 
 from src.core.tax_folder_engine import TaxFolderEngine
+from src.models.tax_folder import TaxFolder
+from src.credit.credit_risk_engine import CreditRiskEngine
 from src.reports.pdf_report import PDFReport, format_mclp
+
+FIXTURES_DIR = Path(__file__).parent / "fixtures" / "cases"
 
 BENCHMARK_CASES = [
     {
         "name": "ALVAL SPA",
+        "key": "alval_spa",
         "rut": "76293939-8",
         "path": Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (8).pdf"),
         "has_debito": True,
     },
     {
         "name": "NUTRISA",
+        "key": "nutrisa",
         "rut": "95214000-0",
         "path": Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria Personalizada NUTRISA.pdf"),
         "has_debito": True,
     },
     {
         "name": "PROTERM S.A.",
+        "key": "proterm_sa",
         "rut": "78155540-1",
         "path": Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (4).pdf"),
         "has_debito": True,
     },
     {
         "name": "CLINICA HYPERBARIC SPA",
+        "key": "clinica_hyperbaric",
         "rut": "77460385-9",
         "path": (
             Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria.CLINICA HYPERBARIC.pdf")
@@ -42,12 +50,17 @@ BENCHMARK_CASES = [
 
 @pytest.mark.parametrize("case", BENCHMARK_CASES, ids=lambda c: c["name"])
 def test_pdf_internal_consistency(case):
-    """Verifica mandatos de consistencia interna v2.9.1 en cada caso benchmark."""
-    if not case["path"].exists():
-        pytest.skip(f"Archivo de prueba {case['path']} no disponible")
+    """Verifica mandatos de consistencia interna v3.1.0 en cada caso benchmark."""
+    json_path = FIXTURES_DIR / f"{case['key']}.json"
+    if json_path.exists():
+        folder = TaxFolder.model_validate_json(json_path.read_text(encoding="utf-8"))
+        folder.credit_risk = CreditRiskEngine().calculate(folder)
+    elif case["path"].exists():
+        engine = TaxFolderEngine(str(case["path"]))
+        folder = engine.parse()
+    else:
+        pytest.skip(f"Ni fixture JSON ni archivo PDF disponible para {case['name']}")
 
-    engine = TaxFolderEngine(str(case["path"]))
-    folder = engine.parse()
     assert folder.credit_risk is not None
 
     last_12 = folder.monthly_taxes[-12:]
@@ -78,7 +91,10 @@ def test_pdf_internal_consistency(case):
         p for p in folder.credit_risk.desglose_score
         if "Débito" in p.nombre or "Holgura" in p.nombre
     )
-    if es_servicios:
+    if not case["has_debito"] or tot_deb_m == 0:
+        assert pilar3.puntaje_obtenido == 10
+        assert "Giro exento de IVA (Débito 12M: M$ 0)" in pilar3.detalle
+    elif es_servicios:
         assert pilar3.puntaje_obtenido == 12
         assert "Estructura de Servicios (Compras representan <35% de ventas)" in pilar3.detalle
     elif case["has_debito"]:
@@ -114,7 +130,9 @@ def test_pdf_internal_consistency(case):
     pdf_bytes = PDFReport().generate(folder)
     with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
         full_text = " ".join(" ".join(p.extract_text().split()) for p in pdf.pages)
-        if es_servicios:
+        if not case["has_debito"] or tot_deb_m == 0:
+            assert "Giro exento de IVA" in full_text
+        elif es_servicios:
             assert "Estructura de Servicios" in full_text
         elif case["has_debito"]:
             ratio_dc = round(tot_deb_m / tot_cred_m, 2)
@@ -127,3 +145,4 @@ def test_pdf_internal_consistency(case):
         assert prom_cop_str in full_text, (
             f"El PDF generado para {case['name']} no contiene el promedio mensual de compras {prom_cop_str}"
         )
+

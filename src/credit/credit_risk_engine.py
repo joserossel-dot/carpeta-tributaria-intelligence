@@ -1,3 +1,4 @@
+from datetime import date
 import math
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Any
@@ -19,6 +20,7 @@ from src.models.credit_risk import (
     PostergacionesIva,
     RespaldoEstructural,
 )
+from src.models.f29 import F29
 from src.models.tax_folder import TaxFolder
 from src.utils.formatting import format_mclp
 
@@ -49,7 +51,7 @@ _round_m100 = _floor_tiered
 
 
 class CreditRiskEngine:
-    """Motor de decisión crediticia B2B v3.0.0.
+    """Motor de decisión crediticia B2B v3.1.0.
 
     Evolución cuantitativa y comercial:
     1. Jerarquía explícita de códigos F22 (RLI 1694/1690 vs 1109 y CPT multigeneración 645/1698).
@@ -69,14 +71,19 @@ class CreditRiskEngine:
         cupo_solicitado: int | None = None,
         boletin_comercial: str | None = None,
         historial_pago: str | None = None,
+        evaluation_date: date | None = None,
     ) -> CreditRiskResult:
+        if evaluation_date is None:
+            evaluation_date = date.today()
+        eval_y = evaluation_date.year
+
         boletin = boletin_comercial or "Pendiente de consulta (Condiciona línea)"
         historial = historial_pago or "Cliente nuevo (Sin historial previo)"
 
         calidad = self._evaluar_calidad_datos(tax_folder)
         hechos = self._extraer_hechos(tax_folder)
-        vigencia = self._evaluar_vigencia_datos(tax_folder)
-        conciliacion = self._calcular_conciliacion_f29_f22(tax_folder)
+        vigencia = self._evaluar_vigencia_datos(tax_folder, evaluation_date=evaluation_date)
+        conciliacion = self._calcular_conciliacion_f29_f22(tax_folder, evaluation_date=evaluation_date)
         bienes_raices = self._resumen_bienes_raices(tax_folder)
         rli_comprimida, alerta_rli = self._detectar_compresion_rli(tax_folder)
 
@@ -102,7 +109,7 @@ class CreditRiskEngine:
             tax_folder, cupo_solicitado, cupo_maximo
         )
         desglose_score = self._calcular_desglose_score(
-            tax_folder, calidad, hechos, indicadores, memoria, rli_comprimida, vigencia, conciliacion
+            tax_folder, calidad, hechos, indicadores, memoria, rli_comprimida, vigencia, conciliacion, evaluation_date=evaluation_date
         )
         score_compuesto = self._componer_score(indicadores, desglose_score)
 
@@ -125,6 +132,7 @@ class CreditRiskEngine:
             boletin_comercial=boletin,
             historial_pago=historial,
             vigencia=vigencia,
+            evaluation_date=evaluation_date,
         )
         decision.desglose_score = desglose_score
         decision.vigencia_datos = vigencia
@@ -139,7 +147,8 @@ class CreditRiskEngine:
             alertas.insert(0, alerta_rli)
             banderas_rojas.insert(0, alerta_rli)
         if conciliacion and conciliacion.get("no_conciliable"):
-            alerta_f22_faltante = "Declaraciones Anuales F22 AT 2025 y AT 2026 no incluidas en carpeta tributaria (último F22 disponible: AT 2024)"
+            at_disp = conciliacion.get("anio_tributario", str(eval_y - 2))
+            alerta_f22_faltante = f"Declaraciones Anuales F22 AT {eval_y - 1} y AT {eval_y} no incluidas en carpeta tributaria (último F22 disponible: AT {at_disp})"
             alertas.append(alerta_f22_faltante)
             banderas_rojas.append(alerta_f22_faltante)
         if vigencia.get("alerta"):
@@ -198,7 +207,23 @@ class CreditRiskEngine:
             },
         )
 
-    evaluate = calculate
+    def evaluate(
+        self,
+        tax_folder: TaxFolder,
+        cupo_solicitado: int | None = None,
+        boletin_comercial: str | None = None,
+        historial_pago: str | None = None,
+        evaluation_date: date | None = None,
+    ) -> CreditRiskResult:
+        return self.calculate(
+            tax_folder,
+            cupo_solicitado=cupo_solicitado,
+            boletin_comercial=boletin_comercial,
+            historial_pago=historial_pago,
+            evaluation_date=evaluation_date,
+        )
+
+    evaluar_carpeta = evaluate
 
     # ------------------------------------------------------------------
     # Calidad de datos y detección de lagunas
@@ -311,21 +336,40 @@ class CreditRiskEngine:
                 # Detección de Overtrading: Crecimiento de ingresos con caída de margen RLI a negativo y compras > ventas
                 f_first = f22_chrono[0]
                 f_last = f22_chrono[-1]
-                growth_pct = round(((float(f_last.ingresos) - float(f_first.ingresos)) / float(f_first.ingresos)) * 100.0, 1) if (f_first.ingresos and f_last.ingresos) else 0.0
+                ingresos_base = float(f_first.ingresos) if f_first.ingresos else 0.0
+                ingresos_actual = float(f_last.ingresos) if f_last.ingresos else 0.0
+                crecimiento = round(((ingresos_actual - ingresos_base) / ingresos_base) * 100.0, 1) if ingresos_base > 0 else 0.0
 
                 last_12 = tax_folder.monthly_taxes[-12:] if tax_folder.monthly_taxes else []
-                meses_compras_gt_ventas = sum(
+                meses_compras_mayor_ventas = sum(
                     1 for m in last_12
                     if float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) > float(m.total_ventas or 0)
                 )
 
-                if growth_pct > 20.0 and (meses_compras_gt_ventas >= 4 or len(f22_chrono) >= 3):
+                if crecimiento > 20.0 and (meses_compras_mayor_ventas >= 4 or len(f22_chrono) >= 3):
+                    ing_progression = " -> ".join(
+                        [f"AT {str(f.anio_tributario or '').replace(':', '').strip()} {format_mclp(f.ingresos)}" for f in f22_chrono if f.ingresos]
+                    )
+                    rli_parts = []
+                    for f in f22_chrono:
+                        r_val = f.renta_liquida_imponible
+                        i_val = f.ingresos or 0
+                        p_val = round(float(r_val) / float(i_val) * 100.0, 1) if (i_val and i_val > 0 and r_val is not None) else 0.0
+                        rli_parts.append(f"{format_mclp(r_val)} ({p_val:.1f}%)")
+                    rli_str = " a ".join(rli_parts)
+
+                    res_fin_txt = f"; Utilidad Contable Cód. 1672: +{format_mclp(res_fin)}" if (res_fin and res_fin > 0) else ""
+
+                    cpt_phrase = "CPT incrementado sin respaldo en utilidades del ejercicio."
+                    if f_first.capital_propio_tributario and f_last.capital_propio_tributario and f_last.capital_propio_tributario > f_first.capital_propio_tributario:
+                        cpt_phrase = f"El aumento del CPT de {format_mclp(f_first.capital_propio_tributario)} a {format_mclp(f_last.capital_propio_tributario)} constituye CPT incrementado sin respaldo en utilidades del ejercicio."
+
                     msg = (
-                        "Alerta de Overtrading y Deterioro Multianual de Margen: "
-                        "Los ingresos crecieron +39.3% en dos ejercicios (AT 2024 M$ 5.112.917 -> AT 2025 M$ 5.850.949 -> AT 2026 M$ 7.121.034) "
-                        "mientras la RLI cayó de M$ 230.292 (4.5%) a M$ 13.526 (0.2%) y -M$ 31.382 (-0.4%; Utilidad Contable Cód. 1672: +M$ 103.376). "
-                        "En F29, las compras superan a las ventas en 6 de los últimos 12 meses (incluidos mayo y junio 2026) y las ventas de junio cayeron -25.5% MoM. "
-                        "El aumento del CPT de M$ 568.044 a M$ 1.716.248 provino de inyección de Capital Aportado Cód. 844 (de M$ 686.265 a M$ 1.685.488) para financiar capital de trabajo."
+                        f"Alerta de Overtrading y Deterioro Multianual de Margen: "
+                        f"Los ingresos crecieron +{crecimiento:.1f}% en {len(f22_chrono)} ejercicios ({ing_progression}) "
+                        f"mientras la RLI cayó de {rli_str}{res_fin_txt}. "
+                        f"En F29, las compras superan a las ventas en {meses_compras_mayor_ventas} de los últimos 12 meses. "
+                        f"{cpt_phrase}"
                     )
                     return True, msg
 
@@ -346,13 +390,12 @@ class CreditRiskEngine:
                 msg_base = f"Deterioro multianual de RLI en {n_ejercicios} ejercicios: {trayectoria_str}."
 
                 # Nota patrimonial si CPT aumentó significativamente
-                cpt_map = {str(f.anio_tributario or "").replace(":", "").strip(): f.capital_propio_tributario for f in f22_chrono if f.capital_propio_tributario}
                 nota_patrimonial = ""
-                if "2024" in cpt_map and "2025" in cpt_map:
-                    c24 = cpt_map["2024"]
-                    c25 = cpt_map["2025"]
-                    if c24 and c25 and c25 >= c24 * 2.5:
-                        nota_patrimonial = f" Nota patrimonial: el CPT se triplicó entre AT 2024 ({format_mclp(c24)}) y AT 2025 ({format_mclp(c25)}) explicado por aumento de Capital Aportado Cód. 844 (de M$ 686.265 a M$ 1.685.488)."
+                if len(f22_chrono) >= 2:
+                    c_ini = f22_chrono[0].capital_propio_tributario
+                    c_fin = f22_chrono[-1].capital_propio_tributario
+                    if c_ini and c_fin and c_fin >= c_ini * 2.0:
+                        nota_patrimonial = f" Nota patrimonial: CPT incrementado de {format_mclp(c_ini)} a {format_mclp(c_fin)} sin respaldo en utilidades del ejercicio."
 
                 msg = f"{msg_base}{nota_patrimonial}"
                 return True, msg
@@ -472,7 +515,7 @@ class CreditRiskEngine:
         ]
 
     @staticmethod
-    def _evaluar_vigencia_datos(tax_folder: TaxFolder) -> dict[str, Any]:
+    def _evaluar_vigencia_datos(tax_folder: TaxFolder, evaluation_date: date | None = None) -> dict[str, Any]:
         c = getattr(tax_folder, "contributor", None)
         fecha_emision_raw = getattr(c, "fecha_generacion", None) if c else None
 
@@ -484,7 +527,8 @@ class CreditRiskEngine:
             else (sorted_mt[-1].periodo if sorted_mt and sorted_mt[-1].periodo else "No informado")
         )
 
-        emision_y, emision_m = 2026, 1
+        today = evaluation_date or date.today()
+        emision_y, emision_m = today.year, 1
         if fecha_emision_raw:
             try:
                 date_part = str(fecha_emision_raw).strip().split()[0]
@@ -511,8 +555,6 @@ class CreditRiskEngine:
                 pass
 
         dias_antiguedad = 0
-        from datetime import date
-        today = date.today()
         if fecha_emision_raw:
             try:
                 date_part = str(fecha_emision_raw).strip().split()[0]
@@ -570,7 +612,7 @@ class CreditRiskEngine:
         }
 
     @staticmethod
-    def _calcular_conciliacion_f29_f22(tax_folder: TaxFolder) -> dict[str, Any] | None:
+    def _calcular_conciliacion_f29_f22(tax_folder: TaxFolder, evaluation_date: date | None = None) -> dict[str, Any] | None:
         f22_con_ingresos = sorted(
             [f for f in tax_folder.f22 if f.anio_tributario and f.ingresos and f.ingresos > 0],
             key=lambda f: f.anio_tributario or "",
@@ -584,6 +626,8 @@ class CreditRiskEngine:
         max_f29_year = max(anios_f29) if anios_f29 else None
         anios_f22 = [int(f.anio_tributario) for f in tax_folder.f22 if f.anio_tributario and str(f.anio_tributario).isdigit()]
         max_f22_year = max(anios_f22) if anios_f22 else None
+
+        eval_y = evaluation_date.year if evaluation_date else 2026
 
         for f22_item in f22_con_ingresos:
             try:
@@ -604,13 +648,13 @@ class CreditRiskEngine:
                 dif_pct = round(dif_monto / float(ingresos_f22) * 100.0, 1) if ingresos_f22 else 0.0
                 dif_pct_f29 = round(dif_monto / float(ventas_f29) * 100.0, 1) if (ventas_f29 and float(ventas_f29) > 0) else 0.0
 
-                # Si faltan los F22 recientes (AT 2025 / AT 2026) o el año comercial tiene < 12 meses de F29
-                faltan_f22_recientes = bool(max_f29_year and max_f29_year >= 2026 and max_f22_year and max_f22_year < 2025)
+                # Si faltan los F22 recientes o el año comercial tiene < 12 meses de F29
+                faltan_f22_recientes = bool(max_f29_year and max_f29_year >= eval_y and max_f22_year and max_f22_year < (eval_y - 1))
                 f29_parcial = len(meses_ac) < 12
 
                 if f29_parcial or faltan_f22_recientes:
                     detalle = (
-                        f"NO CONCILIABLE — Carpeta sin F22 AT 2025 ni AT 2026 "
+                        f"NO CONCILIABLE — Carpeta sin F22 AT {eval_y - 1} ni AT {eval_y} "
                         f"(último F22 disponible: AT {at}; año {ac} con solo {len(meses_ac)} meses F29 en carpeta)"
                     )
                     return {
@@ -1247,8 +1291,11 @@ class CreditRiskEngine:
         rli_comprimida: bool,
         vigencia: dict[str, Any],
         conciliacion: dict[str, Any] | None,
+        evaluation_date: date | None = None,
     ) -> list[PilarScore]:
         pilares: list[PilarScore] = []
+
+        eval_y = evaluation_date.year if evaluation_date else 2026
 
         # 1. Continuidad y Antigüedad Operacional (15 pts)
         n_meses = len(tax_folder.monthly_taxes) or len(tax_folder.f29)
@@ -1266,7 +1313,7 @@ class CreditRiskEngine:
                 parts = str(f_ini).replace("/", "-").split("-")
                 for p in parts:
                     if len(p) == 4 and p.isdigit():
-                        antiguedad_anios = 2026 - int(p)
+                        antiguedad_anios = eval_y - int(p)
                         break
 
         if n_meses >= 24 and lagunas == 0:
@@ -1397,42 +1444,43 @@ class CreditRiskEngine:
         ratio_cop_v = (tot_cop_12m / tot_v_12m) if tot_v_12m > 0 else 0.0
         es_estructura_servicios = (ratio_cop_v < 0.35 and tot_v_12m > 0)
 
-        if es_estructura_servicios:
+        # 1. Regla Giro Exento (Total Débito 12M == 0)
+        if tot_deb_12m == 0 and tot_v_12m > 0:
+            p3 = 10
+            pct_compras_v = round((tot_cop_12m / tot_v_12m) * 100.0, 1) if tot_v_12m > 0 else 0.0
+            det3 = (
+                f"Giro exento de IVA (Débito 12M: M$ 0): F29 no captura costos ni remuneraciones exentas "
+                f"(Compras afectas F29: {pct_compras_v:.1f}% de ventas; requiere EERR/Balance)"
+            )
+        # 2. Solo si tiene débito fiscal, evalúa Estructura de Servicios (Compras/Ventas < 35%)
+        elif es_estructura_servicios:
             p3 = 12
             det3 = "Estructura de Servicios (Compras representan <35% de ventas). El alto ratio D/C mide intensidad en nómina, no holgura operativa. Costos reales requieren EERR."
         elif es_exportador_o_exento:
-            if tot_deb_12m == 0 and pct_exp <= 0.20:
-                p3 = 10
-                pct_compras_v = round((tot_cop_12m / tot_v_12m) * 100.0, 1) if tot_v_12m > 0 else 0.0
-                det3 = (
-                    f"Giro exento de IVA (Débito 12M: M$ 0): F29 no captura costos ni remuneraciones exentas "
-                    f"(Compras afectas F29: {pct_compras_v:.1f}% de ventas; requiere EERR/Balance)"
-                )
+            # Para empresas exportadoras con débito fiscal:
+            if tot_cop_m > 0:
+                ratio_op = round(tot_v_m / tot_cop_m, 2)
+            elif tot_cop_12m > 0:
+                ratio_op = round(tot_v_12m / tot_cop_12m, 2)
             else:
-                # Para empresas exportadoras o con débito fiscal:
-                if tot_cop_m > 0:
-                    ratio_op = round(tot_v_m / tot_cop_m, 2)
-                elif tot_cop_12m > 0:
-                    ratio_op = round(tot_v_12m / tot_cop_12m, 2)
-                else:
-                    ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
+                ratio_op = (v_netas_prom / c_base_val) if c_base_val > 0 else 1.5
 
-                es_exp = pct_exp > 0.20
-                tipo_empresa = "Empresa exportadora" if es_exp else "Empresa de servicios exentos"
-                recup_iva = " y recuperación legítima de IVA" if es_exp else ""
+            es_exp = pct_exp > 0.20
+            tipo_empresa = "Empresa exportadora" if es_exp else "Empresa de servicios exentos"
+            recup_iva = " y recuperación legítima de IVA" if es_exp else ""
 
-                if ratio_op >= 1.40:
-                    p3 = 20
-                    det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
-                elif ratio_op >= 1.15:
-                    p3 = 17
-                    det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
-                elif ratio_op >= 1.00:
-                    p3 = 14
-                    det3 = f"{tipo_empresa} con margen suficiente (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
-                else:
-                    p3 = 8
-                    det3 = f"{tipo_empresa} con compras superiores a ventas (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
+            if ratio_op >= 1.40:
+                p3 = 20
+                det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
+            elif ratio_op >= 1.15:
+                p3 = 17
+                det3 = f"{tipo_empresa}: margen operacional holgado (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x){recup_iva}"
+            elif ratio_op >= 1.00:
+                p3 = 14
+                det3 = f"{tipo_empresa} con margen suficiente (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
+            else:
+                p3 = 8
+                det3 = f"{tipo_empresa} con compras superiores a ventas (Ratio Ventas Netas / Compras Op. 12M: {ratio_op:.2f}x)"
         else:
             tiene_remanente = (
                 (indicadores.mora_efectiva and indicadores.mora_efectiva.meses_con_remanente_credito > 0)
@@ -1459,7 +1507,7 @@ class CreditRiskEngine:
                     if float(m.compras_operacionales if m.compras_operacionales is not None else (m.compras or 0)) > float(m.total_ventas or 0)
                 )
                 extra_rem = f"; {meses_compras_gt_ventas} de 12 meses con compras > ventas" if meses_compras_gt_ventas > 0 else ""
-                det3 = f"Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: {ratio_dc:.2f}x | Ventas / Compras Giro: {ratio_vc:.2f}x{extra_rem})"
+                det3 = f"Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: {ratio_dc:.2f}x | Ventas / Compras Giro: {ratio_vc:.2f}x{extra_rem}. Puntaje asignado en base al ratio Ventas/Compras debido a la distorsión del remanente)"
             else:
                 if tot_cred_m > 0:
                     ratio = round(tot_deb_m / tot_cred_m, 2)
@@ -1533,8 +1581,8 @@ class CreditRiskEngine:
                 cupo_ref = memoria.get("cupo_maximo_sugerido") or 5_000_000
                 veces = cpt / cupo_ref if cupo_ref else 1.0
                 if rli_val_pilar is not None and rli_val_pilar <= 0:
-                    p4 = 15
-                    det4 = f"{rli_txt} | CPT: {cpt_fmt} (incrementado por aporte Cód. 844, no por utilidades retenidas)"
+                    p4 = 6
+                    det4 = f"{rli_txt} | CPT: {cpt_fmt} (Respaldo patrimonial mitigado por pérdida operativa)"
                 else:
                     if n_f22_declarados < 2 and rli_val_pilar is not None and rli_val_pilar > 0:
                         p4 = 13
@@ -1554,10 +1602,7 @@ class CreditRiskEngine:
             p4 = 8
             det4 = f"{rli_txt} | Sin declaración F22 con CPT informado"
 
-        if rli_val_pilar is not None and rli_val_pilar <= 0:
-            p4 = max(0, p4 - 9)
-            det4 += " [Penalización -9 pts por RLI <= 0]"
-        elif rli_comprimida:
+        if rli_comprimida and (rli_val_pilar is not None and rli_val_pilar > 0):
             p4 = max(0, p4 - 6)
             det4 += " [Penalización -6 pts por Alerta de Compresión de RLI en último F22]"
 
@@ -1608,8 +1653,7 @@ class CreditRiskEngine:
         # 6. Coherencia F29/F22 y Vigencia de Información (15 pts)
         meses_desfase = vigencia.get("meses_desfase", 0) if vigencia else 0
         dias_antiguedad = vigencia.get("dias_antiguedad", 0) if vigencia else 0
-        rut_c = getattr(getattr(tax_folder, "contributor", None), "rut", "") or ""
-        es_carpeta_vencida_60d = (dias_antiguedad > 65) or (dias_antiguedad > 60 and rut_c in ("78155540-1", "95214000-0", "77460385-9"))
+        es_carpeta_vencida_60d = dias_antiguedad > 60
 
         if es_carpeta_vencida_60d:
             p6 = 0
@@ -1690,11 +1734,12 @@ class CreditRiskEngine:
         boletin_comercial: str = "Pendiente de consulta (Condiciona línea)",
         historial_pago: str = "Cliente nuevo (Sin historial previo)",
         vigencia: dict[str, Any] | None = None,
+        evaluation_date: date | None = None,
     ) -> Decision:
         # Extraer representantes legales para resguardos personalizados (todos los registrados, sin truncar)
         rep_names = []
         forma_act = None
-        if tax_folder and getattr(tax_folder, "representatives", None):
+        if tax_folder is not None and getattr(tax_folder, "representatives", None):
             for r in tax_folder.representatives:
                 nom = getattr(r, "nombre", None) or (r.get("nombre") if isinstance(r, dict) else None)
                 if nom and str(nom).strip():
@@ -1703,7 +1748,7 @@ class CreditRiskEngine:
                 f = getattr(r, "forma_actuacion", None) or (r.get("forma_actuacion") if isinstance(r, dict) else None)
                 if f and not forma_act:
                     forma_act = f
-        if not forma_act and tax_folder and getattr(tax_folder, "corporate", None):
+        if not forma_act and tax_folder is not None and getattr(tax_folder, "corporate", None):
             forma_act = getattr(tax_folder.corporate, "forma_actuacion_representantes", None)
 
         reps_registrados = " / ".join(rep_names) if rep_names else "No informados"
@@ -1738,16 +1783,25 @@ class CreditRiskEngine:
                 desempeno_sii = "Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)"
 
         # Detección de falta de información reciente en F22
-        anios_f22 = [int(f.anio_tributario) for f in tax_folder.f22 if f.anio_tributario and str(f.anio_tributario).isdigit()]
-        max_f22_year = max(anios_f22) if anios_f22 else None
-        anios_f29 = [int(mt.periodo[:4]) for mt in tax_folder.monthly_taxes if mt.periodo and len(mt.periodo) >= 4 and mt.periodo[:4].isdigit()]
-        max_f29_year = max(anios_f29) if anios_f29 else None
-        falta_f22_reciente = bool(max_f29_year and max_f29_year >= 2026 and max_f22_year and max_f22_year < 2025)
+        eval_y = evaluation_date.year if evaluation_date else 2026
+        if tax_folder is None:
+            anios_f22 = []
+            max_f22_year = None
+            anios_f29 = []
+            max_f29_year = None
+            rut_c = ""
+        else:
+            anios_f22 = [int(f.anio_tributario) for f in (tax_folder.f22 or []) if f.anio_tributario and str(f.anio_tributario).isdigit()]
+            max_f22_year = max(anios_f22) if anios_f22 else None
+            anios_f29 = [int(mt.periodo[:4]) for mt in (tax_folder.monthly_taxes or []) if mt.periodo and len(mt.periodo) >= 4 and mt.periodo[:4].isdigit()]
+            max_f29_year = max(anios_f29) if anios_f29 else None
+            rut_c = getattr(getattr(tax_folder, "contributor", None), "rut", "") or ""
 
-        # Regla de Vigencia Vinculante (Hard Stop v3.0.0): Carpeta vencida > 60 días
+        falta_f22_reciente = bool(max_f29_year and max_f29_year >= eval_y and max_f22_year and max_f22_year < (eval_y - 1))
+
+        # Regla de Vigencia Vinculante (Hard Stop v3.1.0): Carpeta vencida > 60 días
         dias_antiguedad = vigencia.get("dias_antiguedad", 0) if vigencia else 0
-        rut_c = getattr(getattr(tax_folder, "contributor", None), "rut", "") or ""
-        es_carpeta_vencida_60d = (dias_antiguedad > 65) or (dias_antiguedad > 60 and rut_c in ("78155540-1", "95214000-0", "77460385-9"))
+        es_carpeta_vencida_60d = dias_antiguedad > 60
 
         # Validación de mora F29 reciente y alertas
         mora_12m = indicadores.mora_efectiva.meses_con_recargo if indicadores.mora_efectiva else 0
@@ -2232,3 +2286,22 @@ def _parse_monto(valor: str | None) -> int:
         return int(limpio)
     except ValueError:
         return 0
+
+
+def evaluar_carpeta(
+    tax_folder: TaxFolder,
+    evaluation_date: date | None = None,
+    cupo_solicitado: int | None = None,
+    boletin_comercial: str | None = None,
+    historial_pago: str | None = None,
+    benchmark: SectorBenchmark | None = None,
+) -> CreditRiskResult:
+    """Función principal determinista para evaluar riesgo crediticio de una carpeta tributaria."""
+    engine = CreditRiskEngine(benchmark)
+    return engine.calculate(
+        tax_folder,
+        cupo_solicitado=cupo_solicitado,
+        boletin_comercial=boletin_comercial,
+        historial_pago=historial_pago,
+        evaluation_date=evaluation_date,
+    )

@@ -111,7 +111,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v3.0.0)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v3.1.0)",
                 subtitle_style,
             )
         )
@@ -178,7 +178,7 @@ class PDFReport:
             ],
             [
                 Paragraph(f"<b>Emisión Carpeta SII:</b> {fecha_emision} | <b>Último F29:</b> {ult_periodo} (Desfase al emitir: {desfase_m}m)", body_style),
-                Paragraph(f"<b>Fecha Emisión Informe:</b> {fecha_eval_str} | <b>Antigüedad Carpeta:</b> {dias_antiguedad} días ({estado_antiguedad})", body_style),
+                Paragraph(f"<b>Fecha Emisión Informe:</b> {fecha_eval_str} | <b>Fecha Evaluación:</b> {fecha_eval_str} | <b>Antigüedad:</b> {dias_antiguedad} días ({estado_antiguedad})", body_style),
             ],
             [
                 Paragraph(f"<b>Boletín Comercial (Dicom):</b> {boletin_com}", body_style),
@@ -515,29 +515,8 @@ class PDFReport:
             "vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros."
         )
 
-        # Verificación de antigüedad de emisión de carpeta
-        dias_emision = None
-        if fecha_emision and fecha_emision != "No informada":
-            try:
-                date_part = str(fecha_emision).strip().split()[0]
-                d, m, y = 0, 0, 0
-                if "/" in date_part:
-                    p = date_part.split("/")
-                    if len(p) == 3:
-                        d, m, y = int(p[0]), int(p[1]), int(p[2])
-                elif "-" in date_part:
-                    p = date_part.split("-")
-                    if len(p) == 3:
-                        if len(p[0]) == 4:
-                            y, m, d = int(p[0]), int(p[1]), int(p[2])
-                        else:
-                            d, m, y = int(p[0]), int(p[1]), int(p[2])
-                if y > 0 and m > 0 and d > 0:
-                    fecha_dt = datetime.date(y, m, d)
-                    hoy = datetime.date.today()
-                    dias_emision = (hoy - fecha_dt).days
-            except Exception:
-                pass
+        # Verificación de antigüedad de emisión de carpeta (desde vigencia determinista)
+        dias_emision = vigencia.get("dias_antiguedad")
 
         alertas_p = [
             Paragraph("<b>Condiciones Suspensivas y Alertas Críticas:</b>", table_cell_bold),
@@ -788,7 +767,7 @@ class PDFReport:
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
             "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor.<br/>"
             "Escala Pilar 3: >2.0x = 20 pts | 1.4-2.0x = 18 pts | 1.2-1.4x = 16 pts | 1.05-1.2x = 14 pts | 0.95-1.05x = 10 pts | <0.95x = 5 pts | Estructura Servicios (<35% compras/ventas) = 12 pts | Giro Exento IVA = 10 pts.<br/>"
-            "[Motor Determinista Cavilaria v3.0.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT (CPT<=0 -> M$ 0), Apertura=50%/40%/30%/0%]</i>"
+            "[Motor Determinista Cavilaria v3.1.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT (CPT<=0 -> M$ 0), Apertura=50%/40%/30%/0%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 

@@ -1,0 +1,3832 @@
+{
+  "contributor": {
+    "rut": "77460385-9",
+    "razon_social": "CLINICA HYPERBARIC SPA",
+    "fecha_generacion": "02/06/2026 10:31",
+    "fecha_inicio_actividades": "28/01/2022",
+    "domicilio": "Janequeo 175 , CONCEPCION",
+    "comuna": "CONCEPCION",
+    "region": "REGIÓN DEL BIOBÍO",
+    "tipo_contribuyente": "Primera Categoría",
+    "regimen_tributario": "REGIMEN PRO PYME GENERAL (14D)"
+  },
+  "representatives": [
+    {
+      "rut": "18409649-8",
+      "nombre": "FRANCISCO GONZALO BECERRA CUEVAS",
+      "cargo": null,
+      "fecha_incorporacion": "24/09/2021",
+      "forma_actuacion": "Cualquiera",
+      "vigente": true
+    }
+  ],
+  "activities": [
+    {
+      "codigo": "862021",
+      "descripcion": "CENTROS MEDICOS PRIVADOS (ESTABLECIMIENTOS DE ATENCION AMBULATORIA)",
+      "principal": true,
+      "categoria": "Primera Categoría",
+      "fecha_inicio": "28/01/2022"
+    }
+  ],
+  "f29": [
+    {
+      "periodo": "2026-04",
+      "folio": "9004371616",
+      "fecha_presentacion": "12/05/2026",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "155"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "19331600"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "398106"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "128000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2026-03",
+      "folio": "9004365606",
+      "fecha_presentacion": "12/05/2026",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "169"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "20166000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "258817"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2026-02",
+      "folio": "9004360156",
+      "fecha_presentacion": "12/05/2026",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "178"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "23250000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "344459"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "120000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "3"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2026-01",
+      "folio": "9004356596",
+      "fecha_presentacion": "12/05/2026",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "150"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "22474000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "204371"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "128000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-12",
+      "folio": "8742003746",
+      "fecha_presentacion": "19/01/2026",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "122"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "17220000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "179271"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "140000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "17220000"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "172200"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "172200"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "172200"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-11",
+      "folio": "8724151146",
+      "fecha_presentacion": "13/01/2026",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "158"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "20740000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "169605"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "140000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-10",
+      "folio": "8724146496",
+      "fecha_presentacion": "13/01/2026",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "163"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "22326100"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "209762"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "140000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-09",
+      "folio": "8724140506",
+      "fecha_presentacion": "13/01/2026",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "87"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "17320000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "160509"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "140000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-08",
+      "folio": "8475330246",
+      "fecha_presentacion": "22/09/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "44"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "8770000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "157113"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "140000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "8770000"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "87700"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "87700"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "87700"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-07",
+      "folio": "8459135546",
+      "fecha_presentacion": "16/09/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "69"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "12210000"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "12210000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "122100"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "122100"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "122100"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-06",
+      "folio": "8459075316",
+      "fecha_presentacion": "16/09/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "84"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "24482000"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "24482000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "244820"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "244820"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "244820"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-05",
+      "folio": "8458999196",
+      "fecha_presentacion": "16/09/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "65"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "10972000"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "10972000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "109720"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "109720"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "109720"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-04",
+      "folio": "8458978786",
+      "fecha_presentacion": "16/09/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "59"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "9069424"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "13607235"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "136072"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "136072"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "136072"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-03",
+      "folio": "8137331836",
+      "fecha_presentacion": "10/04/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "99"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "15060000"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "15060000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "150600"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "150600"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "150600"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-02",
+      "folio": "8137324676",
+      "fecha_presentacion": "10/04/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "77"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "11920250"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "10259705"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "102597"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "102597"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "102597"
+        }
+      ]
+    },
+    {
+      "periodo": "2025-01",
+      "folio": "8137322186",
+      "fecha_presentacion": "10/04/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "80"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "13070000"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "13070000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "130700"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "130700"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "130700"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-12",
+      "folio": "8136978446",
+      "fecha_presentacion": "09/04/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "63"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "8522000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "262038"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-11",
+      "folio": "8136975716",
+      "fecha_presentacion": "09/04/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "108"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "16985000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-10",
+      "folio": "8136972886",
+      "fecha_presentacion": "09/04/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "101"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "12924000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-09",
+      "folio": "8136959076",
+      "fecha_presentacion": "09/04/2025",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "82"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "9252000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "591292"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "140000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-08",
+      "folio": "7989392666",
+      "fecha_presentacion": "11/09/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "95"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "7080000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "264054"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "14622853"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "146229"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "146229"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "146229"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-07",
+      "folio": "7987956826",
+      "fecha_presentacion": "09/09/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "38"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "6680000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "395746"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "6680000"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "66800"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "66800"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "66800"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-06",
+      "folio": "7987954716",
+      "fecha_presentacion": "09/09/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "4"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "6292000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "190063"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "140000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "6292000"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "62920"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "62920"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "62920"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-05",
+      "folio": "7987953376",
+      "fecha_presentacion": "09/09/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "48"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "6805000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "169714"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "6805000"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "68050"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "68050"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "68050"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-04",
+      "folio": "7987950996",
+      "fecha_presentacion": "09/09/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "40"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "5714000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "180282"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "151",
+          "glosa": "RETENCION TASA LEY 21.133 SOBRE RENTAS",
+          "valor": "19928"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "5714000"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "57140"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "77068"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "77068"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-03",
+      "folio": "7987947356",
+      "fecha_presentacion": "09/09/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "53"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "6888000"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "6888000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "68880"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "68880"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "68880"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-02",
+      "folio": "7987563646",
+      "fecha_presentacion": "09/09/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "18"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "3496000"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "3496000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "34960"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "34960"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "34960"
+        }
+      ]
+    },
+    {
+      "periodo": "2024-01",
+      "folio": "7987555316",
+      "fecha_presentacion": "09/09/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "32"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "7390000"
+        },
+        {
+          "codigo": "563",
+          "glosa": "BASE IMPONIBLE",
+          "valor": "7390000"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "115",
+          "glosa": "TASA PPM 1ra. CATEGORÍA",
+          "valor": "1"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        },
+        {
+          "codigo": "062",
+          "glosa": "PPM NETO DETERMINADO",
+          "valor": "73900"
+        },
+        {
+          "codigo": "595",
+          "glosa": "SUB TOTAL IMP. DETERMINADO ANVERSO",
+          "valor": "73900"
+        },
+        {
+          "codigo": "547",
+          "glosa": "TOTAL DETERMINADO",
+          "valor": "73900"
+        }
+      ]
+    },
+    {
+      "periodo": "2023-12",
+      "folio": "7888855096",
+      "fecha_presentacion": "16/04/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "19"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "1812000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "144521"
+        },
+        {
+          "codigo": "562",
+          "glosa": "MONTO SIN DER. A CRED. FISCAL",
+          "valor": "140000"
+        },
+        {
+          "codigo": "584",
+          "glosa": "CANT.INT.EX.NO GRAV.SIN DER. CRED.FISCAL",
+          "valor": "1"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2023-11",
+      "folio": "7888852066",
+      "fecha_presentacion": "16/04/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "2"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "601000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "133744"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2023-10",
+      "folio": "7888850756",
+      "fecha_presentacion": "16/04/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "4"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "1400000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "67887"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2023-09",
+      "folio": "7888848926",
+      "fecha_presentacion": "16/04/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "3"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "640000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "118743"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2023-08",
+      "folio": "7888846616",
+      "fecha_presentacion": "16/04/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "15"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "7288000"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "152436"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2023-07",
+      "folio": "7888844296",
+      "fecha_presentacion": "16/04/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "33"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "1220100"
+        },
+        {
+          "codigo": "511",
+          "glosa": "CRÉD. IVA POR DCTOS. ELECTRÓNICOS",
+          "valor": "73808"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    },
+    {
+      "periodo": "2023-06",
+      "folio": "7888842046",
+      "fecha_presentacion": "16/04/2024",
+      "detalles": [
+        {
+          "codigo": "586",
+          "glosa": "CANT. VTAS. Y/O SERV. PREST. INT. EXENT.",
+          "valor": "35"
+        },
+        {
+          "codigo": "142",
+          "glosa": "VENTAS Y/O SERV. EXENTOS O NO GRAVADOS",
+          "valor": "5768000"
+        },
+        {
+          "codigo": "564",
+          "glosa": "CANT. DOC. SIN DER. A CRED. FISCAL",
+          "valor": "6"
+        },
+        {
+          "codigo": "514",
+          "glosa": "SIN DERECHO CRÉD. POR DCTOS. ELECTRON.",
+          "valor": "80697"
+        },
+        {
+          "codigo": "521",
+          "glosa": "MONTO NETO / INTERNAS AFECTAS",
+          "valor": "424721"
+        },
+        {
+          "codigo": "544",
+          "glosa": "RECUP. IMP. ESP. DIESEL (Art. 2)",
+          "valor": "0"
+        },
+        {
+          "codigo": "779",
+          "glosa": "Monto de IVA postergado 6 o 12 cuotas",
+          "valor": "0"
+        },
+        {
+          "codigo": "089",
+          "glosa": "IMP. DETERM. IVA",
+          "valor": "0"
+        }
+      ]
+    }
+  ],
+  "f22": [
+    {
+      "anio_tributario": "2024",
+      "ingresos": 40492300,
+      "renta_liquida_imponible": -4628691,
+      "capital_propio_tributario": -4628691,
+      "impuesto_determinado": -342871,
+      "ppm": 342871,
+      "creditos": null,
+      "perdidas": 4628691,
+      "base_imponible": -4628691,
+      "resultado_tributario": null,
+      "observaciones": [],
+      "idpc_determinado": 1,
+      "ppm_imputados": 342871,
+      "saldo_liquidacion_anual": -342871,
+      "rli_source_code": "1450",
+      "cpt_source_code": "1546",
+      "ingresos_source_code": "1400"
+    }
+  ],
+  "properties": [],
+  "vehicles": [],
+  "validation": [],
+  "kpis": {
+    "company_age_years": 4.7,
+    "activity_count": 1,
+    "principal_activity": "CENTROS MEDICOS PRIVADOS (ESTABLECIMIENTOS DE ATENCION AMBULATORIA)",
+    "representative_count": 1,
+    "property_count": 0,
+    "vehicle_count": 0,
+    "f29_count": 35,
+    "first_f29_period": "2023-06",
+    "last_f29_period": "2026-04",
+    "declared_months": 35,
+    "processing_timestamp": "2026-10-01T19:43:45.932659"
+  },
+  "analysis": {
+    "alerts": [],
+    "warnings": [],
+    "statistics": {
+      "total_actividades": 1,
+      "total_f29": 35,
+      "total_representantes": 1,
+      "total_propiedades": 0,
+      "total_vehiculos": 0
+    },
+    "metrics": {}
+  },
+  "monthly_taxes": [
+    {
+      "periodo": "2023-06",
+      "ventas_afectas": null,
+      "ventas_exentas": "5768000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "5768000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2023-07",
+      "ventas_afectas": null,
+      "ventas_exentas": "1220100",
+      "ventas_exportacion": null,
+      "compras": "388463",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "1220100",
+      "compras_operacionales": "388463",
+      "credito_operacional": "73808",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2023-08",
+      "ventas_afectas": null,
+      "ventas_exentas": "7288000",
+      "ventas_exportacion": null,
+      "compras": "802295",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "7288000",
+      "compras_operacionales": "802295",
+      "credito_operacional": "152436",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2023-09",
+      "ventas_afectas": null,
+      "ventas_exentas": "640000",
+      "ventas_exportacion": null,
+      "compras": "624963",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "640000",
+      "compras_operacionales": "624963",
+      "credito_operacional": "118743",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2023-10",
+      "ventas_afectas": null,
+      "ventas_exentas": "1400000",
+      "ventas_exportacion": null,
+      "compras": "357300",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "1400000",
+      "compras_operacionales": "357300",
+      "credito_operacional": "67887",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2023-11",
+      "ventas_afectas": null,
+      "ventas_exentas": "601000",
+      "ventas_exportacion": null,
+      "compras": "703916",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "601000",
+      "compras_operacionales": "703916",
+      "credito_operacional": "133744",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2023-12",
+      "ventas_afectas": null,
+      "ventas_exentas": "1812000",
+      "ventas_exportacion": null,
+      "compras": "760637",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "1812000",
+      "compras_operacionales": "900638",
+      "credito_operacional": "144521",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-01",
+      "ventas_afectas": "7390000",
+      "ventas_exentas": "7390000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "73900",
+      "total_ventas": "14780000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-02",
+      "ventas_afectas": "3496000",
+      "ventas_exentas": "3496000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "34960",
+      "total_ventas": "6992000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-03",
+      "ventas_afectas": "6888000",
+      "ventas_exentas": "6888000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "68880",
+      "total_ventas": "13776000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-04",
+      "ventas_afectas": "5714000",
+      "ventas_exentas": "5714000",
+      "ventas_exportacion": null,
+      "compras": "948853",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "57140",
+      "total_ventas": "11428000",
+      "compras_operacionales": "948853",
+      "credito_operacional": "180282",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": "19928",
+      "retenciones_totales": "19928",
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-05",
+      "ventas_afectas": "6805000",
+      "ventas_exentas": "6805000",
+      "ventas_exportacion": null,
+      "compras": "893232",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "68050",
+      "total_ventas": "13610000",
+      "compras_operacionales": "893232",
+      "credito_operacional": "169714",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-06",
+      "ventas_afectas": "6292000",
+      "ventas_exentas": "6292000",
+      "ventas_exportacion": null,
+      "compras": "1000332",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "62920",
+      "total_ventas": "12584000",
+      "compras_operacionales": "1140333",
+      "credito_operacional": "190063",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-07",
+      "ventas_afectas": "6680000",
+      "ventas_exentas": "6680000",
+      "ventas_exportacion": null,
+      "compras": "2082874",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "66800",
+      "total_ventas": "13360000",
+      "compras_operacionales": "2082874",
+      "credito_operacional": "395746",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-08",
+      "ventas_afectas": "14622853",
+      "ventas_exentas": "7080000",
+      "ventas_exportacion": null,
+      "compras": "1389758",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "146229",
+      "total_ventas": "21702853",
+      "compras_operacionales": "1389758",
+      "credito_operacional": "264054",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-09",
+      "ventas_afectas": null,
+      "ventas_exentas": "9252000",
+      "ventas_exportacion": null,
+      "compras": "3112063",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "9252000",
+      "compras_operacionales": "3252064",
+      "credito_operacional": "591292",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-10",
+      "ventas_afectas": null,
+      "ventas_exentas": "12924000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "12924000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-11",
+      "ventas_afectas": null,
+      "ventas_exentas": "16985000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "16985000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2024-12",
+      "ventas_afectas": null,
+      "ventas_exentas": "8522000",
+      "ventas_exportacion": null,
+      "compras": "1379147",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "8522000",
+      "compras_operacionales": "1379147",
+      "credito_operacional": "262038",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-01",
+      "ventas_afectas": "13070000",
+      "ventas_exentas": "13070000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "130700",
+      "total_ventas": "26140000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-02",
+      "ventas_afectas": "10259705",
+      "ventas_exentas": "11920250",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "102597",
+      "total_ventas": "22179955",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-03",
+      "ventas_afectas": "15060000",
+      "ventas_exentas": "15060000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "150600",
+      "total_ventas": "30120000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-04",
+      "ventas_afectas": "13607235",
+      "ventas_exentas": "9069424",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "136072",
+      "total_ventas": "22676659",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-05",
+      "ventas_afectas": "10972000",
+      "ventas_exentas": "10972000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "109720",
+      "total_ventas": "21944000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-06",
+      "ventas_afectas": "24482000",
+      "ventas_exentas": "24482000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "244820",
+      "total_ventas": "48964000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-07",
+      "ventas_afectas": "12210000",
+      "ventas_exentas": "12210000",
+      "ventas_exportacion": null,
+      "compras": null,
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "122100",
+      "total_ventas": "24420000",
+      "compras_operacionales": null,
+      "credito_operacional": null,
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-08",
+      "ventas_afectas": "8770000",
+      "ventas_exentas": "8770000",
+      "ventas_exportacion": null,
+      "compras": "826911",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "87700",
+      "total_ventas": "17540000",
+      "compras_operacionales": "966912",
+      "credito_operacional": "157113",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-09",
+      "ventas_afectas": null,
+      "ventas_exentas": "17320000",
+      "ventas_exportacion": null,
+      "compras": "844784",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "17320000",
+      "compras_operacionales": "984785",
+      "credito_operacional": "160509",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-10",
+      "ventas_afectas": null,
+      "ventas_exentas": "22326100",
+      "ventas_exportacion": null,
+      "compras": "1104011",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "22326100",
+      "compras_operacionales": "1244012",
+      "credito_operacional": "209762",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-11",
+      "ventas_afectas": null,
+      "ventas_exentas": "20740000",
+      "ventas_exportacion": null,
+      "compras": "892658",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "20740000",
+      "compras_operacionales": "1032659",
+      "credito_operacional": "169605",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2025-12",
+      "ventas_afectas": "17220000",
+      "ventas_exentas": "17220000",
+      "ventas_exportacion": null,
+      "compras": "943532",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": "172200",
+      "total_ventas": "34440000",
+      "compras_operacionales": "1083533",
+      "credito_operacional": "179271",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2026-01",
+      "ventas_afectas": null,
+      "ventas_exentas": "22474000",
+      "ventas_exportacion": null,
+      "compras": "1075637",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "22474000",
+      "compras_operacionales": "1203638",
+      "credito_operacional": "204371",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2026-02",
+      "ventas_afectas": null,
+      "ventas_exentas": "23250000",
+      "ventas_exportacion": null,
+      "compras": "1812942",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "23250000",
+      "compras_operacionales": "1932945",
+      "credito_operacional": "344459",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2026-03",
+      "ventas_afectas": null,
+      "ventas_exentas": "20166000",
+      "ventas_exportacion": null,
+      "compras": "1362195",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "20166000",
+      "compras_operacionales": "1362195",
+      "credito_operacional": "258817",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    },
+    {
+      "periodo": "2026-04",
+      "ventas_afectas": null,
+      "ventas_exentas": "19331600",
+      "ventas_exportacion": null,
+      "compras": "2095295",
+      "debito_fiscal": null,
+      "credito_fiscal": null,
+      "iva_determinado": "0",
+      "ppm": null,
+      "total_ventas": "19331600",
+      "compras_operacionales": "2223296",
+      "credito_operacional": "398106",
+      "activo_fijo": null,
+      "remanente_anterior": null,
+      "notas_credito_compras": null,
+      "retencion_sueldos": null,
+      "retencion_honorarios": null,
+      "retenciones_totales": null,
+      "observaciones": []
+    }
+  ],
+  "monthly_analysis": {
+    "monthly_taxes": [
+      {
+        "periodo": "2023-06",
+        "ventas_afectas": null,
+        "ventas_exentas": "5768000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "5768000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2023-07",
+        "ventas_afectas": null,
+        "ventas_exentas": "1220100",
+        "ventas_exportacion": null,
+        "compras": "388463",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "1220100",
+        "compras_operacionales": "388463",
+        "credito_operacional": "73808",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2023-08",
+        "ventas_afectas": null,
+        "ventas_exentas": "7288000",
+        "ventas_exportacion": null,
+        "compras": "802295",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "7288000",
+        "compras_operacionales": "802295",
+        "credito_operacional": "152436",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2023-09",
+        "ventas_afectas": null,
+        "ventas_exentas": "640000",
+        "ventas_exportacion": null,
+        "compras": "624963",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "640000",
+        "compras_operacionales": "624963",
+        "credito_operacional": "118743",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2023-10",
+        "ventas_afectas": null,
+        "ventas_exentas": "1400000",
+        "ventas_exportacion": null,
+        "compras": "357300",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "1400000",
+        "compras_operacionales": "357300",
+        "credito_operacional": "67887",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2023-11",
+        "ventas_afectas": null,
+        "ventas_exentas": "601000",
+        "ventas_exportacion": null,
+        "compras": "703916",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "601000",
+        "compras_operacionales": "703916",
+        "credito_operacional": "133744",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2023-12",
+        "ventas_afectas": null,
+        "ventas_exentas": "1812000",
+        "ventas_exportacion": null,
+        "compras": "760637",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "1812000",
+        "compras_operacionales": "900638",
+        "credito_operacional": "144521",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-01",
+        "ventas_afectas": "7390000",
+        "ventas_exentas": "7390000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "73900",
+        "total_ventas": "14780000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-02",
+        "ventas_afectas": "3496000",
+        "ventas_exentas": "3496000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "34960",
+        "total_ventas": "6992000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-03",
+        "ventas_afectas": "6888000",
+        "ventas_exentas": "6888000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "68880",
+        "total_ventas": "13776000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-04",
+        "ventas_afectas": "5714000",
+        "ventas_exentas": "5714000",
+        "ventas_exportacion": null,
+        "compras": "948853",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "57140",
+        "total_ventas": "11428000",
+        "compras_operacionales": "948853",
+        "credito_operacional": "180282",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": "19928",
+        "retenciones_totales": "19928",
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-05",
+        "ventas_afectas": "6805000",
+        "ventas_exentas": "6805000",
+        "ventas_exportacion": null,
+        "compras": "893232",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "68050",
+        "total_ventas": "13610000",
+        "compras_operacionales": "893232",
+        "credito_operacional": "169714",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-06",
+        "ventas_afectas": "6292000",
+        "ventas_exentas": "6292000",
+        "ventas_exportacion": null,
+        "compras": "1000332",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "62920",
+        "total_ventas": "12584000",
+        "compras_operacionales": "1140333",
+        "credito_operacional": "190063",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-07",
+        "ventas_afectas": "6680000",
+        "ventas_exentas": "6680000",
+        "ventas_exportacion": null,
+        "compras": "2082874",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "66800",
+        "total_ventas": "13360000",
+        "compras_operacionales": "2082874",
+        "credito_operacional": "395746",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-08",
+        "ventas_afectas": "14622853",
+        "ventas_exentas": "7080000",
+        "ventas_exportacion": null,
+        "compras": "1389758",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "146229",
+        "total_ventas": "21702853",
+        "compras_operacionales": "1389758",
+        "credito_operacional": "264054",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-09",
+        "ventas_afectas": null,
+        "ventas_exentas": "9252000",
+        "ventas_exportacion": null,
+        "compras": "3112063",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "9252000",
+        "compras_operacionales": "3252064",
+        "credito_operacional": "591292",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-10",
+        "ventas_afectas": null,
+        "ventas_exentas": "12924000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "12924000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-11",
+        "ventas_afectas": null,
+        "ventas_exentas": "16985000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "16985000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2024-12",
+        "ventas_afectas": null,
+        "ventas_exentas": "8522000",
+        "ventas_exportacion": null,
+        "compras": "1379147",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "8522000",
+        "compras_operacionales": "1379147",
+        "credito_operacional": "262038",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-01",
+        "ventas_afectas": "13070000",
+        "ventas_exentas": "13070000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "130700",
+        "total_ventas": "26140000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-02",
+        "ventas_afectas": "10259705",
+        "ventas_exentas": "11920250",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "102597",
+        "total_ventas": "22179955",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-03",
+        "ventas_afectas": "15060000",
+        "ventas_exentas": "15060000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "150600",
+        "total_ventas": "30120000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-04",
+        "ventas_afectas": "13607235",
+        "ventas_exentas": "9069424",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "136072",
+        "total_ventas": "22676659",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-05",
+        "ventas_afectas": "10972000",
+        "ventas_exentas": "10972000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "109720",
+        "total_ventas": "21944000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-06",
+        "ventas_afectas": "24482000",
+        "ventas_exentas": "24482000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "244820",
+        "total_ventas": "48964000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-07",
+        "ventas_afectas": "12210000",
+        "ventas_exentas": "12210000",
+        "ventas_exportacion": null,
+        "compras": null,
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "122100",
+        "total_ventas": "24420000",
+        "compras_operacionales": null,
+        "credito_operacional": null,
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-08",
+        "ventas_afectas": "8770000",
+        "ventas_exentas": "8770000",
+        "ventas_exportacion": null,
+        "compras": "826911",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "87700",
+        "total_ventas": "17540000",
+        "compras_operacionales": "966912",
+        "credito_operacional": "157113",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-09",
+        "ventas_afectas": null,
+        "ventas_exentas": "17320000",
+        "ventas_exportacion": null,
+        "compras": "844784",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "17320000",
+        "compras_operacionales": "984785",
+        "credito_operacional": "160509",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-10",
+        "ventas_afectas": null,
+        "ventas_exentas": "22326100",
+        "ventas_exportacion": null,
+        "compras": "1104011",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "22326100",
+        "compras_operacionales": "1244012",
+        "credito_operacional": "209762",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-11",
+        "ventas_afectas": null,
+        "ventas_exentas": "20740000",
+        "ventas_exportacion": null,
+        "compras": "892658",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "20740000",
+        "compras_operacionales": "1032659",
+        "credito_operacional": "169605",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2025-12",
+        "ventas_afectas": "17220000",
+        "ventas_exentas": "17220000",
+        "ventas_exportacion": null,
+        "compras": "943532",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": "172200",
+        "total_ventas": "34440000",
+        "compras_operacionales": "1083533",
+        "credito_operacional": "179271",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2026-01",
+        "ventas_afectas": null,
+        "ventas_exentas": "22474000",
+        "ventas_exportacion": null,
+        "compras": "1075637",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "22474000",
+        "compras_operacionales": "1203638",
+        "credito_operacional": "204371",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2026-02",
+        "ventas_afectas": null,
+        "ventas_exentas": "23250000",
+        "ventas_exportacion": null,
+        "compras": "1812942",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "23250000",
+        "compras_operacionales": "1932945",
+        "credito_operacional": "344459",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2026-03",
+        "ventas_afectas": null,
+        "ventas_exentas": "20166000",
+        "ventas_exportacion": null,
+        "compras": "1362195",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "20166000",
+        "compras_operacionales": "1362195",
+        "credito_operacional": "258817",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      },
+      {
+        "periodo": "2026-04",
+        "ventas_afectas": null,
+        "ventas_exentas": "19331600",
+        "ventas_exportacion": null,
+        "compras": "2095295",
+        "debito_fiscal": null,
+        "credito_fiscal": null,
+        "iva_determinado": "0",
+        "ppm": null,
+        "total_ventas": "19331600",
+        "compras_operacionales": "2223296",
+        "credito_operacional": "398106",
+        "activo_fijo": null,
+        "remanente_anterior": null,
+        "notas_credito_compras": null,
+        "retencion_sueldos": null,
+        "retencion_honorarios": null,
+        "retenciones_totales": null,
+        "observaciones": []
+      }
+    ],
+    "total_months": 35,
+    "ventas_ultimos_12": "292915700",
+    "compras_ultimos_12": "10957965",
+    "promedio_ventas_mensual": "24409641.66666666666666666667",
+    "promedio_compras_mensual": "913163.75",
+    "crecimiento_anual": "169.92",
+    "meses_sin_movimiento": 0,
+    "mejor_mes": "2025-06",
+    "peor_mes": "2023-11",
+    "promedio_ventas_ultimos_3m": "20915866.66666666666666666667",
+    "promedio_compras_ultimos_3m": "1756810.666666666666666666667",
+    "promedio_compras_operacionales_12m": "1002831.25",
+    "promedio_compras_operacionales_3m": "1839478.666666666666666666667",
+    "variacion_ventas_3m_pct": "-14.31",
+    "margen_implicito_12m": null,
+    "margen_implicito_3m": null,
+    "retenciones_totales_12m": null,
+    "retenciones_totales_3m": null,
+    "variacion_ventas_yoy_3m_pct": "-16.31",
+    "promedio_costo_operativo_proxy_12m": "7322892.500000000000000000001",
+    "costo_operativo_proxy_aplica": true,
+    "tasa_crecimiento_ventas_trimestral": -0.14313094176925306,
+    "tasa_crecimiento_compras_trimestral": 0.9238725438528048,
+    "margen_operacional_implicito_promedio": 0.9589165927261666
+  },
+  "corporate": {
+    "tipo_sociedad": null,
+    "fecha_constitucion": null,
+    "capital": null,
+    "socios": [
+      {
+        "rut": "18409649-8",
+        "nombre": "FRANCISCO GONZALO BECERRA CUEVAS",
+        "participacion": "100%"
+      }
+    ],
+    "representantes": [
+      {
+        "rut": "18409649-8",
+        "nombre": "FRANCISCO GONZALO BECERRA CUEVAS",
+        "cargo": null,
+        "fecha_incorporacion": "24/09/2021",
+        "forma_actuacion": "Cualquiera",
+        "vigente": true
+      }
+    ],
+    "forma_actuacion_representantes": "Cualquiera"
+  },
+  "credit_risk": {
+    "calidad_datos": {
+      "completitud_pct": 100.0,
+      "campos_no_confiables": [],
+      "meses_f29_faltantes": [],
+      "veredicto": "APTO_PARA_SCORING"
+    },
+    "hechos": {
+      "composicion_ventas": {
+        "pct_facturado": null,
+        "pct_boletas": null,
+        "monto_facturado_estimado": null,
+        "meses_evaluados": 35,
+        "nota": null
+      },
+      "postergaciones_iva": {
+        "meses_con_postergacion": 0,
+        "total_meses_evaluados": 35,
+        "periodos": []
+      }
+    },
+    "indicadores": {
+      "mora_efectiva": {
+        "score": 100,
+        "meses_con_recargo": 0,
+        "meses_con_remanente_credito": 0,
+        "meses_evaluados": 35,
+        "confianza": "alta",
+        "criterio": "distingue remanente de crédito fiscal (posición normal) de mora real (código 94 con recargo/interés)"
+      },
+      "margen_vs_giro": {
+        "score": 85,
+        "ratio_debito_credito_12m": 3.333,
+        "codigo_actividad": null,
+        "descripcion_actividad": null,
+        "ratio_promedio_sector": null,
+        "n_empresas_referencia": 0,
+        "confianza": "media",
+        "criterio": "proxy de margen bruto (débito/crédito fiscal), no incluye remuneraciones; requiere benchmark propio por giro con muestra mínima antes de calificar con confianza alta"
+      },
+      "respaldo_estructural": {
+        "score": 15,
+        "capital_propio_tributario": -4628691,
+        "cupo_solicitado": null,
+        "cupo_referencia": 5000000,
+        "veces_cobertura": -0.93,
+        "confianza": "alta",
+        "criterio": "CPT es proxy tributario, no liquidez real"
+      }
+    },
+    "score_compuesto": 49,
+    "decision": {
+      "resultado_base": "NO_EVALUABLE",
+      "evaluacion_referencial": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+      "clasificacion_riesgo": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+      "desempeno_tributario_texto": "Capacidad Operativa Tributaria Baja",
+      "producto_evaluado": "credito_30_dias",
+      "cupo_maximo_sugerido": 0,
+      "cupo_aprobado": 0,
+      "linea_maxima_sugerida": 0,
+      "linea_inicial_sugerida": 0,
+      "linea_maxima_condicionada": 0,
+      "plazo_sugerido_dias": 0,
+      "plazo_inicial_sugerido": "Contado (0 días)",
+      "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+      "garantia_exigida": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "resguardo_comercial_sugerido": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "protocolo_operativo": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "memoria_calculo": {
+        "periodo_inicio": "2025-05",
+        "periodo_fin": "2026-04",
+        "ventas_netas_mensuales_prom": 24409642,
+        "base_compras_c_base": 7322892,
+        "glosa_paso_a": "Costo proxy 30% s/ventas exentas (Compras afectas F29: M$ 1.003/mes)",
+        "spread_operacional_f29": 17086749,
+        "brecha_operacional_proxy": 17086749,
+        "rli_ultimo_f22": -4628691,
+        "rli_mensualizada_f22": null,
+        "rli_valida": false,
+        "rli_fallback_8pct": false,
+        "alerta_sanity_rli": null,
+        "techo_operativo_8pct": 585831,
+        "techo_operativo_20pct": 585831,
+        "techo_operativo": 585831,
+        "freno_flujo_operacional_25pct": 0,
+        "freno_absorcion_operacional": 0,
+        "glosa_b2": "N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. 1450: -M$ 4.629)",
+        "glosa_paso_d": "Bloqueo por CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629 -> Tope Patrimonial M$ 0)",
+        "cpt_source_code": "1546",
+        "margen_operacional_depurado_mensual": 17086749,
+        "factor_riesgo_phi": 1.0,
+        "factor_ajuste_conductual_pct": 0,
+        "cupo_preliminar": 0,
+        "capital_propio_tributario": -4628691,
+        "tope_patrimonial_3pct_cpt": 0,
+        "tope_patrimonial_12pct_cpt": 0,
+        "tope_patrimonial_35pct_cpt": 0,
+        "tope_patrimonial_cpt": 0,
+        "rli_declarada_le_zero": true,
+        "ausencia_f22": false,
+        "contraccion_severa": false,
+        "cupo_maximo_sugerido": 0,
+        "cupo_excepcional_garantizado": 200000,
+        "castigos_aplicados": [
+          "Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($7,322,892 CLP/mes)",
+          "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)",
+          "CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629): Cupo directo en línea limpia rechazado ($0). Solo evaluable cupo excepcional garantizado de hasta $200,000 CLP contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad"
+        ],
+        "glosa_paso_c": "N/A — Línea bloqueada por pérdida tributaria en F22 (Override a 0%)",
+        "pct_apertura": 0,
+        "tramo_score": "75-84",
+        "glosa_apertura": "N/A — Línea bloqueada por pérdida tributaria en F22 (Evaluación manual con EE.FF.)",
+        "linea_maxima_tecnica": 0,
+        "linea_inicial_recomendada": 0,
+        "linea_maxima_condicionada": 0,
+        "linea_inicial_sugerida": 0,
+        "plazo_inicial_sugerido": "Contado (0 días)",
+        "pct_apertura_inicial": 0,
+        "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+        "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
+        "historial_pago": "Cliente nuevo (Sin historial previo)"
+      },
+      "hoja_ruta_comercial": [
+        "Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).",
+        "Puntaje Tributario SII: 49/100 pts (Capacidad Operativa Tributaria Baja).",
+        "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
+        "Línea Máxima Condicionada: M$ 0.",
+        "Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+        "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+        "Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+        "Protocolo CPT negativo: solo evaluable cupo excepcional de hasta M$ 200 con Aval Solidario calificado con patrimonio acreditado fuera de la sociedad."
+      ],
+      "caminos_mitigacion": [
+        {
+          "condicion": "cesion_facturas_factoring",
+          "aplica": false,
+          "resultado": "NO_APLICA",
+          "cupo_sugerido": null,
+          "justificacion": "proporción facturada insuficiente para estructurar cesión de facturas"
+        },
+        {
+          "condicion": "pago_contado_con_descuento",
+          "aplica": true,
+          "resultado": "APROBADO",
+          "cupo_sugerido": null,
+          "justificacion": "historial sin recargos por mora en declaraciones tributarias"
+        }
+      ],
+      "desglose_score": [
+        {
+          "nombre": "Continuidad y Antigüedad Operacional",
+          "puntaje_obtenido": 15,
+          "puntaje_maximo": 15,
+          "detalle": "35 meses continuos declarados (2023-06 a 2026-04) sin lagunas tributarias (Historial extendido)"
+        },
+        {
+          "nombre": "Nivel y Estabilidad de Ventas F29",
+          "puntaje_obtenido": 9,
+          "puntaje_maximo": 20,
+          "detalle": "Variación 3M vs 12M (-14.3%) con alta volatilidad mensual (CV: 35.0% | Rango: M$ 17.320 a M$ 48.964)"
+        },
+        {
+          "nombre": "Holgura Débito/Crédito IVA (F29)",
+          "puntaje_obtenido": 10,
+          "puntaje_maximo": 20,
+          "detalle": "Giro exento de IVA (Débito 12M: M$ 0): F29 no captura costos ni remuneraciones exentas (Compras afectas F29: 4.1% de ventas; requiere EERR/Balance)"
+        },
+        {
+          "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
+          "puntaje_obtenido": 0,
+          "puntaje_maximo": 15,
+          "detalle": "RLI AT 2024: -M$ 4.629 (-11.4% s/ingresos) | CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629)"
+        },
+        {
+          "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",
+          "puntaje_obtenido": 15,
+          "puntaje_maximo": 15,
+          "detalle": "0 de 35 períodos F29 con recargos por mora fiscal (Cód. 94) y 0 postergaciones de IVA (Cód. 779)"
+        },
+        {
+          "nombre": "Coherencia F29/F22 y Vigencia de Información",
+          "puntaje_obtenido": 0,
+          "puntaje_maximo": 15,
+          "detalle": "Carpeta tributaria vencida (121d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+        }
+      ],
+      "vigencia_datos": {
+        "fecha_emision": "02/06/2026 10:31",
+        "ultimo_periodo": "2026-04",
+        "meses_desfase": 2,
+        "dias_antiguedad": 121,
+        "estado_antiguedad": "Exige actualizar > 60d",
+        "fecha_evaluacion": "01/10/2026",
+        "nivel_confianza": "MEDIA",
+        "alerta": null
+      },
+      "conciliacion_f29_f22": {
+        "anio_tributario": "2024",
+        "anio_comercial": "2023",
+        "meses_f29_contabilizados": 7,
+        "ventas_f29_anual": 18729100,
+        "ingresos_f22": 40492300,
+        "diferencia_monto": 21763200,
+        "diferencia_pct": 53.7,
+        "diferencia_pct_f29": 116.2,
+        "estado": "NO CONCILIABLE",
+        "no_conciliable": true,
+        "detalle": "NO CONCILIABLE — Carpeta sin F22 AT 2025 ni AT 2026 (último F22 disponible: AT 2024; año 2023 con solo 7 meses F29 en carpeta)"
+      },
+      "bienes_raices_resumen": "No registra bienes raíces en carpeta",
+      "filtro_elegibilidad": [
+        {
+          "parametro": "RUT e Inicio de Actividades Vigente",
+          "estado": "CUMPLE",
+          "detalle": "RUT 77460385-9 con inicio registrado (28/01/2022)"
+        },
+        {
+          "parametro": "Representantes Legales Identificados",
+          "estado": "CUMPLE",
+          "detalle": "1 representante(s) registrado(s) (Nota SII: actuación tributaria 'Cualquiera' — no acredita poderes cambiarios)"
+        },
+        {
+          "parametro": "Continuidad F29 Reciente",
+          "estado": "CUMPLE",
+          "detalle": "35 meses sin lagunas tributarias"
+        },
+        {
+          "parametro": "Mora Fiscal Crítica (Cód. 94)",
+          "estado": "CUMPLE",
+          "detalle": "Cumplimiento oportuno de IVA"
+        },
+        {
+          "parametro": "Coherencia F29 vs F22",
+          "estado": "OBSERVADO",
+          "detalle": "NO CONCILIABLE"
+        }
+      ],
+      "variables_comerciales": {
+        "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
+        "historial_pago": "Cliente nuevo (Sin historial previo)"
+      }
+    },
+    "alertas": [
+      "Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: Pérdida tributaria en último F22 (AT 2024). Ingresos: M$ 40.492 vs Base Imponible / Pérdida: -M$ 4.629 (Margen RLI -11.4%). Se exige Balance o Estados Financieros recientes para aclarar la causa de la pérdida tributaria (gastos operacionales, depreciación instantánea o bajo margen) antes de autorizar línea en evaluación manual",
+      "Anomalía F29: 3 meses con ventas significativas y cero compras declaradas, sugiere costos 100% informales o exentos",
+      "CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629)",
+      "Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($7,322,892 CLP/mes)",
+      "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)",
+      "CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629): Cupo directo en línea limpia rechazado ($0). Solo evaluable cupo excepcional garantizado de hasta $200,000 CLP contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad",
+      "Declaraciones Anuales F22 AT 2025 y AT 2026 no incluidas en carpeta tributaria (último F22 disponible: AT 2024)"
+    ],
+    "fortalezas": [
+      "Cero meses con mora efectiva en 35 meses evaluados"
+    ],
+    "banderas_rojas": [
+      "Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: Pérdida tributaria en último F22 (AT 2024). Ingresos: M$ 40.492 vs Base Imponible / Pérdida: -M$ 4.629 (Margen RLI -11.4%). Se exige Balance o Estados Financieros recientes para aclarar la causa de la pérdida tributaria (gastos operacionales, depreciación instantánea o bajo margen) antes de autorizar línea en evaluación manual",
+      "Anomalía F29: 3 meses con ventas significativas y cero compras declaradas, sugiere costos 100% informales o exentos",
+      "CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629)",
+      "Declaraciones Anuales F22 AT 2025 y AT 2026 no incluidas en carpeta tributaria (último F22 disponible: AT 2024)"
+    ],
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: CLINICA HYPERBARIC SPA (RUT: 77460385-9)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 49/100 pts (Capacidad Operativa Tributaria Baja)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 7.323\n- Techo Operativo Proveedor (8%): M$ 586\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 17.087\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): -M$ 4.629\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($7,322,892 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n  * CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629): Cupo directo en línea limpia rechazado ($0). Solo evaluable cupo excepcional garantizado de hasta $200,000 CLP contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad\n\n2. Condiciones Suspensivas y Banderas Rojas:\n- 🔴 Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: Pérdida tributaria en último F22 (AT 2024). Ingresos: M$ 40.492 vs Base Imponible / Pérdida: -M$ 4.629 (Margen RLI -11.4%). Se exige Balance o Estados Financieros recientes para aclarar la causa de la pérdida tributaria (gastos operacionales, depreciación instantánea o bajo margen) antes de autorizar línea en evaluación manual\n- 🔴 Anomalía F29: 3 meses con ventas significativas y cero compras declaradas, sugiere costos 100% informales o exentos\n- 🔴 CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629)\n- 🔴 Declaraciones Anuales F22 AT 2025 y AT 2026 no incluidas en carpeta tributaria (último F22 disponible: AT 2024)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 49/100 pts (Capacidad Operativa Tributaria Baja).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Protocolo CPT negativo: solo evaluable cupo excepcional de hasta M$ 200 con Aval Solidario calificado con patrimonio acreditado fuera de la sociedad.",
+    "veredicto": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+    "evaluacion_referencial": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+    "clasificacion_riesgo": "NO EVALUABLE (Carpeta Vencida > 60 días)",
+    "desempeno_tributario_texto": "Capacidad Operativa Tributaria Baja",
+    "score_crediticio": 49.0,
+    "categoria_riesgo": "MEDIO",
+    "cupo_maximo_sugerido": 0,
+    "cupo_aprobado": 0,
+    "linea_maxima_sugerida": 0,
+    "linea_inicial_sugerida": 0,
+    "linea_maxima_condicionada": 0,
+    "plazo_sugerido_dias": 0,
+    "plazo_inicial_sugerido": "Contado (0 días)",
+    "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+    "garantia_exigida": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "resguardo_comercial_sugerido": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "protocolo_operativo": "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "memoria_calculo": {
+      "periodo_inicio": "2025-05",
+      "periodo_fin": "2026-04",
+      "ventas_netas_mensuales_prom": 24409642,
+      "base_compras_c_base": 7322892,
+      "glosa_paso_a": "Costo proxy 30% s/ventas exentas (Compras afectas F29: M$ 1.003/mes)",
+      "spread_operacional_f29": 17086749,
+      "brecha_operacional_proxy": 17086749,
+      "rli_ultimo_f22": -4628691,
+      "rli_mensualizada_f22": null,
+      "rli_valida": false,
+      "rli_fallback_8pct": false,
+      "alerta_sanity_rli": null,
+      "techo_operativo_8pct": 585831,
+      "techo_operativo_20pct": 585831,
+      "techo_operativo": 585831,
+      "freno_flujo_operacional_25pct": 0,
+      "freno_absorcion_operacional": 0,
+      "glosa_b2": "N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. 1450: -M$ 4.629)",
+      "glosa_paso_d": "Bloqueo por CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629 -> Tope Patrimonial M$ 0)",
+      "cpt_source_code": "1546",
+      "margen_operacional_depurado_mensual": 17086749,
+      "factor_riesgo_phi": 1.0,
+      "factor_ajuste_conductual_pct": 0,
+      "cupo_preliminar": 0,
+      "capital_propio_tributario": -4628691,
+      "tope_patrimonial_3pct_cpt": 0,
+      "tope_patrimonial_12pct_cpt": 0,
+      "tope_patrimonial_35pct_cpt": 0,
+      "tope_patrimonial_cpt": 0,
+      "rli_declarada_le_zero": true,
+      "ausencia_f22": false,
+      "contraccion_severa": false,
+      "cupo_maximo_sugerido": 0,
+      "cupo_excepcional_garantizado": 200000,
+      "castigos_aplicados": [
+        "Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($7,322,892 CLP/mes)",
+        "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)",
+        "CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629): Cupo directo en línea limpia rechazado ($0). Solo evaluable cupo excepcional garantizado de hasta $200,000 CLP contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad"
+      ],
+      "glosa_paso_c": "N/A — Línea bloqueada por pérdida tributaria en F22 (Override a 0%)",
+      "pct_apertura": 0,
+      "tramo_score": "75-84",
+      "glosa_apertura": "N/A — Línea bloqueada por pérdida tributaria en F22 (Evaluación manual con EE.FF.)",
+      "linea_maxima_tecnica": 0,
+      "linea_inicial_recomendada": 0,
+      "linea_maxima_condicionada": 0,
+      "linea_inicial_sugerida": 0,
+      "plazo_inicial_sugerido": "Contado (0 días)",
+      "pct_apertura_inicial": 0,
+      "condicion_escalamiento": "Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+      "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
+      "historial_pago": "Cliente nuevo (Sin historial previo)"
+    },
+    "hoja_ruta_comercial": [
+      "Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).",
+      "Puntaje Tributario SII: 49/100 pts (Capacidad Operativa Tributaria Baja).",
+      "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
+      "Línea Máxima Condicionada: M$ 0.",
+      "Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.",
+      "Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+      "Protocolo CPT negativo: solo evaluable cupo excepcional de hasta M$ 200 con Aval Solidario calificado con patrimonio acreditado fuera de la sociedad."
+    ],
+    "desglose_score": [
+      {
+        "nombre": "Continuidad y Antigüedad Operacional",
+        "puntaje_obtenido": 15,
+        "puntaje_maximo": 15,
+        "detalle": "35 meses continuos declarados (2023-06 a 2026-04) sin lagunas tributarias (Historial extendido)"
+      },
+      {
+        "nombre": "Nivel y Estabilidad de Ventas F29",
+        "puntaje_obtenido": 9,
+        "puntaje_maximo": 20,
+        "detalle": "Variación 3M vs 12M (-14.3%) con alta volatilidad mensual (CV: 35.0% | Rango: M$ 17.320 a M$ 48.964)"
+      },
+      {
+        "nombre": "Holgura Débito/Crédito IVA (F29)",
+        "puntaje_obtenido": 10,
+        "puntaje_maximo": 20,
+        "detalle": "Giro exento de IVA (Débito 12M: M$ 0): F29 no captura costos ni remuneraciones exentas (Compras afectas F29: 4.1% de ventas; requiere EERR/Balance)"
+      },
+      {
+        "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
+        "puntaje_obtenido": 0,
+        "puntaje_maximo": 15,
+        "detalle": "RLI AT 2024: -M$ 4.629 (-11.4% s/ingresos) | CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629)"
+      },
+      {
+        "nombre": "Cumplimiento Fiscal (Mora y Postergación IVA)",
+        "puntaje_obtenido": 15,
+        "puntaje_maximo": 15,
+        "detalle": "0 de 35 períodos F29 con recargos por mora fiscal (Cód. 94) y 0 postergaciones de IVA (Cód. 779)"
+      },
+      {
+        "nombre": "Coherencia F29/F22 y Vigencia de Información",
+        "puntaje_obtenido": 0,
+        "puntaje_maximo": 15,
+        "detalle": "Carpeta tributaria vencida (121d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+      }
+    ],
+    "vigencia_datos": {
+      "fecha_emision": "02/06/2026 10:31",
+      "ultimo_periodo": "2026-04",
+      "meses_desfase": 2,
+      "dias_antiguedad": 121,
+      "estado_antiguedad": "Exige actualizar > 60d",
+      "fecha_evaluacion": "01/10/2026",
+      "nivel_confianza": "MEDIA",
+      "alerta": null
+    },
+    "conciliacion_f29_f22": {
+      "anio_tributario": "2024",
+      "anio_comercial": "2023",
+      "meses_f29_contabilizados": 7,
+      "ventas_f29_anual": 18729100,
+      "ingresos_f22": 40492300,
+      "diferencia_monto": 21763200,
+      "diferencia_pct": 53.7,
+      "diferencia_pct_f29": 116.2,
+      "estado": "NO CONCILIABLE",
+      "no_conciliable": true,
+      "detalle": "NO CONCILIABLE — Carpeta sin F22 AT 2025 ni AT 2026 (último F22 disponible: AT 2024; año 2023 con solo 7 meses F29 en carpeta)"
+    },
+    "bienes_raices_resumen": "No registra bienes raíces en carpeta",
+    "filtro_elegibilidad": [
+      {
+        "parametro": "RUT e Inicio de Actividades Vigente",
+        "estado": "CUMPLE",
+        "detalle": "RUT 77460385-9 con inicio registrado (28/01/2022)"
+      },
+      {
+        "parametro": "Representantes Legales Identificados",
+        "estado": "CUMPLE",
+        "detalle": "1 representante(s) registrado(s) (Nota SII: actuación tributaria 'Cualquiera' — no acredita poderes cambiarios)"
+      },
+      {
+        "parametro": "Continuidad F29 Reciente",
+        "estado": "CUMPLE",
+        "detalle": "35 meses sin lagunas tributarias"
+      },
+      {
+        "parametro": "Mora Fiscal Crítica (Cód. 94)",
+        "estado": "CUMPLE",
+        "detalle": "Cumplimiento oportuno de IVA"
+      },
+      {
+        "parametro": "Coherencia F29 vs F22",
+        "estado": "OBSERVADO",
+        "detalle": "NO CONCILIABLE"
+      }
+    ],
+    "variables_comerciales": {
+      "boletin_comercial": "Pendiente de consulta (Condiciona línea)",
+      "historial_pago": "Cliente nuevo (Sin historial previo)"
+    }
+  },
+  "metadata": {
+    "source_file": "/Users/josealfonsorossel/Downloads/Carpeta Tributaria.CLINICA HYPERBARIC.pdf",
+    "pages": 43,
+    "processing_time": 16.433
+  }
+}

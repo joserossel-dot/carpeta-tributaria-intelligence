@@ -3923,12 +3923,12 @@
         "criterio": "CPT es proxy tributario, no liquidez real"
       }
     },
-    "score_compuesto": 85,
+    "score_compuesto": 77,
     "decision": {
       "resultado_base": "RECHAZADO",
       "evaluacion_referencial": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
       "clasificacion_riesgo": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
-      "desempeno_tributario_texto": "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)",
+      "desempeno_tributario_texto": "Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)",
       "producto_evaluado": "credito_30_dias",
       "cupo_maximo_sugerido": 0,
       "cupo_aprobado": 0,
@@ -3946,6 +3946,7 @@
         "periodo_fin": "2019-11",
         "ventas_netas_mensuales_prom": 27590169,
         "base_compras_c_base": 8277051,
+        "glosa_paso_a": "Costo proxy 30% s/ventas exentas (Compras afectas F29: M$ 1.290/mes)",
         "spread_operacional_f29": 19313118,
         "brecha_operacional_proxy": 19313118,
         "rli_ultimo_f22": 1513977761,
@@ -3959,6 +3960,8 @@
         "freno_flujo_operacional_25pct": 0,
         "freno_absorcion_operacional": 0,
         "glosa_b2": "N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. 1109: M$ 1.513.978)",
+        "glosa_paso_d": "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0",
+        "cpt_source_code": "645",
         "margen_operacional_depurado_mensual": 19313118,
         "factor_riesgo_phi": 1.0,
         "factor_ajuste_conductual_pct": 0,
@@ -3979,7 +3982,7 @@
         ],
         "glosa_paso_c": "N/A — Línea bloqueada por pérdida tributaria en F22 (Override a 0%)",
         "pct_apertura": 0,
-        "tramo_score": ">=85",
+        "tramo_score": "75-84",
         "glosa_apertura": "N/A — Línea bloqueada por pérdida tributaria en F22 (Evaluación manual con EE.FF.)",
         "linea_maxima_tecnica": 0,
         "linea_inicial_recomendada": 0,
@@ -3993,7 +3996,7 @@
       },
       "hoja_ruta_comercial": [
         "Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).",
-        "Puntaje Tributario SII: 85/100 pts (Desempeño Tributario Moderado (Bloqueo por Pérdida F22)).",
+        "Puntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)).",
         "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
         "Línea Máxima Condicionada: M$ 0.",
         "Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
@@ -4031,9 +4034,9 @@
         },
         {
           "nombre": "Holgura Débito/Crédito IVA (F29)",
-          "puntaje_obtenido": 20,
+          "puntaje_obtenido": 12,
           "puntaje_maximo": 20,
-          "detalle": "Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: 21.39x) (11 de 12 meses con compras > ventas y arrastre de remanente Cód. 504)"
+          "detalle": "Estructura de Servicios (Compras representan <35% de ventas). El alto ratio D/C mide intensidad en nómina, no holgura operativa. Costos reales requieren EERR."
         },
         {
           "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -4051,13 +4054,16 @@
           "nombre": "Coherencia F29/F22 y Vigencia de Información",
           "puntaje_obtenido": 12,
           "puntaje_maximo": 15,
-          "detalle": "Vigencia: desfase 2m (confianza ALTA). Coherencia: sin cruce anual F29/F22"
+          "detalle": "Desfase al emitir carpeta: 2m (Edad actual carpeta: 0d) | Coherencia: sin cruce anual F29/F22"
         }
       ],
       "vigencia_datos": {
         "fecha_emision": "30/01/2020 12:40",
         "ultimo_periodo": "2019-11",
         "meses_desfase": 2,
+        "dias_antiguedad": 0,
+        "estado_antiguedad": "Vigente <= 45d",
+        "fecha_evaluacion": "30/01/2020",
         "nivel_confianza": "ALTA",
         "alerta": null
       },
@@ -4086,7 +4092,7 @@
         },
         {
           "parametro": "Coherencia F29 vs F22",
-          "estado": "CUMPLE",
+          "estado": "OBSERVADO",
           "detalle": "Sin declaraciones F22 concurrentes"
         }
       ],
@@ -4104,12 +4110,12 @@
       "Respaldo patrimonial sólido: CPT positivo de $5,515,454,480,647 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nClasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)\nPuntaje Tributario SII: 85/100 pts (Desempeño Tributario Moderado (Bloqueo por Pérdida F22))\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 8.277\n- Techo Operativo Proveedor (8%): M$ 662\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 19.313\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 5.515.454.481\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).\n- ✅ Puntaje Tributario SII: 85/100 pts (Desempeño Tributario Moderado (Bloqueo por Pérdida F22)).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada.",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: GONZAGRI S.A. (RUT: 76444470-1)\n\nClasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)\nPuntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22))\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 8.277\n- Techo Operativo Proveedor (8%): M$ 662\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 19.313\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 5.515.454.481\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($8,277,051 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).\n- ✅ Puntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: No despachar a crédito. Exigir Balance de 8 Columnas auditado, Estado de Resultados reciente y justificación contable de la pérdida para evaluar una línea manual garantizada.",
     "veredicto": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
     "evaluacion_referencial": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
     "clasificacion_riesgo": "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)",
-    "desempeno_tributario_texto": "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)",
-    "score_crediticio": 85.0,
+    "desempeno_tributario_texto": "Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)",
+    "score_crediticio": 77.0,
     "categoria_riesgo": "MEDIO",
     "cupo_maximo_sugerido": 0,
     "cupo_aprobado": 0,
@@ -4127,6 +4133,7 @@
       "periodo_fin": "2019-11",
       "ventas_netas_mensuales_prom": 27590169,
       "base_compras_c_base": 8277051,
+      "glosa_paso_a": "Costo proxy 30% s/ventas exentas (Compras afectas F29: M$ 1.290/mes)",
       "spread_operacional_f29": 19313118,
       "brecha_operacional_proxy": 19313118,
       "rli_ultimo_f22": 1513977761,
@@ -4140,6 +4147,8 @@
       "freno_flujo_operacional_25pct": 0,
       "freno_absorcion_operacional": 0,
       "glosa_b2": "N/A — Línea bloqueada por Pérdida Tributaria en último F22 (Cód. 1109: M$ 1.513.978)",
+      "glosa_paso_d": "Tope de concentración por proveedor: 3% CPT; actúa como freno en empresas subcapitalizadas o con CPT <= 0",
+      "cpt_source_code": "645",
       "margen_operacional_depurado_mensual": 19313118,
       "factor_riesgo_phi": 1.0,
       "factor_ajuste_conductual_pct": 0,
@@ -4160,7 +4169,7 @@
       ],
       "glosa_paso_c": "N/A — Línea bloqueada por pérdida tributaria en F22 (Override a 0%)",
       "pct_apertura": 0,
-      "tramo_score": ">=85",
+      "tramo_score": "75-84",
       "glosa_apertura": "N/A — Línea bloqueada por pérdida tributaria en F22 (Evaluación manual con EE.FF.)",
       "linea_maxima_tecnica": 0,
       "linea_inicial_recomendada": 0,
@@ -4174,7 +4183,7 @@
     },
     "hoja_ruta_comercial": [
       "Clasificación y Recomendación: SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.).",
-      "Puntaje Tributario SII: 85/100 pts (Desempeño Tributario Moderado (Bloqueo por Pérdida F22)).",
+      "Puntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)).",
       "Línea Inicial Recomendada: M$ 0 (Modalidad Contado).",
       "Línea Máxima Condicionada: M$ 0.",
       "Resguardo comercial sugerido: Operación no elegible para línea automática por registrar Pérdida Tributaria en último F22. Requiere evaluación manual con Estados Financieros auditados o Balance de 8 Columnas.",
@@ -4196,9 +4205,9 @@
       },
       {
         "nombre": "Holgura Débito/Crédito IVA (F29)",
-        "puntaje_obtenido": 20,
+        "puntaje_obtenido": 12,
         "puntaje_maximo": 20,
-        "detalle": "Margen operacional ajustado (Ratio Débito / Crédito Giro 12M: 21.39x) (11 de 12 meses con compras > ventas y arrastre de remanente Cód. 504)"
+        "detalle": "Estructura de Servicios (Compras representan <35% de ventas). El alto ratio D/C mide intensidad en nómina, no holgura operativa. Costos reales requieren EERR."
       },
       {
         "nombre": "Rentabilidad (RLI) y Respaldo Patrimonial F22",
@@ -4216,13 +4225,16 @@
         "nombre": "Coherencia F29/F22 y Vigencia de Información",
         "puntaje_obtenido": 12,
         "puntaje_maximo": 15,
-        "detalle": "Vigencia: desfase 2m (confianza ALTA). Coherencia: sin cruce anual F29/F22"
+        "detalle": "Desfase al emitir carpeta: 2m (Edad actual carpeta: 0d) | Coherencia: sin cruce anual F29/F22"
       }
     ],
     "vigencia_datos": {
       "fecha_emision": "30/01/2020 12:40",
       "ultimo_periodo": "2019-11",
       "meses_desfase": 2,
+      "dias_antiguedad": 0,
+      "estado_antiguedad": "Vigente <= 45d",
+      "fecha_evaluacion": "30/01/2020",
       "nivel_confianza": "ALTA",
       "alerta": null
     },
@@ -4251,7 +4263,7 @@
       },
       {
         "parametro": "Coherencia F29 vs F22",
-        "estado": "CUMPLE",
+        "estado": "OBSERVADO",
         "detalle": "Sin declaraciones F22 concurrentes"
       }
     ],

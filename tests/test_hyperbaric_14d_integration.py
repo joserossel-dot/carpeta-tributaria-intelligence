@@ -81,7 +81,7 @@ class TestHyperbaric14DIntegration:
             assert "Fecha Emisión Informe:" in p1_clean
             assert "Cód. 1450" in p1_clean
             assert "CV: 35.0%" in p1_clean
-            assert "Estructura de Servicios (Compras representan <35% de ventas)" in p1_clean
+            assert "Giro exento de IVA (Débito 12M: M$ 0)" in p1_clean
             assert "Paso B1: Techo por Volumen de Compras (8% C_base)" in p1_clean
             assert "Costo proxy 30% s/ventas exentas (Compras afectas F29: M$ 1.003/mes)" in p1_clean
             assert "M$ 586" in p1_clean

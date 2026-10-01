@@ -255,7 +255,7 @@ class TestAlvalSpaIntegration:
             assert len(pdf.pages) == 2
             text_p1 = pdf.pages[0].extract_text()
             text_p1_clean = " ".join(text_p1.split())
-            assert "(v3.0.0)" in text_p1_clean
+            assert "(v3.1.0)" in text_p1_clean
             assert "NO EVALUABLE (Carpeta Vencida > 60 días)" in text_p1_clean
             assert "n/d" in text_p1_clean
             assert "Operación bloqueada" in text_p1_clean
@@ -277,10 +277,7 @@ class TestAlvalSpaIntegration:
             assert "Utilidad Contable s/Balance Cód. 1672" in text_p1_clean
             assert "+M$ 103.376" in text_p1_clean
             assert "CPT: M$ 1.756.915" in text_p1_clean
-            assert "incrementado por aporte Cód. 844" in text_p1_clean
-            assert "utilidades retenidas" in text_p1_clean
-            assert "Penalización -9" in text_p1_clean
-            assert "RLI <= 0" in text_p1_clean
+            assert "Respaldo patrimonial mitigado por pérdida" in text_p1_clean
             assert "0 de 36 períodos con mora Cód. 94" in text_p1_clean
             assert "5 de últ. 12M sin IVA a pagar" in text_p1_clean
 
@@ -288,8 +285,7 @@ class TestAlvalSpaIntegration:
             full_text = " ".join(text_p1.split()) + " " + " ".join(text_p2.split())
             assert "Alerta de Overtrading y Deterioro Multianual de Margen" in full_text
             assert "compras superan a las ventas en 6" in full_text
-            assert "últimos 12 meses (incluidos mayo y junio 2026)" in full_text
-            assert "inyección de Capital Aportado Cód. 844" in full_text
+            assert "CPT incrementado sin respaldo en utilidades del ejercicio" in full_text
             assert "Ingresos Giro Cód. 1657" in text_p2
             assert "RLI / Pérdida Cód. 1694/1695" in text_p2
             assert "Capital Propio CPT Cód. 645/1698" in text_p2
@@ -304,4 +300,4 @@ class TestAlvalSpaIntegration:
             assert "F22 — CONCILIADO (<10% dif.)" in text_p2
             assert "s/base F29" not in text_p2
             assert "CONCILIADO (<10% dif.)" in text_p2
-            assert "Motor Determinista Cavilaria v3.0.0" in text_p2
+            assert "Motor Determinista Cavilaria v3.1.0" in text_p2
