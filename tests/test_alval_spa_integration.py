@@ -95,11 +95,12 @@ class TestAlvalSpaIntegration:
         """Verifica la regla estricta de comité: pérdida tributaria genera Línea = 0 y veredicto explicativo."""
         cr = alval_folder.credit_risk
         assert cr is not None
-        assert cr.score_compuesto == 77
-        assert cr.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)"
+        # En v3.0.0, carpeta emitida 27/07/2026 tiene > 60 días al 01/10/2026, por lo que Pilar 6 = 0 pts (62 pts -> Baja)
+        assert cr.score_compuesto == 62
+        assert cr.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Baja"
         assert cr.linea_maxima_sugerida == 0
         assert cr.linea_inicial_sugerida == 0
-        assert cr.veredicto == "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)"
+        assert cr.veredicto == "NO EVALUABLE (Carpeta Vencida > 60 días)"
 
         mem = cr.decision.memoria_calculo
         assert mem["rli_declarada_le_zero"] is True
@@ -255,10 +256,11 @@ class TestAlvalSpaIntegration:
             text_p1 = pdf.pages[0].extract_text()
             text_p1_clean = " ".join(text_p1.split())
             assert "(v3.0.0)" in text_p1_clean
-            assert "SIN LÍNEA AUTOMÁTICA" in text_p1_clean
-            assert "77 / 100" in text_p1_clean or "77 pts" in text_p1_clean
-            assert "No constituye rating de solvencia" in text_p1_clean
-            assert "sujeto a Dicom y Balance" in text_p1_clean
+            assert "NO EVALUABLE (Carpeta Vencida > 60 días)" in text_p1_clean
+            assert "n/d" in text_p1_clean
+            assert "Operación bloqueada" in text_p1_clean
+            assert "Se exige actualización" in text_p1_clean
+            assert "carpeta al mes en curso" in text_p1_clean
             assert "Pérdida Tributaria en último F22" in text_p1_clean
             assert "2 representante(s) registrado(s)" in text_p1_clean
             assert "Cualquiera" in text_p1_clean

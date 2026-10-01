@@ -27,7 +27,7 @@ st.set_page_config(
     layout="wide",
 )
 
-# 2. Inyección CSS para incrustación Iframe limpia (WordPress)
+# 2. Inyección CSS Corporativo Cavilaria (Color base #F26822) e incrustación Iframe
 st.markdown(
     """
     <style>
@@ -37,6 +37,119 @@ st.markdown(
     .block-container {
         padding-top: 1.25rem;
         padding-bottom: 2rem;
+    }
+
+    /* Pestañas (Tabs) Corporativas Cavilaria */
+    div[data-testid="stTabs"] button {
+        color: #F26822 !important;
+        font-weight: bold !important;
+        font-size: 1.1rem !important;
+    }
+    div[data-testid="stTabs"] button p,
+    div[data-testid="stTabs"] button div,
+    div[data-testid="stTabs"] button span {
+        color: #F26822 !important;
+        font-weight: bold !important;
+        font-size: 1.1rem !important;
+    }
+    div[data-testid="stTabs"] button[aria-selected="true"] {
+        color: #F26822 !important;
+        font-weight: bold !important;
+        border-bottom-color: #F26822 !important;
+    }
+    div[data-testid="stTabs"] [data-baseweb="tab-highlight"] {
+        background-color: #F26822 !important;
+    }
+    div[data-testid="stTabs"] [data-baseweb="tab-border"] {
+        border-bottom-color: #F26822 !important;
+    }
+
+    /* Botones Corporativos Cavilaria (stButton, stDownloadButton, stFormSubmitButton) */
+    div[data-testid="stButton"] > button,
+    div[data-testid="stDownloadButton"] > button,
+    div[data-testid="stFormSubmitButton"] > button,
+    .stButton > button,
+    .stDownloadButton > button,
+    .stFormSubmitButton > button {
+        background-color: #F26822 !important;
+        color: #FFFFFF !important;
+        border: 2px solid #F26822 !important;
+        font-weight: bold !important;
+        border-radius: 6px !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+
+    div[data-testid="stButton"] > button p,
+    div[data-testid="stDownloadButton"] > button p,
+    div[data-testid="stFormSubmitButton"] > button p,
+    .stButton > button p,
+    .stDownloadButton > button p,
+    .stFormSubmitButton > button p {
+        color: #FFFFFF !important;
+        font-weight: bold !important;
+    }
+
+    div[data-testid="stButton"] > button:hover,
+    div[data-testid="stDownloadButton"] > button:hover,
+    div[data-testid="stFormSubmitButton"] > button:hover,
+    .stButton > button:hover,
+    .stDownloadButton > button:hover,
+    .stFormSubmitButton > button:hover {
+        background-color: #FFFFFF !important;
+        color: #F26822 !important;
+        border: 2px solid #F26822 !important;
+    }
+
+    div[data-testid="stButton"] > button:hover p,
+    div[data-testid="stDownloadButton"] > button:hover p,
+    div[data-testid="stFormSubmitButton"] > button:hover p,
+    .stButton > button:hover p,
+    .stDownloadButton > button:hover p,
+    .stFormSubmitButton > button:hover p {
+        color: #F26822 !important;
+    }
+
+    div[data-testid="stButton"] > button:focus,
+    div[data-testid="stDownloadButton"] > button:focus,
+    div[data-testid="stFormSubmitButton"] > button:focus,
+    .stButton > button:focus,
+    .stDownloadButton > button:focus,
+    .stFormSubmitButton > button:focus {
+        border-color: #F26822 !important;
+        box-shadow: 0 0 0 0.2rem rgba(242, 104, 34, 0.25) !important;
+    }
+
+    div[data-testid="stButton"] > button:disabled,
+    div[data-testid="stDownloadButton"] > button:disabled,
+    div[data-testid="stFormSubmitButton"] > button:disabled,
+    .stButton > button:disabled,
+    .stDownloadButton > button:disabled,
+    .stFormSubmitButton > button:disabled {
+        background-color: #FDBA74 !important;
+        color: #FFFFFF !important;
+        border-color: #FDBA74 !important;
+        opacity: 0.65 !important;
+        cursor: not-allowed !important;
+    }
+
+    div[data-testid="stButton"] > button:disabled:hover,
+    div[data-testid="stDownloadButton"] > button:disabled:hover,
+    div[data-testid="stFormSubmitButton"] > button:disabled:hover,
+    .stButton > button:disabled:hover,
+    .stDownloadButton > button:disabled:hover,
+    .stFormSubmitButton > button:disabled:hover {
+        background-color: #FDBA74 !important;
+        color: #FFFFFF !important;
+        border-color: #FDBA74 !important;
+    }
+
+    div[data-testid="stButton"] > button:disabled:hover p,
+    div[data-testid="stDownloadButton"] > button:disabled:hover p,
+    div[data-testid="stFormSubmitButton"] > button:disabled:hover p,
+    .stButton > button:disabled:hover p,
+    .stDownloadButton > button:disabled:hover p,
+    .stFormSubmitButton > button:disabled:hover p {
+        color: #FFFFFF !important;
     }
     </style>
     """,
@@ -312,10 +425,6 @@ uploaded_file = st.file_uploader(
     accept_multiple_files=False,
 )
 
-st.info(
-    "🔒 **Privacidad (Ley N° 21.719):** Los documentos se procesan en memoria temporal únicamente para generar este reporte y no son almacenados por Cavilaria SpA."
-)
-
 col_cupo1, col_cupo2 = st.columns([3, 1])
 with col_cupo1:
     cupo_solicitado = st.number_input(
@@ -355,11 +464,11 @@ with col_com2:
         help="Para clientes nuevos o con alertas aplica la Línea Inicial de Apertura (50% del techo técnico).",
     )
 
-col_btn1, col_btn2 = st.columns([1, 4])
-with col_btn1:
-    analizar = st.button("Analizar", type="primary", disabled=uploaded_file is None)
-with col_btn2:
-    if st.button("🗑️ Limpiar sesión actual"):
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    analizar = st.button("Analizar", type="primary", disabled=uploaded_file is None, use_container_width=True)
+with col2:
+    if st.button("Limpiar", use_container_width=True):
         tier = st.session_state.get("access_tier")
         credits = st.session_state.get("free_credits_remaining")
         raw_fps = st.session_state.get("evaluated_fps")
@@ -385,6 +494,9 @@ with col_btn2:
             st.query_params["access_code"] = code
         gc.collect()
         st.rerun()
+
+ph_pdf_arriba = col3.empty()
+ph_excel_arriba = col4.empty()
 
 # 6. Ejecución del Análisis y Control de Créditos
 if uploaded_file is not None and analizar:
@@ -450,6 +562,39 @@ if "result" in st.session_state:
     json_bytes = st.session_state["json_bytes"]
     markdown_bytes = st.session_state["markdown_bytes"]
 
+    # Generación y caché en memoria de informes PDF y Excel
+    rut_val = getattr(getattr(result, "contributor", None), "rut", "empresa") or "empresa"
+    rut_clean = str(rut_val).replace(".", "").replace("-", "").strip()
+
+    if "cached_pdf_data" not in st.session_state or st.session_state.get("cached_download_rut") != rut_clean:
+        from src.reports.excel_report import ExcelReport
+        from src.reports.pdf_report import PDFReport
+        st.session_state["cached_pdf_data"] = PDFReport().generate(result)
+        st.session_state["cached_excel_data"] = ExcelReport().generate(result)
+        st.session_state["cached_download_rut"] = rut_clean
+        gc.collect()
+
+    pdf_data = st.session_state["cached_pdf_data"]
+    excel_data = st.session_state["cached_excel_data"]
+
+    # Inyección en placeholders de la botonera superior (col3 y col4)
+    ph_pdf_arriba.download_button(
+        label="Descargar PDF",
+        data=pdf_data,
+        file_name=f"evaluacion_tributaria_{rut_clean}.pdf",
+        mime="application/pdf",
+        key="pdf_arriba",
+        use_container_width=True,
+    )
+    ph_excel_arriba.download_button(
+        label="Descargar Excel",
+        data=excel_data,
+        file_name=f"cartola_evaluacion_{rut_clean}.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        key="excel_arriba",
+        use_container_width=True,
+    )
+
     st.success(
         f"Procesado en {result.metadata.processing_time}s "
         f"({result.metadata.pages} páginas)"
@@ -506,5 +651,24 @@ if "result" in st.session_state:
     with tab7:
         show_export(result, auth_role=access_tier)
 
-    st.divider()
-    show_downloads(result)
+    # 4. Réplica de botonera de descarga inferior
+    st.markdown("---")
+    col_dl1, col_dl2 = st.columns(2)
+    with col_dl1:
+        st.download_button(
+            label="Descargar PDF",
+            data=pdf_data,
+            file_name=f"evaluacion_tributaria_{rut_clean}.pdf",
+            mime="application/pdf",
+            key="pdf_abajo",
+            use_container_width=True,
+        )
+    with col_dl2:
+        st.download_button(
+            label="Descargar Excel",
+            data=excel_data,
+            file_name=f"cartola_evaluacion_{rut_clean}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            key="excel_abajo",
+            use_container_width=True,
+        )
