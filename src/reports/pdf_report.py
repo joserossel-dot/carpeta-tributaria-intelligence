@@ -111,7 +111,7 @@ class PDFReport:
         story.append(Paragraph("CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial", title_style))
         story.append(
             Paragraph(
-                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v2.9.1)",
+                "Informe Cuantitativo Referencial para Otorgamiento de Crédito Comercial B2B (v3.0.0)",
                 subtitle_style,
             )
         )
@@ -209,7 +209,7 @@ class PDFReport:
         clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
         desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or (
             "Capacidad Operativa Tributaria Alta" if score_val >= 85
-            else ("Desempeño Tributario Moderado" if score_val >= 65
+            else ("Capacidad Operativa Tributaria Moderada" if score_val >= 65
                   else "Capacidad Operativa Tributaria Baja")
         )
         linea_ini = getattr(cr, "linea_inicial_sugerida", 0) if cr else 0
@@ -250,7 +250,19 @@ class PDFReport:
         forma_act = getattr(tax_folder.corporate, "forma_actuacion_representantes", None) if getattr(tax_folder, "corporate", None) else None
         act_txt = f"Actuación SII: {forma_act} — " if forma_act else ""
 
-        if linea_ini > 0:
+        es_carpeta_vencida = "Carpeta Vencida" in clasif_riesgo or "Carpeta Vencida" in evaluacion
+        if es_carpeta_vencida:
+            puntaje_cell_content = (
+                "<b>n/d</b><br/>"
+                "<font size=6.0 color='#DC2626'>Carpeta Vencida > 60d</font><br/>"
+                "<font size=5.5 color='#64748B'>Exige actualización</font>"
+            )
+            resguardo_box_txt = (
+                "<b>Plazo Inicial:</b> Contado (0 días).<br/>"
+                "<b>Operación bloqueada. Se exige actualización de carpeta al mes en curso.</b>"
+            )
+        elif linea_ini > 0:
+            puntaje_cell_content = f"<b>{score_val:.0f} / 100 pts</b><br/>{desempeno_texto}<br/><font size=5.5 color='#64748B'>No reemplaza informe comercial</font>"
             resguardo_box_txt = (
                 f"<b>Plazo Inicial:</b> {plazo_ini}. Línea no liberable sin: "
                 "(1) Dicom/Equifax sin morosidad vigente, y "
@@ -258,6 +270,7 @@ class PDFReport:
                 "o esquema mixto (50% anticipo + 50% a 30 días)."
             )
         else:
+            puntaje_cell_content = f"<b>{score_val:.0f} / 100 pts</b><br/>{desempeno_texto}<br/><font size=5.5 color='#64748B'>No reemplaza informe comercial</font>"
             resguardo_box_txt = f"<b>Plazo Inicial:</b> {plazo_ini}.<br/>{resguardo}"
 
         panel_data = [
@@ -269,7 +282,7 @@ class PDFReport:
             ],
             [
                 evaluacion_cell,
-                Paragraph(f"<b>{score_val:.0f} / 100 pts</b><br/>{desempeno_texto}<br/><font size=5.5 color='#64748B'>No reemplaza informe comercial</font>", table_cell_bold),
+                Paragraph(puntaje_cell_content, table_cell_bold),
                 Paragraph(f"<b>Inicial: {linea_ini_txt}</b><br/><font size=6.5>Máxima: {linea_max_txt}</font>", table_cell_bold),
                 Paragraph(resguardo_box_txt, resguardo_style),
             ],
@@ -773,8 +786,9 @@ class PDFReport:
         nota_pie = (
             "<i>Nota Legal: Cifras expresadas en Miles de Pesos Chilenos (M$). "
             "Este informe constituye una recomendación cuantitativa referencial y no vinculante basada en declaraciones tributarias SII; "
-            "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor. "
-            "[Motor Determinista Cavilaria v2.9.1 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT (CPT<=0 -> M$ 0), Apertura=50%/40%/30%/0%]</i>"
+            "la decisión final de otorgamiento de crédito es de exclusiva responsabilidad del proveedor.<br/>"
+            "Escala Pilar 3: >2.0x = 20 pts | 1.4-2.0x = 18 pts | 1.2-1.4x = 16 pts | 1.05-1.2x = 14 pts | 0.95-1.05x = 10 pts | <0.95x = 5 pts | Estructura Servicios (<35% compras/ventas) = 12 pts | Giro Exento IVA = 10 pts.<br/>"
+            "[Motor Determinista Cavilaria v3.0.0 | Política Base: B1=8% Compras, B2=min(15% Spread F29, 25% RLI/12; RLI<=0 -> M$ 0; sin F22 -> 8% Spread), C=100%/80%/60%/0%, D=3% CPT (CPT<=0 -> M$ 0), Apertura=50%/40%/30%/0%]</i>"
         )
         story.append(Paragraph(nota_pie, ParagraphStyle("NotaPie", parent=body_style, fontSize=6.5, leading=8.5, textColor=colors.HexColor("#64748B"))))
 

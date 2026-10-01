@@ -35,7 +35,7 @@ def show_credit_score(tax_folder: TaxFolder) -> None:
     # --- PANEL EJECUTIVO DE EVALUACIÓN REFERENCIAL ---
     score_val = getattr(cr, "score_crediticio", 0.0)
     clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
-    desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Capacidad Operativa Tributaria Alta" if score_val >= 80 else "Desempeño Tributario Medio")
+    desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or ("Capacidad Operativa Tributaria Alta" if score_val >= 80 else "Capacidad Operativa Tributaria Moderada")
     linea_ini = getattr(cr, "linea_inicial_sugerida", None)
     linea_max = getattr(cr, "linea_maxima_condicionada", None) or getattr(cr, "cupo_maximo_sugerido", 0)
     plazo_dias = getattr(cr, "plazo_sugerido_dias", 0)

@@ -146,7 +146,7 @@ class CreditRiskResult(BaseModel):
     veredicto: str = "OBSERVADO"
     evaluacion_referencial: str = "OBSERVADO"
     clasificacion_riesgo: str = "MODERADO"
-    desempeno_tributario_texto: str = "Desempeño Tributario Medio"
+    desempeno_tributario_texto: str = "Capacidad Operativa Tributaria Moderada"
     score_crediticio: float = 0.0
     categoria_riesgo: str = "MEDIO"
     cupo_maximo_sugerido: int | None = None

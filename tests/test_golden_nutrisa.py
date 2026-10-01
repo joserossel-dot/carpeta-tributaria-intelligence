@@ -43,20 +43,17 @@ class TestGoldenNutrisa:
             assert r.vigente is True
 
     def test_evaluacion_crediticia_v26_perfil_solido(self, nutrisa_folder):
-        """Verifica la clasificación v2.9, puntaje y líneas escalonadas para NUTRISA."""
+        """Verifica la clasificación v3.0.0: Carpeta Vencida > 60 días bloquea la línea comercial."""
         cr = nutrisa_folder.credit_risk
         assert cr is not None
-        assert cr.score_crediticio is not None
-        assert cr.score_crediticio == 92
-        assert cr.evaluacion_referencial == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA) (Línea Sujeta a Dicom)"
-        assert cr.clasificacion_riesgo == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA)"
-        assert cr.desempeno_tributario_texto == "Capacidad Operativa Tributaria Alta"
+        assert cr.clasificacion_riesgo == "NO EVALUABLE (Carpeta Vencida > 60 días)"
+        assert cr.evaluacion_referencial == "NO EVALUABLE (Carpeta Vencida > 60 días)"
 
-        # Líneas escalonadas: Máxima M$ 14.400, Inicial M$ 7.200 (50% apertura)
-        assert cr.linea_maxima_condicionada == 14_400_000
-        assert cr.linea_inicial_sugerida == 7_200_000
-        assert cr.cupo_aprobado == 7_200_000
-        assert cr.plazo_inicial_sugerido == "15 días (o 30 días con 50% de anticipo)"
+        # Líneas bloqueadas a M$ 0 por carpeta vencida (> 60 días)
+        assert cr.linea_maxima_condicionada == 0
+        assert cr.linea_inicial_sugerida == 0
+        assert cr.cupo_aprobado == 0
+        assert cr.plazo_inicial_sugerido == "Contado (0 días)"
 
     def test_memoria_calculo_nutrisa(self, nutrisa_folder):
         """Verifica la consistencia cuantitativa de la Memoria de Cálculo."""
@@ -72,8 +69,8 @@ class TestGoldenNutrisa:
         assert mem["base_compras_c_base"] == 523_884_831
         assert mem["techo_operativo_8pct"] == 41_910_786
         assert mem["freno_absorcion_operacional"] == 14_417_824
-        assert mem["linea_maxima_condicionada"] == 14_400_000
-        assert mem["linea_inicial_sugerida"] == 7_200_000
+        assert mem["linea_maxima_condicionada"] == 0
+        assert mem["linea_inicial_sugerida"] == 0
 
         # CPT holgado (Tope patrimonial 3% CPT no restrictivo)
         assert mem["tope_patrimonial_3pct_cpt"] == 108_753_289
@@ -88,10 +85,7 @@ class TestGoldenNutrisa:
         assert "3 representante(s) registrado(s)" in rep_filtro.get("detalle", "")
 
         resguardo = cr.resguardo_comercial_sugerido
-        assert "En conjunto" in resguardo
-        assert "HECTOR GABRIEL RIOS LARRAIN" in resguardo
-        assert "MARIA GLORIA RIOS LARRAIN" in resguardo
-        assert "JOSE LUIS RODRIGUEZ CASANUEVA" in resguardo
+        assert "Operación bloqueada. Se exige actualización de carpeta al mes en curso." in resguardo
 
         # Verificación de Pilares 1, 3, 4 y 5
         desglose = cr.desglose_score
@@ -112,25 +106,30 @@ class TestGoldenNutrisa:
         assert p5.puntaje_obtenido == 15
         assert "0 de 23 períodos F29 con recargos por mora fiscal (Cód. 94) y 0 postergaciones de IVA (Cód. 779)" in p5.detalle
 
+        p6 = next(p for p in desglose if "Vigencia" in p.nombre)
+        assert p6.puntaje_obtenido == 0
+        assert "Carpeta tributaria vencida" in p6.detalle
+
     def test_generacion_pdf_nutrisa_layout(self, nutrisa_folder):
-        """Genera el PDF y valida los textos clave de la versión v2.9.0."""
+        """Genera el PDF y valida los textos clave de la versión v3.0.0."""
         pdf_bytes = PDFReport().generate(nutrisa_folder)
         assert len(pdf_bytes) > 10_000
 
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             text_p1 = pdf.pages[0].extract_text()
-            assert "(v2.9.1)" in text_p1
-            assert "ELEGIBLE PARA LÍNEA COMERCIAL" in text_p1
-            assert "Inicial: M$ 7.200" in text_p1
-            assert "Máxima: M$ 14.400" in text_p1
-            assert "En conjunto" in text_p1
+            assert "(v3.0.0)" in text_p1
+            assert "NO EVALUABLE (Carpeta Vencida > 60 días)" in text_p1
+            assert "n/d" in text_p1
+            assert "Inicial: M$ 0" in text_p1
+            assert "Máxima: M$ 0" in text_p1
+            assert "Operación bloqueada" in text_p1
+            assert "Se exige actualización" in text_p1
+            assert "carpeta al mes en curso" in text_p1
             assert "Tope de concentración por proveedor: 3% CPT" in text_p1
             # Normalización de domicilio
             assert "01565 Bodeg" in text_p1
             # Aclaración de glosa Paso B2
             assert "(Proxy tributario sobre RLI/12; no equivale a flujo de caja libre)" in text_p1
-            # Glosa Apertura con tramos
-            assert "50% de Apertura para Score >=85" in text_p1
 
             if len(pdf.pages) > 1:
                 text_p2 = pdf.pages[1].extract_text()
@@ -139,7 +138,7 @@ class TestGoldenNutrisa:
                 assert "Capital Propio CPT Cód. 645/1698" in text_p2
                 assert "M$ 692.056 (Cód. 1694)" in text_p2
                 assert "M$ 3.625.110" in text_p2
-                assert "Motor Determinista Cavilaria v2.9.1" in text_p2
+                assert "Motor Determinista Cavilaria v3.0.0" in text_p2
                 # Base única de conciliación F22
                 assert "3.2% s/base" in text_p2
                 assert "F22 — CONCILIADO (<10% dif.)" in text_p2

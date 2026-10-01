@@ -96,7 +96,7 @@ class TestAlvalSpaIntegration:
         cr = alval_folder.credit_risk
         assert cr is not None
         assert cr.score_compuesto == 77
-        assert cr.decision.desempeno_tributario_texto == "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)"
+        assert cr.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)"
         assert cr.linea_maxima_sugerida == 0
         assert cr.linea_inicial_sugerida == 0
         assert cr.veredicto == "SIN LÍNEA AUTOMÁTICA (Pérdida Tributaria en F22 — Evaluación Manual con EE.FF.)"
@@ -254,7 +254,7 @@ class TestAlvalSpaIntegration:
             assert len(pdf.pages) == 2
             text_p1 = pdf.pages[0].extract_text()
             text_p1_clean = " ".join(text_p1.split())
-            assert "(v2.9.1)" in text_p1_clean
+            assert "(v3.0.0)" in text_p1_clean
             assert "SIN LÍNEA AUTOMÁTICA" in text_p1_clean
             assert "77 / 100" in text_p1_clean or "77 pts" in text_p1_clean
             assert "No constituye rating de solvencia" in text_p1_clean
@@ -302,4 +302,4 @@ class TestAlvalSpaIntegration:
             assert "F22 — CONCILIADO (<10% dif.)" in text_p2
             assert "s/base F29" not in text_p2
             assert "CONCILIADO (<10% dif.)" in text_p2
-            assert "Motor Determinista Cavilaria v2.9.1" in text_p2
+            assert "Motor Determinista Cavilaria v3.0.0" in text_p2

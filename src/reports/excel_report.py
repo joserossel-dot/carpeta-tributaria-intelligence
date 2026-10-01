@@ -88,7 +88,7 @@ class ExcelReport:
         ws.cell(
             row=2,
             column=1,
-            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v2.9.1)",
+            value="Recomendación Cuantitativa de Línea de Crédito Comercial y Memoria de Cálculo (v3.0.0)",
         ).font = self.font_caption
         ws.cell(
             row=3,
@@ -109,7 +109,7 @@ class ExcelReport:
         clasif_riesgo = getattr(cr, "clasificacion_riesgo", None) or getattr(cr, "categoria_riesgo", "MODERADO")
         desempeno_texto = getattr(cr, "desempeno_tributario_texto", None) or (
             "Capacidad Operativa Tributaria Alta" if score_val >= 85
-            else ("Desempeño Tributario Moderado" if score_val >= 65
+            else ("Capacidad Operativa Tributaria Moderada" if score_val >= 65
                   else "Capacidad Operativa Tributaria Baja (Bloqueo por Pérdida F22)" if (getattr(cr, "bloqueo_por_perdida_tributaria", False))
                   else "Capacidad Operativa Tributaria Baja")
         )

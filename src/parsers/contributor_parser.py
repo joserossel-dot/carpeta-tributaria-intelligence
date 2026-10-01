@@ -60,6 +60,24 @@ class ContributorParser:
             region=region,
         )
 
+    @staticmethod
+    def anonymize_person_name(name: str | None) -> str:
+        """Anonimiza nombres de personas naturales conforme a la Ley 21.719 de Protección de Datos Personales.
+
+        Convierte nombres completos en iniciales + apellidos (ej. 'JUAN CARLOS PEREZ CASTILLO' -> 'J. PEREZ C.').
+        """
+        if not name or not str(name).strip():
+            return ""
+        parts = str(name).strip().split()
+        if len(parts) == 1:
+            return f"{parts[0][0].upper()}."
+        elif len(parts) == 2:
+            return f"{parts[0][0].upper()}. {parts[1].upper()}"
+        elif len(parts) == 3:
+            return f"{parts[0][0].upper()}. {parts[1].upper()} {parts[2][0].upper()}."
+        else:
+            return f"{parts[0][0].upper()}. {parts[-2].upper()} {parts[-1][0].upper()}."
+
     _CODIGO_53_TO_REGION = {
         1: "REGIÓN DE TARAPACÁ",
         2: "REGIÓN DE ANTOFAGASTA",

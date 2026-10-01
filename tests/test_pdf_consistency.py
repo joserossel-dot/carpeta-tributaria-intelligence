@@ -69,12 +69,19 @@ def test_pdf_internal_consistency(case):
     tot_cred_m = round(float(tot_cred) / 1000.0)
     tot_cop_m = round(float(tot_cop) / 1000.0)
 
-    # 1. Mandato a: Ratio Pilar 3 == round(Tabla_Total_Debito / Tabla_Total_Credito, 2)
+    tot_v = sum(m.total_ventas or Decimal("0") for m in last_12)
+    ratio_cop_v = float(tot_cop) / float(tot_v) if tot_v > 0 else 0.0
+    es_servicios = (ratio_cop_v < 0.35 and tot_v > 0)
+
+    # 1. Mandato a: Ratio Pilar 3
     pilar3 = next(
         p for p in folder.credit_risk.desglose_score
         if "Débito" in p.nombre or "Holgura" in p.nombre
     )
-    if case["has_debito"]:
+    if es_servicios:
+        assert pilar3.puntaje_obtenido == 12
+        assert "Estructura de Servicios (Compras representan <35% de ventas)" in pilar3.detalle
+    elif case["has_debito"]:
         ratio_dc = round(tot_deb_m / tot_cred_m, 2)
         ratio_str = f"{ratio_dc:.2f}x"
         assert ratio_str in pilar3.detalle, (
@@ -107,7 +114,9 @@ def test_pdf_internal_consistency(case):
     pdf_bytes = PDFReport().generate(folder)
     with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
         full_text = " ".join(" ".join(p.extract_text().split()) for p in pdf.pages)
-        if case["has_debito"]:
+        if es_servicios:
+            assert "Estructura de Servicios" in full_text
+        elif case["has_debito"]:
             ratio_dc = round(tot_deb_m / tot_cred_m, 2)
             ratio_str = f"{ratio_dc:.2f}x"
             assert ratio_str in full_text, (

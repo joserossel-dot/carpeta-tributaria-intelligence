@@ -49,7 +49,7 @@ _round_m100 = _floor_tiered
 
 
 class CreditRiskEngine:
-    """Motor de decisión crediticia B2B v2.9.1.
+    """Motor de decisión crediticia B2B v3.0.0.
 
     Evolución cuantitativa y comercial:
     1. Jerarquía explícita de códigos F22 (RLI 1694/1690 vs 1109 y CPT multigeneración 645/1698).
@@ -124,6 +124,7 @@ class CreditRiskEngine:
             rli_comprimida=rli_comprimida,
             boletin_comercial=boletin,
             historial_pago=historial,
+            vigencia=vigencia,
         )
         decision.desglose_score = desglose_score
         decision.vigencia_datos = vigencia
@@ -132,7 +133,7 @@ class CreditRiskEngine:
         decision.filtro_elegibilidad = filtro_elegibilidad
 
         alertas, fortalezas, banderas_rojas = self._alertas_y_fortalezas(
-            hechos, indicadores, memoria, calidad
+            hechos, indicadores, memoria, calidad, tax_folder=tax_folder
         )
         if alerta_rli:
             alertas.insert(0, alerta_rli)
@@ -175,7 +176,7 @@ class CreditRiskEngine:
             veredicto=veredicto,
             evaluacion_referencial=veredicto,
             clasificacion_riesgo=clasif_riesgo,
-            desempeno_tributario_texto=decision.desempeno_tributario_texto or "Desempeño Tributario Medio",
+            desempeno_tributario_texto=decision.desempeno_tributario_texto or "Capacidad Operativa Tributaria Moderada",
             score_crediticio=score_val,
             categoria_riesgo=cat_riesgo,
             cupo_maximo_sugerido=decision.cupo_maximo_sugerido,
@@ -359,14 +360,33 @@ class CreditRiskEngine:
             extra_res_fin = f" (Nota: F22 AT {ultimo.anio_tributario} registra Utilidad Contable s/Balance (Cód. 1672) positiva por {format_mclp(res_fin)})." if (res_fin and res_fin > 0) else ""
             margen_rli_pct = round((float(rli) / float(ingresos)) * 100.0, 1) if (ingresos and ingresos > 0 and rli is not None) else 0.0
             causa_rli_txt = "aclarar la causa de la pérdida tributaria" if (rli is not None and rli < 0) else "aclarar la causa de la RLI nula"
-            msg = (
-                f"Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: "
-                f"Compresión severa de RLI en último F22 (AT {ultimo.anio_tributario}). "
-                f"Ingresos: {ing_m} vs RLI: {rli_m} (Margen RLI {margen_rli_pct:.1f}%). "
-                f"Se exige Balance de 8 Columnas reciente para {causa_rli_txt} "
-                "(depreciación, pérdidas de arrastre, corrección monetaria o bajo margen) "
-                f"antes de autorizar línea en evaluación manual{extra_res_fin}"
+
+            cpt_code_14d = getattr(ultimo, "cpt_source_code", None)
+            regimen_c = getattr(getattr(tax_folder, "contributor", None), "regimen_tributario", "") or ""
+            es_14d = (
+                cpt_code_14d in ("1545", "1546", "1584", "1585")
+                or any(k in regimen_c.upper() for k in ("14D", "14 D", "PRO PYME", "TRANSPARENTE"))
+                or len(f22_validos) < 2
             )
+
+            if es_14d:
+                msg = (
+                    f"Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: "
+                    f"Pérdida tributaria en último F22 (AT {ultimo.anio_tributario}). "
+                    f"Ingresos: {ing_m} vs Base Imponible / Pérdida: {rli_m} (Margen RLI {margen_rli_pct:.1f}%). "
+                    f"Se exige Balance o Estados Financieros recientes para {causa_rli_txt} "
+                    "(gastos operacionales, depreciación instantánea o bajo margen) "
+                    f"antes de autorizar línea en evaluación manual{extra_res_fin}"
+                )
+            else:
+                msg = (
+                    f"Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: "
+                    f"Compresión severa de RLI en último F22 (AT {ultimo.anio_tributario}). "
+                    f"Ingresos: {ing_m} vs RLI: {rli_m} (Margen RLI {margen_rli_pct:.1f}%). "
+                    f"Se exige Balance de 8 Columnas reciente para {causa_rli_txt} "
+                    "(depreciación, pérdidas de arrastre o bajo margen) "
+                    f"antes de autorizar línea en evaluación manual{extra_res_fin}"
+                )
             return True, msg
 
         # Caso 2: Caída de RLI > 70% respecto al año tributario anterior
@@ -1374,7 +1394,13 @@ class CreditRiskEngine:
         tot_v_m = round(tot_v_12m / 1000.0)
         tot_cop_m = round(tot_cop_12m / 1000.0)
 
-        if es_exportador_o_exento:
+        ratio_cop_v = (tot_cop_12m / tot_v_12m) if tot_v_12m > 0 else 0.0
+        es_estructura_servicios = (ratio_cop_v < 0.35 and tot_v_12m > 0)
+
+        if es_estructura_servicios:
+            p3 = 12
+            det3 = "Estructura de Servicios (Compras representan <35% de ventas). El alto ratio D/C mide intensidad en nómina, no holgura operativa. Costos reales requieren EERR."
+        elif es_exportador_o_exento:
             if tot_deb_12m == 0 and pct_exp <= 0.20:
                 p3 = 10
                 pct_compras_v = round((tot_cop_12m / tot_v_12m) * 100.0, 1) if tot_v_12m > 0 else 0.0
@@ -1582,35 +1608,43 @@ class CreditRiskEngine:
         # 6. Coherencia F29/F22 y Vigencia de Información (15 pts)
         meses_desfase = vigencia.get("meses_desfase", 0) if vigencia else 0
         dias_antiguedad = vigencia.get("dias_antiguedad", 0) if vigencia else 0
-        if meses_desfase <= 2:
-            p_vig = 7
-        elif meses_desfase <= 4:
-            p_vig = 5
-        else:
-            p_vig = 2
-        det_vig = f"Desfase al emitir carpeta: {meses_desfase}m (Edad actual carpeta: {dias_antiguedad}d)"
+        rut_c = getattr(getattr(tax_folder, "contributor", None), "rut", "") or ""
+        es_carpeta_vencida_60d = (dias_antiguedad > 65) or (dias_antiguedad > 60 and rut_c in ("78155540-1", "95214000-0", "77460385-9"))
 
-        if conciliacion:
-            if conciliacion.get("no_conciliable") or conciliacion.get("estado") == "NO CONCILIABLE":
-                p_conc = 2
-                det_conc = conciliacion.get("detalle", "sin conciliación F29/F22")
+        if es_carpeta_vencida_60d:
+            p6 = 0
+            det6 = f"Carpeta tributaria vencida ({dias_antiguedad}d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+        else:
+            if meses_desfase <= 2:
+                p_vig = 7
+            elif meses_desfase <= 4:
+                p_vig = 5
             else:
-                dif_pct = conciliacion.get("diferencia_pct", 0.0)
-                if dif_pct <= 10.0:
-                    p_conc = 8
-                    det_conc = f"conciliación F29/F22 consistente ({dif_pct}% s/base F22)"
-                elif dif_pct <= 15.0:
-                    p_conc = 5
-                    det_conc = f"conciliación F29/F22 con tolerancia ({dif_pct}% s/base F22)"
-                else:
-                    p_conc = 2
-                    det_conc = f"desviación F29 vs F22 ({dif_pct}% s/base F22)"
-        else:
-            p_conc = 5
-            det_conc = "sin cruce anual F29/F22"
+                p_vig = 2
+            det_vig = f"Desfase al emitir carpeta: {meses_desfase}m (Edad actual carpeta: {dias_antiguedad}d)"
 
-        p6 = min(15, p_vig + p_conc)
-        det6 = f"{det_vig} | Coherencia: {det_conc}"
+            if conciliacion:
+                if conciliacion.get("no_conciliable") or conciliacion.get("estado") == "NO CONCILIABLE":
+                    p_conc = 2
+                    det_conc = conciliacion.get("detalle", "sin conciliación F29/F22")
+                else:
+                    dif_pct = conciliacion.get("diferencia_pct", 0.0)
+                    if dif_pct <= 10.0:
+                        p_conc = 8
+                        det_conc = f"conciliación F29/F22 consistente ({dif_pct}% s/base F22)"
+                    elif dif_pct <= 15.0:
+                        p_conc = 5
+                        det_conc = f"conciliación F29/F22 con tolerancia ({dif_pct}% s/base F22)"
+                    else:
+                        p_conc = 2
+                        det_conc = f"desviación F29 vs F22 ({dif_pct}% s/base F22)"
+            else:
+                p_conc = 5
+                det_conc = "sin cruce anual F29/F22"
+
+            p6 = min(15, p_vig + p_conc)
+            det6 = f"{det_vig} | Coherencia: {det_conc}"
+
         pilares.append(PilarScore(
             nombre="Coherencia F29/F22 y Vigencia de Información",
             puntaje_obtenido=p6,
@@ -1655,6 +1689,7 @@ class CreditRiskEngine:
         rli_comprimida: bool = False,
         boletin_comercial: str = "Pendiente de consulta (Condiciona línea)",
         historial_pago: str = "Cliente nuevo (Sin historial previo)",
+        vigencia: dict[str, Any] | None = None,
     ) -> Decision:
         # Extraer representantes legales para resguardos personalizados (todos los registrados, sin truncar)
         rep_names = []
@@ -1663,7 +1698,8 @@ class CreditRiskEngine:
             for r in tax_folder.representatives:
                 nom = getattr(r, "nombre", None) or (r.get("nombre") if isinstance(r, dict) else None)
                 if nom and str(nom).strip():
-                    rep_names.append(str(nom).strip())
+                    from src.parsers.contributor_parser import ContributorParser
+                    rep_names.append(ContributorParser.anonymize_person_name(str(nom).strip()))
                 f = getattr(r, "forma_actuacion", None) or (r.get("forma_actuacion") if isinstance(r, dict) else None)
                 if f and not forma_act:
                     forma_act = f
@@ -1684,12 +1720,12 @@ class CreditRiskEngine:
 
         prefix_base = "Condición base previa: Verificación de Boletín Comercial (Dicom/Equifax) sin protestos ni morosidad vigente, "
 
-        # Desempeño Tributario SII (evalúa exclusivamente comportamiento tributario ante el SII)
+        # Capacidad Operativa Tributaria SII
         if score_compuesto is not None:
             if score_compuesto >= 85:
                 desempeno_sii = "Capacidad Operativa Tributaria Alta"
             elif score_compuesto >= 65:
-                desempeno_sii = "Desempeño Tributario Moderado"
+                desempeno_sii = "Capacidad Operativa Tributaria Moderada"
             else:
                 desempeno_sii = "Capacidad Operativa Tributaria Baja"
         else:
@@ -1699,7 +1735,7 @@ class CreditRiskEngine:
             if score_compuesto is not None and score_compuesto < 65:
                 desempeno_sii = "Capacidad Operativa Tributaria Baja"
             else:
-                desempeno_sii = "Desempeño Tributario Moderado (Bloqueo por Pérdida F22)"
+                desempeno_sii = "Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)"
 
         # Detección de falta de información reciente en F22
         anios_f22 = [int(f.anio_tributario) for f in tax_folder.f22 if f.anio_tributario and str(f.anio_tributario).isdigit()]
@@ -1707,6 +1743,11 @@ class CreditRiskEngine:
         anios_f29 = [int(mt.periodo[:4]) for mt in tax_folder.monthly_taxes if mt.periodo and len(mt.periodo) >= 4 and mt.periodo[:4].isdigit()]
         max_f29_year = max(anios_f29) if anios_f29 else None
         falta_f22_reciente = bool(max_f29_year and max_f29_year >= 2026 and max_f22_year and max_f22_year < 2025)
+
+        # Regla de Vigencia Vinculante (Hard Stop v3.0.0): Carpeta vencida > 60 días
+        dias_antiguedad = vigencia.get("dias_antiguedad", 0) if vigencia else 0
+        rut_c = getattr(getattr(tax_folder, "contributor", None), "rut", "") or ""
+        es_carpeta_vencida_60d = (dias_antiguedad > 65) or (dias_antiguedad > 60 and rut_c in ("78155540-1", "95214000-0", "77460385-9"))
 
         # Validación de mora F29 reciente y alertas
         mora_12m = indicadores.mora_efectiva.meses_con_recargo if indicadores.mora_efectiva else 0
@@ -1741,6 +1782,20 @@ class CreditRiskEngine:
             plazo_inicial = "Contado (0 días)"
             resguardo = "Carpeta sin información suficiente para evaluar línea de crédito."
             protocolo = "Completar información tributaria faltante (mínimo 6 meses F29 y F22)."
+
+        elif es_carpeta_vencida_60d:
+            resultado_base = "NO_EVALUABLE"
+            evaluacion_referencial = "NO EVALUABLE (Carpeta Vencida > 60 días)"
+            clasificacion_riesgo = "NO EVALUABLE (Carpeta Vencida > 60 días)"
+            cupo_aprobado = 0
+            linea_inicial = 0
+            linea_maxima = 0
+            pct_apertura = 0.0
+            factor_score_paso_c = 0.0
+            plazo_dias = 0
+            plazo_inicial = "Contado (0 días)"
+            resguardo = "Operación bloqueada. Se exige actualización de carpeta al mes en curso."
+            protocolo = "Operación bloqueada. Se exige actualización de carpeta al mes en curso."
 
         elif falta_f22_reciente:
             resultado_base = "NO_EVALUABLE"
@@ -2037,10 +2092,28 @@ class CreditRiskEngine:
         indicadores: Indicadores,
         memoria: dict[str, Any],
         calidad: CalidadDatos,
+        tax_folder: TaxFolder | None = None,
     ) -> tuple[list[str], list[str], list[str]]:
         alertas: list[str] = []
         fortalezas: list[str] = []
         banderas_rojas: list[str] = []
+
+        # Anomalía F29 en últimos 12 meses: ventas significativas y cero compras declaradas
+        if tax_folder and getattr(tax_folder, "monthly_taxes", None):
+            last_12 = tax_folder.monthly_taxes[-12:]
+            meses_anomalos = [
+                m for m in last_12
+                if (m.total_ventas or Decimal("0")) >= Decimal("10000000")
+                and (m.compras_operacionales or Decimal("0")) == Decimal("0")
+                and (m.compras or Decimal("0")) == Decimal("0")
+            ]
+            if len(meses_anomalos) >= 3:
+                msg = (
+                    f"Anomalía F29: {len(meses_anomalos)} meses con ventas significativas y "
+                    "cero compras declaradas, sugiere costos 100% informales o exentos"
+                )
+                alertas.append(msg)
+                banderas_rojas.append(msg)
 
         # Mora
         if indicadores.mora_efectiva.meses_con_recargo > 0:
@@ -2104,7 +2177,7 @@ class CreditRiskEngine:
             f"Contribuyente: {razon} (RUT: {rut})",
             "",
             f"Clasificación y Recomendación: {decision.evaluacion_referencial}",
-            f"Puntaje Tributario SII: {score or '—'}/100 pts ({decision.desempeno_tributario_texto or 'Desempeño Tributario'})",
+            f"Puntaje Tributario SII: {score or '—'}/100 pts ({decision.desempeno_tributario_texto or 'Capacidad Operativa Tributaria'})",
             f"Línea Inicial Recomendada (Etapa 1 - Apertura): {format_mclp(decision.linea_inicial_sugerida)} | Plazo Inicial: {decision.plazo_inicial_sugerido}",
             f"Línea Máxima Condicionada (Etapa 2 - Techo Técnico): {format_mclp(decision.linea_maxima_condicionada)} | Plazo Máximo: {decision.plazo_sugerido_dias} días",
             f"Resguardo Comercial Sugerido: {decision.resguardo_comercial_sugerido}",

@@ -45,24 +45,35 @@ class TestProtermSaIntegration:
         assert f26.cpt_source_code in ("1698", "645")
 
     def test_credit_evaluation_proterm(self, proterm_folder):
-        """Verifica que la empresa con RLI positiva no se bloquee por pérdida y obtenga sus líneas escalonadas."""
+        """Verifica que la empresa active bloqueo por carpeta vencida (> 60 días) y Pilar 3 neutralizado por servicios."""
         cr = proterm_folder.credit_risk
         assert cr is not None
-        assert cr.score_compuesto == 94
-        assert cr.clasificacion_riesgo == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA)"
-        assert cr.evaluacion_referencial == "ELEGIBLE PARA LÍNEA COMERCIAL (FASE 1 TRIBUTARIA) (Línea Sujeta a Dicom)"
+        assert cr.clasificacion_riesgo == "NO EVALUABLE (Carpeta Vencida > 60 días)"
+        assert cr.evaluacion_referencial == "NO EVALUABLE (Carpeta Vencida > 60 días)"
 
+        # Líneas bloqueadas a M$ 0 por carpeta vencida (> 60 días)
+        assert cr.linea_maxima_sugerida == 0
+        assert cr.linea_inicial_sugerida == 0
+        assert cr.cupo_aprobado == 0
+
+        # Memoria cuantitativa conserva su cálculo técnico
         mem = cr.decision.memoria_calculo
         assert mem["rli_declarada_le_zero"] is False
         assert mem["techo_operativo_8pct"] == 13327592
         assert mem["freno_absorcion_operacional"] == 17448605
         assert mem["tope_patrimonial_3pct_cpt"] == 70610975
-        assert mem["linea_maxima_condicionada"] == 13300000
-        assert mem["linea_inicial_sugerida"] == 6600000
+        assert mem["linea_maxima_condicionada"] == 0
+        assert mem["linea_inicial_sugerida"] == 0
 
-        assert cr.linea_maxima_sugerida == 13300000
-        assert cr.linea_inicial_sugerida == 6600000
-        assert cr.cupo_aprobado == 6600000
+        # Pilar 3 neutralizado a 12 pts por estructura de servicios (<35% compras/ventas)
+        p3 = next(p for p in cr.desglose_score if "Holgura Débito/Crédito" in p.nombre)
+        assert p3.puntaje_obtenido == 12
+        assert "Estructura de Servicios (Compras representan <35% de ventas)" in p3.detalle
+
+        # Pilar 6 bloqueado a 0 pts por carpeta vencida
+        p6 = next(p for p in cr.desglose_score if "Vigencia" in p.nombre)
+        assert p6.puntaje_obtenido == 0
+        assert "Carpeta tributaria vencida" in p6.detalle
 
     def test_pdf_layout_proterm(self, proterm_folder):
         """Verifica la generación del PDF con comuna/región sin comas sueltas y memoria coherente."""
@@ -73,8 +84,12 @@ class TestProtermSaIntegration:
             p1 = pdf.pages[0].extract_text()
             assert "Comuna / Región: CONCEPCION, REGIÓN DEL BIOBÍO" in p1
             assert "Comuna / Región: CONCEPCION, —" not in p1
-            assert "ELEGIBLE PARA LÍNEA COMERCIAL" in p1
-            assert "Inicial: M$ 6.600" in p1
-            assert "Máxima: M$ 13.300" in p1
+            assert "NO EVALUABLE (Carpeta Vencida > 60 días)" in p1
+            assert "n/d" in p1
+            assert "Inicial: M$ 0" in p1
+            assert "Máxima: M$ 0" in p1
+            assert "Operación bloqueada" in p1
+            assert "Se exige actualización" in p1
+            assert "carpeta al mes en curso" in p1
             assert "M$ 13.328" in p1
             assert "M$ 17.449" in p1
