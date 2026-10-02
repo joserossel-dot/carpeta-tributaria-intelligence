@@ -1,7 +1,7 @@
 {
   "contributor": {
-    "rut": "95214000-0",
-    "razon_social": "NUTRICION Y ALIMENTOS SOCIEDAD ANONIMA",
+    "rut": "96666666-8",
+    "razon_social": "EMPRESA C S.A.",
     "fecha_generacion": "15/06/2026 11:44",
     "fecha_inicio_actividades": "01/01/1993",
     "domicilio": "AVDA LO ESPEJO 01565Bodeg DEPTO G14 1437-1444, LO ESPEJO, SANTIAGO",
@@ -12,24 +12,24 @@
   },
   "representatives": [
     {
-      "rut": "4506112-4",
-      "nombre": "HECTOR GABRIEL RIOS LARRAIN",
+      "rut": "11111111-1",
+      "nombre": "REPRESENTANTE 1",
       "cargo": null,
       "fecha_incorporacion": "07/09/1983",
       "forma_actuacion": "En conjunto",
       "vigente": true
     },
     {
-      "rut": "4509405-7",
-      "nombre": "MARIA GLORIA RIOS LARRAIN",
+      "rut": "22222222-2",
+      "nombre": "REPRESENTANTE 2",
       "cargo": null,
       "fecha_incorporacion": "07/09/1983",
       "forma_actuacion": "En conjunto",
       "vigente": true
     },
     {
-      "rut": "10958716-8",
-      "nombre": "JOSE LUIS RODRIGUEZ CASANUEVA",
+      "rut": "15555555-6",
+      "nombre": "REPRESENTANTE 3",
       "cargo": null,
       "fecha_incorporacion": "21/06/1994",
       "forma_actuacion": "En conjunto",
@@ -4760,24 +4760,24 @@
     "socios": [],
     "representantes": [
       {
-        "rut": "4506112-4",
-        "nombre": "HECTOR GABRIEL RIOS LARRAIN",
+        "rut": "11111111-1",
+        "nombre": "REPRESENTANTE 1",
         "cargo": null,
         "fecha_incorporacion": "07/09/1983",
         "forma_actuacion": "En conjunto",
         "vigente": true
       },
       {
-        "rut": "4509405-7",
-        "nombre": "MARIA GLORIA RIOS LARRAIN",
+        "rut": "22222222-2",
+        "nombre": "REPRESENTANTE 2",
         "cargo": null,
         "fecha_incorporacion": "07/09/1983",
         "forma_actuacion": "En conjunto",
         "vigente": true
       },
       {
-        "rut": "10958716-8",
-        "nombre": "JOSE LUIS RODRIGUEZ CASANUEVA",
+        "rut": "15555555-6",
+        "nombre": "REPRESENTANTE 3",
         "cargo": null,
         "fecha_incorporacion": "21/06/1994",
         "forma_actuacion": "En conjunto",
@@ -4966,16 +4966,16 @@
           "nombre": "Coherencia F29/F22 y Vigencia de Información",
           "puntaje_obtenido": 0,
           "puntaje_maximo": 15,
-          "detalle": "Carpeta tributaria vencida (108d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+          "detalle": "Carpeta tributaria vencida (109d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
         }
       ],
       "vigencia_datos": {
         "fecha_emision": "15/06/2026 11:44",
         "ultimo_periodo": "2026-04",
         "meses_desfase": 2,
-        "dias_antiguedad": 108,
+        "dias_antiguedad": 109,
         "estado_antiguedad": "Exige actualizar > 60d",
-        "fecha_evaluacion": "01/10/2026",
+        "fecha_evaluacion": "02/10/2026",
         "nivel_confianza": "MEDIA",
         "alerta": null
       },
@@ -4997,7 +4997,7 @@
         {
           "parametro": "RUT e Inicio de Actividades Vigente",
           "estado": "CUMPLE",
-          "detalle": "RUT 95214000-0 con inicio registrado (01/01/1993)"
+          "detalle": "RUT 96666666-8 con inicio registrado (01/01/1993)"
         },
         {
           "parametro": "Representantes Legales Identificados",
@@ -5033,7 +5033,7 @@
       "Respaldo patrimonial sólido: CPT positivo de $3,625,109,624 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: NUTRICION Y ALIMENTOS SOCIEDAD ANONIMA (RUT: 95214000-0)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 523.885\n- Techo Operativo Proveedor (8%): M$ 41.911\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 134.558\n- Freno Flujo Operacional (25%): M$ 14.418\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 3.625.110\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Freno por Absorción Operacional (min(15% Spread F29: $20,183,658, 25% RLI Mensualizada: $14,417,824)): reduce techo de compras de $41,910,786 a $14,417,824\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: EMPRESA C S.A. (RUT: 96666666-8)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 523.885\n- Techo Operativo Proveedor (8%): M$ 41.911\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 134.558\n- Freno Flujo Operacional (25%): M$ 14.418\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 3.625.110\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Freno por Absorción Operacional (min(15% Spread F29: $20,183,658, 25% RLI Mensualizada: $14,417,824)): reduce techo de compras de $41,910,786 a $14,417,824\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 77/100 pts (Capacidad Operativa Tributaria Moderada).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
     "veredicto": "NO EVALUABLE (Carpeta Vencida > 60 días)",
     "evaluacion_referencial": "NO EVALUABLE (Carpeta Vencida > 60 días)",
     "clasificacion_riesgo": "NO EVALUABLE (Carpeta Vencida > 60 días)",
@@ -5147,16 +5147,16 @@
         "nombre": "Coherencia F29/F22 y Vigencia de Información",
         "puntaje_obtenido": 0,
         "puntaje_maximo": 15,
-        "detalle": "Carpeta tributaria vencida (108d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+        "detalle": "Carpeta tributaria vencida (109d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
       }
     ],
     "vigencia_datos": {
       "fecha_emision": "15/06/2026 11:44",
       "ultimo_periodo": "2026-04",
       "meses_desfase": 2,
-      "dias_antiguedad": 108,
+      "dias_antiguedad": 109,
       "estado_antiguedad": "Exige actualizar > 60d",
-      "fecha_evaluacion": "01/10/2026",
+      "fecha_evaluacion": "02/10/2026",
       "nivel_confianza": "MEDIA",
       "alerta": null
     },
@@ -5178,7 +5178,7 @@
       {
         "parametro": "RUT e Inicio de Actividades Vigente",
         "estado": "CUMPLE",
-        "detalle": "RUT 95214000-0 con inicio registrado (01/01/1993)"
+        "detalle": "RUT 96666666-8 con inicio registrado (01/01/1993)"
       },
       {
         "parametro": "Representantes Legales Identificados",
@@ -5207,7 +5207,7 @@
     }
   },
   "metadata": {
-    "source_file": "/Users/josealfonsorossel/Downloads/Carpeta Tributaria Personalizada NUTRISA.pdf",
+    "source_file": "tests/fixtures/cases/Carpeta Tributaria Personalizada EMPRESA C S.A..pdf",
     "pages": 27,
     "processing_time": 15.425
   }

@@ -14,35 +14,31 @@ FIXTURES_DIR = Path(__file__).parent / "fixtures" / "cases"
 
 BENCHMARK_CASES = [
     {
-        "name": "ALVAL SPA",
+        "name": "EMPRESA A SPA",
         "key": "alval_spa",
-        "rut": "76293939-8",
-        "path": Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (8).pdf"),
+        "rut": "77777777-7",
+        "path": FIXTURES_DIR / "empresa_a.pdf",
         "has_debito": True,
     },
     {
-        "name": "NUTRISA",
+        "name": "EMPRESA C S.A.",
         "key": "nutrisa",
-        "rut": "95214000-0",
-        "path": Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria Personalizada NUTRISA.pdf"),
+        "rut": "96666666-8",
+        "path": FIXTURES_DIR / "empresa_c.pdf",
         "has_debito": True,
     },
     {
-        "name": "PROTERM S.A.",
+        "name": "EMPRESA B S.A.",
         "key": "proterm_sa",
-        "rut": "78155540-1",
-        "path": Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (4).pdf"),
+        "rut": "78888888-0",
+        "path": FIXTURES_DIR / "empresa_b.pdf",
         "has_debito": True,
     },
     {
-        "name": "CLINICA HYPERBARIC SPA",
+        "name": "EMPRESA D SPA",
         "key": "clinica_hyperbaric",
-        "rut": "77460385-9",
-        "path": (
-            Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria.CLINICA HYPERBARIC.pdf")
-            if Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria.CLINICA HYPERBARIC.pdf").exists()
-            else Path("examples/Carpeta Tributaria.CLINICA HYPERBARIC.pdf")
-        ),
+        "rut": "76999999-K",
+        "path": FIXTURES_DIR / "empresa_d.pdf",
         "has_debito": False,
     },
 ]

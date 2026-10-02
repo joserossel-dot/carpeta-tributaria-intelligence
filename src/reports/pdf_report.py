@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import io
 import re
@@ -527,11 +529,11 @@ class PDFReport:
         else:
             alertas_p.append(Paragraph("• 🟢 <i>Sin alertas críticas detectadas en declaraciones tributarias.</i>", body_style))
 
-        if dias_emision is not None and dias_emision > 45:
+        if dias_emision is not None and dias_emision > 60:
             alertas_p.append(
                 Paragraph(
-                    f"• <b>Condición Suspensiva de Vigencia:</b> Carpeta emitida hace {dias_emision} días (> 45 días). "
-                    "Se exige actualización de carpeta tributaria antes del desembolso si supera 60 días.",
+                    f"• <b>Condición Suspensiva de Vigencia:</b> Carpeta emitida hace {dias_emision} días (> 60 días). "
+                    "Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
                     body_style,
                 )
             )

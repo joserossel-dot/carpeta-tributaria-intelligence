@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import time
 from pathlib import Path
-from typing import BinaryIO
+from typing import Any, BinaryIO
 
 from src.analyzers.tax_analyzer import TaxAnalyzer
 from src.credit.credit_risk_engine import CreditRiskEngine

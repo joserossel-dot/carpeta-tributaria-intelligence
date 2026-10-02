@@ -3,29 +3,26 @@ from pathlib import Path
 import pdfplumber
 import pytest
 
-from src.core.tax_folder_engine import TaxFolderEngine
+from src.models.tax_folder import TaxFolder
+from src.credit.credit_risk_engine import CreditRiskEngine
 from src.reports.pdf_report import PDFReport
 
-_PROTERM_CANDIDATES = [
-    Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (4).pdf"),
-    Path("examples/Carpeta_Tributaria_Regular (4).pdf"),
-]
-PROTERM_PDF = next((p for p in _PROTERM_CANDIDATES if p.exists()), Path("examples/Carpeta_Tributaria_Regular (4).pdf"))
+PROTERM_FIXTURE = Path(__file__).parent / "fixtures" / "cases" / "proterm_sa.json"
 
 
-@pytest.mark.skipif(not PROTERM_PDF.exists(), reason="PDF de prueba PROTERM S.A. no disponible")
 class TestProtermSaIntegration:
     @pytest.fixture(scope="class")
     def proterm_folder(self):
-        engine = TaxFolderEngine(str(PROTERM_PDF))
-        return engine.parse()
+        folder = TaxFolder.model_validate_json(PROTERM_FIXTURE.read_text(encoding="utf-8"))
+        folder.credit_risk = CreditRiskEngine().calculate(folder)
+        return folder
 
     def test_contributor_info(self, proterm_folder):
         """Verifica la extracción limpia del contribuyente, comuna y región del Biobío."""
         contrib = proterm_folder.contributor
         assert contrib is not None
-        assert contrib.rut == "78155540-1"
-        assert contrib.razon_social == "PROTERM S.A."
+        assert contrib.rut == "78888888-0"
+        assert contrib.razon_social == "EMPRESA B S.A."
         assert contrib.comuna == "CONCEPCION"
         assert contrib.region == "REGIÓN DEL BIOBÍO"
         assert "AVDA. INGLESA 55 PEDRO DE VALDIVIA" in (contrib.domicilio or "")
@@ -82,6 +79,8 @@ class TestProtermSaIntegration:
 
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             p1 = pdf.pages[0].extract_text()
+            assert "EMPRESA B S.A." in p1
+            assert "78888888-0" in p1
             assert "Comuna / Región: CONCEPCION, REGIÓN DEL BIOBÍO" in p1
             assert "Comuna / Región: CONCEPCION, —" not in p1
             assert "NO EVALUABLE (Carpeta Vencida > 60 días)" in p1

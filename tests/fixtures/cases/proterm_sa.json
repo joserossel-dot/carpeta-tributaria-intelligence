@@ -1,7 +1,7 @@
 {
   "contributor": {
-    "rut": "78155540-1",
-    "razon_social": "PROTERM S.A.",
+    "rut": "78888888-0",
+    "razon_social": "EMPRESA B S.A.",
     "fecha_generacion": "03/06/2026 18:39",
     "fecha_inicio_actividades": "01/01/1993",
     "domicilio": "AVDA. INGLESA 55 PEDRO DE VALDIVIA, CONCEPCION, CONCEPCION",
@@ -12,16 +12,16 @@
   },
   "representatives": [
     {
-      "rut": "6394243-K",
-      "nombre": "MANFRED HANS HELLWIG FRANCKENHOFF",
+      "rut": "11111111-1",
+      "nombre": "REPRESENTANTE 1",
       "cargo": null,
       "fecha_incorporacion": "26/01/2000",
       "forma_actuacion": "Cualquiera",
       "vigente": true
     },
     {
-      "rut": "12933599-8",
-      "nombre": "CHRISTINE BEATRICE WARD PEREZ-CANTO",
+      "rut": "22222222-2",
+      "nombre": "REPRESENTANTE 2",
       "cargo": null,
       "fecha_incorporacion": "13/04/2017",
       "forma_actuacion": "Cualquiera",
@@ -7300,48 +7300,48 @@
     "capital": null,
     "socios": [
       {
-        "rut": "77840785-K",
-        "nombre": "INVERSIONES MAITEN SPA",
+        "rut": "76111111-1",
+        "nombre": "SOCIO ENTIDAD 1 SPA",
         "participacion": "5%"
       },
       {
-        "rut": "77840769-8",
-        "nombre": "INVERSIONES MANIO SPA",
+        "rut": "76222222-2",
+        "nombre": "SOCIO ENTIDAD 2 SPA",
         "participacion": "5%"
       },
       {
-        "rut": "76312543-2",
-        "nombre": "INVERSIONES RAULI LIMITADA",
+        "rut": "76333333-3",
+        "nombre": "SOCIO ENTIDAD 3 LTDA",
         "participacion": "5%"
       },
       {
-        "rut": "76312541-6",
-        "nombre": "INVERSIONES TRONADOR LIMITADA",
+        "rut": "76444444-4",
+        "nombre": "SOCIO ENTIDAD 4 LTDA",
         "participacion": "15%"
       },
       {
-        "rut": "76312539-4",
-        "nombre": "INVERSIONES HORNOPIREN LIMITADA",
+        "rut": "76555555-5",
+        "nombre": "SOCIO ENTIDAD 5 LTDA",
         "participacion": "15%"
       },
       {
-        "rut": "76139177-1",
-        "nombre": "INVERSIONES LANIN LIMITADA",
+        "rut": "76666666-6",
+        "nombre": "SOCIO ENTIDAD 6 LTDA",
         "participacion": "55%"
       }
     ],
     "representantes": [
       {
-        "rut": "6394243-K",
-        "nombre": "MANFRED HANS HELLWIG FRANCKENHOFF",
+        "rut": "11111111-1",
+        "nombre": "REPRESENTANTE 1",
         "cargo": null,
         "fecha_incorporacion": "26/01/2000",
         "forma_actuacion": "Cualquiera",
         "vigente": true
       },
       {
-        "rut": "12933599-8",
-        "nombre": "CHRISTINE BEATRICE WARD PEREZ-CANTO",
+        "rut": "22222222-2",
+        "nombre": "REPRESENTANTE 2",
         "cargo": null,
         "fecha_incorporacion": "13/04/2017",
         "forma_actuacion": "Cualquiera",
@@ -7528,16 +7528,16 @@
           "nombre": "Coherencia F29/F22 y Vigencia de Información",
           "puntaje_obtenido": 0,
           "puntaje_maximo": 15,
-          "detalle": "Carpeta tributaria vencida (120d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+          "detalle": "Carpeta tributaria vencida (121d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
         }
       ],
       "vigencia_datos": {
         "fecha_emision": "03/06/2026 18:39",
         "ultimo_periodo": "2026-04",
         "meses_desfase": 2,
-        "dias_antiguedad": 120,
+        "dias_antiguedad": 121,
         "estado_antiguedad": "Exige actualizar > 60d",
-        "fecha_evaluacion": "01/10/2026",
+        "fecha_evaluacion": "02/10/2026",
         "nivel_confianza": "MEDIA",
         "alerta": null
       },
@@ -7559,7 +7559,7 @@
         {
           "parametro": "RUT e Inicio de Actividades Vigente",
           "estado": "CUMPLE",
-          "detalle": "RUT 78155540-1 con inicio registrado (01/01/1993)"
+          "detalle": "RUT 78888888-0 con inicio registrado (01/01/1993)"
         },
         {
           "parametro": "Representantes Legales Identificados",
@@ -7593,7 +7593,7 @@
       "Respaldo patrimonial sólido: CPT positivo de $2,353,699,152 CLP"
     ],
     "banderas_rojas": [],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: PROTERM S.A. (RUT: 78155540-1)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 71/100 pts (Capacidad Operativa Tributaria Moderada)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 166.595\n- Techo Operativo Proveedor (8%): M$ 13.328\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 355.746\n- Freno Flujo Operacional (25%): M$ 17.449\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 2.353.699\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 71/100 pts (Capacidad Operativa Tributaria Moderada).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: EMPRESA B S.A. (RUT: 78888888-0)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 71/100 pts (Capacidad Operativa Tributaria Moderada)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 166.595\n- Techo Operativo Proveedor (8%): M$ 13.328\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 355.746\n- Freno Flujo Operacional (25%): M$ 17.449\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 2.353.699\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 71/100 pts (Capacidad Operativa Tributaria Moderada).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
     "veredicto": "NO EVALUABLE (Carpeta Vencida > 60 días)",
     "evaluacion_referencial": "NO EVALUABLE (Carpeta Vencida > 60 días)",
     "clasificacion_riesgo": "NO EVALUABLE (Carpeta Vencida > 60 días)",
@@ -7705,16 +7705,16 @@
         "nombre": "Coherencia F29/F22 y Vigencia de Información",
         "puntaje_obtenido": 0,
         "puntaje_maximo": 15,
-        "detalle": "Carpeta tributaria vencida (120d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+        "detalle": "Carpeta tributaria vencida (121d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
       }
     ],
     "vigencia_datos": {
       "fecha_emision": "03/06/2026 18:39",
       "ultimo_periodo": "2026-04",
       "meses_desfase": 2,
-      "dias_antiguedad": 120,
+      "dias_antiguedad": 121,
       "estado_antiguedad": "Exige actualizar > 60d",
-      "fecha_evaluacion": "01/10/2026",
+      "fecha_evaluacion": "02/10/2026",
       "nivel_confianza": "MEDIA",
       "alerta": null
     },
@@ -7736,7 +7736,7 @@
       {
         "parametro": "RUT e Inicio de Actividades Vigente",
         "estado": "CUMPLE",
-        "detalle": "RUT 78155540-1 con inicio registrado (01/01/1993)"
+        "detalle": "RUT 78888888-0 con inicio registrado (01/01/1993)"
       },
       {
         "parametro": "Representantes Legales Identificados",
@@ -7765,7 +7765,7 @@
     }
   },
   "metadata": {
-    "source_file": "/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (4).pdf",
+    "source_file": "tests/fixtures/cases/empresa_b.pdf",
     "pages": 44,
     "processing_time": 26.644
   }

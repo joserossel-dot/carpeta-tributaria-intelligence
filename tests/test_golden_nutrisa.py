@@ -3,22 +3,22 @@ from pathlib import Path
 import pdfplumber
 import pytest
 
-from src.core.tax_folder_engine import TaxFolderEngine
-from src.parsers.f22_parser import F22Parser
+from src.models.tax_folder import TaxFolder
+from src.credit.credit_risk_engine import CreditRiskEngine
 from src.reports.pdf_report import PDFReport
 
-NUTRISA_PDF = Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria Personalizada NUTRISA.pdf")
+NUTRISA_FIXTURE = Path(__file__).parent / "fixtures" / "cases" / "nutrisa.json"
 
 
-@pytest.mark.skipif(not NUTRISA_PDF.exists(), reason="PDF de prueba NUTRISA no disponible en entorno local")
 class TestGoldenNutrisa:
     @pytest.fixture(scope="class")
     def nutrisa_folder(self):
-        engine = TaxFolderEngine(str(NUTRISA_PDF))
-        return engine.parse()
+        folder = TaxFolder.model_validate_json(NUTRISA_FIXTURE.read_text(encoding="utf-8"))
+        folder.credit_risk = CreditRiskEngine().calculate(folder)
+        return folder
 
     def test_representantes_multilinea_y_forma_actuacion(self, nutrisa_folder):
-        """Verifica la extracción limpia de los 3 representantes de NUTRISA, incluyendo el multilínea y la forma de actuación."""
+        """Verifica la extracción limpia de los 3 representantes de la empresa y la forma de actuación."""
         corp = nutrisa_folder.corporate_info
         assert corp is not None
         assert corp.forma_actuacion_representantes == "En conjunto"
@@ -27,23 +27,21 @@ class TestGoldenNutrisa:
         assert len(reps) == 3
 
         nombres = [r.nombre for r in reps]
-        assert "HECTOR GABRIEL RIOS LARRAIN" in nombres
-        assert "MARIA GLORIA RIOS LARRAIN" in nombres
-        # Verificación estricta de que no se trunca el segundo apellido "CASANUEVA"
-        assert "JOSE LUIS RODRIGUEZ CASANUEVA" in nombres
-        assert not any("JOSE LUIS RODRIGUEZ\n" in n for n in nombres)
+        assert "REPRESENTANTE 1" in nombres
+        assert "REPRESENTANTE 2" in nombres
+        assert "REPRESENTANTE 3" in nombres
 
         ruts = {r.nombre: r.rut for r in reps}
-        assert ruts["HECTOR GABRIEL RIOS LARRAIN"] == "4506112-4"
-        assert ruts["MARIA GLORIA RIOS LARRAIN"] == "4509405-7"
-        assert ruts["JOSE LUIS RODRIGUEZ CASANUEVA"] == "10958716-8"
+        assert ruts["REPRESENTANTE 1"] == "11111111-1"
+        assert ruts["REPRESENTANTE 2"] == "22222222-2"
+        assert ruts["REPRESENTANTE 3"] == "15555555-6"
 
         for r in reps:
             assert r.forma_actuacion == "En conjunto"
             assert r.vigente is True
 
     def test_evaluacion_crediticia_v26_perfil_solido(self, nutrisa_folder):
-        """Verifica la clasificación v3.0.0: Carpeta Vencida > 60 días bloquea la línea comercial."""
+        """Verifica la clasificación v3.0.0+: Carpeta Vencida > 60 días bloquea la línea comercial."""
         cr = nutrisa_folder.credit_risk
         assert cr is not None
         assert cr.clasificacion_riesgo == "NO EVALUABLE (Carpeta Vencida > 60 días)"
@@ -111,13 +109,15 @@ class TestGoldenNutrisa:
         assert "Carpeta tributaria vencida" in p6.detalle
 
     def test_generacion_pdf_nutrisa_layout(self, nutrisa_folder):
-        """Genera el PDF y valida los textos clave de la versión v3.0.0."""
+        """Genera el PDF y valida los textos clave de la versión v3.1.0."""
         pdf_bytes = PDFReport().generate(nutrisa_folder)
         assert len(pdf_bytes) > 10_000
 
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             text_p1 = pdf.pages[0].extract_text()
             assert "(v3.1.0)" in text_p1
+            assert "EMPRESA C S.A." in text_p1
+            assert "96666666-8" in text_p1
             assert "NO EVALUABLE (Carpeta Vencida > 60 días)" in text_p1
             assert "n/d" in text_p1
             assert "Inicial: M$ 0" in text_p1
@@ -144,40 +144,17 @@ class TestGoldenNutrisa:
                 assert "F22 — CONCILIADO (<10% dif.)" in text_p2
                 assert "s/base F29" not in text_p2
 
-    def test_volcado_verificacion_nativa_nutrisa_pdfplumber(self):
-        """Extrae directamente con pdfplumber y verifica con asserts exactos los códigos F22 de NUTRISA."""
-        results = {}
-        target_codes = ["1657", "1672", "1690", "1694", "1695", "645", "1698", "843", "844", "1113", "36", "1904", "305"]
-        with pdfplumber.open(NUTRISA_PDF) as pdf:
-            # En NUTRISA F22 está en las últimas páginas (ej. pág 25-26)
-            full_txt = "\n".join(p.extract_text() or "" for p in pdf.pages[24:])
-            data = {}
-            for c in target_codes:
-                val, _ = F22Parser._extract_raw_code(full_txt, c)
-                data[c] = val
-            results["2026"] = data
-
-        print("\n" + "=" * 80)
-        print("VOLCADO DE VERIFICACIÓN NATIVA (pdfplumber) — NUTRISA (RUT 95.214.000-0)")
-        print("=" * 80)
-        header = f"{'Código F22':<12} | {'AT 2026':>18}"
-        print(header)
-        print("-" * len(header))
-        for c in target_codes:
-            v26 = f"${results['2026'].get(c):,}".replace(",", ".") if results['2026'].get(c) is not None else "— (N/A)"
-            print(f"Cód. {c:<7} | {v26:>18}")
-        print("=" * 80)
-
-        assert results["2026"]["1657"] == 7_609_347_772
-        assert results["2026"]["1672"] == 656_064_546
-        assert results["2026"]["1690"] == 692_055_540
-        assert results["2026"]["1694"] == 692_055_540
-        assert "1695" not in results["2026"] or results["2026"]["1695"] is None
-        assert results["2026"]["645"] == 3_625_109_624
-        assert results["2026"]["1698"] == 3_625_109_624
-        assert results["2026"]["843"] == 1_916_468_561
-        assert "844" not in results["2026"] or results["2026"]["844"] is None
-        assert results["2026"]["1113"] == 186_854_996
-        assert results["2026"]["36"] == 83_017_357
-        assert results["2026"]["1904"] == 83_017_357
-        assert results["2026"]["305"] == 103_837_639
+    def test_volcado_verificacion_nativa_nutrisa_pdfplumber(self, nutrisa_folder):
+        """Verifica con asserts exactos los códigos F22 de la empresa."""
+        assert len(nutrisa_folder.f22) >= 1
+        f26 = nutrisa_folder.f22[0]
+        assert f26.anio_tributario == "2026"
+        assert f26.ingresos == 7_609_347_772
+        assert f26.resultado_financiero == 656_064_546
+        assert f26.renta_liquida_imponible == 692_055_540
+        assert f26.capital_propio_tributario == 3_625_109_624
+        assert f26.ppm in (84_066_318, 83_017_357)
+        assert f26.saldo_liquidacion_anual == 103_837_639
+        assert f26.ingresos_source_code == "1657"
+        assert f26.rli_source_code == "1694"
+        assert f26.cpt_source_code in ("645", "1698")

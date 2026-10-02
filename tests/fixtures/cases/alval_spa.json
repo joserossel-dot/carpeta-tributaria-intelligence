@@ -1,7 +1,7 @@
 {
   "contributor": {
-    "rut": "76293939-8",
-    "razon_social": "ALVAL SPA",
+    "rut": "77777777-7",
+    "razon_social": "EMPRESA A SPA",
     "fecha_generacion": "27/07/2026 11:33",
     "fecha_inicio_actividades": "13/08/2013",
     "domicilio": "CAMINO RENCA LAMPA 9100 LT.10 a, PUDAHUEL",
@@ -12,16 +12,16 @@
   },
   "representatives": [
     {
-      "rut": "16369817-K",
-      "nombre": "IGNACIO JOSE ALLENDES CORREA",
+      "rut": "11111111-1",
+      "nombre": "REPRESENTANTE 1",
       "cargo": null,
       "fecha_incorporacion": "13/08/2013",
       "forma_actuacion": "Cualquiera",
       "vigente": true
     },
     {
-      "rut": "16371206-7",
-      "nombre": "DIEGO JOSE VALENZUELA INFANTE",
+      "rut": "22222222-2",
+      "nombre": "REPRESENTANTE 2",
       "cargo": null,
       "fecha_incorporacion": "13/08/2013",
       "forma_actuacion": "Cualquiera",
@@ -8314,38 +8314,38 @@
     "capital": null,
     "socios": [
       {
-        "rut": "77810798-8",
-        "nombre": "DAB SPA",
+        "rut": "76111111-1",
+        "nombre": "SOCIO ENTIDAD 1 SPA",
         "participacion": "49%"
       },
       {
-        "rut": "77810767-8",
-        "nombre": "AG SPA",
+        "rut": "76222222-2",
+        "nombre": "SOCIO ENTIDAD 2 SPA",
         "participacion": "49%"
       },
       {
-        "rut": "16371206-7",
-        "nombre": "DIEGO JOSE VALENZUELA INFANTE",
+        "rut": "22222222-2",
+        "nombre": "REPRESENTANTE 2",
         "participacion": "1%"
       },
       {
-        "rut": "16369817-K",
-        "nombre": "IGNACIO JOSE ALLENDES CORREA",
+        "rut": "11111111-1",
+        "nombre": "REPRESENTANTE 1",
         "participacion": "1%"
       }
     ],
     "representantes": [
       {
-        "rut": "16369817-K",
-        "nombre": "IGNACIO JOSE ALLENDES CORREA",
+        "rut": "11111111-1",
+        "nombre": "REPRESENTANTE 1",
         "cargo": null,
         "fecha_incorporacion": "13/08/2013",
         "forma_actuacion": "Cualquiera",
         "vigente": true
       },
       {
-        "rut": "16371206-7",
-        "nombre": "DIEGO JOSE VALENZUELA INFANTE",
+        "rut": "22222222-2",
+        "nombre": "REPRESENTANTE 2",
         "cargo": null,
         "fecha_incorporacion": "13/08/2013",
         "forma_actuacion": "Cualquiera",
@@ -8534,16 +8534,16 @@
           "nombre": "Coherencia F29/F22 y Vigencia de Información",
           "puntaje_obtenido": 0,
           "puntaje_maximo": 15,
-          "detalle": "Carpeta tributaria vencida (66d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+          "detalle": "Carpeta tributaria vencida (67d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
         }
       ],
       "vigencia_datos": {
         "fecha_emision": "27/07/2026 11:33",
         "ultimo_periodo": "2026-06",
         "meses_desfase": 1,
-        "dias_antiguedad": 66,
+        "dias_antiguedad": 67,
         "estado_antiguedad": "Exige actualizar > 60d",
-        "fecha_evaluacion": "01/10/2026",
+        "fecha_evaluacion": "02/10/2026",
         "nivel_confianza": "MEDIA",
         "alerta": null
       },
@@ -8565,7 +8565,7 @@
         {
           "parametro": "RUT e Inicio de Actividades Vigente",
           "estado": "CUMPLE",
-          "detalle": "RUT 76293939-8 con inicio registrado (13/08/2013)"
+          "detalle": "RUT 77777777-7 con inicio registrado (13/08/2013)"
         },
         {
           "parametro": "Representantes Legales Identificados",
@@ -8594,7 +8594,7 @@
       }
     },
     "alertas": [
-      "Alerta de Overtrading y Deterioro Multianual de Margen: Los ingresos crecieron +39.3% en 3 ejercicios (AT 2024 M$ 5.112.917 -> AT 2025 M$ 5.850.949 -> AT 2026 M$ 7.121.034) mientras la RLI cayó de M$ 230.292 (4.5%) a M$ 13.526 (0.2%) a -M$ 31.382 (-0.4%); Utilidad Contable Cód. 1672: +M$ 103.376. En F29, las compras superan a las ventas en 6 de los últimos 12 meses. El aumento del CPT de M$ 568.044 a M$ 1.756.915 constituye CPT incrementado sin respaldo en utilidades del ejercicio.",
+      "Alerta de Overtrading y Deterioro Multianual de Margen: Los ingresos crecieron +39.3% en 3 ejercicios (AT 2024 M$ 5.112.917 -> AT 2025 M$ 5.850.949 -> AT 2026 M$ 7.121.034) mientras la RLI cayó de M$ 230.292 (4.5%) a M$ 13.526 (0.2%) a -M$ 31.382 (-0.4%); Utilidad Contable Cód. 1672: +M$ 103.376. En F29, las compras superan a las ventas en 6 de los últimos 12 meses. El aumento del CPT de M$ 568.044 a M$ 1.756.915 constituye Variación positiva de CPT (origen y composición requieren verificación en EERR).",
       "F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)"
     ],
     "fortalezas": [
@@ -8602,9 +8602,9 @@
       "Respaldo patrimonial sólido: CPT positivo de $1,756,914,649 CLP"
     ],
     "banderas_rojas": [
-      "Alerta de Overtrading y Deterioro Multianual de Margen: Los ingresos crecieron +39.3% en 3 ejercicios (AT 2024 M$ 5.112.917 -> AT 2025 M$ 5.850.949 -> AT 2026 M$ 7.121.034) mientras la RLI cayó de M$ 230.292 (4.5%) a M$ 13.526 (0.2%) a -M$ 31.382 (-0.4%); Utilidad Contable Cód. 1672: +M$ 103.376. En F29, las compras superan a las ventas en 6 de los últimos 12 meses. El aumento del CPT de M$ 568.044 a M$ 1.756.915 constituye CPT incrementado sin respaldo en utilidades del ejercicio."
+      "Alerta de Overtrading y Deterioro Multianual de Margen: Los ingresos crecieron +39.3% en 3 ejercicios (AT 2024 M$ 5.112.917 -> AT 2025 M$ 5.850.949 -> AT 2026 M$ 7.121.034) mientras la RLI cayó de M$ 230.292 (4.5%) a M$ 13.526 (0.2%) a -M$ 31.382 (-0.4%); Utilidad Contable Cód. 1672: +M$ 103.376. En F29, las compras superan a las ventas en 6 de los últimos 12 meses. El aumento del CPT de M$ 568.044 a M$ 1.756.915 constituye Variación positiva de CPT (origen y composición requieren verificación en EERR)."
     ],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: ALVAL SPA (RUT: 76293939-8)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 62/100 pts (Capacidad Operativa Tributaria Baja)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 590.152\n- Techo Operativo Proveedor (8%): M$ 47.212\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 41.594\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 1.756.915\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n\n2. Condiciones Suspensivas y Banderas Rojas:\n- 🔴 Alerta de Overtrading y Deterioro Multianual de Margen: Los ingresos crecieron +39.3% en 3 ejercicios (AT 2024 M$ 5.112.917 -> AT 2025 M$ 5.850.949 -> AT 2026 M$ 7.121.034) mientras la RLI cayó de M$ 230.292 (4.5%) a M$ 13.526 (0.2%) a -M$ 31.382 (-0.4%); Utilidad Contable Cód. 1672: +M$ 103.376. En F29, las compras superan a las ventas en 6 de los últimos 12 meses. El aumento del CPT de M$ 568.044 a M$ 1.756.915 constituye CPT incrementado sin respaldo en utilidades del ejercicio.\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 62/100 pts (Capacidad Operativa Tributaria Baja).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: EMPRESA A SPA (RUT: 77777777-7)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 62/100 pts (Capacidad Operativa Tributaria Baja)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 590.152\n- Techo Operativo Proveedor (8%): M$ 47.212\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 41.594\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): M$ 1.756.915\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n\n2. Condiciones Suspensivas y Banderas Rojas:\n- 🔴 Alerta de Overtrading y Deterioro Multianual de Margen: Los ingresos crecieron +39.3% en 3 ejercicios (AT 2024 M$ 5.112.917 -> AT 2025 M$ 5.850.949 -> AT 2026 M$ 7.121.034) mientras la RLI cayó de M$ 230.292 (4.5%) a M$ 13.526 (0.2%) a -M$ 31.382 (-0.4%); Utilidad Contable Cód. 1672: +M$ 103.376. En F29, las compras superan a las ventas en 6 de los últimos 12 meses. El aumento del CPT de M$ 568.044 a M$ 1.756.915 constituye Variación positiva de CPT (origen y composición requieren verificación en EERR).\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 62/100 pts (Capacidad Operativa Tributaria Baja).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.",
     "veredicto": "NO EVALUABLE (Carpeta Vencida > 60 días)",
     "evaluacion_referencial": "NO EVALUABLE (Carpeta Vencida > 60 días)",
     "clasificacion_riesgo": "NO EVALUABLE (Carpeta Vencida > 60 días)",
@@ -8718,16 +8718,16 @@
         "nombre": "Coherencia F29/F22 y Vigencia de Información",
         "puntaje_obtenido": 0,
         "puntaje_maximo": 15,
-        "detalle": "Carpeta tributaria vencida (66d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+        "detalle": "Carpeta tributaria vencida (67d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
       }
     ],
     "vigencia_datos": {
       "fecha_emision": "27/07/2026 11:33",
       "ultimo_periodo": "2026-06",
       "meses_desfase": 1,
-      "dias_antiguedad": 66,
+      "dias_antiguedad": 67,
       "estado_antiguedad": "Exige actualizar > 60d",
-      "fecha_evaluacion": "01/10/2026",
+      "fecha_evaluacion": "02/10/2026",
       "nivel_confianza": "MEDIA",
       "alerta": null
     },
@@ -8749,7 +8749,7 @@
       {
         "parametro": "RUT e Inicio de Actividades Vigente",
         "estado": "CUMPLE",
-        "detalle": "RUT 76293939-8 con inicio registrado (13/08/2013)"
+        "detalle": "RUT 77777777-7 con inicio registrado (13/08/2013)"
       },
       {
         "parametro": "Representantes Legales Identificados",
@@ -8778,7 +8778,7 @@
     }
   },
   "metadata": {
-    "source_file": "/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (8).pdf",
+    "source_file": "tests/fixtures/cases/empresa_a.pdf",
     "pages": 45,
     "processing_time": 31.744
   }

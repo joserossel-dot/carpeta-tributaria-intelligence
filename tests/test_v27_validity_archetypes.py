@@ -14,8 +14,6 @@ from src.models.contributor import Contributor
 from src.models.tax_folder import TaxFolder, Metadata
 from src.parsers.f22_parser import F22Parser
 
-NUTRISA_PDF = Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria Personalizada NUTRISA.pdf")
-
 
 from src.services.monthly_tax_service import MonthlyTaxService
 
@@ -66,19 +64,11 @@ def _make_dummy_monthly_tax(periodo: str, ventas: int, compras: int, exportacion
 class TestV27ValidityArchetypes:
     """Suite de validación v2.7 de 8 arquetipos metodológicos."""
 
-    # 1. Caso Dorado NUTRISA (95214000-0)
-    @pytest.mark.skipif(
-        not NUTRISA_PDF.exists() and not Path("tests/fixtures/cases/nutrisa.json").exists(),
-        reason="PDF NUTRISA no disponible localmente",
-    )
+    # 1. Caso Dorado NUTRISA (EMPRESA C S.A.)
     def test_1_golden_nutrisa(self):
-        fixture_json = Path("tests/fixtures/cases/nutrisa.json")
-        if fixture_json.exists():
-            folder = TaxFolder.model_validate_json(fixture_json.read_text(encoding="utf-8"))
-            folder.credit_risk = CreditRiskEngine().calculate(folder, evaluation_date=date(2026, 6, 15))
-        else:
-            engine = TaxFolderEngine(str(NUTRISA_PDF))
-            folder = engine.parse(evaluation_date=date(2026, 6, 15))
+        fixture_json = Path(__file__).parent / "fixtures" / "cases" / "nutrisa.json"
+        folder = TaxFolder.model_validate_json(fixture_json.read_text(encoding="utf-8"))
+        folder.credit_risk = CreditRiskEngine().calculate(folder, evaluation_date=date(2026, 6, 15))
         cr = folder.credit_risk
         assert cr is not None
         assert cr.linea_maxima_condicionada == 14_400_000

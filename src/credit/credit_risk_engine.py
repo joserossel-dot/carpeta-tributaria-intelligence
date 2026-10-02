@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import date
 import math
 from decimal import Decimal, ROUND_HALF_UP
@@ -360,9 +362,9 @@ class CreditRiskEngine:
 
                     res_fin_txt = f"; Utilidad Contable Cód. 1672: +{format_mclp(res_fin)}" if (res_fin and res_fin > 0) else ""
 
-                    cpt_phrase = "CPT incrementado sin respaldo en utilidades del ejercicio."
+                    cpt_phrase = "Variación positiva de CPT (origen y composición requieren verificación en EERR)."
                     if f_first.capital_propio_tributario and f_last.capital_propio_tributario and f_last.capital_propio_tributario > f_first.capital_propio_tributario:
-                        cpt_phrase = f"El aumento del CPT de {format_mclp(f_first.capital_propio_tributario)} a {format_mclp(f_last.capital_propio_tributario)} constituye CPT incrementado sin respaldo en utilidades del ejercicio."
+                        cpt_phrase = f"El aumento del CPT de {format_mclp(f_first.capital_propio_tributario)} a {format_mclp(f_last.capital_propio_tributario)} constituye Variación positiva de CPT (origen y composición requieren verificación en EERR)."
 
                     msg = (
                         f"Alerta de Overtrading y Deterioro Multianual de Margen: "
@@ -627,7 +629,7 @@ class CreditRiskEngine:
         anios_f22 = [int(f.anio_tributario) for f in tax_folder.f22 if f.anio_tributario and str(f.anio_tributario).isdigit()]
         max_f22_year = max(anios_f22) if anios_f22 else None
 
-        eval_y = evaluation_date.year if evaluation_date else 2026
+        eval_y = evaluation_date.year if evaluation_date else date.today().year
 
         for f22_item in f22_con_ingresos:
             try:
@@ -1295,7 +1297,7 @@ class CreditRiskEngine:
     ) -> list[PilarScore]:
         pilares: list[PilarScore] = []
 
-        eval_y = evaluation_date.year if evaluation_date else 2026
+        eval_y = evaluation_date.year if evaluation_date else date.today().year
 
         # 1. Continuidad y Antigüedad Operacional (15 pts)
         n_meses = len(tax_folder.monthly_taxes) or len(tax_folder.f29)
@@ -1783,7 +1785,7 @@ class CreditRiskEngine:
                 desempeno_sii = "Capacidad Operativa Tributaria Moderada (Bloqueo por Pérdida F22)"
 
         # Detección de falta de información reciente en F22
-        eval_y = evaluation_date.year if evaluation_date else 2026
+        eval_y = evaluation_date.year if evaluation_date else date.today().year
         if tax_folder is None:
             anios_f22 = []
             max_f22_year = None

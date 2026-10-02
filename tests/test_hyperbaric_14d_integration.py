@@ -3,29 +3,26 @@ from pathlib import Path
 import pdfplumber
 import pytest
 
-from src.core.tax_folder_engine import TaxFolderEngine
+from src.models.tax_folder import TaxFolder
+from src.credit.credit_risk_engine import CreditRiskEngine
 from src.reports.pdf_report import PDFReport
 
-_HYPERBARIC_CANDIDATES = [
-    Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria.CLINICA HYPERBARIC.pdf"),
-    Path("examples/Carpeta Tributaria.CLINICA HYPERBARIC.pdf"),
-]
-HYPERBARIC_PDF = next((p for p in _HYPERBARIC_CANDIDATES if p.exists()), Path("examples/Carpeta Tributaria.CLINICA HYPERBARIC.pdf"))
+HYPERBARIC_FIXTURE = Path(__file__).parent / "fixtures" / "cases" / "clinica_hyperbaric.json"
 
 
-@pytest.mark.skipif(not HYPERBARIC_PDF.exists(), reason="PDF de prueba CLINICA HYPERBARIC no disponible")
 class TestHyperbaric14DIntegration:
     @pytest.fixture(scope="class")
     def hyperbaric_folder(self):
-        engine = TaxFolderEngine(str(HYPERBARIC_PDF))
-        return engine.parse()
+        folder = TaxFolder.model_validate_json(HYPERBARIC_FIXTURE.read_text(encoding="utf-8"))
+        folder.credit_risk = CreditRiskEngine().calculate(folder)
+        return folder
 
     def test_contributor_info(self, hyperbaric_folder):
         """Verifica la extracción limpia del contribuyente Pyme 14D."""
         contrib = hyperbaric_folder.contributor
         assert contrib is not None
-        assert contrib.rut == "77460385-9"
-        assert contrib.razon_social == "CLINICA HYPERBARIC SPA"
+        assert contrib.rut == "76999999-K"
+        assert contrib.razon_social == "EMPRESA D SPA"
         assert "PRO PYME" in (contrib.regimen_tributario or "").upper()
         assert contrib.comuna == "CONCEPCION"
         assert contrib.region == "REGIÓN DEL BIOBÍO"
@@ -72,6 +69,8 @@ class TestHyperbaric14DIntegration:
         with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
             p1 = pdf.pages[0].extract_text()
             p1_clean = " ".join(p1.split())
+            assert "EMPRESA D SPA" in p1_clean
+            assert "76999999-K" in p1_clean
             assert "REGIMEN PRO PYME GENERAL (14D)" in p1_clean
             assert "NO EVALUABLE (Carpeta Vencida > 60 días)" in p1_clean
             assert "n/d" in p1_clean

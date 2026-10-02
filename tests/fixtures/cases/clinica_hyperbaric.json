@@ -1,7 +1,7 @@
 {
   "contributor": {
-    "rut": "77460385-9",
-    "razon_social": "CLINICA HYPERBARIC SPA",
+    "rut": "76999999-K",
+    "razon_social": "EMPRESA D SPA",
     "fecha_generacion": "02/06/2026 10:31",
     "fecha_inicio_actividades": "28/01/2022",
     "domicilio": "Janequeo 175 , CONCEPCION",
@@ -12,8 +12,8 @@
   },
   "representatives": [
     {
-      "rut": "18409649-8",
-      "nombre": "FRANCISCO GONZALO BECERRA CUEVAS",
+      "rut": "11111111-1",
+      "nombre": "REPRESENTANTE 1",
       "cargo": null,
       "fecha_incorporacion": "24/09/2021",
       "forma_actuacion": "Cualquiera",
@@ -3371,15 +3371,15 @@
     "capital": null,
     "socios": [
       {
-        "rut": "18409649-8",
-        "nombre": "FRANCISCO GONZALO BECERRA CUEVAS",
+        "rut": "11111111-1",
+        "nombre": "REPRESENTANTE 1",
         "participacion": "100%"
       }
     ],
     "representantes": [
       {
-        "rut": "18409649-8",
-        "nombre": "FRANCISCO GONZALO BECERRA CUEVAS",
+        "rut": "11111111-1",
+        "nombre": "REPRESENTANTE 1",
         "cargo": null,
         "fecha_incorporacion": "24/09/2021",
         "forma_actuacion": "Cualquiera",
@@ -3571,16 +3571,16 @@
           "nombre": "Coherencia F29/F22 y Vigencia de Información",
           "puntaje_obtenido": 0,
           "puntaje_maximo": 15,
-          "detalle": "Carpeta tributaria vencida (121d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+          "detalle": "Carpeta tributaria vencida (122d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
         }
       ],
       "vigencia_datos": {
         "fecha_emision": "02/06/2026 10:31",
         "ultimo_periodo": "2026-04",
         "meses_desfase": 2,
-        "dias_antiguedad": 121,
+        "dias_antiguedad": 122,
         "estado_antiguedad": "Exige actualizar > 60d",
-        "fecha_evaluacion": "01/10/2026",
+        "fecha_evaluacion": "02/10/2026",
         "nivel_confianza": "MEDIA",
         "alerta": null
       },
@@ -3602,7 +3602,7 @@
         {
           "parametro": "RUT e Inicio de Actividades Vigente",
           "estado": "CUMPLE",
-          "detalle": "RUT 77460385-9 con inicio registrado (28/01/2022)"
+          "detalle": "RUT 76999999-K con inicio registrado (28/01/2022)"
         },
         {
           "parametro": "Representantes Legales Identificados",
@@ -3648,7 +3648,7 @@
       "CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629)",
       "Declaraciones Anuales F22 AT 2025 y AT 2026 no incluidas en carpeta tributaria (último F22 disponible: AT 2024)"
     ],
-    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: CLINICA HYPERBARIC SPA (RUT: 77460385-9)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 49/100 pts (Capacidad Operativa Tributaria Baja)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 7.323\n- Techo Operativo Proveedor (8%): M$ 586\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 17.087\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): -M$ 4.629\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($7,322,892 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n  * CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629): Cupo directo en línea limpia rechazado ($0). Solo evaluable cupo excepcional garantizado de hasta $200,000 CLP contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad\n\n2. Condiciones Suspensivas y Banderas Rojas:\n- 🔴 Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: Pérdida tributaria en último F22 (AT 2024). Ingresos: M$ 40.492 vs Base Imponible / Pérdida: -M$ 4.629 (Margen RLI -11.4%). Se exige Balance o Estados Financieros recientes para aclarar la causa de la pérdida tributaria (gastos operacionales, depreciación instantánea o bajo margen) antes de autorizar línea en evaluación manual\n- 🔴 Anomalía F29: 3 meses con ventas significativas y cero compras declaradas, sugiere costos 100% informales o exentos\n- 🔴 CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629)\n- 🔴 Declaraciones Anuales F22 AT 2025 y AT 2026 no incluidas en carpeta tributaria (último F22 disponible: AT 2024)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 49/100 pts (Capacidad Operativa Tributaria Baja).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Protocolo CPT negativo: solo evaluable cupo excepcional de hasta M$ 200 con Aval Solidario calificado con patrimonio acreditado fuera de la sociedad.",
+    "dictamen_ejecutivo": "CAVILARIA SpA — Informe de Evaluación Tributaria y Recomendación de Línea Comercial\nContribuyente: EMPRESA D SPA (RUT: 76999999-K)\n\nClasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días)\nPuntaje Tributario SII: 49/100 pts (Capacidad Operativa Tributaria Baja)\nLínea Inicial Recomendada (Etapa 1 - Apertura): M$ 0 | Plazo Inicial: Contado (0 días)\nLínea Máxima Condicionada (Etapa 2 - Techo Técnico): M$ 0 | Plazo Máximo: 0 días\nResguardo Comercial Sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\nCondición de Escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n\n1. Memoria Cuantitativa de Asignación:\n- Base Mensual de Absorción (C_base): M$ 7.323\n- Techo Operativo Proveedor (8%): M$ 586\n- Margen Tributario F29 Proxy [Ventas - Compras - IVA]: M$ 17.087\n- Freno Flujo Operacional (25%): M$ 0\n- Factor de Ajuste Conductual: 100%\n- Capital Propio Tributario (CPT): -M$ 4.629\n- Línea Máxima Condicionada (Techo Técnico): M$ 0\n- Línea Inicial Recomendada (Etapa 1 - 50% Apertura): M$ 0\n- Ajustes de Riesgo Aplicados:\n  * Empresa de servicios/rentas/exenta: Base calibrada con Costo Operativo Proxy ($7,322,892 CLP/mes)\n  * F22 declara RLI <= 0 (pérdida tributaria): Cupo automático no sugerido (Paso B2 = M$ 0)\n  * CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629): Cupo directo en línea limpia rechazado ($0). Solo evaluable cupo excepcional garantizado de hasta $200,000 CLP contra Pagaré Notarial y Aval Solidario con patrimonio acreditado fuera de la sociedad\n\n2. Condiciones Suspensivas y Banderas Rojas:\n- 🔴 Alerta de Rentabilidad Tributaria / Condición Suspensiva Documental: Pérdida tributaria en último F22 (AT 2024). Ingresos: M$ 40.492 vs Base Imponible / Pérdida: -M$ 4.629 (Margen RLI -11.4%). Se exige Balance o Estados Financieros recientes para aclarar la causa de la pérdida tributaria (gastos operacionales, depreciación instantánea o bajo margen) antes de autorizar línea en evaluación manual\n- 🔴 Anomalía F29: 3 meses con ventas significativas y cero compras declaradas, sugiere costos 100% informales o exentos\n- 🔴 CPTS Negativo o igual a cero (Cód. 1546: -M$ 4.629)\n- 🔴 Declaraciones Anuales F22 AT 2025 y AT 2026 no incluidas en carpeta tributaria (último F22 disponible: AT 2024)\n\n3. Recomendaciones Operativas:\n- ✅ Clasificación y Recomendación: NO EVALUABLE (Carpeta Vencida > 60 días).\n- ✅ Puntaje Tributario SII: 49/100 pts (Capacidad Operativa Tributaria Baja).\n- ✅ Línea Inicial Recomendada: M$ 0 (Modalidad Contado).\n- ✅ Línea Máxima Condicionada: M$ 0.\n- ✅ Resguardo comercial sugerido: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Condición de escalamiento: Habilitable tras 2 a 3 ciclos de pago completos y oportunos, sujeta a Dicom/Equifax sin morosidad vigente, constitución de resguardo (pagaré a la vista / seguro de crédito) y validación de estados financieros.\n- ✅ Protocolo operativo: Operación bloqueada. Se exige actualización de carpeta al mes en curso.\n- ✅ Protocolo CPT negativo: solo evaluable cupo excepcional de hasta M$ 200 con Aval Solidario calificado con patrimonio acreditado fuera de la sociedad.",
     "veredicto": "NO EVALUABLE (Carpeta Vencida > 60 días)",
     "evaluacion_referencial": "NO EVALUABLE (Carpeta Vencida > 60 días)",
     "clasificacion_riesgo": "NO EVALUABLE (Carpeta Vencida > 60 días)",
@@ -3765,16 +3765,16 @@
         "nombre": "Coherencia F29/F22 y Vigencia de Información",
         "puntaje_obtenido": 0,
         "puntaje_maximo": 15,
-        "detalle": "Carpeta tributaria vencida (121d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
+        "detalle": "Carpeta tributaria vencida (122d > 60 días al emitir informe). Operación bloqueada; se exige actualización al mes en curso."
       }
     ],
     "vigencia_datos": {
       "fecha_emision": "02/06/2026 10:31",
       "ultimo_periodo": "2026-04",
       "meses_desfase": 2,
-      "dias_antiguedad": 121,
+      "dias_antiguedad": 122,
       "estado_antiguedad": "Exige actualizar > 60d",
-      "fecha_evaluacion": "01/10/2026",
+      "fecha_evaluacion": "02/10/2026",
       "nivel_confianza": "MEDIA",
       "alerta": null
     },
@@ -3796,7 +3796,7 @@
       {
         "parametro": "RUT e Inicio de Actividades Vigente",
         "estado": "CUMPLE",
-        "detalle": "RUT 77460385-9 con inicio registrado (28/01/2022)"
+        "detalle": "RUT 76999999-K con inicio registrado (28/01/2022)"
       },
       {
         "parametro": "Representantes Legales Identificados",
@@ -3825,7 +3825,7 @@
     }
   },
   "metadata": {
-    "source_file": "/Users/josealfonsorossel/Downloads/Carpeta Tributaria.CLINICA HYPERBARIC.pdf",
+    "source_file": "tests/fixtures/cases/Carpeta Tributaria.EMPRESA D SPA.pdf",
     "pages": 43,
     "processing_time": 16.433
   }

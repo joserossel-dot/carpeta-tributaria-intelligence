@@ -1,38 +1,40 @@
-"""Script para regenerar los 4 informes oficiales de Evaluación Tributaria en /Users/josealfonsorossel/Downloads/."""
+"""Script para regenerar los 4 informes oficiales de Evaluación Tributaria en ~/Downloads/."""
 import sys
 from pathlib import Path
 
 from src.core.tax_folder_engine import TaxFolderEngine
 from src.reports.pdf_report import PDFReport
 
+DOWNLOADS = Path.home() / "Downloads"
+
 CASES = [
     {
         "rut": "762939398",
         "name": "ALVAL SPA",
-        "input": Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (8).pdf"),
-        "output": Path("/Users/josealfonsorossel/Downloads/evaluacion_tributaria_762939398.pdf"),
+        "input": DOWNLOADS / "Carpeta_Tributaria_Regular (8).pdf",
+        "output": DOWNLOADS / "evaluacion_tributaria_762939398.pdf",
     },
     {
         "rut": "952140000",
         "name": "NUTRISA",
-        "input": Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria Personalizada NUTRISA.pdf"),
-        "output": Path("/Users/josealfonsorossel/Downloads/evaluacion_tributaria_952140000.pdf"),
+        "input": DOWNLOADS / "Carpeta Tributaria Personalizada NUTRISA.pdf",
+        "output": DOWNLOADS / "evaluacion_tributaria_952140000.pdf",
     },
     {
         "rut": "781555401",
         "name": "PROTERM S.A.",
-        "input": Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (4).pdf"),
-        "output": Path("/Users/josealfonsorossel/Downloads/evaluacion_tributaria_781555401.pdf"),
+        "input": DOWNLOADS / "Carpeta_Tributaria_Regular (4).pdf",
+        "output": DOWNLOADS / "evaluacion_tributaria_781555401.pdf",
     },
     {
         "rut": "774603859",
         "name": "CLINICA HYPERBARIC SPA",
         "input": (
-            Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria.CLINICA HYPERBARIC.pdf")
-            if Path("/Users/josealfonsorossel/Downloads/Carpeta Tributaria.CLINICA HYPERBARIC.pdf").exists()
+            DOWNLOADS / "Carpeta Tributaria.CLINICA HYPERBARIC.pdf"
+            if (DOWNLOADS / "Carpeta Tributaria.CLINICA HYPERBARIC.pdf").exists()
             else Path("examples/Carpeta Tributaria.CLINICA HYPERBARIC.pdf")
         ),
-        "output": Path("/Users/josealfonsorossel/Downloads/evaluacion_tributaria_774603859.pdf"),
+        "output": DOWNLOADS / "evaluacion_tributaria_774603859.pdf",
     },
 ]
 

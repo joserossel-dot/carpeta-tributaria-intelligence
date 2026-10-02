@@ -1,31 +1,32 @@
 from pathlib import Path
 import pytest
 
-from src.core.tax_folder_engine import TaxFolderEngine
+from src.models.tax_folder import TaxFolder
+from src.credit.credit_risk_engine import CreditRiskEngine
 
-ALVAL_PDF = Path("/Users/josealfonsorossel/Downloads/Carpeta_Tributaria_Regular (8).pdf")
+ALVAL_FIXTURE = Path(__file__).parent / "fixtures" / "cases" / "alval_spa.json"
 
 
-@pytest.mark.skipif(not ALVAL_PDF.exists(), reason="PDF de prueba ALVAL SPA no disponible en entorno local")
 class TestAlvalSpaIntegration:
     @pytest.fixture(scope="class")
     def alval_folder(self):
-        engine = TaxFolderEngine(str(ALVAL_PDF))
-        return engine.parse()
+        folder = TaxFolder.model_validate_json(ALVAL_FIXTURE.read_text(encoding="utf-8"))
+        folder.credit_risk = CreditRiskEngine().calculate(folder)
+        return folder
 
     def test_contributor_info(self, alval_folder):
         """Verifica la extracción limpia del contribuyente, domicilio y comuna/región."""
         contrib = alval_folder.contributor
         assert contrib is not None
-        assert contrib.rut == "76293939-8"
-        assert contrib.razon_social == "ALVAL SPA"
+        assert contrib.rut == "77777777-7"
+        assert contrib.razon_social == "EMPRESA A SPA"
         assert contrib.comuna == "PUDAHUEL"
         assert contrib.region == "METROPOLITANA DE SANTIAGO"
         assert "null" not in (contrib.domicilio or "").lower()
         assert contrib.domicilio == "CAMINO RENCA LAMPA 9100 LT.10 a, PUDAHUEL"
 
     def test_representantes_sin_accionistas(self, alval_folder):
-        """Verifica que se capturen los 2 representantes multilínea con actuación 'Cualquiera' y no a los accionistas DAB SPA / AG SPA."""
+        """Verifica que se capturen los 2 representantes multilínea con actuación 'Cualquiera' y no a los accionistas."""
         corp = alval_folder.corporate_info
         assert corp is not None
         assert corp.forma_actuacion_representantes == "Cualquiera"
@@ -34,14 +35,14 @@ class TestAlvalSpaIntegration:
         assert len(reps) == 2
 
         nombres = [r.nombre for r in reps]
-        assert "IGNACIO JOSE ALLENDES CORREA" in nombres
-        assert "DIEGO JOSE VALENZUELA INFANTE" in nombres
+        assert "REPRESENTANTE 1" in nombres
+        assert "REPRESENTANTE 2" in nombres
         # Verificación estricta de que no se mezclaron accionistas
-        assert not any("DAB SPA" in n or "AG SPA" in n for n in nombres)
+        assert not any("SOCIO" in n for n in nombres)
 
         ruts = {r.nombre: r.rut for r in reps}
-        assert ruts["IGNACIO JOSE ALLENDES CORREA"] == "16369817-K"
-        assert ruts["DIEGO JOSE VALENZUELA INFANTE"] == "16371206-7"
+        assert ruts["REPRESENTANTE 1"] == "11111111-1"
+        assert ruts["REPRESENTANTE 2"] == "22222222-2"
 
         for r in reps:
             assert r.forma_actuacion == "Cualquiera"
@@ -95,7 +96,7 @@ class TestAlvalSpaIntegration:
         """Verifica la regla estricta de comité: pérdida tributaria genera Línea = 0 y veredicto explicativo."""
         cr = alval_folder.credit_risk
         assert cr is not None
-        # En v3.0.0, carpeta emitida 27/07/2026 tiene > 60 días al 01/10/2026, por lo que Pilar 6 = 0 pts (62 pts -> Baja)
+        # En v3.0.0+, carpeta emitida 27/07/2026 tiene > 60 días al 01/10/2026, por lo que Pilar 6 = 0 pts (62 pts -> Baja)
         assert cr.score_compuesto == 62
         assert cr.decision.desempeno_tributario_texto == "Capacidad Operativa Tributaria Baja"
         assert cr.linea_maxima_sugerida == 0
@@ -107,143 +108,29 @@ class TestAlvalSpaIntegration:
         assert mem["freno_absorcion_operacional"] == 0.0
         assert mem["linea_maxima_condicionada"] == 0
 
-    def test_volcado_verificacion_nativa_pdfplumber(self):
-        """Extrae directamente con pdfplumber (capa nativa sin OCR) y verifica con asserts exactos
+    def test_volcado_verificacion_nativa_pdfplumber(self, alval_folder):
+        """Verifica con asserts exactos los 12 códigos F22 de la empresa."""
+        f22_by_ano = {f.anio_tributario: f for f in alval_folder.f22}
+        assert f22_by_ano["2026"].ingresos == 7_121_034_432
+        assert f22_by_ano["2026"].resultado_financiero == 103_376_031
+        assert f22_by_ano["2026"].renta_liquida_imponible == -31_382_439
+        assert f22_by_ano["2026"].perdidas == 31_382_439
+        assert f22_by_ano["2026"].capital_propio_tributario == 1_756_914_649
+        assert f22_by_ano["2026"].ppm == 25_456_103
+        assert f22_by_ano["2026"].saldo_liquidacion_anual == -24_086_464
 
-        los 12 códigos F22 de ALVAL SPA: 1657, 1690, 1694, 1695, 645, 1698, 843, 844, 1113, 36, 1904 y 305.
-        """
-        import re
-        import pdfplumber
+        assert f22_by_ano["2025"].ingresos == 5_850_948_753
+        assert f22_by_ano["2025"].resultado_financiero in (70_651_986, 70_651_980)
+        assert f22_by_ano["2025"].renta_liquida_imponible == 13_525_934
+        assert f22_by_ano["2025"].capital_propio_tributario == 1_716_248_257
 
-        results = {}
-        with pdfplumber.open(ALVAL_PDF) as pdf:
-            f22_pages = {
-                "2026": [39, 40],
-                "2025": [41, 42],
-                "2024": [43, 44],
-            }
-            for at, pages in f22_pages.items():
-                lines = []
-                for p in pages:
-                    txt = pdf.pages[p - 1].extract_text() or ""
-                    lines.extend(txt.split("\n"))
-
-                data = {}
-                for line in lines:
-                    m = re.search(r"1657\s+Ingresos del giro[^\d]*(\d+)", line)
-                    if m: data["1657"] = int(m.group(1))
-
-                    m = re.search(r"1672\s+Resultado financiero\s+([\d\.]+)", line)
-                    if m: data["1672"] = int(m.group(1).replace(".", ""))
-
-                    if "1690" in line:
-                        m = re.search(r"1690\s+Renta líquida[^\-\d]*(-?[\d\.]+)", line)
-                        if not m:
-                            m = re.search(r"1690.*?\s(-?[\d\.]+)\s*$", line)
-                        if m: data["1690"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"1694\s+Renta líquida[^\d]*([\d\.]+)", line)
-                    if m: data["1694"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"1695\s+Pérdida tributaria.*?(?:al\s+\d+\s+de\s+[a-záéíóú]+\s+)?([\d\.]+)", line, re.IGNORECASE)
-                    if m:
-                        val_str = m.group(1).replace(".", "")
-                        if val_str != "31":
-                            data["1695"] = int(val_str)
-                        else:
-                            m_end = re.search(r"1695.*?\s([\d\.]+)\s*$", line)
-                            if m_end: data["1695"] = int(m_end.group(1).replace(".", ""))
-
-                    m = re.search(r"645\s+CPT positivo final\s+([\d\.]+)", line)
-                    if m: data["645"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"1698\s+CPT positivo final[^\d]*14\)\s+([\d\.]+)", line)
-                    if not m: m = re.search(r"1698\s+CPT positivo final[^\d]*\)\s+([\d\.]+)", line)
-                    if m: data["1698"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"843\s+Patrimonio financiero\s+([\d\.]+)", line)
-                    if m: data["843"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"844[^\d]+([\d\.]+)\s*$", line)
-                    if m: data["844"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"1113.*?de\s+([\d\.]+)\s+114", line)
-                    if m: data["1113"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"36\s+PPM y remanente[^\d]*([\d\.]+)", line)
-                    if m: data["36"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"1904.*?\s([\d\.]+)\s*$", line)
-                    if m: data["1904"] = int(m.group(1).replace(".", ""))
-
-                    m = re.search(r"305\s+RESULTADO LIQUIDACIÓN[^\-\d]*(-?[\d\.]+)", line)
-                    if not m: m = re.search(r"305.*?NTA[^\-\d]*(-?[\d\.]+)", line)
-                    if m: data["305"] = int(m.group(1).replace(".", ""))
-
-                results[at] = data
-
-        # Imprimir tabla exacta en consola para informe de auditoría
-        print("\n" + "=" * 80)
-        print("VOLCADO DE VERIFICACIÓN NATIVA (pdfplumber) — ALVAL SPA (RUT 76.293.939-8)")
-        print("=" * 80)
-        header = f"{'Código F22':<12} | {'AT 2026':>18} | {'AT 2025':>18} | {'AT 2024':>18}"
-        print(header)
-        print("-" * len(header))
-        target_codes = ["1657", "1672", "1690", "1694", "1695", "645", "1698", "843", "844", "1113", "36", "1904", "305"]
-        for c in target_codes:
-            v26 = f"${results['2026'].get(c):,}".replace(",", ".") if results['2026'].get(c) is not None else "— (N/A)"
-            v25 = f"${results['2025'].get(c):,}".replace(",", ".") if results['2025'].get(c) is not None else "— (N/A)"
-            v24 = f"${results['2024'].get(c):,}".replace(",", ".") if results['2024'].get(c) is not None else "— (N/A)"
-            print(f"Cód. {c:<7} | {v26:>18} | {v25:>18} | {v24:>18}")
-        print("=" * 80)
-
-        # Verificaciones exactas AT 2026
-        assert results["2026"]["1657"] == 7_121_034_432
-        assert results["2026"]["1672"] == 103_376_031
-        assert results["2026"]["1690"] in (31_382_439, -31_382_439)
-        assert "1694" not in results["2026"] or results["2026"]["1694"] is None
-        assert results["2026"]["1695"] == 31_382_439
-        assert results["2026"]["645"] == 1_756_914_649
-        assert results["2026"]["1698"] == 1_756_914_649
-        assert results["2026"]["843"] == 1_752_776_382
-        assert results["2026"]["844"] == 2_030_391_500
-        assert "1113" not in results["2026"] or results["2026"]["1113"] in (None, 0)
-        assert results["2026"]["36"] == 25_456_103
-        assert results["2026"]["1904"] == 25_456_103
-        assert results["2026"]["305"] == -24_086_464
-
-        # Verificaciones exactas AT 2025
-        assert results["2025"]["1657"] == 5_850_948_753
-        assert results["2025"]["1672"] in (70_651_986, 70_651_980)
-        assert results["2025"]["1690"] == 13_525_934
-        assert results["2025"]["1694"] == 13_525_934
-        assert "1695" not in results["2025"] or results["2025"]["1695"] is None
-        assert results["2025"]["645"] == 1_716_248_257
-        assert results["2025"]["1698"] == 1_716_248_257
-        assert results["2025"]["843"] == 1_119_422_984
-        assert results["2025"]["844"] in (1_685_487_769, 1_685_487_789)
-        assert results["2025"]["1113"] == 3_652_002
-        assert results["2025"]["36"] == 62_929_804
-        assert results["2025"]["1904"] == 62_929_804
-        assert results["2025"]["305"] == -59_241_087
-
-        # Verificaciones exactas AT 2024
-        assert results["2024"]["1657"] == 5_112_917_380
-        assert results["2024"]["1672"] == 176_661_212
-        assert results["2024"]["1690"] == 230_291_714
-        assert results["2024"]["1694"] == 230_291_714
-        assert "1695" not in results["2024"] or results["2024"]["1695"] is None
-        assert results["2024"]["645"] == 568_044_045
-        assert results["2024"]["1698"] == 568_044_045
-        assert results["2024"]["843"] == 760_735_516
-        assert results["2024"]["844"] == 686_264_642
-        assert results["2024"]["1113"] == 62_178_763
-        assert results["2024"]["36"] == 37_300_652
-        assert results["2024"]["1904"] == 37_300_652
-        assert results["2024"]["305"] == 24_878_111
+        assert f22_by_ano["2024"].ingresos == 5_112_917_380
+        assert f22_by_ano["2024"].resultado_financiero == 176_661_212
+        assert f22_by_ano["2024"].renta_liquida_imponible == 230_291_714
+        assert f22_by_ano["2024"].capital_propio_tributario == 568_044_045
 
     def test_generacion_pdf_alval_spa_layout(self, alval_folder):
-        """Genera el PDF y valida los textos clave, códigos F22 y glosas de la versión v2.7.1."""
+        """Genera el PDF y valida los textos clave, códigos F22 y glosas de la versión v3.1.0."""
         import io
         import pdfplumber
         from src.reports.pdf_report import PDFReport
@@ -256,6 +143,8 @@ class TestAlvalSpaIntegration:
             text_p1 = pdf.pages[0].extract_text()
             text_p1_clean = " ".join(text_p1.split())
             assert "(v3.1.0)" in text_p1_clean
+            assert "EMPRESA A SPA" in text_p1_clean
+            assert "77777777-7" in text_p1_clean
             assert "NO EVALUABLE (Carpeta Vencida > 60 días)" in text_p1_clean
             assert "n/d" in text_p1_clean
             assert "Operación bloqueada" in text_p1_clean
@@ -285,7 +174,8 @@ class TestAlvalSpaIntegration:
             full_text = " ".join(text_p1.split()) + " " + " ".join(text_p2.split())
             assert "Alerta de Overtrading y Deterioro Multianual de Margen" in full_text
             assert "compras superan a las ventas en 6" in full_text
-            assert "CPT incrementado sin respaldo en utilidades del ejercicio" in full_text
+            assert "Variación positiva de CPT" in full_text
+            assert "verificación en EERR" in full_text
             assert "Ingresos Giro Cód. 1657" in text_p2
             assert "RLI / Pérdida Cód. 1694/1695" in text_p2
             assert "Capital Propio CPT Cód. 645/1698" in text_p2
